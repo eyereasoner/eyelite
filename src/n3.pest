@@ -1,0 +1,154 @@
+// Pest automatically skips WHITESPACE and COMMENT between tokens.
+WHITESPACE = _{ " " | "\t" | NEWLINE }
+NEWLINE    = _{ "\r\n" | "\n" | "\r" | "\u{0C}" }
+COMMENT    = _{ "#" ~ (!NEWLINE ~ ANY)* }
+
+document = { SOI ~ statement_or_directive* ~ EOI }
+statement_or_directive = _{ directive | statement }
+
+directive = { prefix_id | base_id | sparql_prefix | sparql_base }
+
+// ---- directives ----
+
+PREFIX_KW        = { ^"@prefix" }
+PREFIX_SPARQL_KW = { ^"prefix" }
+BASE_KW          = { ^"@base" }
+BASE_SPARQL_KW   = { ^"base" }
+
+// @prefix ex: <iri> .
+prefix_id = { PREFIX_KW ~ PNAME_NS ~ IRIREF ~ "." }
+// PREFIX ex: <iri>
+sparql_prefix = { PREFIX_SPARQL_KW ~ PNAME_NS ~ IRIREF }
+
+// @base <iri> .
+base_id = { BASE_KW ~ IRIREF ~ "." }
+// BASE <iri>
+sparql_base = { BASE_SPARQL_KW ~ IRIREF }
+
+statement = { implication | triples }
+
+implication = { formula ~ implication_op ~ formula ~ "." }
+implication_op = { "=>" | "<=" }
+
+triples = { subject ~ pred_obj_list ~ "." }
+
+subject = { path }
+
+pred_obj_list = { verb_obj_list ~ ( ";" ~ verb_obj_list )* ~ ";"? }
+verb_obj_list = { verb ~ object_list }
+
+verb = _{
+      inverse_predicate
+    | has_predicate
+    | kw_a
+    | kw_eq
+    | kw_implies
+    | kw_impliedby
+    | path
+}
+
+// Inverse predicate forms
+inverse_predicate = { "<-" ~ path }
+
+// has P
+HAS_KW = { "@"? ~ ^"has" }
+has_predicate = { HAS_KW ~ path }
+
+// (kept for future use; not referenced in `verb` now)
+// is P of O  (inverse)
+IS_KW = { "@"? ~ ^"is" }
+OF_KW = { "@"? ~ ^"of" }
+is_of_predicate   = { IS_KW ~ path ~ OF_KW }
+
+// Keyword predicates (shorthands)
+kw_a         = { "@"? ~ ^"a" }
+kw_eq        = { "@"? ~ "=" }
+kw_implies   = { "@"? ~ "=>" }
+kw_impliedby = { "@"? ~ "<=" }
+
+object_list = { object ~ ( "," ~ object )* }
+object = { path }
+
+// Resource path: item (!|^) item ...
+path = { path_item ~ ( ( "!" | "^" ) ~ path_item )* }
+path_item = _{ term }
+
+term = _{
+      formula
+    | collection
+    | blank_node_property_list
+    | literal
+    | iri
+    | prefixed_name
+    | blank_node
+    | variable
+}
+
+formula = { "{" ~ statement* ~ "}" }
+collection = { "(" ~ path* ~ ")" }
+blank_node_property_list = { "[" ~ pred_obj_list? ~ "]" }
+
+blank_node = { "_:" ~ PN_LOCAL }
+variable   = { "?"  ~ PN_LOCAL }
+
+literal = _{ rdf_literal | numeric_literal | boolean_literal }
+
+rdf_literal = { string ~ ( "@" ~ LANGTAG )? ~ ( "^^" ~ ( iri | prefixed_name ) )? }
+
+numeric_literal = { DOUBLE | DECIMAL | INTEGER }
+
+boolean_literal = { "@"? ~ ( ^"true" | ^"false" ) }
+
+// ---- IRIs and names (simplified; tighten to spec if needed) ----
+
+iri = { IRIREF }
+prefixed_name = { PNAME_LN | PNAME_NS }
+
+// <...>
+IRIREF = @{ "<" ~ (!">" ~ ANY)* ~ ">" }
+
+// prefix:
+PNAME_NS = @{ PN_PREFIX? ~ ":" }
+// prefix:local
+PNAME_LN = @{ PNAME_NS ~ PN_LOCAL }
+
+PN_PREFIX = @{ (ASCII_ALPHANUMERIC | "_" )+ }
+PN_LOCAL  = @{ 
+    (ASCII_ALPHANUMERIC | "_" | "-")+ 
+    ~ ( "." ~ (ASCII_ALPHANUMERIC | "_" | "-")+ )*
+}
+
+LANGTAG = @{ ASCII_ALPHA+ ~ ("-" ~ ASCII_ALPHANUMERIC+ )* }
+
+// Strings
+string = _{
+      STRING_LITERAL_LONG_SINGLE_QUOTE
+    | STRING_LITERAL_LONG_QUOTE
+    | STRING_LITERAL_SINGLE_QUOTE
+    | STRING_LITERAL_QUOTE
+}
+
+STRING_LITERAL_QUOTE = @{
+    "\"" ~ ( "\\\"" | !"\"" ~ ANY )* ~ "\""
+}
+STRING_LITERAL_SINGLE_QUOTE = @{
+    "'"  ~ ( "\\'"  | !"'"  ~ ANY )* ~ "'"
+}
+STRING_LITERAL_LONG_QUOTE = @{
+    "\"\"\"" ~ ( !"\"\"\"" ~ ANY )* ~ "\"\"\""
+}
+STRING_LITERAL_LONG_SINGLE_QUOTE = @{
+    "'''" ~ ( !"'''" ~ ANY )* ~ "'''"
+}
+
+// Numbers (Turtle-style)
+INTEGER = @{ ("+" | "-")? ~ ASCII_DIGIT+ }
+DECIMAL = @{ ("+" | "-")? ~ ASCII_DIGIT* ~ "." ~ ASCII_DIGIT+ }
+DOUBLE  = @{
+    ("+" | "-")?
+    ~ ( ASCII_DIGIT+ ~ "." ~ ASCII_DIGIT* | "." ~ ASCII_DIGIT+ | ASCII_DIGIT+ )
+    ~ ( "e" | "E" )
+    ~ ("+" | "-")?
+    ~ ASCII_DIGIT+
+}
+
