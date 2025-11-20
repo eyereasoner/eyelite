@@ -11,9 +11,6 @@ A small Notation3 (N3) parser in Rust with a minimal forward-chaining reasoner.
   - variables `?x`
   - quoted formulas `{ ... }`
   - implications `{ ... } => { ... }`
-- Prefix environment + resolution:
-  - expands prefixed names to full IRIs
-  - supports EYE-style bare `@prefix foo: .` via built-in prefix defaults
 - Naive forward chainer for Horn-like rules:
   - conjunction of triple patterns in premise/conclusion
   - saturates a fact set until fixpoint
