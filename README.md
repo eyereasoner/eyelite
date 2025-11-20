@@ -22,7 +22,6 @@ A small Notation3 (N3) parser in Rust with a minimal forward-chaining reasoner.
 - `src/ast.rs` — AST types
 - `src/resolve.rs` — prefix env + IRI expansion
 - `src/reasoner.rs` — tiny forward chainer
-- `src/bin/quick_test.rs` — dump AST for a file
 - `src/bin/socrates.rs` — runs the Socrates example
 
 ## Quick start
