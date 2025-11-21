@@ -6,5 +6,14 @@ mod reasoner;
 pub use ast::*;
 pub use parser::{parse_document, ParseError};
 pub use resolve::{PrefixEnv, RDF_TYPE};
-pub use reasoner::{extract, forward_chain, Atom, GTriple, RulePat};
+pub use reasoner::{
+    extract,
+    extract_queries,
+    forward_chain,
+    backward_solve,
+    instantiate_pat,
+    Atom,
+    GTriple,
+    RulePat,
+};
 

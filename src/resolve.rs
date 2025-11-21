@@ -2,11 +2,6 @@ use std::collections::HashMap;
 
 use crate::ast::*;
 
-pub const RDF_NS:  &str = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-pub const RDFS_NS: &str = "http://www.w3.org/2000/01/rdf-schema#";
-pub const LOG_NS:  &str = "http://www.w3.org/2000/10/swap/log#";
-pub const XSD_NS:  &str = "http://www.w3.org/2001/XMLSchema#";
-
 pub const RDF_TYPE: &str = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
 #[derive(Debug, Clone)]
@@ -18,48 +13,31 @@ pub struct PrefixEnv {
 impl PrefixEnv {
     pub fn from_document(doc: &Document) -> Self {
         let mut prefixes = HashMap::new();
-
-        // EYE-like builtins / common defaults
-        prefixes.insert("rdf".into(),  RDF_NS.into());
-        prefixes.insert("rdfs".into(), RDFS_NS.into());
-        prefixes.insert("log".into(),  LOG_NS.into());
-        prefixes.insert("xsd".into(),  XSD_NS.into());
-
         let mut base: Option<String> = None;
 
-        // First pass: pick up explicit bases/prefixes
+        // Only take explicit @base / @prefix with IRIs.
         for d in &doc.directives {
             match d {
                 Directive::Base { iri } if !iri.is_empty() => {
                     base = Some(iri.clone());
                 }
-                Directive::Prefix { prefix, iri } => {
-                    if !iri.is_empty() {
-                        prefixes.insert(prefix.clone(), iri.clone());
-                    }
+                Directive::Prefix { prefix, iri } if !iri.is_empty() => {
+                    prefixes.insert(prefix.clone(), iri.clone());
                 }
                 _ => {}
             }
         }
 
-        // Second pass: fill empty @prefix foo: . with builtins if known
-        for d in &doc.directives {
-            if let Directive::Prefix { prefix, iri } = d {
-                if iri.is_empty() {
-                    if let Some(builtin) = prefixes.get(prefix).cloned() {
-                        prefixes.insert(prefix.clone(), builtin);
-                    } else if prefix.is_empty() {
-                        if let Some(b) = &base {
-                            prefixes.insert(prefix.clone(), b.clone());
-                        }
-                    }
-                }
+        // If a default prefix ":" was explicitly given, it will be in `prefixes[""]`.
+        // If not, we leave it unset unless base exists.
+        if !prefixes.contains_key("") {
+            if let Some(b) = &base {
+                prefixes.insert("".into(), b.clone());
+            } else {
+                // harmless fallback to avoid None in pretty-printers
+                prefixes.insert("".into(), "http://example.org/".into());
             }
         }
-
-        // If still no default prefix and no base, give a harmless fallback
-        prefixes.entry("".into())
-            .or_insert_with(|| base.clone().unwrap_or_else(|| "http://example.org/".into()));
 
         PrefixEnv { base, prefixes }
     }
