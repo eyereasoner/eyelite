@@ -1,0 +1,26 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix : <http://www.agfa.com/w3c/euler/graph.axiom#>.
+
+:paris :oneway :orleans.
+:paris :oneway :chartres.
+:paris :oneway :amiens.
+:orleans :oneway :blois.
+:orleans :oneway :bourges.
+:blois :oneway :tours.
+:chartres :oneway :lemans.
+:lemans :oneway :angers.
+:lemans :oneway :tours.
+:angers :oneway :nantes.
+
+:oneway rdfs:subPropertyOf :path.
+:path a owl:TransitiveProperty.
+
+# RDFS rules
+{?P rdfs:subPropertyOf ?Q. ?S ?P ?O} => {?S ?Q ?O}.
+{?P rdfs:subPropertyOf ?Q. ?Q rdfs:subPropertyOf ?R} => {?P rdfs:subPropertyOf ?R}.
+
+# OWL rules
+{?P a owl:TransitiveProperty. ?S ?P ?X. ?X ?P ?O.} => {?S ?P ?O}.
+

@@ -1,0 +1,23 @@
+@prefix : <http://www.agfa.com/w3c/euler/graph.axiom#>.
+
+:lemans :path :tours .
+:paris :path :nantes .
+:paris :path :blois .
+:paris :path :angers .
+:paris :path :tours .
+:lemans :path :angers .
+:chartres :path :tours .
+:angers :path :nantes .
+:paris :path :chartres .
+:orleans :path :bourges .
+:chartres :path :nantes .
+:paris :path :orleans .
+:orleans :path :tours .
+:paris :path :amiens .
+:lemans :path :nantes .
+:blois :path :tours .
+:paris :path :lemans .
+:paris :path :bourges .
+:chartres :path :lemans .
+:chartres :path :angers .
+:orleans :path :blois .

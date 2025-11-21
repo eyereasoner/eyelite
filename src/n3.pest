@@ -42,8 +42,6 @@ verb = _{
     | has_predicate
     | kw_a
     | kw_eq
-    | kw_implies
-    | kw_impliedby
     | path
 }
 
@@ -84,7 +82,10 @@ term = _{
     | variable
 }
 
-formula = { "{" ~ statement* ~ "}" }
+formula = { "{" ~ formula_stmt* ~ "}" }
+formula_stmt = _{ implication | triples_formula }
+triples_formula = { subject ~ pred_obj_list ~ "."? }
+
 collection = { "(" ~ path* ~ ")" }
 blank_node_property_list = { "[" ~ pred_obj_list? ~ "]" }
 

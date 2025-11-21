@@ -138,8 +138,6 @@ fn build_verb(pair: Pair<Rule>) -> Result<Predicate, ParseError> {
     match pair.as_rule() {
         Rule::kw_a => Ok(Predicate::KeywordA),
         Rule::kw_eq => Ok(Predicate::KeywordEquals),
-        Rule::kw_implies => Ok(Predicate::KeywordImplies),
-        Rule::kw_impliedby => Ok(Predicate::KeywordImpliedBy),
         Rule::inverse_predicate => {
             let term = build_path(pair.into_inner().next().unwrap())?;
             Ok(Predicate::Inverse(term))
@@ -165,11 +163,30 @@ fn build_object_list(pair: Pair<Rule>) -> Result<Vec<Term>, ParseError> {
 
 fn build_formula(pair: Pair<Rule>) -> Result<Formula, ParseError> {
     let mut stmts = vec![];
+
     for s in pair.into_inner() {
-        if s.as_rule() == Rule::statement {
-            stmts.extend(build_statement(s)?);
+        match s.as_rule() {
+            // If formula_stmt is non-silent, we’ll see it:
+            Rule::formula_stmt => {
+                let inner = s.into_inner().next().unwrap();
+                match inner.as_rule() {
+                    Rule::implication => stmts.push(build_implication(inner)?),
+                    Rule::triples_formula => stmts.extend(build_triples(inner)?),
+                    _ => {}
+                }
+            }
+
+            // If formula_stmt is silent (current grammar), we see these directly:
+            Rule::implication => stmts.push(build_implication(s)?),
+            Rule::triples_formula => stmts.extend(build_triples(s)?),
+
+            // Harmless fallback:
+            Rule::statement => stmts.extend(build_statement(s)?),
+
+            _ => {}
         }
     }
+
     Ok(Formula { statements: stmts })
 }
 

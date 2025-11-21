@@ -3,6 +3,8 @@ use std::collections::HashMap;
 use crate::ast::*;
 
 pub const RDF_TYPE: &str = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+pub const LOG_IMPLIES: &str = "http://www.w3.org/2000/10/swap/log#implies";
+pub const LOG_IMPLIED_BY: &str = "http://www.w3.org/2000/10/swap/log#impliedBy";
 
 #[derive(Debug, Clone)]
 pub struct PrefixEnv {

@@ -17,14 +17,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let envp = PrefixEnv::from_document(&doc);
     let doc_resolved = envp.apply(&doc);
 
+    // normalize log:implies/log:impliedBy triples into Implication statements
+    let doc_norm = eyelite::normalize_implications(&doc_resolved);
+
     // Ground facts from the file
-    let base_facts = ground_facts(&doc_resolved);
+    let base_facts = ground_facts(&doc_norm);
 
     // All rules in forward orientation (backward rules flipped)
-    let (_facts0, all_rules) = extract(&doc_resolved);
+    let (_facts0, all_rules) = extract(&doc_norm);
 
     // Forward-only rules (=> in the source, excluding query {Q}=>{Q})
-    let forward_rules = extract_forward_only_rules(&doc_resolved);
+    let forward_rules = extract_forward_only_rules(&doc_norm);
 
     // Seed: prove any *ground* forward premises using backward solver
     let seeded_facts = seed_ground_forward_premises(

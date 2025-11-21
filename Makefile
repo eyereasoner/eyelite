@@ -9,7 +9,10 @@ socrates: build
 backward: build
 	target/release/eyelite examples/backward_demo.n3 > examples/output/backward_demo.n3
 
-all: socrates backward
+french: build
+	target/release/eyelite examples/french_cities.n3 > examples/output/french_cities.n3
+
+all: socrates backward french
 
 clean:
 	cargo clean
