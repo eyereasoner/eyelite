@@ -187,12 +187,27 @@ fn print_output(triples: &HashSet<GTriple>, envp: &PrefixEnv) {
         println!("@prefix : <{}>.\n", ns);
     }
 
-    for t in triples {
+    // Collect + sort for deterministic output
+    let mut v: Vec<&GTriple> = triples.iter().collect();
+    v.sort_by(|a, b| triple_key(a).cmp(&triple_key(b)));
+
+    for t in v {
         let s = render_atom(&t.s, envp);
         let p = render_predicate(&t.p, envp);
         let o = render_atom(&t.o, envp);
-
         println!("{s} {p} {o} .");
+    }
+}
+
+fn triple_key(t: &GTriple) -> (String, String, String) {
+    (atom_key(&t.s), atom_key(&t.p), atom_key(&t.o))
+}
+
+fn atom_key(a: &Atom) -> String {
+    match a {
+        Atom::Iri(i) => i.clone(),
+        Atom::Blank(b) => format!("_:{b}"),
+        Atom::Literal(l) => l.clone(),
     }
 }
 
