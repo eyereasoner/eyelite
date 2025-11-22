@@ -3,17 +3,16 @@ use std::collections::{HashMap, HashSet};
 use crate::ast::*;
 use crate::resolve::RDF_TYPE;
 
-/// Full IRI for math:greaterThan
-/// math: namespace is http://www.w3.org/2000/10/swap/math# :contentReference[oaicite:2]{index=2}
-const MATH_GREATER_THAN: &str = "http://www.w3.org/2000/10/swap/math#greaterThan";
-
+/// Ground atom for reasoning.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Atom {
     Iri(String),
     Blank(String),
-    Literal(String), // canonical string form
+    Literal(String),
+    List(Vec<Atom>),
 }
 
+/// Ground triple used in fact sets.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct GTriple {
     pub s: Atom,
@@ -21,27 +20,26 @@ pub struct GTriple {
     pub o: Atom,
 }
 
+/// Pattern term used in rules/goals.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PT {
     Var(String),
     Const(Atom),
+    List(Vec<PT>),
 }
 
+/// Rule pattern: conjunction of triple patterns => conjunction of triple patterns.
 #[derive(Debug, Clone)]
 pub struct RulePat {
     pub premise: Vec<(PT, PT, PT)>,
     pub conclusion: Vec<(PT, PT, PT)>,
 }
 
-/// Extract ground triples + Horn-like rules from a resolved Document.
-///
-/// - Forward rules `{P} => {C}.` are kept as-is.
-/// - Backward rules `{C} <= {P}.` are converted to forward orientation `P => C`,
-///   so we can use them in both forward and backward reasoning.
-/// - Query rules `{Q} => {Q}.` are *not* added to rules; they are detected separately.
+/// Extract ground facts and rules from a document.
+/// (Direction is preserved on the Statement for the CLI to split rules.)
 pub fn extract(doc: &Document) -> (HashSet<GTriple>, Vec<RulePat>) {
     let mut facts = HashSet::new();
-    let mut rules = vec![];
+    let mut rules = Vec::new();
 
     for st in &doc.statements {
         match st {
@@ -50,34 +48,18 @@ pub fn extract(doc: &Document) -> (HashSet<GTriple>, Vec<RulePat>) {
                     facts.insert(gt);
                 }
             }
-            Statement::Implication { premise, conclusion, direction } => {
+            Statement::Implication { premise, conclusion, .. } => {
                 let prem_pats = formula_to_patterns(premise);
                 let concl_pats = formula_to_patterns(conclusion);
 
-                // Detect query rules {Q} => {Q}. and skip them as rules.
-                if *direction == ImplicationDir::Forward && prem_pats == concl_pats {
+                if prem_pats.is_empty() && concl_pats.is_empty() {
                     continue;
                 }
 
-                match direction {
-                    ImplicationDir::Forward => {
-                        if !prem_pats.is_empty() && !concl_pats.is_empty() {
-                            rules.push(RulePat {
-                                premise: prem_pats,
-                                conclusion: concl_pats,
-                            });
-                        }
-                    }
-                    ImplicationDir::Backward => {
-                        // C <= P  ==>  P => C
-                        if !prem_pats.is_empty() && !concl_pats.is_empty() {
-                            rules.push(RulePat {
-                                premise: concl_pats,
-                                conclusion: prem_pats,
-                            });
-                        }
-                    }
-                }
+                rules.push(RulePat {
+                    premise: prem_pats,
+                    conclusion: concl_pats,
+                });
             }
         }
     }
@@ -85,37 +67,426 @@ pub fn extract(doc: &Document) -> (HashSet<GTriple>, Vec<RulePat>) {
     (facts, rules)
 }
 
-/// Find query goals embedded as `{ Q } => { Q } .`
-/// Returns a list of conjunctions (each conjunction is a Vec of triple patterns).
+/// Extract query patterns of the form `{Q} => {Q}.`
 pub fn extract_queries(doc: &Document) -> Vec<Vec<(PT, PT, PT)>> {
-    let mut qs = vec![];
+    let mut queries = vec![];
+
     for st in &doc.statements {
         if let Statement::Implication { premise, conclusion, direction } = st {
             if *direction != ImplicationDir::Forward {
                 continue;
             }
+
             let prem = formula_to_patterns(premise);
             let concl = formula_to_patterns(conclusion);
-            if prem == concl && !prem.is_empty() {
-                qs.push(prem);
+
+            if !prem.is_empty() && prem == concl {
+                queries.push(prem);
             }
         }
     }
-    qs
+
+    queries
 }
+
+/// Naive forward-chaining to fixpoint over RulePat rules.
+pub fn forward_chain(mut facts: HashSet<GTriple>, rules: &[RulePat]) -> HashSet<GTriple> {
+    loop {
+        let mut changed = false;
+
+        for rule in rules {
+            let sols = match_premise(&rule.premise, &facts, &HashMap::new());
+            for env in sols {
+                for pat in &rule.conclusion {
+                    if let Some(gt) = instantiate_pat(pat, &env) {
+                        if facts.insert(gt) {
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if !changed {
+            break;
+        }
+    }
+
+    facts
+}
+
+//
+// ------------------------- Backward chaining -------------------------
+// Backward env stores PT terms, so vars can bind to lists.
+//
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum Bind {
+    Term(PT),
+    Alias(String),
+}
+
+type BEnv = HashMap<String, Bind>;
+
+fn resolve_root(v: &str, env: &BEnv) -> String {
+    match env.get(v) {
+        Some(Bind::Alias(u)) => resolve_root(u, env),
+        _ => v.to_string(),
+    }
+}
+
+fn resolve_term(v: &str, env: &BEnv) -> Option<PT> {
+    match env.get(v)? {
+        Bind::Term(t) => Some(t.clone()),
+        Bind::Alias(u) => resolve_term(u, env),
+    }
+}
+
+fn bind_var_term_bwd(v: &str, val: PT, env: &mut BEnv) -> Option<()> {
+    let rv = resolve_root(v, env);
+    if let Some(existing) = resolve_term(&rv, env) {
+        // must be consistent with existing binding
+        unify_pt_pt_bwd(&existing, &val, env)
+    } else {
+        env.insert(rv, Bind::Term(val));
+        Some(())
+    }
+}
+
+fn unify_var_var_bwd(va: &str, vb: &str, env: &mut BEnv) -> Option<()> {
+    let ra = resolve_root(va, env);
+    let rb = resolve_root(vb, env);
+    if ra == rb {
+        return Some(());
+    }
+
+    let aval = resolve_term(&ra, env);
+    let bval = resolve_term(&rb, env);
+
+    match (aval, bval) {
+        (Some(a), Some(b)) => unify_pt_pt_bwd(&a, &b, env),
+        (Some(a), None) => { env.insert(rb, Bind::Term(a)); Some(()) }
+        (None, Some(b)) => { env.insert(ra, Bind::Term(b)); Some(()) }
+        (None, None) => {
+            env.insert(rb, Bind::Alias(ra));
+            Some(())
+        }
+    }
+}
+
+fn pt_to_atom_bwd(pt: &PT, env: &BEnv) -> Option<Atom> {
+    match pt {
+        PT::Const(a) => Some(a.clone()),
+        PT::Var(v) => {
+            let t = resolve_term(v, env)?;
+            pt_to_atom_bwd(&t, env)
+        }
+        PT::List(ps) => {
+            let mut v = Vec::with_capacity(ps.len());
+            for p in ps {
+                v.push(pt_to_atom_bwd(p, env)?);
+            }
+            Some(Atom::List(v))
+        }
+    }
+}
+
+fn strip_benv(env: BEnv) -> HashMap<String, Atom> {
+    let mut out = HashMap::new();
+    for k in env.keys() {
+        if let Some(t) = resolve_term(k, &env) {
+            if let Some(a) = pt_to_atom_bwd(&t, &env) {
+                out.insert(k.clone(), a);
+            }
+        }
+    }
+    out
+}
+
+/// Backward chaining (goal-directed).
+/// Rules passed here are in forward orientation already:
+/// premise(body) => conclusion(head). The solver matches goals against heads.
+pub fn backward_solve(
+    goals: &[(PT, PT, PT)],
+    facts: &HashSet<GTriple>,
+    rules: &[RulePat],
+) -> Vec<HashMap<String, Atom>> {
+    const MAX_DEPTH: usize = 512;
+    let mut seen = Vec::new();
+    let sols = solve_goals_bwd(goals, facts, rules, &BEnv::new(), 0, MAX_DEPTH, &mut seen);
+    sols.into_iter().map(strip_benv).collect()
+}
+
+fn solve_goals_bwd(
+    goals: &[(PT, PT, PT)],
+    facts: &HashSet<GTriple>,
+    rules: &[RulePat],
+    env: &BEnv,
+    depth: usize,
+    max_depth: usize,
+    seen: &mut Vec<(PT, PT, PT)>,
+) -> Vec<BEnv> {
+    if depth > max_depth {
+        return vec![];
+    }
+    if goals.is_empty() {
+        return vec![env.clone()];
+    }
+
+    let (g0, rest) = goals.split_first().unwrap();
+
+    // exact-goal-on-stack guard
+    if seen.contains(g0) {
+        return vec![];
+    }
+    seen.push(g0.clone());
+
+    let mut out = vec![];
+
+    // Builtin goal?
+    if is_builtin_pat(g0) {
+        let mut env2 = env.clone();
+        if eval_builtin_pat_bwd(g0, &mut env2).is_some() {
+            out.extend(solve_goals_bwd(
+                rest, facts, rules, &env2, depth + 1, max_depth, seen,
+            ));
+        }
+        seen.pop();
+        return out;
+    }
+
+    // 1) Match facts
+    for f in facts {
+        let mut env2 = env.clone();
+        if unify_pat_atom_bwd(g0, f, &mut env2).is_some() {
+            out.extend(solve_goals_bwd(
+                rest, facts, rules, &env2, depth + 1, max_depth, seen,
+            ));
+        }
+    }
+
+    // 2) Match rule heads
+    for (i, r) in rules.iter().enumerate() {
+        let fr = fresh_rule(r, i + depth * 997);
+        for head_pat in &fr.conclusion {
+            let mut env2 = env.clone();
+            if unify_pat_pat_bwd(head_pat, g0, &mut env2).is_some() {
+                let mut new_goals = fr.premise.clone();
+                new_goals.extend_from_slice(rest);
+
+                out.extend(solve_goals_bwd(
+                    &new_goals, facts, rules, &env2, depth + 1, max_depth, seen,
+                ));
+            }
+        }
+    }
+
+    seen.pop();
+    out
+}
+
+//
+// ------------------------- Forward matching helpers -------------------------
+//
+
+fn match_premise(
+    premise: &[(PT, PT, PT)],
+    facts: &HashSet<GTriple>,
+    env: &HashMap<String, Atom>,
+) -> Vec<HashMap<String, Atom>> {
+    if premise.is_empty() {
+        return vec![env.clone()];
+    }
+
+    let (p0, rest) = premise.split_first().unwrap();
+    let mut out = vec![];
+
+    if is_builtin_pat(p0) {
+        let mut env2 = env.clone();
+        if eval_builtin_pat(p0, &mut env2).is_some() {
+            out.extend(match_premise(rest, facts, &env2));
+        }
+        return out;
+    }
+
+    for f in facts {
+        let mut env2 = env.clone();
+        if unify_pat_atom(p0, f, &mut env2).is_some() {
+            out.extend(match_premise(rest, facts, &env2));
+        }
+    }
+
+    out
+}
+
+//
+// ------------------------- Unification (forward) -------------------------
+//
+
+fn unify_pat_atom(
+    pat: &(PT, PT, PT),
+    tr: &GTriple,
+    env: &mut HashMap<String, Atom>,
+) -> Option<()> {
+    unify_term(&pat.0, &tr.s, env)?;
+    unify_term(&pat.1, &tr.p, env)?;
+    unify_term(&pat.2, &tr.o, env)?;
+    Some(())
+}
+
+fn unify_term(pt: &PT, atom: &Atom, env: &mut HashMap<String, Atom>) -> Option<()> {
+    match pt {
+        PT::Const(c) => if c == atom { Some(()) } else { None },
+
+        PT::Var(v) => {
+            if let Some(bound) = env.get(v) {
+                if bound == atom { Some(()) } else { None }
+            } else {
+                env.insert(v.clone(), atom.clone());
+                Some(())
+            }
+        }
+
+        PT::List(ps) => match atom {
+            Atom::List(as_) if ps.len() == as_.len() => {
+                for (p, a) in ps.iter().zip(as_) {
+                    unify_term(p, a, env)?;
+                }
+                Some(())
+            }
+            _ => None,
+        },
+    }
+}
+
+//
+// ------------------------- Unification (backward) -------------------------
+//
+
+fn unify_pat_atom_bwd(
+    pat: &(PT, PT, PT),
+    tr: &GTriple,
+    env: &mut BEnv,
+) -> Option<()> {
+    unify_term_bwd(&pat.0, &tr.s, env)?;
+    unify_term_bwd(&pat.1, &tr.p, env)?;
+    unify_term_bwd(&pat.2, &tr.o, env)?;
+    Some(())
+}
+
+fn unify_pat_pat_bwd(
+    a: &(PT, PT, PT),
+    b: &(PT, PT, PT),
+    env: &mut BEnv,
+) -> Option<()> {
+    unify_pt_pt_bwd(&a.0, &b.0, env)?;
+    unify_pt_pt_bwd(&a.1, &b.1, env)?;
+    unify_pt_pt_bwd(&a.2, &b.2, env)?;
+    Some(())
+}
+
+fn unify_term_bwd(pt: &PT, atom: &Atom, env: &mut BEnv) -> Option<()> {
+    unify_pt_pt_bwd(pt, &PT::Const(atom.clone()), env)
+}
+
+fn unify_pt_pt_bwd(a: &PT, b: &PT, env: &mut BEnv) -> Option<()> {
+    match (a, b) {
+        (PT::Const(ca), PT::Const(cb)) => if ca == cb { Some(()) } else { None },
+
+        (PT::Var(va), PT::Var(vb)) => unify_var_var_bwd(va, vb, env),
+
+        (PT::Var(va), t) => bind_var_term_bwd(va, t.clone(), env),
+        (t, PT::Var(vb)) => bind_var_term_bwd(vb, t.clone(), env),
+
+        (PT::List(ae), PT::List(be)) => {
+            if ae.len() != be.len() { return None; }
+            for (x, y) in ae.iter().zip(be) {
+                unify_pt_pt_bwd(x, y, env)?;
+            }
+            Some(())
+        }
+
+        _ => None,
+    }
+}
+
+//
+// ------------------------- Instantiation -------------------------
+//
+
+pub fn instantiate_pat(
+    pat: &(PT, PT, PT),
+    env: &HashMap<String, Atom>,
+) -> Option<GTriple> {
+    let s = inst_term(&pat.0, env)?;
+    let p = inst_term(&pat.1, env)?;
+    let o = inst_term(&pat.2, env)?;
+    Some(GTriple { s, p, o })
+}
+
+fn inst_term(pt: &PT, env: &HashMap<String, Atom>) -> Option<Atom> {
+    match pt {
+        PT::Const(c) => Some(c.clone()),
+        PT::Var(v) => env.get(v).cloned(),
+        PT::List(ps) => {
+            let mut v = Vec::with_capacity(ps.len());
+            for p in ps {
+                v.push(inst_term(p, env)?);
+            }
+            Some(Atom::List(v))
+        }
+    }
+}
+
+//
+// ------------------------- Freshening -------------------------
+//
+
+fn fresh_rule(rule: &RulePat, salt: usize) -> RulePat {
+    let mut map: HashMap<String, String> = HashMap::new();
+    RulePat {
+        premise: rule.premise.iter().map(|p| fresh_pat(p, salt, &mut map)).collect(),
+        conclusion: rule.conclusion.iter().map(|p| fresh_pat(p, salt, &mut map)).collect(),
+    }
+}
+
+fn fresh_pat(
+    pat: &(PT, PT, PT),
+    salt: usize,
+    map: &mut HashMap<String, String>,
+) -> (PT, PT, PT) {
+    (
+        fresh_pt(&pat.0, salt, map),
+        fresh_pt(&pat.1, salt, map),
+        fresh_pt(&pat.2, salt, map),
+    )
+}
+
+fn fresh_pt(pt: &PT, salt: usize, map: &mut HashMap<String, String>) -> PT {
+    match pt {
+        PT::Const(c) => PT::Const(c.clone()),
+        PT::Var(v) => {
+            let nv = map.entry(v.clone()).or_insert_with(|| format!("{v}__{salt}")).clone();
+            PT::Var(nv)
+        }
+        PT::List(xs) => PT::List(xs.iter().map(|p| fresh_pt(p, salt, map)).collect()),
+    }
+}
+
+//
+// ------------------------- AST -> patterns / grounding -------------------------
+//
 
 fn to_ground(tr: &Triple) -> Option<GTriple> {
     let s = term_to_atom(&tr.subject)?;
     let o = term_to_atom(&tr.object)?;
-
     let p = match &tr.predicate {
         Predicate::KeywordA => Atom::Iri(RDF_TYPE.into()),
         Predicate::Normal(t) => term_to_atom(t)?,
-        Predicate::Inverse(t) => term_to_atom(t)?, // ignore inverse semantics here
+        Predicate::Inverse(t) => term_to_atom(t)?,
         Predicate::Has(t) => term_to_atom(t)?,
         _ => return None,
     };
-
     Some(GTriple { s, p, o })
 }
 
@@ -124,24 +495,13 @@ fn term_to_atom(t: &Term) -> Option<Atom> {
         Term::Iri(i) => Some(Atom::Iri(i.clone())),
         Term::BlankNode(b) => Some(Atom::Blank(b.clone())),
         Term::Literal(l) => Some(Atom::Literal(canon_lit(l))),
-        _ => None,
-    }
-}
-
-fn term_to_pt(t: &Term) -> Option<PT> {
-    match t {
-        Term::Variable(v) => Some(PT::Var(v.clone())),
-        Term::Iri(i) => Some(PT::Const(Atom::Iri(i.clone()))),
-        Term::BlankNode(b) => Some(PT::Const(Atom::Blank(b.clone()))),
-        Term::Literal(l) => Some(PT::Const(Atom::Literal(canon_lit(l)))),
-        _ => None,
-    }
-}
-
-fn pred_to_pt(p: &Predicate) -> Option<PT> {
-    match p {
-        Predicate::KeywordA => Some(PT::Const(Atom::Iri(RDF_TYPE.into()))),
-        Predicate::Normal(t) => term_to_pt(t),
+        Term::Collection(items) => {
+            let mut v = Vec::with_capacity(items.len());
+            for it in items {
+                v.push(term_to_atom(it)?);
+            }
+            Some(Atom::List(v))
+        }
         _ => None,
     }
 }
@@ -161,307 +521,92 @@ fn formula_to_patterns(f: &Formula) -> Vec<(PT, PT, PT)> {
     out
 }
 
-/// -------------------------
-/// Forward chaining (fixpoint)
-/// -------------------------
-
-pub fn forward_chain(mut facts: HashSet<GTriple>, rules: &[RulePat]) -> HashSet<GTriple> {
-    loop {
-        let mut added_any = false;
-
-        for rule in rules {
-            let bindings = match_premise(&rule.premise, &facts);
-            for b in bindings {
-                for pat in &rule.conclusion {
-                    if let Some(gt) = instantiate_pat(pat, &b) {
-                        if facts.insert(gt) {
-                            added_any = true;
-                        }
-                    }
-                }
+fn term_to_pt(t: &Term) -> Option<PT> {
+    match t {
+        Term::Variable(v) => Some(PT::Var(v.clone())),
+        Term::Iri(i) => Some(PT::Const(Atom::Iri(i.clone()))),
+        Term::BlankNode(b) => Some(PT::Const(Atom::Blank(b.clone()))),
+        Term::Literal(l) => Some(PT::Const(Atom::Literal(canon_lit(l)))),
+        Term::Collection(items) => {
+            let mut v = Vec::with_capacity(items.len());
+            for it in items {
+                v.push(term_to_pt(it)?);
             }
+            Some(PT::List(v))
         }
-
-        if !added_any {
-            break;
-        }
-    }
-
-    facts
-}
-
-fn match_premise(
-    pats: &[(PT, PT, PT)],
-    facts: &HashSet<GTriple>,
-) -> Vec<HashMap<String, Atom>> {
-    let mut envs: Vec<HashMap<String, Atom>> = vec![HashMap::new()];
-
-    for (ps, pp, po) in pats {
-        // Builtin premise: evaluate instead of matching to facts.
-        if is_builtin_pattern(pp) {
-            let mut next_envs = vec![];
-            for env in &envs {
-                if let Some(env2) = eval_builtin(ps, pp, po, env) {
-                    next_envs.push(env2);
-                }
-            }
-            envs = next_envs;
-            continue;
-        }
-
-        let mut next_envs = vec![];
-        for env in &envs {
-            for f in facts {
-                if let Some(e2) = unify(ps, pp, po, f, env) {
-                    next_envs.push(e2);
-                }
-            }
-        }
-        envs = next_envs;
-        if envs.is_empty() {
-            break;
-        }
-    }
-
-    envs
-}
-
-fn unify(
-    ps: &PT, pp: &PT, po: &PT,
-    f: &GTriple,
-    env: &HashMap<String, Atom>,
-) -> Option<HashMap<String, Atom>> {
-    let mut e = env.clone();
-    unify_term(ps, &f.s, &mut e)?;
-    unify_term(pp, &f.p, &mut e)?;
-    unify_term(po, &f.o, &mut e)?;
-    Some(e)
-}
-
-fn unify_term(pt: &PT, atom: &Atom, env: &mut HashMap<String, Atom>) -> Option<()> {
-    match pt {
-        PT::Const(c) => if c == atom { Some(()) } else { None },
-        PT::Var(v) => {
-            if let Some(bound) = env.get(v) {
-                if bound == atom { Some(()) } else { None }
-            } else {
-                env.insert(v.clone(), atom.clone());
-                Some(())
-            }
-        }
+        _ => None,
     }
 }
 
-/// -------------------------
-/// Backward chaining (goals)
-/// -------------------------
-
-/// Solve a conjunction of goal patterns against facts+rules.
-/// Returns all satisfying bindings (toy SLD resolution).
-pub fn backward_solve(
-    goals: &[(PT, PT, PT)],
-    facts: &HashSet<GTriple>,
-    rules: &[RulePat],
-) -> Vec<HashMap<String, Atom>> {
-    solve_goals(goals.to_vec(), HashMap::new(), facts, rules, 0)
-}
-
-fn solve_goals(
-    goals: Vec<(PT, PT, PT)>,
-    env: HashMap<String, Atom>,
-    facts: &HashSet<GTriple>,
-    rules: &[RulePat],
-    depth: usize,
-) -> Vec<HashMap<String, Atom>> {
-    if goals.is_empty() {
-        return vec![env];
-    }
-    if depth > 50 {
-        return vec![]; // recursion guard
-    }
-
-    let (g, rest) = goals.split_first().unwrap();
-    let (ps, pp, po) = g;
-
-    // Builtin goal: evaluate directly.
-    if is_builtin_pattern(pp) {
-        if let Some(env2) = eval_builtin(ps, pp, po, &env) {
-            return solve_goals(rest.to_vec(), env2, facts, rules, depth + 1);
-        } else {
-            return vec![];
-        }
-    }
-
-    let mut out = vec![];
-
-    // 1) Try matching a fact.
-    for f in facts {
-        if let Some(env2) = unify(ps, pp, po, f, &env) {
-            out.extend(solve_goals(rest.to_vec(), env2, facts, rules, depth + 1));
-        }
-    }
-
-    // 2) Try matching a rule conclusion, then prove its premise.
-    for (ri, rule) in rules.iter().enumerate() {
-        let frule = freshen_rule(rule, depth * 10_000 + ri);
-
-        for concl_pat in &frule.conclusion {
-            let mut env2 = env.clone();
-            if unify_pat_pat(g, concl_pat, &mut env2).is_some() {
-                let mut new_goals = frule.premise.clone();
-                new_goals.extend_from_slice(rest);
-                out.extend(solve_goals(new_goals, env2, facts, rules, depth + 1));
-            }
-        }
-    }
-
-    out
-}
-
-/// Unify goal pattern with rule conclusion pattern (symmetric, toy unification).
-/// If both sides are unbound vars, we leave them unbound (fine for your examples).
-fn unify_pat_pat(
-    g: &(PT, PT, PT),
-    c: &(PT, PT, PT),
-    env: &mut HashMap<String, Atom>,
-) -> Option<()> {
-    let (gs, gp, go) = g;
-    let (cs, cp, co) = c;
-    unify_pt_pt(gs, cs, env)?;
-    unify_pt_pt(gp, cp, env)?;
-    unify_pt_pt(go, co, env)?;
-    Some(())
-}
-
-fn unify_pt_pt(a: &PT, b: &PT, env: &mut HashMap<String, Atom>) -> Option<()> {
-    match (a, b) {
-        (PT::Const(ca), PT::Const(cb)) => if ca == cb { Some(()) } else { None },
-
-        (PT::Var(va), PT::Const(cb)) => bind_var(va, cb.clone(), env),
-        (PT::Const(ca), PT::Var(vb)) => bind_var(vb, ca.clone(), env),
-
-        (PT::Var(va), PT::Var(vb)) => {
-            let va_val = env.get(va).cloned();
-            let vb_val = env.get(vb).cloned();
-            match (va_val, vb_val) {
-                (Some(x), Some(y)) => if x == y { Some(()) } else { None },
-                (Some(x), None) => { env.insert(vb.clone(), x); Some(()) }
-                (None, Some(y)) => { env.insert(va.clone(), y); Some(()) }
-                (None, None) => Some(()),
-            }
-        }
+fn pred_to_pt(p: &Predicate) -> Option<PT> {
+    match p {
+        Predicate::KeywordA => Some(PT::Const(Atom::Iri(RDF_TYPE.into()))),
+        Predicate::Normal(t) => term_to_pt(t),
+        Predicate::Inverse(t) => term_to_pt(t),
+        Predicate::Has(t) => term_to_pt(t),
+        _ => None,
     }
 }
 
-fn bind_var(v: &str, val: Atom, env: &mut HashMap<String, Atom>) -> Option<()> {
-    if let Some(bound) = env.get(v) {
-        if *bound == val { Some(()) } else { None }
-    } else {
-        env.insert(v.to_string(), val);
-        Some(())
-    }
+//
+// ------------------------- Builtins (forward + backward) -------------------------
+//
+
+fn is_builtin_pat(p: &(PT, PT, PT)) -> bool {
+    matches!(
+        &p.1,
+        PT::Const(Atom::Iri(i))
+            if i == "http://www.w3.org/2000/10/swap/math#greaterThan"
+    )
 }
 
-/// Rename rule variables to avoid collisions (freshening).
-fn freshen_rule(rule: &RulePat, salt: usize) -> RulePat {
-    let map: HashMap<String, String> = HashMap::new();
-
-    fn fresh_pt(pt: &PT, salt: usize, map: &mut HashMap<String, String>) -> PT {
-        match pt {
-            PT::Const(c) => PT::Const(c.clone()),
-            PT::Var(v) => {
-                let nv = map
-                    .entry(v.clone())
-                    .or_insert_with(|| format!("{v}__{salt}"))
-                    .clone();
-                PT::Var(nv)
-            }
-        }
-    }
-
-    let fresh_triple = |(s,p,o): &(PT,PT,PT), salt, map: &mut HashMap<String,String>| {
-        (
-            fresh_pt(s, salt, map),
-            fresh_pt(p, salt, map),
-            fresh_pt(o, salt, map),
-        )
+fn eval_builtin_pat(p: &(PT, PT, PT), env: &mut HashMap<String, Atom>) -> Option<()> {
+    let pred = match &p.1 {
+        PT::Const(Atom::Iri(i)) => i.as_str(),
+        _ => return None,
     };
 
-    let mut m = map;
-    let premise = rule.premise.iter().map(|t| fresh_triple(t, salt, &mut m)).collect();
-    let conclusion = rule.conclusion.iter().map(|t| fresh_triple(t, salt, &mut m)).collect();
-    RulePat { premise, conclusion }
-}
-
-/// Instantiate a pattern triple under bindings into a ground triple.
-pub fn instantiate_pat(
-    pat: &(PT, PT, PT),
-    env: &HashMap<String, Atom>
-) -> Option<GTriple> {
-    let (ps, pp, po) = pat;
-    Some(GTriple {
-        s: inst_term(ps, env)?,
-        p: inst_term(pp, env)?,
-        o: inst_term(po, env)?,
-    })
-}
-
-fn inst_term(pt: &PT, env: &HashMap<String, Atom>) -> Option<Atom> {
-    match pt {
-        PT::Const(c) => Some(c.clone()),
-        PT::Var(v) => env.get(v).cloned(),
+    match pred {
+        "http://www.w3.org/2000/10/swap/math#greaterThan" => {
+            let a = inst_term(&p.0, env)?;
+            let b = inst_term(&p.2, env)?;
+            let av = atom_to_num(&a)?;
+            let bv = atom_to_num(&b)?;
+            if av > bv { Some(()) } else { None }
+        }
+        _ => None,
     }
 }
 
-/// -------------------------
-/// Builtins (toy subset)
-/// -------------------------
+fn eval_builtin_pat_bwd(p: &(PT, PT, PT), env: &mut BEnv) -> Option<()> {
+    let pred = match &p.1 {
+        PT::Const(Atom::Iri(i)) => i.as_str(),
+        _ => return None,
+    };
 
-fn is_builtin_pattern(pp: &PT) -> bool {
-    matches!(pp, PT::Const(Atom::Iri(iri)) if iri == MATH_GREATER_THAN)
-}
-
-fn eval_builtin(
-    ps: &PT, pp: &PT, po: &PT,
-    env: &HashMap<String, Atom>
-) -> Option<HashMap<String, Atom>> {
-    // Only math:greaterThan right now.
-    if !is_builtin_pattern(pp) {
-        return None;
-    }
-
-    let s_val = pt_value(ps, env)?;
-    let o_val = pt_value(po, env)?;
-
-    let s_num = parse_number(&s_val)?;
-    let o_num = parse_number(&o_val)?;
-
-    if s_num > o_num {
-        Some(env.clone())
-    } else {
-        None
+    match pred {
+        "http://www.w3.org/2000/10/swap/math#greaterThan" => {
+            let a = pt_to_atom_bwd(&p.0, env)?;
+            let b = pt_to_atom_bwd(&p.2, env)?;
+            let av = atom_to_num(&a)?;
+            let bv = atom_to_num(&b)?;
+            if av > bv { Some(()) } else { None }
+        }
+        _ => None,
     }
 }
 
-/// Get bound value of a PT (must be ground after bindings).
-fn pt_value(pt: &PT, env: &HashMap<String, Atom>) -> Option<Atom> {
-    match pt {
-        PT::Const(c) => Some(c.clone()),
-        PT::Var(v) => env.get(v).cloned(),
-    }
-}
-
-/// Parse numeric atoms for math builtins.
-/// Spec expects numeric literals. We accept anything f64-parsable. :contentReference[oaicite:3]{index=3}
-fn parse_number(a: &Atom) -> Option<f64> {
+fn atom_to_num(a: &Atom) -> Option<f64> {
     match a {
         Atom::Literal(s) => s.parse::<f64>().ok(),
         _ => None,
     }
 }
 
-/// Canonical literal string for hashing.
-/// (Same one you added earlier.)
+//
+// ------------------------- Literal canonicalization -------------------------
+//
+
 fn canon_lit(l: &Literal) -> String {
     match l {
         Literal::RdfString { lex, lang, datatype } => {

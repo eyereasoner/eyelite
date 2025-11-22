@@ -12,7 +12,10 @@ backward: build
 french: build
 	target/release/eyelite examples/french_cities.n3 > examples/output/french_cities.n3
 
-all: socrates backward french
+peano: build
+	target/release/eyelite examples/peano.n3 > examples/output/peano.n3
+
+all: socrates backward french peano
 
 clean:
 	cargo clean

@@ -99,15 +99,58 @@ fn build_statement(pair: Pair<Rule>) -> Result<Vec<Statement>, ParseError> {
 
 fn build_implication(pair: Pair<Rule>) -> Result<Statement, ParseError> {
     let mut it = pair.into_inner();
-    let premise = build_formula(it.next().unwrap())?;
-    let op = it.next().unwrap().as_str(); // now Rule::implication_op
-    let conclusion = build_formula(it.next().unwrap())?;
-    let direction = if op == "=>" {
-        ImplicationDir::Forward
+
+    let lhs = it.next().unwrap();
+    let op_pair = it.next().unwrap(); // Rule::implication_op
+    let rhs = it.next().unwrap();
+
+    // Peel wrappers if present
+    let lhs_inner = if lhs.as_rule() == Rule::implication_lhs {
+        lhs.into_inner().next().unwrap()
     } else {
-        ImplicationDir::Backward
+        lhs
     };
-    Ok(Statement::Implication { premise, conclusion, direction })
+
+    let rhs_inner = if rhs.as_rule() == Rule::implication_rhs {
+        rhs.into_inner().next().unwrap()
+    } else {
+        rhs
+    };
+
+    let op = op_pair.as_str();
+
+    if op == "=>" {
+        let premise = build_formula(lhs_inner)?;
+        let conclusion = build_implication_rhs(rhs_inner)?;
+        Ok(Statement::Implication {
+            premise,
+            conclusion,
+            direction: ImplicationDir::Forward,
+        })
+    } else {
+        let premise = build_implication_rhs(rhs_inner)?;
+        let conclusion = build_formula(lhs_inner)?;
+        Ok(Statement::Implication {
+            premise,
+            conclusion,
+            direction: ImplicationDir::Backward,
+        })
+    }
+}
+
+fn build_implication_rhs(pair: Pair<Rule>) -> Result<Formula, ParseError> {
+    match pair.as_rule() {
+        Rule::formula => build_formula(pair),
+        Rule::boolean_literal => {
+            let s = pair.as_str().trim_start_matches('@').to_ascii_lowercase();
+            if s == "true" {
+                Ok(Formula { statements: vec![] }) // true == empty conjunction
+            } else {
+                Err(ParseError::Unexpected(pair.as_rule()))
+            }
+        }
+        r => Err(ParseError::Unexpected(r)),
+    }
 }
 
 fn build_triples(pair: Pair<Rule>) -> Result<Vec<Statement>, ParseError> {

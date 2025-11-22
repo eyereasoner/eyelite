@@ -27,8 +27,11 @@ sparql_base = { BASE_SPARQL_KW ~ IRIREF }
 
 statement = { implication | triples }
 
-implication = { formula ~ implication_op ~ formula ~ "." }
+implication = { implication_lhs ~ implication_op ~ implication_rhs ~ "." }
 implication_op = { "=>" | "<=" }
+
+implication_lhs = { formula }
+implication_rhs = { formula | boolean_literal }
 
 triples = { subject ~ pred_obj_list ~ "." }
 
