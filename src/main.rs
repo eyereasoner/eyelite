@@ -309,8 +309,18 @@ impl PrefixEnv {
 
     fn prefixes_used_for_output(&self, triples: &[Triple]) -> Vec<(String, String)> {
         let mut used = HashSet::new();
+
         for t in triples {
-            for iri in collect_iris_in_triple(t) {
+            // Collect IRIs from subject + object always.
+            // Collect IRIs from predicate only if it won't be printed as `a`.
+            let mut iris = Vec::new();
+            iris.extend(collect_iris_in_term(&t.s));
+            if !is_rdf_type_pred(&t.p) {
+                iris.extend(collect_iris_in_term(&t.p));
+            }
+            iris.extend(collect_iris_in_term(&t.o));
+
+            for iri in iris {
                 for (p, base) in &self.map {
                     if base.is_empty() { continue; }
                     if iri.starts_with(base) {
@@ -319,29 +329,35 @@ impl PrefixEnv {
                 }
             }
         }
+
         let mut v: Vec<(String, String)> = used.into_iter()
             .filter_map(|p| self.map.get(&p).map(|b| (p, b.clone())))
             .collect();
-        v.sort_by(|a,b| a.0.cmp(&b.0));
+        v.sort_by(|a, b| a.0.cmp(&b.0));
         v
     }
 }
 
-fn collect_iris_in_triple(t: &Triple) -> Vec<String> {
-    let mut out = vec![];
-    fn rec(term: &Term, out: &mut Vec<String>) {
-        match term {
-            Term::Iri(i) => out.push(i.clone()),
-            Term::List(xs) => for x in xs { rec(x, out); }
-            Term::Formula(ts) => for tr in ts { 
-                rec(&tr.s, out); rec(&tr.p, out); rec(&tr.o, out);
+fn collect_iris_in_term(t: &Term) -> Vec<String> {
+    let mut out = Vec::new();
+    match t {
+        Term::Iri(i) => out.push(i.clone()),
+        Term::List(vs) => {
+            for x in vs {
+                out.extend(collect_iris_in_term(x));
             }
-            _ => {}
         }
+        Term::Formula(fs) => {
+            for tr in fs {
+                out.extend(collect_iris_in_term(&tr.s));
+                out.extend(collect_iris_in_term(&tr.p));
+                out.extend(collect_iris_in_term(&tr.o));
+            }
+        }
+        Term::Literal(_)
+        | Term::Var(_)
+        | Term::Blank(_) => {}
     }
-    rec(&t.s, &mut out);
-    rec(&t.p, &mut out);
-    rec(&t.o, &mut out);
     out
 }
 
@@ -610,6 +626,11 @@ impl Parser {
         };
         Rule { premise, conclusion, is_forward }
     }
+}
+
+fn is_rdf_type_pred(p: &Term) -> bool {
+    let iri = format!("{}type", RDF_NS);
+    matches!(p, Term::Iri(i) if i == &iri)
 }
 
 fn is_log_implies(p: &Term) -> bool {
@@ -1282,13 +1303,15 @@ fn term_to_n3(t: &Term, pref: &PrefixEnv) -> String {
     }
 }
 
-fn triple_to_n3(t: &Triple, pref: &PrefixEnv) -> String {
-    format!(
-        "{} {} {} .",
-        term_to_n3(&t.s, pref),
-        term_to_n3(&t.p, pref),
-        term_to_n3(&t.o, pref),
-    )
+fn triple_to_n3(tr: &Triple, prefixes: &PrefixEnv) -> String {
+    let s = term_to_n3(&tr.s, prefixes);
+    let p = if is_rdf_type_pred(&tr.p) {
+        "a".to_string()
+    } else {
+        term_to_n3(&tr.p, prefixes)
+    };
+    let o = term_to_n3(&tr.o, prefixes);
+    format!("{} {} {} .", s, p, o)
 }
 
 fn main() {
