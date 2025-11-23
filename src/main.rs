@@ -1301,6 +1301,176 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
             vec![]
         }
 
+        // ----------------
+        // list:member
+        // ----------------
+        // CWM/EYE semantics:
+        //   Subject is a list, object is an element of that list. :contentReference[oaicite:2]{index=2}
+        // Bidirectional in the useful direction:
+        //   - if subject is a ground list and object is var => enumerate members
+        //   - if subject is a ground list and object is ground => membership test
+        Term::Iri(p) if p == &format!("{}member", LIST_NS) => {
+            let xs = match &g.s {
+                Term::List(xs) => xs,
+                _ => return vec![],
+            };
+
+            let mut outs = Vec::new();
+            for x in xs {
+                if let Some(s2) = unify_term(&g.o, x, subst) {
+                    outs.push(s2);
+                }
+            }
+            outs
+        }
+
+        // --------------
+        // list:in
+        // --------------
+        // Dual of member:
+        //   Subject is an element, object is a list, and subject is in object. :contentReference[oaicite:3]{index=3}
+        // Useful direction:
+        //   - if object is ground list:
+        //       * subject var => enumerate
+        //       * subject ground => test
+        Term::Iri(p) if p == &format!("{}in", LIST_NS) => {
+            let xs = match &g.o {
+                Term::List(xs) => xs,
+                _ => return vec![],
+            };
+
+            let mut outs = Vec::new();
+            for x in xs {
+                if let Some(s2) = unify_term(&g.s, x, subst) {
+                    outs.push(s2);
+                }
+            }
+            outs
+        }
+
+        // -----------------
+        // list:length
+        // -----------------
+        // EYE builtin name; same intent as math:memberCount. :contentReference[oaicite:4]{index=4}
+        //   L list:length N  iff N is the number of members in L.
+        // Only computes/checks when L is a ground list.
+        Term::Iri(p) if p == &format!("{}length", LIST_NS) => {
+            let xs = match &g.s {
+                Term::List(xs) => xs,
+                _ => return vec![],
+            };
+
+            // length is always an integer literal in eyelite
+            let n = xs.len() as i64;
+            let n_term = Term::Literal(n.to_string());
+
+            match &g.o {
+                Term::Var(_) | Term::Literal(_) => {
+                    if let Some(s2) = unify_term(&g.o, &n_term, subst) {
+                        vec![s2]
+                    } else {
+                        vec![]
+                    }
+                }
+                _ => vec![],
+            }
+        }
+
+        // -------------
+        // list:map
+        // -------------
+        // Pragmatic eyelite-only version:
+        //
+        //   (InputList Predicate) list:map OutputList.
+        //
+        // Where Predicate MUST be a builtin predicate (math:/string:/list:/time:/log:).
+        // Each element e in InputList is mapped by evaluating:
+        //   e Predicate ?y
+        // OutputList is the list of all y's.
+        //
+        // Limitations:
+        // - only unary builtin predicates via binary form (e P ?y)
+        // - InputList must be ground to run forward
+        // - no inverse generation
+        Term::Iri(p) if p == &format!("{}map", LIST_NS) => {
+            let args = match &g.s {
+                Term::List(xs) if xs.len() == 2 => xs,
+                _ => return vec![],
+            };
+
+            let input = match &args[0] {
+                Term::List(xs) => xs,
+                _ => return vec![],
+            };
+
+            let pred = match &args[1] {
+                Term::Iri(i) => Term::Iri(i.clone()),
+                _ => return vec![],
+            };
+
+            if !is_builtin_pred(&pred) {
+                // eyelite can't map non-builtin predicates yet
+                return vec![];
+            }
+
+            // Ensure input is ground; map doesn't invent list content
+            if !input.iter().all(is_ground_term) {
+                return vec![];
+            }
+
+            let mut results: Vec<Term> = Vec::with_capacity(input.len());
+            let mut cur_substs: Vec<Subst> = vec![subst.clone()];
+
+            for el in input {
+                let mut next_substs = Vec::new();
+
+                for s_in in cur_substs {
+                    let yvar = Term::Var("_mapY".to_string());
+                    let goal = Triple {
+                        s: el.clone(),
+                        p: pred.clone(),
+                        o: yvar.clone(),
+                    };
+
+                    let sols = eval_builtin(&goal, &s_in);
+                    for s_out in sols {
+                        let yval = apply_subst_term(&yvar, &s_out);
+                        // if yval still a var, skip (builtin didn't bind)
+                        if matches!(yval, Term::Var(_)) {
+                            continue;
+                        }
+                        let s_keep = s_out.clone();
+                        // stash value by pushing to results only once per solution track
+                        next_substs.push((s_keep, yval));
+                    }
+                }
+
+                // If builtin is deterministic, we will have exactly one per track.
+                if next_substs.is_empty() {
+                    return vec![];
+                }
+
+                // Flatten solution tracks:
+                cur_substs = Vec::new();
+                let mut new_results_per_track: Vec<Vec<Term>> = Vec::new();
+                for (s_next, yval) in next_substs {
+                    cur_substs.push(s_next);
+                    new_results_per_track.push(vec![yval]);
+                }
+
+                // We only support deterministic builtins per element:
+                // take first track if multiple
+                results.push(new_results_per_track[0][0].clone());
+            }
+
+            let out_list = Term::List(results);
+            if let Some(s2) = unify_term(&g.o, &out_list, subst) {
+                vec![s2]
+            } else {
+                vec![]
+            }
+        }
+
         // time:localTime
         Term::Iri(p) if p == &format!("{}localTime", TIME_NS) => {
             let now = Local::now().to_rfc3339();

@@ -130,6 +130,44 @@ List example:
   - Forward: if `L` is a non-empty list, binds `F` to its first element and `R` to the rest.
   - Inverse: if `R` is a list (or list variable), constructs `L` such that its head is `F` and tail is `R`.
 
+- `list:member`  
+  Subject is a list, object is a member of that list.  
+  Bidirectional over ground lists (enumerates members when object is a variable).
+
+  **Form:**  
+  `L list:member E.`
+
+- `list:in`  
+  Dual of `list:member`: subject is an element and object is a list.  
+  Bidirectional over ground lists.
+
+  **Form:**  
+  `E list:in L.`
+
+- `list:length`  
+  Object is the integer length of the subject list.  
+  Only checks/binds when the subject list is ground.
+
+  **Form:**  
+  `L list:length N.`
+
+- `list:map` *(pragmatic eyelite subset)*  
+  Maps a **builtin predicate** over a ground list.
+
+  **Form:**  
+  `(InputList Predicate) list:map OutputList.`
+
+  For each element `e` in `InputList`, eyelite evaluates the builtin triple:
+
+  `e Predicate ?y`
+
+  and collects the `?y` values into `OutputList`.
+
+  **Limitations:**  
+  - `Predicate` must be a builtin predicate (e.g., `math:negation`, `math:absoluteValue`, `string:length`, etc.).  
+  - `InputList` must be ground.  
+  - No inverse mode and no higher-order mapping of user-defined rules yet.
+
 ---
 
 ## Layout
