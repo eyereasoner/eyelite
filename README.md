@@ -41,27 +41,56 @@ Non-goals / limitations (for now):
 
 ---
 
-## Builtins
-
-Builtins are recognized by expanded IRIs and evaluated during premise/goal checking.
-
-Currently supported math/log/time builtins include (see N3 Builtins report for definitions):
-
 ### `math:`
 
-- `math:sum` (list form)
-- `math:product` (list form)
-- `math:difference` (list form)
-- `math:quotient` (list form)
-- `math:exponentiation` (list form; includes inverse exponent solve)
-- Comparisons:
-  - `math:greaterThan`
-  - `math:lessThan`
-  - `math:notLessThan` (>=)
+**Arithmetic (list forms unless noted):**
 
-**Extensions beyond the report (pragmatic):**
-- If the list to `math:difference` contains `xsd:date`/`xsd:dateTime`, the result is an `xsd:duration`.
-- Comparisons accept `xsd:duration` by converting to an approximate number of seconds (years/months are approximated).
+- `math:sum`  
+  `(a b c ...) math:sum ?z`  → `z = a + b + c + ...`
+- `math:product`  
+  `(a b c ...) math:product ?z` → `z = a*b*c*...`
+- `math:difference`  
+  `(a b) math:difference ?z` → `z = a - b`
+- `math:quotient`  
+  `(a b) math:quotient ?z` → `z = a / b` (fails on division by 0)
+- `math:exponentiation`  
+  `(a b) math:exponentiation ?z` → `z = a^b`  
+  Also supports **inverse exponent solve**:  
+  `(a ?b) math:exponentiation z` → `b = ln(z)/ln(a)` when valid.
+
+**Unary numeric ops:**
+
+- `math:negation`  
+  `x math:negation ?y` → `y = -x`  
+  `?x math:negation y` → `x = -y`
+- `math:absoluteValue`  
+  `x math:absoluteValue ?y` → `y = |x|`
+
+**Trig:**
+
+- `math:sin`
+- `math:cos`
+- `math:asin`
+- `math:acos`
+
+(All take a numeric subject and bind/verify the numeric object.)
+
+**Comparisons (binary or list form):**
+
+- `math:greaterThan` (`>`)
+- `math:lessThan` (`<`)
+- `math:notLessThan` (`>=`)
+
+Binary example:  
+`5 math:greaterThan 3.`
+
+List example:  
+`(5 3) math:greaterThan true.`
+
+**Pragmatic extensions:**
+
+- If `math:difference` receives `(xsd:date|xsd:dateTime  xsd:date|xsd:dateTime)`, it returns an `xsd:duration`.
+- Comparisons accept `xsd:duration` by converting to an approximate number of seconds (years/months approximated).
 
 ### `log:`
 
@@ -72,6 +101,10 @@ Currently supported math/log/time builtins include (see N3 Builtins report for d
 
 - `time:localTime` (legacy CWM/SWAP builtin):  
   `"" time:localTime ?D.` binds `?D` to the current local time as an `xsd:dateTime`.
+
+### `string:` / `list:` namespaces
+
+The prefixes are recognized, but **no `string:` or `list:` builtins are implemented yet**.
 
 ---
 
