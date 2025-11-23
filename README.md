@@ -121,6 +121,15 @@ List example:
   * Inputs must be bound lists; `list:append` does not invent missing list parts.
   * Matches the SWAP/CWM `list:append` builtin behavior.
 
+- `list:firstRest` *(experimental / not yet specced)*  
+  Bidirectional “head/tail” list splitter/constructor.
+
+  **Form:**  
+  `L list:firstRest (F R).`
+
+  - Forward: if `L` is a non-empty list, binds `F` to its first element and `R` to the rest.
+  - Inverse: if `R` is a list (or list variable), constructs `L` such that its head is `F` and tail is `R`.
+
 ---
 
 ## Layout

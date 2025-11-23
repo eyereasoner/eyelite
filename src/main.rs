@@ -31,6 +31,7 @@ enum Term {
     Var(String),
     Blank(String),
     List(Vec<Term>),
+    OpenList(Vec<Term>, String),
     Formula(Vec<Triple>), // conjunction of triple patterns
 }
 
@@ -464,6 +465,11 @@ fn collect_iris_in_term(t: &Term) -> Vec<String> {
                 out.extend(collect_iris_in_term(x));
             }
         }
+        Term::OpenList(vs, _) => {
+            for x in vs {
+                out.extend(collect_iris_in_term(x));
+            }
+        }
         Term::Formula(fs) => {
             for tr in fs {
                 out.extend(collect_iris_in_term(&tr.s));
@@ -826,6 +832,9 @@ fn contains_var_term(t: &Term, v: &str) -> bool {
     match t {
         Term::Var(x) => x == v,
         Term::List(xs) => xs.iter().any(|e| contains_var_term(e, v)),
+        Term::OpenList(xs, tailv) => {
+            xs.iter().any(|e| contains_var_term(e, v)) || tailv == v
+        }
         Term::Formula(ts) => ts.iter().any(|tr| {
             contains_var_term(&tr.s, v)
                 || contains_var_term(&tr.p, v)
@@ -839,6 +848,7 @@ fn is_ground_term(t: &Term) -> bool {
     match t {
         Term::Var(_) => false,
         Term::List(xs) => xs.iter().all(is_ground_term),
+        Term::OpenList(_, _) => false,
         Term::Formula(ts) => ts.iter().all(is_ground_triple),
         _ => true,
     }
@@ -877,6 +887,29 @@ fn apply_subst_term(t: &Term, s: &Subst) -> Term {
             }
         }
         Term::List(xs) => Term::List(xs.iter().map(|e| apply_subst_term(e, s)).collect()),
+        Term::OpenList(prefix, tailv) => {
+            let new_prefix: Vec<Term> =
+                prefix.iter().map(|e| apply_subst_term(e, s)).collect();
+
+            if let Some(tail_term) = s.get(tailv) {
+                let tail_applied = apply_subst_term(tail_term, s);
+                match tail_applied {
+                    Term::List(tail_elems) => {
+                        let mut all = new_prefix;
+                        all.extend(tail_elems);
+                        Term::List(all)
+                    }
+                    Term::OpenList(tail_prefix, tail_tailv) => {
+                        let mut all_prefix = new_prefix;
+                        all_prefix.extend(tail_prefix);
+                        Term::OpenList(all_prefix, tail_tailv)
+                    }
+                    _ => Term::OpenList(new_prefix, tailv.clone()),
+                }
+            } else {
+                Term::OpenList(new_prefix, tailv.clone())
+            }
+        }
         Term::Formula(ts) => {
             Term::Formula(ts.iter().map(|tr| apply_subst_triple(tr, s)).collect())
         }
@@ -890,6 +923,24 @@ fn apply_subst_triple(tr: &Triple, s: &Subst) -> Triple {
         p: apply_subst_term(&tr.p, s),
         o: apply_subst_term(&tr.o, s),
     }
+}
+
+fn unify_open_with_list(
+    prefix: &[Term],
+    tailv: &str,
+    ys: &[Term],
+    subst: &Subst,
+) -> Option<Subst> {
+    if ys.len() < prefix.len() {
+        return None;
+    }
+    let mut s2 = subst.clone();
+    for (x, y) in prefix.iter().zip(ys.iter()) {
+        s2 = unify_term(x, y, &s2)?;
+    }
+    let rest = Term::List(ys[prefix.len()..].to_vec());
+    s2 = unify_term(&Term::Var(tailv.to_string()), &rest, &s2)?;
+    Some(s2)
 }
 
 fn unify_term(a: &Term, b: &Term, subst: &Subst) -> Option<Subst> {
@@ -915,6 +966,23 @@ fn unify_term(a: &Term, b: &Term, subst: &Subst) -> Option<Subst> {
         (Term::Iri(x), Term::Iri(y)) if x == y => Some(subst.clone()),
         (Term::Literal(x), Term::Literal(y)) if x == y => Some(subst.clone()),
         (Term::Blank(x), Term::Blank(y)) if x == y => Some(subst.clone()),
+        // Open list unification (like [H|T])
+        (Term::OpenList(pref, tailv), Term::List(ys)) => {
+            unify_open_with_list(&pref, &tailv, &ys, subst)
+        }
+        (Term::List(xs), Term::OpenList(pref, tailv)) => {
+            unify_open_with_list(&pref, &tailv, &xs, subst)
+        }
+        (Term::OpenList(p1, t1), Term::OpenList(p2, t2)) => {
+            if t1 != t2 || p1.len() != p2.len() {
+                return None;
+            }
+            let mut s2 = subst.clone();
+            for (x, y) in p1.iter().zip(p2.iter()) {
+                s2 = unify_term(x, y, &s2)?;
+            }
+            Some(s2)
+        }
         (Term::List(xs), Term::List(ys)) => {
             if xs.len() != ys.len() {
                 return None;
@@ -1169,6 +1237,68 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
                 }
                 _ => vec![],
             }
+        }
+
+        // list:firstRest  (experimental, bidirectional, supports open tail)
+        //
+        // Forward:
+        //   (a b c ...) list:firstRest (?F ?R)
+        //   => ?F = a, ?R = (b c ...)
+        //
+        // Inverse:
+        //   ?L list:firstRest (?F ?R)
+        //   => ?L = open list with head ?F and tail ?R
+        Term::Iri(p) if p == &format!("{}firstRest", LIST_NS) => {
+            // --- Forward: split a concrete non-empty list ---
+            if let Term::List(xs) = &g.s {
+                if xs.is_empty() {
+                    return vec![];
+                }
+                let first = xs[0].clone();
+                let rest = Term::List(xs[1..].to_vec());
+                let pair = Term::List(vec![first, rest]);
+
+                return unify_term(&g.o, &pair, subst).into_iter().collect();
+            }
+
+            // --- Inverse: build list from (first rest) ---
+            if let Term::List(pair) = &g.o {
+                if pair.len() != 2 {
+                    return vec![];
+                }
+                let first = &pair[0];
+                let rest = &pair[1];
+
+                match rest {
+                    // rest is concrete list => construct full concrete list
+                    Term::List(rs) => {
+                        let mut xs = Vec::with_capacity(1 + rs.len());
+                        xs.push(first.clone());
+                        xs.extend(rs.clone());
+                        let constructed = Term::List(xs);
+                        return unify_term(&g.s, &constructed, subst).into_iter().collect();
+                    }
+
+                    // rest is a variable => construct OPEN list [first | rest]
+                    Term::Var(rv) => {
+                        let constructed = Term::OpenList(vec![first.clone()], rv.clone());
+                        return unify_term(&g.s, &constructed, subst).into_iter().collect();
+                    }
+
+                    // rest is already open => extend its prefix
+                    Term::OpenList(rprefix, rtailv) => {
+                        let mut new_prefix = Vec::with_capacity(1 + rprefix.len());
+                        new_prefix.push(first.clone());
+                        new_prefix.extend(rprefix.clone());
+                        let constructed = Term::OpenList(new_prefix, rtailv.clone());
+                        return unify_term(&g.s, &constructed, subst).into_iter().collect();
+                    }
+
+                    _ => return vec![],
+                }
+            }
+
+            vec![]
         }
 
         // time:localTime
@@ -1590,6 +1720,19 @@ fn standardize_rule(rule: &Rule, gen: &mut usize) -> Rule {
                 Term::Var(nv)
             }
             Term::List(xs) => Term::List(xs.iter().map(|e| rename_term(e, vmap, gen)).collect()),
+            Term::OpenList(xs, tailv) => {
+                let new_xs: Vec<Term> =
+                    xs.iter().map(|e| rename_term(e, vmap, gen)).collect();
+                let new_tail = vmap
+                    .entry(tailv.clone())
+                    .or_insert_with(|| {
+                        let name = format!("{}__{}", tailv, *gen);
+                        *gen += 1;
+                        name
+                    })
+                    .clone();
+                Term::OpenList(new_xs, new_tail)
+            }
             Term::Formula(ts) => Term::Formula(
                 ts.iter()
                     .map(|tr| Triple {
@@ -1772,6 +1915,12 @@ fn term_to_n3(t: &Term, pref: &PrefixEnv) -> String {
         Term::Blank(b) => b.clone(),
         Term::List(xs) => {
             let inside: Vec<String> = xs.iter().map(|e| term_to_n3(e, pref)).collect();
+            format!("({})", inside.join(" "))
+        }
+        Term::OpenList(prefix, tailv) => {
+            let mut inside: Vec<String> =
+                prefix.iter().map(|e| term_to_n3(e, pref)).collect();
+            inside.push(format!("?{}", tailv));
             format!("({})", inside.join(" "))
         }
         Term::Formula(ts) => {

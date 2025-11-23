@@ -6,7 +6,7 @@
 :test :is true .
 
 # --------------------------------------------------
-# Running examples/backward_demo.n3
+# Running examples/backward.n3
 # --------------------------------------------------
 @prefix : <http://example.org/#> .
 
@@ -27,7 +27,7 @@
 } .
 
 # --------------------------------------------------
-# Running examples/french_cities.n3
+# Running examples/french-cities.n3
 # --------------------------------------------------
 @prefix : <http://www.agfa.com/w3c/euler/graph.axiom#> .
 
@@ -52,6 +52,13 @@
 :paris :path :angers .
 :chartres :path :nantes .
 :paris :path :nantes .
+
+# --------------------------------------------------
+# Running examples/gray-code-counter.n3
+# --------------------------------------------------
+@prefix : <https://eyereasoner.github.io/eye/reasoning#> .
+
+((1 1 1 1 1 1 1 1 1) (0 0 0)) :isgcc ((0 0 1) (0 1 1) (0 1 0) (1 1 0) (1 1 1) (1 0 1) (1 0 0) (0 0 0) (0 0 1)) .
 
 # --------------------------------------------------
 # Running examples/hanoi.n3
