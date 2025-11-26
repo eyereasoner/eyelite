@@ -1,7 +1,7 @@
-# Makefile for ocelli
+# Makefile for eyelite
 
 SHELL := /bin/bash
-BIN := target/release/ocelli
+BIN := target/release/eyelite
 EXAMPLE_DIR := examples
 EXAMPLES := $(wildcard $(EXAMPLE_DIR)/*.n3)
 
