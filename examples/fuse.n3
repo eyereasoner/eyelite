@@ -1,0 +1,11 @@
+# inference fuse
+
+@prefix : <https://eyereasoner.github.io/ns#>.
+
+:stone :color :black.
+:stone :color :white.
+
+{
+    ?X :color :black.
+    ?X :color :white.
+} => false.

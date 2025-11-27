@@ -62,6 +62,11 @@
 :paris :path :nantes .
 
 # --------------------------------------------------
+# Running examples/fuse.n3
+# --------------------------------------------------
+# Inference fuse triggered: a { ... } => false. rule fired.
+
+# --------------------------------------------------
 # Running examples/gray-code-counter.n3
 # --------------------------------------------------
 @prefix : <https://eyereasoner.github.io/eye/reasoning#> .

@@ -33,7 +33,18 @@ run-examples: release
 			echo "# --------------------------------------------------"; \
 			echo "# Running $$f"; \
 			echo "# --------------------------------------------------"; \
-			$(BIN) "$$f"; \
+			if [ "$$f" = "examples/fuse.n3" ]; then \
+				# Fuse example: we EXPECT exit code 2. \
+				set +e; \
+				$(BIN) "$$f"; status=$$?; \
+				set -e; \
+				if [ $$status -ne 2 ]; then \
+					echo "Unexpected exit code $$status for $$f" >&2; \
+					exit $$status; \
+				fi; \
+			else \
+				$(BIN) "$$f"; \
+			fi; \
 			echo; \
 		done; \
 		echo "# All examples finished OK."; \

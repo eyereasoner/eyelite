@@ -112,6 +112,8 @@ struct Rule {
     premise: Vec<Triple>,
     conclusion: Vec<Triple>,
     is_forward: bool,
+    /// { ... } => false.   (inference fuse / constraint)
+    is_fuse: bool,
 }
 
 /// Substitution mapping variable name -> term.
@@ -884,6 +886,17 @@ impl Parser {
         // For <= rules, swap to keep premise/body on the left.
         let (premise_term, concl_term) = if is_forward { (left, right) } else { (right, left) };
 
+        // Inference fuse: { ... } => false.
+        let is_fuse = if is_forward {
+            if let Term::Literal(ref lit) = concl_term {
+                lit == "false"
+            } else {
+                false
+            }
+        } else {
+            false
+        };
+
         let raw_premise = match premise_term {
             Term::Formula(ts) => ts,
             Term::Literal(lit) if lit == "true" => Vec::new(),
@@ -892,6 +905,8 @@ impl Parser {
 
         let raw_conclusion = match concl_term {
             Term::Formula(ts) => ts,
+            // For fuses, there are no head triples to derive.
+            Term::Literal(lit) if lit == "false" => Vec::new(),
             _ => Vec::new(),
         };
 
@@ -902,6 +917,7 @@ impl Parser {
             premise,
             conclusion,
             is_forward,
+            is_fuse,
         }
     }
 }
@@ -2045,7 +2061,12 @@ fn standardize_rule(rule: &Rule, gen: &mut usize) -> Rule {
         o: rename_term(&tr.o, &mut vmap2, gen),
     }).collect();
 
-    Rule { premise, conclusion, is_forward: rule.is_forward }
+    Rule {
+        premise,
+        conclusion,
+        is_forward: rule.is_forward,
+        is_fuse: rule.is_fuse,
+    }
 }
 
 fn prove_goals(
@@ -2154,6 +2175,12 @@ fn forward_chain(
                 &mut visited,
                 &mut var_gen,
             );
+
+            // --- inference fuse handling ---
+            if r.is_fuse && !sols.is_empty() {
+                eprintln!("# Inference fuse triggered: a {{ ... }} => false. rule fired.");
+                std::process::exit(2);
+            }
 
             for s in sols {
                 // New head existentials per rule application:
