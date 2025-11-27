@@ -514,6 +514,7 @@ struct Parser {
     pos: usize,
     prefixes: PrefixEnv,
     blank_counter: usize,
+    pending_triples: Vec<Triple>,
 }
 
 impl Parser {
@@ -523,6 +524,7 @@ impl Parser {
             pos: 0,
             prefixes: PrefixEnv::new(),
             blank_counter: 0,
+            pending_triples: Vec::new(),
         }
     }
 
@@ -720,20 +722,73 @@ impl Parser {
         Term::List(elems)
     }
 
-    /// Parse blank node `[]`.
+    /// Parse blank node `[]` or `[ ... ]` property list.
     ///
-    /// We currently ignore property lists like `[ :p 1 ]` and just create a blank.
+    /// - `[]`          => a fresh Term::Blank
+    /// - `[ :p :o ]`   => a fresh Term::Blank plus extra triples
+    ///                    _:bN :p :o .
     fn parse_blank(&mut self) -> Term {
+        // Simple [] with no property list
         if *self.peek() == TokenKind::RBracket {
-            self.next();
+            self.next(); // consume ']'
             self.blank_counter += 1;
             return Term::Blank(format!("_:b{}", self.blank_counter));
         }
 
-        while *self.peek() != TokenKind::RBracket { self.next(); }
-        self.next();
+        // Blank node property list: [ predicateObjectList ]
         self.blank_counter += 1;
-        Term::Blank(format!("_:b{}", self.blank_counter))
+        let id = format!("_:b{}", self.blank_counter);
+        let subj = Term::Blank(id.clone());
+
+        // Minimal inlined `predicateObjectList` for the blank node.
+        // We *don't* use parse_predicate_object_list here to avoid
+        // mixing the subject with the outer statement.
+        loop {
+            // Verb (can also be 'a')
+            let pred = match self.peek() {
+                TokenKind::Ident(s) if s == "a" => {
+                    self.next();
+                    Term::Iri(format!("{}type", RDF_NS))
+                }
+                _ => self.parse_term(),
+            };
+
+            // Object list: o1, o2, ...
+            let mut objs = vec![self.parse_term()];
+            while *self.peek() == TokenKind::Comma {
+                self.next();
+                objs.push(self.parse_term());
+            }
+
+            for o in objs {
+                self.pending_triples.push(Triple {
+                    s: subj.clone(),
+                    p: pred.clone(),
+                    o,
+                });
+            }
+
+            if *self.peek() == TokenKind::Semicolon {
+                self.next();
+                if *self.peek() == TokenKind::RBracket {
+                    break;
+                }
+                continue;
+            }
+            break;
+        }
+
+        // Expect closing ']'
+        match self.peek() {
+            TokenKind::RBracket => {
+                self.next(); // consume ']'
+            }
+            other => panic!("Expected ']' at end of blank node property list, got {:?}", other),
+        }
+
+        // Return the blank node term; the extra triples are now in
+        // self.pending_triples and will be attached by the caller.
+        Term::Blank(id)
     }
 
     /// Parse `{ ... }` formula.
@@ -798,11 +853,17 @@ impl Parser {
 
             if *self.peek() == TokenKind::Semicolon {
                 self.next();
-                if *self.peek() == TokenKind::Dot { break; }
+                if *self.peek() == TokenKind::Dot {
+                    break;
+                }
                 continue;
             }
-
             break;
+        }
+
+        // Attach any triples created by blank node property lists `[ ... ]`
+        if !self.pending_triples.is_empty() {
+            out.extend(self.pending_triples.drain(..));
         }
 
         out

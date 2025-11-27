@@ -11,8 +11,7 @@
 
 # subclass rule
 {
-    _:A rdfs:subClassOf ?B.
-    ?S a _:A.
+    ?S a [ rdfs:subClassOf ?B].
 } => {
     ?S a ?B.
 }.
