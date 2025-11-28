@@ -449,4 +449,11 @@
 :ind a :I100 .
 :ind a :J100 .
 
+# --------------------------------------------------
+# Running examples/zebra.n3
+# --------------------------------------------------
+@prefix : <http://eulersharp.sourceforge.net/2005/11swap/zebra#> .
+
+:german :eats :fish .
+
 # All examples finished OK.

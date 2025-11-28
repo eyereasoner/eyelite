@@ -1500,6 +1500,36 @@ fn format_duration_literal_from_seconds(secs: f64) -> Term {
     Term::Literal(format!("{}^^<{}duration>", lex, XSD_NS))
 }
 
+/// Relational list:append, following the N3 spec:
+/// ( $s.i?[*] )+ list:append $o?
+/// true iff `o` is the concatenation of all lists `s.i`.
+fn list_append_split(parts: &[Term], res_elems: &[Term], subst: &Subst) -> Vec<Subst> {
+    // If we ran out of parts, the remaining result must be empty.
+    if parts.is_empty() {
+        return if res_elems.is_empty() {
+            vec![subst.clone()]
+        } else {
+            vec![]
+        };
+    }
+
+    let mut out = Vec::new();
+    let n = res_elems.len();
+
+    // Choose a split point k for the first part:
+    // left = res[0..k], right = res[k..]
+    for k in 0..=n {
+        let left = Term::List(res_elems[..k].to_vec());
+
+        if let Some(s1) = unify_term(&parts[0], &left, subst) {
+            let rest_elems = &res_elems[k..];
+            out.extend(list_append_split(&parts[1..], rest_elems, &s1));
+        }
+    }
+
+    out
+}
+
 /// Evaluate a builtin triple under current substitution.
 /// Returns zero or more new substitutions (for backtracking).
 fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
@@ -1822,44 +1852,78 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
         // ---------------------------------------------------------------------
         // log: equality builtins
         // ---------------------------------------------------------------------
+        // Relational log:equalTo: succeeds iff subject and object can be made
+        // equal by extending the current substitution.
         Term::Iri(p) if p == &format!("{}equalTo", LOG_NS) => {
-            if g.s == g.o { vec![subst.clone()] } else { vec![] }
+            // Use the original goal terms with the current substitution.
+            unify_term(&goal.s, &goal.o, subst).into_iter().collect()
         }
 
+        // log:notEqualTo is the exact complement: it succeeds iff there is
+        // *no* unifier for subject and object under the current substitution.
         Term::Iri(p) if p == &format!("{}notEqualTo", LOG_NS) => {
-            if g.s != g.o { vec![subst.clone()] } else { vec![] }
+            if unify_term(&goal.s, &goal.o, subst).is_some() {
+                // They *can* be equal → notEqualTo must fail.
+                vec![]
+            } else {
+                // No way to make them equal → notEqualTo holds, no new bindings.
+                vec![subst.clone()]
+            }
         }
 
         // ---------------------------------------------------------------------
-        // list:append  (concatenate list-of-lists)
+        // list:append  -- relational, like in the N3 spec and  Prolog append/2
         // ---------------------------------------------------------------------
         Term::Iri(p) if p == &format!("{}append", LIST_NS) => {
+            // Subject must be a list-of-lists
             let parts = match &g.s {
                 Term::List(xs) => xs,
                 _ => return vec![],
             };
 
-            let mut out_elems = Vec::new();
-            for part in parts {
-                match part {
-                    Term::List(es) => {
-                        if !es.iter().all(is_ground_term) { return vec![]; }
-                        out_elems.extend(es.clone());
-                    }
-                    _ => return vec![],
-                }
-            }
-
-            let result = Term::List(out_elems);
-
             match &g.o {
-                Term::Var(v) => {
-                    let mut s2 = subst.clone();
-                    s2.insert(v.clone(), result);
-                    vec![s2]
+                // Relational mode: object is a (possibly non-ground) list.
+                // Matches N3 spec examples such as:
+                //   ( (1 2) ?what ) list:append (1 2 3 4)
+                //   ( ?what (3 4) ) list:append (1 2 3 4)
+                Term::List(res_elems) => {
+                    list_append_split(parts, res_elems, subst)
                 }
-                Term::List(_) if g.o == result => vec![subst.clone()],
-                _ => vec![],
+
+                // Functional mode: subject is list-of-lists, object is anything
+                // (typically a variable). Here we just concatenate all subject lists.
+                //
+                // This covers:
+                //   ( (1) (2 3) (4) ) list:append (1 2 3 4)
+                //   ( (1 2) (3 4) ) list:append ?list
+                _ => {
+                    let mut out_elems = Vec::<Term>::new();
+
+                    // All s.i must be rdf:List (per N3 spec), so we require inner lists here.
+                    for part in parts {
+                        match part {
+                            Term::List(es) => {
+                                // No need for "ground" checks; variables inside the lists
+                                // are fine, we just keep them structurally.
+                                out_elems.extend(es.clone());
+                            }
+                            _ => return vec![],
+                        }
+                    }
+
+                    let result = Term::List(out_elems);
+
+                    match &g.o {
+                        Term::Var(v) => {
+                            let mut s2 = subst.clone();
+                            s2.insert(v.clone(), result);
+                            vec![s2]
+                        }
+                        // Ground check: just ordinary equality.
+                        _ if g.o == result => vec![subst.clone()],
+                        _ => vec![],
+                    }
+                }
             }
         }
 
