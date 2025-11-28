@@ -82,9 +82,8 @@ In rule premises (the left side of `=>` / right side of `<=`):
 
 the locally scoped `_:` nodes are treated like **rule-scoped universal variables**:
 
-* `_:` inside a rule body behaves as if it were written as `?A`.
-* Occurrences of the same `_:` label inside that rule are linked together.
-* This lets patterns like the Socrates example work both with explicit variables *and* with blank nodes.
+* `_:A` inside a rule body behaves as if it were written as `?A`.
+* Occurrences of the same `_:` label inside that rule premis are linked together.
 
 The same applies to property-list syntax:
 
@@ -291,8 +290,7 @@ The repo includes a small suite in `examples/` that exercise different features:
 The Makefile contains helper targets:
 
 ```bash
-# Build optimized binary and run all examples,
-# writing their output to examples-output.n3
+# Build optimized binary and run all examples, writing their output to examples-output.n3
 make run-examples
 ```
 
