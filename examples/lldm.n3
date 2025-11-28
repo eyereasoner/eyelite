@@ -1,3 +1,9 @@
+# ----------------------------------
+# Leg Length Discrepancy Measurement
+# ----------------------------------
+#
+# See https://web.archive.org/web/20220524062310/http://www.agfa.com/w3c/2002/10/medicad/op/
+
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix math: <http://www.w3.org/2000/10/swap/math#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
