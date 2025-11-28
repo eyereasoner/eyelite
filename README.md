@@ -278,6 +278,7 @@ The repo includes a small suite in `examples/` that exercise different features:
 * `french-cities.n3` — simple data & rules over a tiny city dataset.
 * `fuse.n3` — `{ ... } => false.` inference fuse and exit code 2.
 * `gray-code-counter.n3` — Gray code, counters, and list built-ins.
+* `good-cobbler.n3` — using list terms.
 * `hanoi.n3` — recursive Towers of Hanoi rules.
 * `lldm.n3` — more advanced reasoning (lists, math).
 * `peano.n3` — Peano arithmetic style encodings.
