@@ -270,18 +270,20 @@ Output:
 
 The repo includes a small suite in `examples/` that exercise different features:
 
-* `socrates.n3` — classic subclass inference.
-* `existential-rule.n3` — blank nodes in rule heads → existential Skolem constants.
-* `fuse.n3` — `{ ... } => false.` inference fuse and exit code 2.
-* `taxonomy.n3` — taxonomy / transitive subclass patterns.
 * `age.n3` — dates, durations, and age comparison using `time:` and `math:` built-ins.
+* `backward.n3` — backward rules (`<=`) seeding forward derivations.
+* `complex.n3` — combined use of forward / backward rules and built-ins.
+* `control-system.n3` — control system emulation using rules.
+* `existential-rule.n3` — blank nodes in rule heads → existential Skolem constants.
 * `french-cities.n3` — simple data & rules over a tiny city dataset.
+* `fuse.n3` — `{ ... } => false.` inference fuse and exit code 2.
 * `gray-code-counter.n3` — Gray code, counters, and list built-ins.
 * `hanoi.n3` — recursive Towers of Hanoi rules.
 * `lldm.n3` — more advanced reasoning (lists, math).
 * `peano.n3` — Peano arithmetic style encodings.
-* `backward.n3` — backward rules (`<=`) seeding forward derivations.
-* `complex.n3` — combined use of forward / backward rules and built-ins.
+* `socrates.n3` — classic subclass inference.
+* `taxonomy.n3` — taxonomy / transitive subclass patterns.
+* `zebra.n3` — Einstein's zebra puzzle.
 
 (See the `examples` directory and `examples-output.n3` for the full current set.)
 
