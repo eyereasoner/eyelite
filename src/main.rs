@@ -796,29 +796,66 @@ impl Parser {
     /// Parse `{ ... }` formula.
     ///
     /// Inside formulas the last '.' can be omitted, so we accept either '.' or '}'.
+    /// Nested rules `{ A } => { B }` and `{ A } <= { B }` inside a formula are
+    /// represented as explicit `log:implies` / `log:impliedBy` triples:
+    ///
+    ///   { A } => { B }   ==>   (A) log:implies (B)
+    ///   { A } <= { B }   ==>   (A) log:impliedBy (B)
     fn parse_formula(&mut self) -> Term {
         let mut triples = vec![];
 
         while *self.peek() != TokenKind::RBrace {
-            let first = self.parse_term();
+            let left = self.parse_term();
 
             match self.peek() {
-                TokenKind::OpImplies | TokenKind::OpImpliedBy => {
-                    // Nested rules are ignored in this subset.
-                    self.next();
-                    self.parse_term();
+                TokenKind::OpImplies => {
+                    // { left } => { right }  inside a formula
+                    self.next(); // consume =>
+                    let right = self.parse_term();
+
+                    let pred = Term::Iri(format!("{}implies", LOG_NS));
+                    triples.push(Triple {
+                        s: left,
+                        p: pred,
+                        o: right,
+                    });
 
                     match self.peek() {
-                        TokenKind::Dot => { self.next(); }
+                        TokenKind::Dot => {
+                            self.next();
+                        }
                         TokenKind::RBrace => {}
                         other => panic!("Expected '.' or '}}', got {:?}", other),
                     }
                 }
-                _ => {
-                    triples.append(&mut self.parse_predicate_object_list(first));
+
+                TokenKind::OpImpliedBy => {
+                    // { left } <= { right }  inside a formula
+                    self.next(); // consume <=
+                    let right = self.parse_term();
+
+                    let pred = Term::Iri(format!("{}impliedBy", LOG_NS));
+                    triples.push(Triple {
+                        s: left,
+                        p: pred,
+                        o: right,
+                    });
 
                     match self.peek() {
-                        TokenKind::Dot => { self.next(); }
+                        TokenKind::Dot => {
+                            self.next();
+                        }
+                        TokenKind::RBrace => {}
+                        other => panic!("Expected '.' or '}}', got {:?}", other),
+                    }
+                }
+
+                _ => {
+                    triples.append(&mut self.parse_predicate_object_list(left));
+                    match self.peek() {
+                        TokenKind::Dot => {
+                            self.next();
+                        }
                         TokenKind::RBrace => {}
                         other => panic!("Expected '.' or '}}', got {:?}", other),
                     }
@@ -2215,7 +2252,7 @@ fn prove_goals(
 
 fn forward_chain(
     mut facts: Vec<Triple>,
-    forward_rules: &[Rule],
+    forward_rules: &mut Vec<Rule>,
     back_rules: &[Rule],
 ) -> Vec<Triple> {
     let mut fact_set: HashSet<Triple> = facts.iter().cloned().collect();
@@ -2226,10 +2263,14 @@ fn forward_chain(
     loop {
         let mut changed = false;
 
-        for r in forward_rules.iter() {
+        // We may add new forward rules while looping, so iterate by index.
+        let mut i = 0usize;
+        while i < forward_rules.len() {
+            let r = forward_rules[i].clone();
+            i += 1;
+
             let empty = Subst::new();
             let mut visited = vec![];
-
             let sols = prove_goals(
                 &r.premise,
                 &empty,
@@ -2249,11 +2290,63 @@ fn forward_chain(
             for s in sols {
                 // New head existentials per rule application:
                 let mut blank_map: HashMap<String, String> = HashMap::new();
-
                 for cpat in &r.conclusion {
                     let instantiated = apply_subst_triple(cpat, &s);
-                    // Skolemize any conclusion blanks into _:sk_N
-                    let inst = skolemize_triple(&instantiated, &mut blank_map, &mut skolem_counter);
+
+                    // If the instantiated conclusion is itself a rule encoded as
+                    //   { ... } log:implies { ... }
+                    // then we turn it into a *live* forward rule.
+                    let is_rule_triple =
+                        is_log_implies(&instantiated.p)
+                            && matches!(instantiated.s, Term::Formula(_))
+                            && matches!(instantiated.o, Term::Formula(_));
+
+                    if is_rule_triple {
+                        // 1) Keep the triple itself as derived output, even if non-ground,
+                        //    so it shows up in the final printing.
+                        if !fact_set.contains(&instantiated)
+                            && !has_alpha_equiv(&fact_set, &instantiated)
+                        {
+                            fact_set.insert(instantiated.clone());
+                            facts.push(instantiated.clone());
+                            derived_forward.push(instantiated.clone());
+                            changed = true;
+                        }
+
+                        // 2) Convert it into a Rule and add it to `forward_rules` if new.
+                        if let (Term::Formula(prem), Term::Formula(concl)) =
+                            (&instantiated.s, &instantiated.o)
+                        {
+                            // Lift rule-body blanks to variables, like Parser::make_rule does.
+                            let (premise, conclusion) =
+                                lift_blank_rule_vars(prem.clone(), concl.clone());
+
+                            let new_rule = Rule {
+                                premise,
+                                conclusion,
+                                is_forward: true,
+                                is_fuse: false,
+                            };
+
+                            let already_there = forward_rules.iter().any(|rr| {
+                                rr.is_forward == new_rule.is_forward
+                                    && rr.is_fuse == new_rule.is_fuse
+                                    && rr.premise == new_rule.premise
+                                    && rr.conclusion == new_rule.conclusion
+                            });
+
+                            if !already_there {
+                                forward_rules.push(new_rule);
+                            }
+                        }
+
+                        // Skip normal fact handling for rule triples.
+                        continue;
+                    }
+
+                    // Normal fact conclusion: skolemize blanks into _:sk_N
+                    let inst =
+                        skolemize_triple(&instantiated, &mut blank_map, &mut skolem_counter);
 
                     // Only add fully ground facts (no variables/OpenList)
                     if !is_ground_triple(&inst) {
@@ -2330,15 +2423,25 @@ fn term_to_n3(t: &Term, pref: &PrefixEnv) -> String {
 }
 
 fn triple_to_n3(tr: &Triple, prefixes: &PrefixEnv) -> String {
-    let s = term_to_n3(&tr.s, prefixes);
+    // Pretty-print rule triples of the form:
+    //   { ... } log:implies { ... }   as   { ... } => { ... } .
+    if is_log_implies(&tr.p) {
+        if let (Term::Formula(prem), Term::Formula(concl)) = (&tr.s, &tr.o) {
+            let prem_s = term_to_n3(&Term::Formula(prem.clone()), prefixes);
+            let concl_s = term_to_n3(&Term::Formula(concl.clone()), prefixes);
+            return format!("{} => {} .", prem_s, concl_s);
+        }
+    }
 
+    // (Optional extension: similarly for log:impliedBy you could print "<=")
+
+    let s = term_to_n3(&tr.s, prefixes);
     // rdf:type prints as `a` in Turtle/N3.
     let p = if is_rdf_type_pred(&tr.p) {
         "a".to_string()
     } else {
         term_to_n3(&tr.p, prefixes)
     };
-
     let o = term_to_n3(&tr.o, prefixes);
     format!("{} {} {} .", s, p, o)
 }
@@ -2361,13 +2464,13 @@ fn main() {
 
     let toks = lex(&text);
     let mut p = Parser::new(toks);
-    let (prefixes, triples, frules, brules) = p.parse_document();
+    let (prefixes, triples, mut frules, brules) = p.parse_document();
 
     // Keep only ground input facts for the forward database.
     let facts: Vec<Triple> = triples.into_iter().filter(is_ground_triple).collect();
 
     // Run the engine!
-    let derived = forward_chain(facts, &frules, &brules);
+    let derived = forward_chain(facts, &mut frules, &brules);
 
     // Print only prefixes needed by derived output.
     let used_prefixes = prefixes.prefixes_used_for_output(&derived);

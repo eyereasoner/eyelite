@@ -35,6 +35,18 @@
 :actuator2 :control1 26.08 .
 
 # --------------------------------------------------
+# Running examples/derived-rule.n3
+# --------------------------------------------------
+@prefix : <https://eyereasoner.github.io/ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+{ ?y rdf:type :Dog .
+} => { :test :is true .
+} .
+:test :is true .
+
+# --------------------------------------------------
 # Running examples/existential-rule.n3
 # --------------------------------------------------
 @prefix : <http://example.org/socrates#> .

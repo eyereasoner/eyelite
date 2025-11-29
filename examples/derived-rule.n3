@@ -1,0 +1,15 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <https://eyereasoner.github.io/ns#>.
+
+:Minka a :Cat.
+:Charly a :Dog.
+
+{
+    ?x a :Cat.
+} => {
+    {
+        ?y a :Dog.
+    } => {
+        :test :is true.
+    }.
+}.
