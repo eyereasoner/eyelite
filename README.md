@@ -315,5 +315,6 @@ Dependencies:
 make
 ```
 
-This builds the `eyeling` binary and runs the examples in `examples/` which should give `examples-output.n3`.
+This builds the `eyeling` binary and runs the examples in [examples](https://github.com/eyereasoner/eyeling/tree/main/examples)
+which should give [examples-output.n3](https://github.com/eyereasoner/eyeling/blob/main/examples-output.n3).
 
