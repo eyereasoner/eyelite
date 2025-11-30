@@ -24,9 +24,9 @@
 use std::collections::{HashMap, HashSet};
 use std::env;
 use std::fs;
-
 // We use chrono only for time/date builtins (time:localTime, math:difference on dates).
 use chrono::{DateTime, Local, NaiveDate, TimeZone, Utc};
+use num_bigint::BigInt;
 
 /// Namespace constants we expand QNames against.
 /// Rust tip: `const` is compile-time and has no runtime cost.
@@ -40,7 +40,7 @@ const LIST_NS: &str = "http://www.w3.org/2000/10/swap/list#";
 const TIME_NS: &str = "http://www.w3.org/2000/10/swap/time#";
 
 /// Safety valve so backward proof doesn’t loop forever in degenerate cases.
-const MAX_BACKWARD_DEPTH: usize = 2000;
+const MAX_BACKWARD_DEPTH: usize = 20000;
 
 // =====================================================================================
 // AST (Abstract Syntax Tree)
@@ -1383,11 +1383,41 @@ fn unify_triple(pat: &Triple, fact: &Triple, subst: &Subst) -> Option<Subst> {
 //
 
 fn parse_num(t: &Term) -> Option<f64> {
-    if let Term::Literal(s) = t { s.parse::<f64>().ok() } else { None }
+    if let Term::Literal(s) = t {
+        s.parse::<f64>().ok()
+    } else {
+        None
+    }
+}
+
+/// Parse a literal as an arbitrary-precision integer if it looks like
+/// a plain decimal integer (optionally with a leading '-').
+fn parse_int_literal(t: &Term) -> Option<BigInt> {
+    if let Term::Literal(s) = t {
+        let (lex, _dt) = literal_parts(s);
+        let lex = strip_quotes(&lex);
+
+        if lex.is_empty() {
+            return None;
+        }
+
+        let is_dec_int = lex.chars().all(|c| c.is_ascii_digit())
+            || (lex.starts_with('-')
+                && lex[1..].chars().all(|c| c.is_ascii_digit()));
+
+        if is_dec_int {
+            return BigInt::parse_bytes(lex.as_bytes(), 10);
+        }
+    }
+    None
 }
 
 fn format_num(n: f64) -> String {
-    if n.fract() == 0.0 { format!("{}", n as i64) } else { format!("{}", n) }
+    if n.fract() == 0.0 {
+        format!("{}", n as i64)
+    } else {
+        format!("{}", n)
+    }
 }
 
 /// Decide whether a predicate IRI is a builtin we handle internally.
@@ -1655,17 +1685,54 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
         Term::Iri(p) if p == &format!("{}sum", MATH_NS) => {
             // (a b c) math:sum ?z
             if let Term::List(xs) = &g.s {
-                if xs.len() >= 2 && xs.iter().all(|t| parse_num(t).is_some()) {
-                    let total: f64 = xs.iter().map(|t| parse_num(t).unwrap()).sum();
-                    return match &g.o {
-                        Term::Var(v) => {
-                            let mut s2 = subst.clone();
-                            s2.insert(v.clone(), Term::Literal(format_num(total)));
-                            vec![s2]
+                if xs.len() >= 2 {
+                    // ----- Exact big-integer mode for plain integer literals -----
+                    if let Some(total_big) = {
+                        let mut acc = BigInt::from(0_i32);
+                        let mut ok = true;
+                        for t in xs {
+                            match parse_int_literal(t) {
+                                Some(n) => acc += n,
+                                None => {
+                                    ok = false;
+                                    break;
+                                }
+                            }
                         }
-                        Term::Literal(o) if o == &format_num(total) => vec![subst.clone()],
-                        _ => vec![],
-                    };
+                        if ok { Some(acc) } else { None }
+                    } {
+                        let lit = Term::Literal(total_big.to_string());
+                        return match &g.o {
+                            // ?z is a variable: bind it to the big integer literal.
+                            Term::Var(v) => {
+                                let mut s2 = subst.clone();
+                                s2.insert(v.clone(), lit);
+                                vec![s2]
+                            }
+                            // Otherwise, unify object with the computed literal (relational behaviour).
+                            _ => {
+                                if let Some(s2) = unify_term(&g.o, &lit, subst) {
+                                    vec![s2]
+                                } else {
+                                    vec![]
+                                }
+                            }
+                        };
+                    }
+
+                    // ----- Fallback: old float-based behaviour -----
+                    if xs.iter().all(|t| parse_num(t).is_some()) {
+                        let total: f64 = xs.iter().map(|t| parse_num(t).unwrap()).sum();
+                        return match &g.o {
+                            Term::Var(v) => {
+                                let mut s2 = subst.clone();
+                                s2.insert(v.clone(), Term::Literal(format_num(total)));
+                                vec![s2]
+                            }
+                            Term::Literal(o) if o == &format_num(total) => vec![subst.clone()],
+                            _ => vec![],
+                        };
+                    }
                 }
             }
             vec![]
@@ -1693,7 +1760,29 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
             // (?A ?B) math:difference ?C
             if let Term::List(xs) = &g.s {
                 if xs.len() == 2 {
-                    // Numeric difference
+                    // ----- Exact big-integer difference for integer literals -----
+                    if let (Some(a_big), Some(b_big)) =
+                        (parse_int_literal(&xs[0]), parse_int_literal(&xs[1]))
+                    {
+                        let c_big = a_big - b_big;
+                        let lit = Term::Literal(c_big.to_string());
+                        return match &g.o {
+                            Term::Var(v) => {
+                                let mut s2 = subst.clone();
+                                s2.insert(v.clone(), lit);
+                                vec![s2]
+                            }
+                            _ => {
+                                if let Some(s2) = unify_term(&g.o, &lit, subst) {
+                                    vec![s2]
+                                } else {
+                                    vec![]
+                                }
+                            }
+                        };
+                    }
+
+                    // ----- Fallback: numeric difference via f64 (existing behaviour) -----
                     if let (Some(a), Some(b)) = (parse_num(&xs[0]), parse_num(&xs[1])) {
                         let c = a - b;
                         return match &g.o {
@@ -1707,14 +1796,13 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
                         };
                     }
 
-                    // Date(dateTime) difference -> duration
+                    // ----- Date(dateTime) difference -> duration (unchanged) -----
                     if let (Some(a_dt), Some(b_dt)) =
                         (parse_datetime_like(&xs[0]), parse_datetime_like(&xs[1]))
                     {
                         let diff = a_dt - b_dt;
                         let secs = diff.num_seconds() as f64;
                         let dur_term = format_duration_literal_from_seconds(secs);
-
                         return match &g.o {
                             Term::Var(v) => {
                                 let mut s2 = subst.clone();

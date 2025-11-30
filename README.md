@@ -231,6 +231,7 @@ The crate is deliberately small and self-contained:
 Dependencies:
 
 * [`chrono`](https://crates.io/crates/chrono) for `time:localTime` and date/duration built-ins.
+* [`num-bigint`](https://crates.io/crates/num-bigint) for `math:sum` and `math:difference` built-ins.
 * Standard library only otherwise.
 
 ---

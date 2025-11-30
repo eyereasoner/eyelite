@@ -71,6 +71,19 @@
 :Plato :is _:sk_1 .
 
 # --------------------------------------------------
+# Running examples/fibonacci.n3
+# --------------------------------------------------
+@prefix : <https://eyereasoner.github.io/eye/reasoning#> .
+
+:test :is {
+    0 :fibonacci 0 .
+    1 :fibonacci 1 .
+    6 :fibonacci 8 .
+    91 :fibonacci 4660046610375530309 .
+    283 :fibonacci 62232491515607091882574410635924603070626544377175485625797 .
+} .
+
+# --------------------------------------------------
 # Running examples/french-cities.n3
 # --------------------------------------------------
 @prefix : <http://www.agfa.com/w3c/euler/graph.axiom#> .
