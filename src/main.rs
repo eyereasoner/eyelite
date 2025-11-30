@@ -40,7 +40,7 @@ const LIST_NS: &str = "http://www.w3.org/2000/10/swap/list#";
 const TIME_NS: &str = "http://www.w3.org/2000/10/swap/time#";
 
 /// Safety valve so backward proof doesn’t loop forever in degenerate cases.
-const MAX_BACKWARD_DEPTH: usize = 20000;
+const MAX_BACKWARD_DEPTH: usize = 50000;
 
 // =====================================================================================
 // AST (Abstract Syntax Tree)
@@ -119,6 +119,9 @@ struct Rule {
 /// Substitution mapping variable name -> term.
 /// Rust tip: `type Foo = ...` makes a readable alias.
 type Subst = HashMap<String, Term>;
+
+/// Tiny memo table for backward goals during one forward-rule proof.
+type GoalCache = HashMap<Triple, Vec<Subst>>;
 
 // =====================================================================================
 // LEXER
@@ -1369,6 +1372,27 @@ fn unify_triple(pat: &Triple, fact: &Triple, subst: &Subst) -> Option<Subst> {
     Some(s3)
 }
 
+/// Combine an "outer" substitution with a delta-substitution coming from
+/// solving a single goal. If there is a conflicting binding we drop that
+/// solution.
+fn compose_subst(outer: &Subst, delta: &Subst) -> Option<Subst> {
+    if delta.is_empty() {
+        return Some(outer.clone());
+    }
+    let mut out = outer.clone();
+    for (k, v) in delta {
+        if let Some(existing) = out.get(k) {
+            if existing != v {
+                // inconsistent; this answer can't be joined with the outer context
+                return None;
+            }
+        } else {
+            out.insert(k.clone(), v.clone());
+        }
+    }
+    Some(out)
+}
+
 // =====================================================================================
 // BUILTINS
 // =====================================================================================
@@ -2258,47 +2282,46 @@ fn standardize_rule(rule: &Rule, gen: &mut usize) -> Rule {
     }
 }
 
-fn prove_goals(
-    goals: &[Triple],
-    subst: &Subst,
+/// Solve a single goal triple under an *empty* substitution, possibly
+/// using a tiny memo table. The goal we get here is already instantiated
+/// with the outer substitution.
+fn solve_single_goal(
+    goal: &Triple,
     facts: &[Triple],
     back_rules: &[Rule],
     depth: usize,
     visited: &mut Vec<Triple>,
     var_gen: &mut usize,
+    cache: &mut GoalCache,
 ) -> Vec<Subst> {
-    if goals.is_empty() {
-        return vec![subst.clone()];
+    // Builtins are pure and cheap; keep them out of the cache and
+    // evaluate directly, starting from an empty substitution.
+    if is_builtin_pred(&goal.p) {
+        return eval_builtin(goal, &Subst::new());
     }
+
     if depth > MAX_BACKWARD_DEPTH {
         return vec![];
     }
 
-    let goal0 = apply_subst_triple(&goals[0], subst);
-    let rest = &goals[1..];
-
-    // Builtins get evaluated directly.
-    if is_builtin_pred(&goal0.p) {
-        let subs = eval_builtin(&goal0, subst);
-        let mut out = vec![];
-        for s2 in subs {
-            out.extend(prove_goals(rest, &s2, facts, back_rules, depth + 1, visited, var_gen));
-        }
-        return out;
+    // Memoization: if we've already solved this goal under the current
+    // (facts, back_rules) snapshot, reuse the delta substitutions.
+    if let Some(cached) = cache.get(goal) {
+        return cached.clone();
     }
 
-    // Loop check
-    if visited.contains(&goal0) {
+    // Loop check to avoid trivial cycles like ?X :p ?Y <= {?X :p ?Y}
+    if visited.contains(goal) {
         return vec![];
     }
-    visited.push(goal0.clone());
+    visited.push(goal.clone());
 
-    let mut results = vec![];
+    let mut results: Vec<Subst> = Vec::new();
 
-    // 1) Try matching known facts.
+    // 1) Try matching known facts, starting from an empty substitution.
     for f in facts {
-        if let Some(s2) = unify_triple(&goal0, f, subst) {
-            results.extend(prove_goals(rest, &s2, facts, back_rules, depth + 1, visited, var_gen));
+        if let Some(s2) = unify_triple(goal, f, &Subst::new()) {
+            results.push(s2);
         }
     }
 
@@ -2307,24 +2330,93 @@ fn prove_goals(
         if r.conclusion.len() != 1 {
             continue;
         }
+
         let r_std = standardize_rule(r, var_gen);
         let head = &r_std.conclusion[0];
 
-        if let Some(s2) = unify_triple(head, &goal0, subst) {
-            let body: Vec<Triple> = r_std.premise.iter()
+        if let Some(s2) = unify_triple(head, goal, &Subst::new()) {
+            // Instantiate the body under the head substitution s2.
+            let body: Vec<Triple> = r_std
+                .premise
+                .iter()
                 .map(|b| apply_subst_triple(b, &s2))
                 .collect();
 
+            // Prove the body starting from s2. Any solution is a delta
+            // substitution for this goal (w.r.t. an empty outer subst).
             let body_solutions =
-                prove_goals(&body, &s2, facts, back_rules, depth + 1, visited, var_gen);
+                prove_goals(&body, &s2, facts, back_rules, depth + 1, visited, var_gen, cache);
 
-            for sb in body_solutions {
-                results.extend(prove_goals(rest, &sb, facts, back_rules, depth + 1, visited, var_gen));
-            }
+            results.extend(body_solutions);
         }
     }
 
     visited.pop();
+
+    // Store (possibly empty) results in the cache so we don't recompute
+    // this goal again during this forward-rule proof.
+    cache.insert(goal.clone(), results.clone());
+    results
+}
+
+/// Prove a conjunction of goals under an *outer* substitution, using
+/// solve_single_goal for the first goal and then recursing on the rest.
+fn prove_goals(
+    goals: &[Triple],
+    subst: &Subst,
+    facts: &[Triple],
+    back_rules: &[Rule],
+    depth: usize,
+    visited: &mut Vec<Triple>,
+    var_gen: &mut usize,
+    cache: &mut GoalCache,
+) -> Vec<Subst> {
+    if goals.is_empty() {
+        return vec![subst.clone()];
+    }
+    if depth > MAX_BACKWARD_DEPTH {
+        return vec![];
+    }
+
+    // Apply the current substitution to the first goal; from this point on
+    // we can solve it starting from an empty substitution and treat the
+    // result as a "delta" to compose with `subst`.
+    let goal0 = apply_subst_triple(&goals[0], subst);
+    let rest = &goals[1..];
+
+    let mut results: Vec<Subst> = Vec::new();
+
+    // Solve the first goal (with memoization for non-builtins).
+    let deltas = solve_single_goal(
+        &goal0,
+        facts,
+        back_rules,
+        depth,
+        visited,
+        var_gen,
+        cache,
+    );
+
+    for delta in deltas {
+        if let Some(composed) = compose_subst(subst, &delta) {
+            if rest.is_empty() {
+                results.push(composed);
+            } else {
+                let mut tail_solutions = prove_goals(
+                    rest,
+                    &composed,
+                    facts,
+                    back_rules,
+                    depth + 1,
+                    visited,
+                    var_gen,
+                    cache,
+                );
+                results.append(&mut tail_solutions);
+            }
+        }
+    }
+
     results
 }
 
@@ -2359,6 +2451,8 @@ fn forward_chain(
 
             let empty = Subst::new();
             let mut visited = vec![];
+            // Tiny memo table for this one forward rule application.
+            let mut goal_cache: GoalCache = GoalCache::new();
 
             // NOTE: pass current backward rules as a slice
             let sols = prove_goals(
@@ -2369,6 +2463,7 @@ fn forward_chain(
                 0,
                 &mut visited,
                 &mut var_gen,
+                &mut goal_cache,
             );
 
             // --- inference fuse handling ---
@@ -2580,19 +2675,15 @@ fn triple_to_n3(tr: &Triple, prefixes: &PrefixEnv) -> String {
 // =====================================================================================
 // CLI entry point
 // =====================================================================================
-
 fn main() {
     // `env::args()` gives an iterator of CLI args.
-    // Collecting into Vec<String> is fine here (tiny inputs).
+    // Collecting into Vec is fine here (tiny inputs).
     let args: Vec<String> = env::args().collect();
-
     if args.len() != 2 {
         eprintln!("Usage: eyeling <file.n3>");
         std::process::exit(1);
     }
-
     let text = fs::read_to_string(&args[1]).expect("read file");
-
     let toks = lex(&text);
     let mut p = Parser::new(toks);
     let (prefixes, triples, mut frules, mut brules) = p.parse_document();
