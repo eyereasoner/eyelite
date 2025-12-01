@@ -47,7 +47,7 @@ run-examples: release
 			fi; \
 			echo; \
 		done; \
-		echo "# All examples finished OK."; \
+		echo "# All $(words $(EXAMPLES)) examples finished OK."; \
 	} 2>&1 | tee examples-output.n3
 
 # Run one example: make run-one FILE=examples/foo.n3
