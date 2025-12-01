@@ -1,0 +1,18 @@
+# --------------------------
+# Scoped Negation As Failure
+# --------------------------
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <http://example.org/>.
+
+:Alice :loves :Bob.
+:Bob a :Person.
+
+{
+  ?SCOPE log:notIncludes { :Alice :hates ?X }.
+  ?X a :Person.
+}
+=>
+{
+  :Alice :hates :Nobody.
+}.

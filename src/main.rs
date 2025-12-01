@@ -2107,6 +2107,78 @@ fn eval_builtin(
             }
         }
 
+        // log:notEqualTo is the exact complement: it succeeds iff there is
+        // *no* unifier for subject and object under the current substitution.
+        Term::Iri(p) if p == &format!("{}notEqualTo", LOG_NS) => {
+            if unify_term(&goal.s, &goal.o, subst).is_some() {
+                // They *can* be equal → notEqualTo must fail.
+                vec![]
+            } else {
+                // No way to make them equal → notEqualTo holds, no new bindings.
+                vec![subst.clone()]
+            }
+        }
+
+        // -----------------------------------------------------------------
+        // log:notIncludes  (Scoped Negation As Failure)
+        // -----------------------------------------------------------------
+        // ?Scope log:notIncludes { pattern } .
+        //
+        // We treat this as: succeed iff there is **no** proof of all triples
+        // in the quoted { pattern } in the current closure (facts + rules),
+        // given the current outer substitution.
+        //
+        // In the SNAF example:
+        //   { ?SCOPE log:notIncludes { :Alice :hates ?X } .
+        //     ?X a :Person .
+        //   } => { :Alice :hates :Nobody . }
+        //
+        // the first goal checks there is no derivable triple of the form
+        //   :Alice :hates ?something
+        // under the current knowledge, independently of how ?X is later
+        // instantiated by the second goal.
+        Term::Iri(p) if p == &format!("{}notIncludes", LOG_NS) => {
+            // Object must be a quoted formula { ... }.
+            let body: Vec<Triple> = match &g.o {
+                Term::Formula(ts) => ts.clone(),
+                _ => return vec![],
+            };
+
+            // We currently ignore the ?Scope argument and always use the
+            // whole current closure (facts + backward rules) as scope,
+            // just like log:collectAllIn above.
+            if depth >= MAX_BACKWARD_DEPTH {
+                return vec![];
+            }
+
+            let mut visited2: Vec<Triple> = Vec::new();
+            let mut cache2: GoalCache = GoalCache::new();
+
+            // `g` already has the outer substitution applied (because
+            // prove_goals() instantiated the goal before calling this
+            // builtin), so the variables inside `body` reflect the current
+            // rule context.
+            let sols = prove_goals(
+                &body[..],
+                &Subst::new(), // look for any extension that makes {body} provable
+                facts,
+                back_rules,
+                depth + 1,
+                &mut visited2,
+                var_gen,
+                &mut cache2,
+            );
+
+            if sols.is_empty() {
+                // No way to prove all triples in {body} → notIncludes holds.
+                // This builtin does not introduce new bindings; it is a pure test.
+                vec![subst.clone()]
+            } else {
+                // At least one proof of the pattern exists → notIncludes fails.
+                vec![]
+            }
+        }
+
         // -----------------------------------------------------------------
         // log:collectAllIn
         // -----------------------------------------------------------------
@@ -2329,7 +2401,7 @@ fn eval_builtin(
         }
 
         // -----------------------------------------------------------------
-        // list:notMember  (Eye-style)
+        // list:notMember
         // -----------------------------------------------------------------
         // ?List list:notMember ?X.
         // Succeeds iff ?X cannot be unified with any element of ?List under
@@ -2373,7 +2445,7 @@ fn eval_builtin(
         }
 
         // -----------------------------------------------------------------
-        // list:sort  (Eye-style, pragmatic ordering)
+        // list:sort
         // -----------------------------------------------------------------
         // ?List list:sort ?Sorted.
         // We sort using:

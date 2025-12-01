@@ -336,7 +336,19 @@ Integer arithmetic:
     * Dijkstra’s algorithm (collect neighbor queue entries).
     * Counting / aggregating events in a local graph.
 
-Full SNAF behavior and arbitrary scopes are **not** implemented yet.
+* `log:notIncludes` (Scoped Negation As Failure)
+  * Shape:
+
+    ```n3
+    ?SCOPE log:notIncludes { ...pattern... } .
+    ```
+
+  * Semantics (current eyeling behavior):
+    - Evaluate the quoted `{ pattern }` against the current closure
+      (facts + rules + built-ins).
+    - If there is **no** way to prove all triples in `{ pattern }`,
+      the builtin **succeeds** (and does not introduce any new bindings).
+    - If there **is** at least one proof of `{ pattern }`, the builtin fails.
 
 ### `time:` namespace
 

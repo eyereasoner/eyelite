@@ -2255,6 +2255,35 @@
 
 
 # --------------------------------------------------
+# Running examples/snaf.n3
+# --------------------------------------------------
+@prefix : <http://example.org/> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Alice :hates :Nobody .
+# It holds because the following instantiated premises are all satisfied:
+#   ?SCOPE log:notIncludes {
+#       :Alice :hates :Bob .
+#   } .
+#   :Bob a :Person .
+# via the schematic forward rule:
+#   {
+#     ?SCOPE log:notIncludes {
+#         :Alice :hates ?X .
+#     } .
+#     ?X a :Person .
+#   } => {
+#     :Alice :hates :Nobody .
+#   }
+# with substitution (on rule variables):
+#   ?X = :Bob
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+:Alice :hates :Nobody .
+
+
+# --------------------------------------------------
 # Running examples/socrates.n3
 # --------------------------------------------------
 @prefix : <http://example.org/socrates#> .
@@ -8094,4 +8123,4 @@
 :german :eats :fish .
 
 
-# All 20 examples finished OK.
+# All 21 examples finished OK.
