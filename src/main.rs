@@ -120,6 +120,19 @@ struct Rule {
 /// Rust tip: `type Foo = ...` makes a readable alias.
 type Subst = HashMap<String, Term>;
 
+/// One forward-derived fact together with a simple justification.
+#[derive(Clone, Debug)]
+struct DerivedFact {
+    /// The ground triple that was finally added to the fact base.
+    fact: Triple,
+    /// The forward rule (in schematic form) that produced this triple.
+    rule: Rule,
+    /// The rule body instantiated with the substitution that fired the rule.
+    premises: Vec<Triple>,
+    /// The substitution used when the rule fired.
+    subst: Subst,
+}
+
 /// Tiny memo table for backward goals during one forward-rule proof.
 type GoalCache = HashMap<Triple, Vec<Subst>>;
 
@@ -504,6 +517,54 @@ fn collect_iris_in_term(t: &Term) -> Vec<String> {
         Term::Literal(_) | Term::Var(_) | Term::Blank(_) => {}
     }
     out
+}
+
+/// Collect all variable names appearing inside a term
+/// (recursing into lists and formulas).
+fn collect_vars_in_term(t: &Term, acc: &mut HashSet<String>) {
+    match t {
+        Term::Var(v) => {
+            acc.insert(v.clone());
+        }
+        Term::List(xs) => {
+            for x in xs {
+                collect_vars_in_term(x, acc);
+            }
+        }
+        Term::OpenList(xs, tailv) => {
+            for x in xs {
+                collect_vars_in_term(x, acc);
+            }
+            acc.insert(tailv.clone());
+        }
+        Term::Formula(ts) => {
+            for tr in ts {
+                collect_vars_in_term(&tr.s, acc);
+                collect_vars_in_term(&tr.p, acc);
+                collect_vars_in_term(&tr.o, acc);
+            }
+        }
+        Term::Iri(_) | Term::Literal(_) | Term::Blank(_) => {}
+    }
+}
+
+/// Collect the set of variable names that syntactically occur in a rule
+/// (both in the premise and the conclusion).
+fn vars_in_rule(rule: &Rule) -> HashSet<String> {
+    let mut acc = HashSet::new();
+
+    for tr in &rule.premise {
+        collect_vars_in_term(&tr.s, &mut acc);
+        collect_vars_in_term(&tr.p, &mut acc);
+        collect_vars_in_term(&tr.o, &mut acc);
+    }
+    for tr in &rule.conclusion {
+        collect_vars_in_term(&tr.s, &mut acc);
+        collect_vars_in_term(&tr.p, &mut acc);
+        collect_vars_in_term(&tr.o, &mut acc);
+    }
+
+    acc
 }
 
 // =====================================================================================
@@ -2436,23 +2497,21 @@ fn prove_goals(
     results
 }
 
-// =====================================================================================
-// Forward chaining to fixpoint
-// =====================================================================================
-//
-// This is classic data-driven reasoning.
-// Loop until no new facts are derived.
-//
-// Each forward rule is applied by proving its premise (with backward rules/builtins),
-// then instantiating the conclusion with the resulting substitutions.
-
+/// Forward chaining to fixpoint.
+///
+/// This is classic data-driven reasoning:
+/// - We keep a database of ground facts.
+/// - We repeatedly fire forward rules whose premises are provable
+///   (using facts + backward rules + builtins).
+/// - We collect all newly derived forward facts together with a
+///   short justification (which rule fired with which premises).
 fn forward_chain(
     mut facts: Vec<Triple>,
     forward_rules: &mut Vec<Rule>,
     back_rules: &mut Vec<Rule>,
-) -> Vec<Triple> {
+) -> Vec<DerivedFact> {
     let mut fact_set: HashSet<Triple> = facts.iter().cloned().collect();
-    let mut derived_forward: Vec<Triple> = vec![];
+    let mut derived_forward: Vec<DerivedFact> = vec![];
     let mut var_gen = 0usize;
     let mut skolem_counter = 0usize; // global counter for _:sk_N
 
@@ -2484,11 +2543,18 @@ fn forward_chain(
 
             // --- inference fuse handling ---
             if r.is_fuse && !sols.is_empty() {
-                eprintln!("# Inference fuse triggered: a {{ ... }} => false. rule fired.");
+                eprintln!("# Inference fuse triggered: a {{ ... }} => false.  rule fired.");
                 std::process::exit(2);
             }
 
             for s in sols {
+                // For explanation: body instantiated under this solution.
+                let instantiated_premises: Vec<Triple> = r
+                    .premise
+                    .iter()
+                    .map(|b| apply_subst_triple(b, &s))
+                    .collect();
+
                 // New head existentials per rule application:
                 let mut blank_map: HashMap<String, String> = HashMap::new();
 
@@ -2497,13 +2563,12 @@ fn forward_chain(
 
                     // --- rule-producing conclusions ---------------------------------
                     // Handle both:
-                    //   { ... } log:implies  { ... }  → new forward rule
+                    //   { ... } log:implies { ... } → new forward rule
                     //   { ... } log:impliedBy { ... } → new backward rule
                     let is_fw_rule_triple =
                         is_log_implies(&instantiated.p)
                             && matches!(instantiated.s, Term::Formula(_))
                             && matches!(instantiated.o, Term::Formula(_));
-
                     let is_bw_rule_triple =
                         is_log_implied_by(&instantiated.p)
                             && matches!(instantiated.s, Term::Formula(_))
@@ -2517,7 +2582,12 @@ fn forward_chain(
                         {
                             fact_set.insert(instantiated.clone());
                             facts.push(instantiated.clone());
-                            derived_forward.push(instantiated.clone());
+                            derived_forward.push(DerivedFact {
+                                fact: instantiated.clone(),
+                                rule: r.clone(),
+                                premises: instantiated_premises.clone(),
+                                subst: s.clone(),
+                            });
                             changed = true;
                         }
 
@@ -2526,7 +2596,7 @@ fn forward_chain(
                             (&instantiated.s, &instantiated.o)
                         {
                             if is_fw_rule_triple {
-                                // { left } log:implies { right }  ≅  { left } => { right }
+                                // { left } log:implies { right } ≅ { left } => { right }
                                 let (premise, conclusion) =
                                     lift_blank_rule_vars(left.clone(), right.clone());
                                 let new_rule = Rule {
@@ -2542,13 +2612,12 @@ fn forward_chain(
                                         && rr.premise == new_rule.premise
                                         && rr.conclusion == new_rule.conclusion
                                 });
-
                                 if !already_there {
                                     forward_rules.push(new_rule);
                                 }
                             } else if is_bw_rule_triple {
                                 // { left } log:impliedBy { right }
-                                // means:  { left } <= { right }
+                                // means: { left } <= { right }
                                 // Backward Rule: head = left, body = right
                                 // Internally: premise = body, conclusion = head
                                 let (premise, conclusion) =
@@ -2566,7 +2635,6 @@ fn forward_chain(
                                         && rr.premise == new_rule.premise
                                         && rr.conclusion == new_rule.conclusion
                                 });
-
                                 if !already_there {
                                     back_rules.push(new_rule);
                                 }
@@ -2579,8 +2647,7 @@ fn forward_chain(
 
                     // --- normal fact conclusion -----------------------------------
                     // Normal fact conclusion: skolemize blanks into _:sk_N
-                    let inst =
-                        skolemize_triple(&instantiated, &mut blank_map, &mut skolem_counter);
+                    let inst = skolemize_triple(&instantiated, &mut blank_map, &mut skolem_counter);
 
                     // Only add fully ground facts (no variables/OpenList)
                     if !is_ground_triple(&inst) {
@@ -2594,7 +2661,12 @@ fn forward_chain(
 
                     fact_set.insert(inst.clone());
                     facts.push(inst.clone());
-                    derived_forward.push(inst);
+                    derived_forward.push(DerivedFact {
+                        fact: inst.clone(),
+                        rule: r.clone(),
+                        premises: instantiated_premises.clone(),
+                        subst: s.clone(),
+                    });
                     changed = true;
                 }
             }
@@ -2688,6 +2760,83 @@ fn triple_to_n3(tr: &Triple, prefixes: &PrefixEnv) -> String {
     format!("{} {} {} .", s, p, o)
 }
 
+/// Pretty-print a derived fact together with a small mathematical-English proof
+/// as N3 comments. The triple itself is **not** printed here; caller prints it.
+fn print_explanation(df: &DerivedFact, prefixes: &PrefixEnv) {
+    // Header
+    println!("# ----------------------------------------------------------------------");
+    println!("# Proof for derived triple:");
+    for line in triple_to_n3(&df.fact, prefixes).lines() {
+        let trimmed = line.trim_end();
+        if !trimmed.is_empty() {
+            println!("#   {}", trimmed);
+        }
+    }
+
+    if df.premises.is_empty() {
+        println!(
+            "# This triple is the head of a forward rule with an empty premise,")
+        ;
+        println!("# so it holds unconditionally whenever the program is loaded.");
+    } else {
+        println!(
+            "# It holds because the following instantiated premises are all satisfied:"
+        );
+        for prem in &df.premises {
+            for line in triple_to_n3(prem, prefixes).lines() {
+                let trimmed = line.trim_end();
+                if !trimmed.is_empty() {
+                    println!("#   {}", trimmed);
+                }
+            }
+        }
+    }
+
+    println!("# via the schematic forward rule:");
+    println!("#   {{");
+    for tr in &df.rule.premise {
+        for line in triple_to_n3(tr, prefixes).lines() {
+            let trimmed = line.trim_end();
+            if !trimmed.is_empty() {
+                println!("#     {}", trimmed);
+            }
+        }
+    }
+    println!("#   }} => {{");
+    for tr in &df.rule.conclusion {
+        for line in triple_to_n3(tr, prefixes).lines() {
+            let trimmed = line.trim_end();
+            if !trimmed.is_empty() {
+                println!("#     {}", trimmed);
+            }
+        }
+    }
+    println!("#   }}");
+
+    // Only show bindings for variables that actually occur in *this* rule.
+    // The backward prover may introduce many internal variables (A__1234, ...)
+    // that are irrelevant for understanding this inference step.
+    let rule_vars = vars_in_rule(&df.rule);
+
+    let mut visible: Vec<_> = df
+        .subst
+        .iter()
+        .filter(|(name, _)| rule_vars.contains(*name))
+        .collect();
+
+    if !visible.is_empty() {
+        println!("# with substitution (on rule variables):");
+        // Sort by variable name for stable, deterministic output
+        visible.sort_by(|(a, _), (b, _)| a.cmp(b));
+        for (v, term) in visible {
+            println!("#   ?{} = {}", v, term_to_n3(term, prefixes));
+        }
+    }
+
+    println!("# Therefore the derived triple above is entailed by the rules and facts.");
+    println!("# ----------------------------------------------------------------------");
+}
+
 // =====================================================================================
 // CLI entry point
 // =====================================================================================
@@ -2709,8 +2858,11 @@ fn main() {
     // Run the engine!
     let derived = forward_chain(facts, &mut frules, &mut brules);
 
+    // Collect just the triples for prefix analysis.
+    let derived_triples: Vec<Triple> = derived.iter().map(|df| df.fact.clone()).collect();
+
     // Print only prefixes needed by derived output.
-    let used_prefixes = prefixes.prefixes_used_for_output(&derived);
+    let used_prefixes = prefixes.prefixes_used_for_output(&derived_triples);
     for (pfx, base) in &used_prefixes {
         if pfx.is_empty() {
             println!("@prefix : <{}> .", base);
@@ -2722,9 +2874,11 @@ fn main() {
         println!();
     }
 
-    // Print derived triples.
-    for t in derived {
-        println!("{}", triple_to_n3(&t, &prefixes));
+    // Print derived triples interlaced with comment proofs.
+    for df in derived {
+        print_explanation(&df, &prefixes);
+        println!("{}", triple_to_n3(&df.fact, &prefixes));
+        println!();
     }
 }
 
