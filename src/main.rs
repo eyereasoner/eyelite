@@ -1684,7 +1684,17 @@ fn list_append_split(parts: &[Term], res_elems: &[Term], subst: &Subst) -> Vec<S
 
 /// Evaluate a builtin triple under current substitution.
 /// Returns zero or more new substitutions (for backtracking).
-fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
+///
+/// Some builtins (e.g. log:collectAllIn) need to look at the current
+/// fact base and backward rules, so we thread those through.
+fn eval_builtin(
+    goal: &Triple,
+    subst: &Subst,
+    facts: &[Triple],
+    back_rules: &[Rule],
+    depth: usize,
+    var_gen: &mut usize,
+) -> Vec<Subst> {
     let g = apply_subst_triple(goal, subst);
 
     match &g.p {
@@ -2097,6 +2107,82 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
             }
         }
 
+        // -----------------------------------------------------------------
+        // log:collectAllIn
+        // -----------------------------------------------------------------
+        // (?V { clause } ?List) log:collectAllIn ?Scope.
+        //
+        // We:
+        //  - evaluate `clause` against the current reasoning context
+        //    (facts + back_rules),
+        //  - for each solution σ, instantiate ?Vσ,
+        //  - collect these into a list, and
+        //  - unify that list with ?List.
+        //
+        // The ?Scope argument is ignored for now; we always use the full
+        // current closure as scope, which is enough for the Dijkstra example.
+        Term::Iri(p) if p == &format!("{}collectAllIn", LOG_NS) => {
+            let args = match &g.s {
+                Term::List(xs) if xs.len() == 3 => xs,
+                _ => return vec![],
+            };
+            let value_templ = &args[0];
+            let clause_term = &args[1];
+            let list_term = &args[2];
+
+            let body: Vec<Triple> = match clause_term {
+                Term::Formula(ts) => ts.clone(),
+                _ => return vec![],
+            };
+
+            if depth >= MAX_BACKWARD_DEPTH {
+                return vec![];
+            }
+
+            let mut visited2: Vec<Triple> = Vec::new();
+            let mut cache2: GoalCache = GoalCache::new();
+
+            // body is already instantiated with the outer substitution,
+            // because `goal` came from prove_goals(...) which applied it.
+            let sols = prove_goals(
+                &body[..],
+                &Subst::new(),
+                facts,
+                back_rules,
+                depth + 1,
+                &mut visited2,
+                var_gen,
+                &mut cache2,
+            );
+
+            // Collect instantiated values, preserving order and removing
+            // simple duplicates.
+            let mut collected: Vec<Term> = Vec::new();
+            for s_body in sols {
+                let v = apply_subst_term(value_templ, &s_body);
+                if !collected.contains(&v) {
+                    collected.push(v);
+                }
+            }
+            let collected_list = Term::List(collected);
+
+            let mut out = Vec::new();
+            // Bind / check the 3rd component (the ?Neighbors in Dijkstra).
+            match list_term {
+                Term::Var(_) | Term::List(_) | Term::OpenList(_, _) => {
+                    if let Some(s2) = unify_term(list_term, &collected_list, subst) {
+                        out.push(s2);
+                    }
+                }
+                _ => {
+                    if unify_term(list_term, &collected_list, subst).is_some() {
+                        out.push(subst.clone());
+                    }
+                }
+            }
+            out
+        }
+
         // ---------------------------------------------------------------------
         // list:append  -- relational, like in the N3 spec and  Prolog append/2
         // ---------------------------------------------------------------------
@@ -2235,11 +2321,135 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
                 _ => return vec![],
             };
             let n_term = Term::Literal((xs.len() as i64).to_string());
-
             if let Some(s2) = unify_term(&g.o, &n_term, subst) {
                 vec![s2]
             } else {
                 vec![]
+            }
+        }
+
+        // -----------------------------------------------------------------
+        // list:notMember  (Eye-style)
+        // -----------------------------------------------------------------
+        // ?List list:notMember ?X.
+        // Succeeds iff ?X cannot be unified with any element of ?List under
+        // the current substitution. Used in the Dijkstra example to ensure
+        // neighbors are not already in the visited set.
+        Term::Iri(p) if p == &format!("{}notMember", LIST_NS) => {
+            let xs = match &g.s {
+                Term::List(xs) => xs,
+                _ => return vec![],
+            };
+            for el in xs {
+                if unify_term(&g.o, el, subst).is_some() {
+                    // There *is* a way to make ?X equal to an element → fail.
+                    return vec![];
+                }
+            }
+            vec![subst.clone()]
+        }
+
+        // -----------------------------------------------------------------
+        // list:reverse  (relational)
+        // -----------------------------------------------------------------
+        // ?L list:reverse ?R.
+        // One side must be a closed list; the other side is that list reversed.
+        Term::Iri(p) if p == &format!("{}reverse", LIST_NS) => {
+            match (&g.s, &g.o) {
+                (Term::List(xs), _) => {
+                    let mut rev = xs.clone();
+                    rev.reverse();
+                    let rterm = Term::List(rev);
+                    unify_term(&g.o, &rterm, subst).into_iter().collect()
+                }
+                (_, Term::List(xs)) => {
+                    let mut rev = xs.clone();
+                    rev.reverse();
+                    let rterm = Term::List(rev);
+                    unify_term(&g.s, &rterm, subst).into_iter().collect()
+                }
+                _ => vec![],
+            }
+        }
+
+        // -----------------------------------------------------------------
+        // list:sort  (Eye-style, pragmatic ordering)
+        // -----------------------------------------------------------------
+        // ?List list:sort ?Sorted.
+        // We sort using:
+        //  - numeric comparison for literal numbers
+        //  - lexicographic comparison for everything else
+        //  - lexicographic on sublists
+        Term::Iri(p) if p == &format!("{}sort", LIST_NS) => {
+            use std::cmp::Ordering;
+
+            fn cmp_term_for_sort(a: &Term, b: &Term) -> Ordering {
+                match (a, b) {
+                    (Term::Literal(sa), Term::Literal(sb)) => {
+                        let (lex_a, _) = literal_parts(sa);
+                        let (lex_b, _) = literal_parts(sb);
+                        let na = strip_quotes(&lex_a).parse::<f64>();
+                        let nb = strip_quotes(&lex_b).parse::<f64>();
+                        match (na.ok(), nb.ok()) {
+                            (Some(va), Some(vb)) => va
+                                .partial_cmp(&vb)
+                                .unwrap_or(Ordering::Equal),
+                            _ => lex_a.cmp(&lex_b),
+                        }
+                    }
+                    (Term::List(xs), Term::List(ys)) => {
+                        // Lexicographic on sublists.
+                        let mut i = 0;
+                        loop {
+                            match (xs.get(i), ys.get(i)) {
+                                (Some(xi), Some(yi)) => {
+                                    let ord = cmp_term_for_sort(xi, yi);
+                                    if ord != Ordering::Equal {
+                                        return ord;
+                                    }
+                                    i += 1;
+                                }
+                                (None, Some(_)) => return Ordering::Less,
+                                (Some(_), None) => return Ordering::Greater,
+                                (None, None) => return Ordering::Equal,
+                            }
+                        }
+                    }
+                    (Term::Iri(ia), Term::Iri(ib)) => ia.cmp(ib),
+
+                    // Lists before non-lists so Dijkstra queues (lists of tuples)
+                    // behave as expected.
+                    (Term::List(_), _) => Ordering::Less,
+                    (_, Term::List(_)) => Ordering::Greater,
+
+                    _ => format!("{:?}", a).cmp(&format!("{:?}", b)),
+                }
+            }
+
+            // One side must be the input list.
+            let input = match (&g.s, &g.o) {
+                (Term::List(xs), _) => xs.clone(),
+                (_, Term::List(xs)) => xs.clone(),
+                _ => return vec![],
+            };
+
+            // Be conservative: only sort ground lists.
+            if !input.iter().all(is_ground_term) {
+                return vec![];
+            }
+
+            let mut sorted = input;
+            sorted.sort_by(|a, b| cmp_term_for_sort(a, b));
+            let sorted_term = Term::List(sorted);
+
+            match (&g.s, &g.o) {
+                (Term::List(_), _) => {
+                    unify_term(&g.o, &sorted_term, subst).into_iter().collect()
+                }
+                (_, Term::List(_)) => {
+                    unify_term(&g.s, &sorted_term, subst).into_iter().collect()
+                }
+                _ => vec![],
             }
         }
 
@@ -2267,7 +2477,7 @@ fn eval_builtin(goal: &Triple, subst: &Subst) -> Vec<Subst> {
             for el in input {
                 let yvar = Term::Var("_mapY".to_string());
                 let goal = Triple { s: el.clone(), p: pred.clone(), o: yvar.clone() };
-                let sols = eval_builtin(&goal, subst);
+                let sols = eval_builtin(&goal, subst, facts, back_rules, depth + 1, var_gen);
                 if sols.is_empty() { return vec![]; }
                 let yval = apply_subst_term(&yvar, &sols[0]);
                 if matches!(yval, Term::Var(_)) { return vec![]; }
@@ -2371,10 +2581,12 @@ fn solve_single_goal(
     var_gen: &mut usize,
     cache: &mut GoalCache,
 ) -> Vec<Subst> {
-    // Builtins are pure and cheap; keep them out of the cache and
-    // evaluate directly, starting from an empty substitution.
+    // Builtins are pure (no side effects). We still evaluate them
+    // directly, starting from an empty substitution, but we also pass
+    // the current fact base and backward rules for things like
+    // log:collectAllIn.
     if is_builtin_pred(&goal.p) {
-        return eval_builtin(goal, &Subst::new());
+        return eval_builtin(goal, &Subst::new(), facts, back_rules, depth, var_gen);
     }
 
     if depth > MAX_BACKWARD_DEPTH {

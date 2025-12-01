@@ -293,6 +293,309 @@
 
 
 # --------------------------------------------------
+# Running examples/dijkstra.n3
+# --------------------------------------------------
+@prefix : <https://eyereasoner.github.io/ns#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:b :a) :edge 4 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :b) :edge 4 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :a
+#   ?B = :b
+#   ?C = 4
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:b :a) :edge 4 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:c :a) :edge 2 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :c) :edge 2 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :a
+#   ?B = :c
+#   ?C = 2
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:c :a) :edge 2 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:c :b) :edge 1 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:b :c) :edge 1 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :b
+#   ?B = :c
+#   ?C = 1
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:c :b) :edge 1 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:d :b) :edge 5 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:b :d) :edge 5 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :b
+#   ?B = :d
+#   ?C = 5
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:d :b) :edge 5 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:d :c) :edge 8 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:c :d) :edge 8 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :c
+#   ?B = :d
+#   ?C = 8
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:d :c) :edge 8 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:e :c) :edge 10 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:c :e) :edge 10 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :c
+#   ?B = :e
+#   ?C = 10
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:e :c) :edge 10 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:e :d) :edge 2 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:d :e) :edge 2 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :d
+#   ?B = :e
+#   ?C = 2
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:e :d) :edge 2 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:f :d) :edge 6 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:d :f) :edge 6 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :d
+#   ?B = :f
+#   ?C = 6
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:f :d) :edge 6 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:f :e) :edge 3 .
+# It holds because the following instantiated premises are all satisfied:
+#   (:e :f) :edge 3 .
+# via the schematic forward rule:
+#   {
+#     (?A ?B) :edge ?C .
+#   } => {
+#     (?B ?A) :edge ?C .
+#   }
+# with substitution (on rule variables):
+#   ?A = :e
+#   ?B = :f
+#   ?C = 3
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:f :e) :edge 3 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :c :b :d :e :f) 13) .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :f) :dijkstra ((:a :c :b :d :e :f) 13) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   }
+# with substitution (on rule variables):
+#   ?Cost = 13
+#   ?Path = (:a :c :b :d :e :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:a :f) :path ((:a :c :b :d :e :f) 13) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :c :b :d :f) 14) .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :f) :dijkstra ((:a :c :b :d :f) 14) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   }
+# with substitution (on rule variables):
+#   ?Cost = 14
+#   ?Path = (:a :c :b :d :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:a :f) :path ((:a :c :b :d :f) 14) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :b :d :e :f) 14) .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :f) :dijkstra ((:a :b :d :e :f) 14) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   }
+# with substitution (on rule variables):
+#   ?Cost = 14
+#   ?Path = (:a :b :d :e :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:a :f) :path ((:a :b :d :e :f) 14) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :b :d :f) 15) .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :f) :dijkstra ((:a :b :d :f) 15) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   }
+# with substitution (on rule variables):
+#   ?Cost = 15
+#   ?Path = (:a :b :d :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:a :f) :path ((:a :b :d :f) 15) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :c :e :f) 15) .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :f) :dijkstra ((:a :c :e :f) 15) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   }
+# with substitution (on rule variables):
+#   ?Cost = 15
+#   ?Path = (:a :c :e :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:a :f) :path ((:a :c :e :f) 15) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :c :d :e :f) 15) .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :f) :dijkstra ((:a :c :d :e :f) 15) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   }
+# with substitution (on rule variables):
+#   ?Cost = 15
+#   ?Path = (:a :c :d :e :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:a :f) :path ((:a :c :d :e :f) 15) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :c :d :f) 16) .
+# It holds because the following instantiated premises are all satisfied:
+#   (:a :f) :dijkstra ((:a :c :d :f) 16) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   }
+# with substitution (on rule variables):
+#   ?Cost = 16
+#   ?Path = (:a :c :d :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+(:a :f) :path ((:a :c :d :f) 16) .
+
+
+# --------------------------------------------------
 # Running examples/existential-rule.n3
 # --------------------------------------------------
 @prefix : <http://example.org/socrates#> .
@@ -7791,4 +8094,4 @@
 :german :eats :fish .
 
 
-# All 19 examples finished OK.
+# All 20 examples finished OK.
