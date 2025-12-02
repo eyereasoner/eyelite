@@ -1355,6 +1355,34 @@ def compose_subst(outer: Subst, delta: Subst) -> Optional[Subst]:
 # BUILTINS
 # =====================================================================================
 
+from typing import Optional, Union
+
+Number = Union[int, float]
+
+def parse_number_literal(t: Term) -> Optional[Number]:
+    """
+    Try to interpret Term `t` as either an int or a float.
+
+    Semantics:
+      - Prefer integer parsing when the literal is a plain decimal integer
+        (possibly with a leading '-'; typed or untyped).
+      - Fall back to the existing float parsing for other numeric-looking literals.
+      - Does *not* touch durations / dates – those still go through
+        parse_num_or_duration where needed.
+    """
+    # 1) Exact integer mode (this already handles typed xsd:int-style literals)
+    i = parse_int_literal(t)
+    if i is not None:
+        return i
+
+    # 2) Fallback: normal numeric literal parsing (float)
+    f = parse_num(t)
+    if f is not None:
+        return f
+
+    return None
+
+
 def parse_num(t: Term) -> Optional[float]:
     if isinstance(t, Literal):
         try:
@@ -1707,57 +1735,62 @@ def eval_builtin(
         if isinstance(g.s, ListTerm) and len(g.s.elems) >= 2:
             xs = g.s.elems
 
-            # Exact big-integer mode for plain integer literals
-            ints: List[int] = []
+            # Use a generic number parser, but still prefer exact ints
+            values: List[Number] = []
             for t in xs:
-                v = parse_int_literal(t)
+                v = parse_number_literal(t)
                 if v is None:
-                    ints = []
-                    break
-                ints.append(v)
-            if ints:
-                total_big = sum(ints)
-                lit = Literal(str(total_big))
-                if isinstance(g.o, Var):
-                    s2 = dict(subst)
-                    s2[g.o.name] = lit
-                    return [s2]
-                else:
-                    s2 = unify_term(g.o, lit, subst)
-                    return [s2] if s2 is not None else []
-
-            # Fallback: float-based
-            nums: List[float] = []
-            for t in xs:
-                n = parse_num(t)
-                if n is None:
+                    # Not a numeric literal we understand
                     return []
-                nums.append(n)
-            total = sum(nums)
+                values.append(v)
+
+            # All arguments are ints -> stay in integer land
+            if all(isinstance(v, int) for v in values):
+                total_int = sum(values)  # type: ignore[arg-type]
+                lit = Literal(str(total_int))
+            else:
+                # Mixed or non-integer -> fall back to float semantics
+                total_float = sum(float(v) for v in values)
+                lit = Literal(format_num(total_float))
+
             if isinstance(g.o, Var):
                 s2 = dict(subst)
-                s2[g.o.name] = Literal(format_num(total))
+                s2[g.o.name] = lit
                 return [s2]
-            if isinstance(g.o, Literal) and g.o.value == format_num(total):
-                return [dict(subst)]
+
+            s2 = unify_term(g.o, lit, subst)
+            return [s2] if s2 is not None else []
+
         return []
 
     if isinstance(g.p, Iri) and g.p.value == MATH_NS + "product":
+        # (a b c) math:product ?z
         if isinstance(g.s, ListTerm) and len(g.s.elems) >= 2:
-            nums: List[float] = []
-            for t in g.s.elems:
-                n = parse_num(t)
-                if n is None:
+            xs = g.s.elems
+
+            values: List[Number] = []
+            for t in xs:
+                v = parse_number_literal(t)
+                if v is None:
                     return []
-                nums.append(n)
-            prod = 1.0
-            for n in nums:
-                prod *= n
+                values.append(v)
+
+            if all(isinstance(v, int) for v in values):
+                prod_int = 1
+                for v in values:
+                    prod_int *= v  # type: ignore[operator]
+                lit = Literal(str(prod_int))
+            else:
+                prod_float = 1.0
+                for v in values:
+                    prod_float *= float(v)
+                lit = Literal(format_num(prod_float))
+
             if isinstance(g.o, Var):
                 s2 = dict(subst)
-                s2[g.o.name] = Literal(format_num(prod))
+                s2[g.o.name] = lit
                 return [s2]
-            if isinstance(g.o, Literal) and g.o.value == format_num(prod):
+            if isinstance(g.o, Literal) and g.o.value == lit.value:
                 return [dict(subst)]
         return []
 
