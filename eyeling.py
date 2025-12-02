@@ -2768,17 +2768,19 @@ def print_explanation(df: DerivedFact, prefixes: PrefixEnv) -> None:
     print("#   }}")
 
     rule_vars = vars_in_rule(df.rule)
-    visible = [
-        (name, term)
-        for name, term in df.subst.items()
-        if name in rule_vars
-    ]
 
-    if visible:
+    # Only show variables that actually occur in *this* rule,
+    # but print their fully instantiated values (follow chains).
+    visible_names = sorted(
+        name for name in df.subst.keys() if name in rule_vars
+    )
+
+    if visible_names:
         print("# with substitution (on rule variables):")
-        visible.sort(key=lambda kv: kv[0])
-        for v, term in visible:
-            print(f"#   ?{v} = {term_to_n3(term, prefixes)}")
+        for v in visible_names:
+            # Start from the variable itself and chase its binding to a fixed point
+            full_term = apply_subst_term(Var(v), df.subst)
+            print(f"#   ?{v} = {term_to_n3(full_term, prefixes)}")
 
     print("# Therefore the derived triple above is entailed by the rules and facts.")
     print("# ----------------------------------------------------------------------")

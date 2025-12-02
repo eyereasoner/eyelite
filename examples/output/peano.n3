@@ -16,8 +16,8 @@
 #     ?B :peanoFactorial ?C .
 #   }}
 # with substitution (on rule variables):
-#   ?A = (:s ?C__60)
-#   ?B = (:s ?C__99)
+#   ?A = (:s (:s 0))
+#   ?B = (:s (:s (:s (:s (:s 0)))))
 #   ?C = (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s 0))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
