@@ -13,5 +13,6 @@
 #   } .
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 5 :isIndeedMoreInterestingThan 3 .
 

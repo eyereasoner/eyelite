@@ -19,5 +19,6 @@
 #   ?_b1 = :Human
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :Socrates a :Mortal .
 

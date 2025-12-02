@@ -109,5 +109,6 @@
 #   ?L = ((:yellow :norwegian :cats :water :dunhill) (:blue :dane :horse :tea :blends) (:red :brit :birds :milk :pallmall) (:green :german :fish :coffee :prince) (:white :swede :dogs :beer :bluemasters))
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :german :eats :fish .
 

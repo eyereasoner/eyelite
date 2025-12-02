@@ -39,6 +39,7 @@
 #   ?F91 = 4660046610375530309
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :test :is {
     0 :fibonacci 0 .
     1 :fibonacci 1 .

@@ -25,6 +25,7 @@
 #   ?q = :childOf
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 {
     ?x :childOf ?y .
 } <= {
@@ -47,5 +48,6 @@
 #   ?y = :alice
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :bob :hasParent :alice .
 

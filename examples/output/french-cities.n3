@@ -20,6 +20,7 @@
 #   ?S = :paris
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :orleans .
 
 # ----------------------------------------------------------------------
@@ -42,6 +43,7 @@
 #   ?S = :paris
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :chartres .
 
 # ----------------------------------------------------------------------
@@ -64,6 +66,7 @@
 #   ?S = :paris
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :amiens .
 
 # ----------------------------------------------------------------------
@@ -86,6 +89,7 @@
 #   ?S = :orleans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :orleans :path :blois .
 
 # ----------------------------------------------------------------------
@@ -108,6 +112,7 @@
 #   ?S = :orleans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :orleans :path :bourges .
 
 # ----------------------------------------------------------------------
@@ -130,6 +135,7 @@
 #   ?S = :blois
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :blois :path :tours .
 
 # ----------------------------------------------------------------------
@@ -152,6 +158,7 @@
 #   ?S = :chartres
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :chartres :path :lemans .
 
 # ----------------------------------------------------------------------
@@ -174,6 +181,7 @@
 #   ?S = :lemans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :lemans :path :angers .
 
 # ----------------------------------------------------------------------
@@ -196,6 +204,7 @@
 #   ?S = :lemans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :lemans :path :tours .
 
 # ----------------------------------------------------------------------
@@ -218,6 +227,7 @@
 #   ?S = :angers
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :angers :path :nantes .
 
 # ----------------------------------------------------------------------
@@ -242,6 +252,7 @@
 #   ?X = :orleans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :blois .
 
 # ----------------------------------------------------------------------
@@ -266,6 +277,7 @@
 #   ?X = :orleans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :bourges .
 
 # ----------------------------------------------------------------------
@@ -290,6 +302,7 @@
 #   ?X = :chartres
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :lemans .
 
 # ----------------------------------------------------------------------
@@ -314,6 +327,7 @@
 #   ?X = :blois
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :orleans :path :tours .
 
 # ----------------------------------------------------------------------
@@ -338,6 +352,7 @@
 #   ?X = :lemans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :chartres :path :angers .
 
 # ----------------------------------------------------------------------
@@ -362,6 +377,7 @@
 #   ?X = :lemans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :chartres :path :tours .
 
 # ----------------------------------------------------------------------
@@ -386,6 +402,7 @@
 #   ?X = :angers
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :lemans :path :nantes .
 
 # ----------------------------------------------------------------------
@@ -410,6 +427,7 @@
 #   ?X = :orleans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :tours .
 
 # ----------------------------------------------------------------------
@@ -434,6 +452,7 @@
 #   ?X = :chartres
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :angers .
 
 # ----------------------------------------------------------------------
@@ -458,6 +477,7 @@
 #   ?X = :lemans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :chartres :path :nantes .
 
 # ----------------------------------------------------------------------
@@ -482,5 +502,6 @@
 #   ?X = :lemans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :paris :path :nantes .
 

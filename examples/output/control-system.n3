@@ -29,6 +29,7 @@
 #   ?M1 = 2.23606797749979
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :actuator1 :control1 39.27346198678276 .
 
 # ----------------------------------------------------------------------
@@ -73,5 +74,6 @@
 #   ?T2 = 29
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :actuator2 :control1 26.08 .
 

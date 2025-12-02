@@ -15,6 +15,7 @@
 #   ?S = :Socrates
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :Socrates :is _:sk_0 .
 
 # ----------------------------------------------------------------------
@@ -32,5 +33,6 @@
 #   ?S = :Plato
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :Plato :is _:sk_1 .
 

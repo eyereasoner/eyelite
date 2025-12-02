@@ -15,5 +15,6 @@
 #   ?M = ((:left :right) (:left :center) (:right :center) (:left :right) (:center :left) (:center :right) (:left :right))
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 3 :answer ((:left :right) (:left :center) (:right :center) (:left :right) (:center :left) (:center :right) (:left :right)) .
 

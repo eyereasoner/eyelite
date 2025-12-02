@@ -2783,7 +2783,7 @@ def print_explanation(df: DerivedFact, prefixes: PrefixEnv) -> None:
             print(f"#   ?{v} = {term_to_n3(full_term, prefixes)}")
 
     print("# Therefore the derived triple above is entailed by the rules and facts.")
-    print("# ----------------------------------------------------------------------")
+    print("# ----------------------------------------------------------------------\n")
 
 
 # =====================================================================================

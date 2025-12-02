@@ -45,6 +45,7 @@
 #   ?C6 = (0 -1.3169578969248166)
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :test :is {
     ((-1 0) (0.5 0)) complex:exponentiation (6.123233995736766e-17 1) .
     ((2.718281828459045 0) (0 3.141592653589793)) complex:exponentiation (-1 1.2246467991473532e-16) .

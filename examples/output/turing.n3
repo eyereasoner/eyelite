@@ -34,6 +34,7 @@
 #   ?A4 = (1 "#")
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
+
 :test :is {
     (1 0 1 0 0 1) :compute (1 0 1 0 1 0 "#") .
     (1 0 1 1 1 1) :compute (1 1 0 0 0 0 "#") .
