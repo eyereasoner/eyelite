@@ -143,7 +143,7 @@ This supports EYE-style meta-programs, such as rules that generate subclass-prop
 
 The backward prover has a simple depth limit (`MAX_BACKWARD_DEPTH`) to protect against infinite or extremely deep recursion. If the limit is hit, that proof path is cut off.
 
-The original Rust version experimented with a tiny memo table for non-builtin goals; the Python port currently relies on:
+It currently relies on:
 
 * The depth limit, and
 * A “visited goals” stack
@@ -452,7 +452,7 @@ The repository includes N3 programs in [`examples`](https://github.com/eyereason
 * A Dijkstra shortest-path program using `list:` and `log:` built-ins,
 * And more mathematically flavored examples (e.g., complex numbers).
 
-You can run all of them with:
+You can test all the examples with:
 
 ```bash
 cd examples

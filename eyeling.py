@@ -31,7 +31,7 @@ from typing import List, Dict, Optional, Tuple, Iterable, Set
 
 from datetime import datetime, date, timezone, timedelta
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(100000)
 
 # Python ints are already arbitrary-precision, so we don't need BigInt.
 
@@ -161,9 +161,6 @@ class DerivedFact:
     premises: List[Triple]
     # The substitution used when the rule fired.
     subst: Subst
-
-
-GoalCache = Dict[object, List[Subst]]
 
 
 # =====================================================================================
@@ -1612,7 +1609,6 @@ def prove_goals(
     depth: int,
     visited: List[Triple],
     var_gen: List[int],
-    cache: GoalCache,
 ) -> List[Subst]:
     ...
 
@@ -1969,7 +1965,6 @@ def eval_builtin(
             return []
 
         visited2: List[Triple] = []
-        cache2: GoalCache = {}
         sols = prove_goals(
             list(body),
             {},
@@ -1978,7 +1973,6 @@ def eval_builtin(
             depth + 1,
             visited2,
             var_gen,
-            cache2,
         )
         if not sols:
             # No way to prove all triples in {body} → notIncludes holds.
@@ -2004,7 +1998,6 @@ def eval_builtin(
             return []
 
         visited2: List[Triple] = []
-        cache2: GoalCache = {}
         sols = prove_goals(
             list(body),
             {},
@@ -2013,7 +2006,6 @@ def eval_builtin(
             depth + 1,
             visited2,
             var_gen,
-            cache2,
         )
 
         # Collect instantiated values, preserving order and removing simple duplicates.
@@ -2359,17 +2351,12 @@ def solve_single_goal(
     depth: int,
     visited: List[Triple],
     var_gen: List[int],
-    cache: GoalCache,  # still passed around, but unused here
 ) -> List[Subst]:
     """
     Solve a single goal triple under an *empty* substitution.
-
-    We intentionally do **no** memoization here to keep the logic simple and
-    avoid Python recursion issues on complex keys. This matches the logical
-    behaviour of the Rust version; we just give up a bit of speed.
     """
 
-    # Builtins are pure. Evaluate them directly (no loop check / cache).
+    # Builtins are pure. Evaluate them directly (no loop check).
     if is_builtin_pred(goal.p):
         return eval_builtin(goal, {}, facts, back_rules, depth, var_gen)
 
@@ -2379,8 +2366,8 @@ def solve_single_goal(
     # Loop check to avoid trivial cycles like ?X :p ?Y <= {?X :p ?Y}
     if goal in visited:
         return []
-    visited.append(goal)
 
+    visited.append(goal)
     results: List[Subst] = []
 
     # 1) Try matching known facts, starting from an empty substitution.
@@ -2407,7 +2394,7 @@ def solve_single_goal(
         # Prove the body starting from s2. Any solution is a delta
         # substitution for this goal (w.r.t. an empty outer subst).
         body_solutions = prove_goals(
-            body, s2, facts, back_rules, depth + 1, visited, var_gen, cache
+            body, s2, facts, back_rules, depth + 1, visited, var_gen
         )
         results.extend(body_solutions)
 
@@ -2423,7 +2410,6 @@ def prove_goals(
     depth: int,
     visited: List[Triple],
     var_gen: List[int],
-    cache: GoalCache,
 ) -> List[Subst]:
     """
     Prove a conjunction of goals under an *outer* substitution, using
@@ -2439,7 +2425,7 @@ def prove_goals(
 
     results: List[Subst] = []
 
-    deltas = solve_single_goal(goal0, facts, back_rules, depth, visited, var_gen, cache)
+    deltas = solve_single_goal(goal0, facts, back_rules, depth, visited, var_gen)
     for delta in deltas:
         composed = compose_subst(subst, delta)
         if composed is None:
@@ -2455,7 +2441,6 @@ def prove_goals(
                 depth + 1,
                 visited,
                 var_gen,
-                cache,
             )
             results.extend(tail_solutions)
 
@@ -2499,7 +2484,6 @@ def forward_chain(
 
             empty: Subst = {}
             visited: List[Triple] = []
-            goal_cache: GoalCache = {}
 
             sols = prove_goals(
                 list(r.premise),
@@ -2509,7 +2493,6 @@ def forward_chain(
                 0,
                 visited,
                 var_gen,
-                goal_cache,
             )
 
             # Inference fuse handling
@@ -2776,7 +2759,7 @@ def main() -> None:
     # Command-line interface, mirroring the Rust version.
     args = sys.argv
     if len(args) != 2:
-        print("Usage: eyeling.py <file.n3>", file=sys.stderr)
+        print("Usage: eyeling <file.n3>", file=sys.stderr)
         sys.exit(1)
 
     path = args[1]
