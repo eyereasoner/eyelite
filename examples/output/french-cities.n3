@@ -7,12 +7,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :paris :oneway :orleans .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :orleans
 #   ?P = :oneway
@@ -29,12 +29,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :paris :oneway :chartres .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :chartres
 #   ?P = :oneway
@@ -51,12 +51,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :paris :oneway :amiens .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :amiens
 #   ?P = :oneway
@@ -73,12 +73,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :orleans :oneway :blois .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :blois
 #   ?P = :oneway
@@ -95,12 +95,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :orleans :oneway :bourges .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :bourges
 #   ?P = :oneway
@@ -117,12 +117,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :blois :oneway :tours .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :tours
 #   ?P = :oneway
@@ -139,12 +139,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :chartres :oneway :lemans .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :lemans
 #   ?P = :oneway
@@ -161,12 +161,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :lemans :oneway :angers .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :angers
 #   ?P = :oneway
@@ -183,12 +183,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :lemans :oneway :tours .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :tours
 #   ?P = :oneway
@@ -205,12 +205,12 @@
 #   :oneway rdfs:subPropertyOf :path .
 #   :angers :oneway :nantes .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P rdfs:subPropertyOf ?Q .
 #     ?S ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?Q ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :nantes
 #   ?P = :oneway
@@ -228,13 +228,13 @@
 #   :paris :path :orleans .
 #   :orleans :path :blois .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :blois
 #   ?P = :path
@@ -252,13 +252,13 @@
 #   :paris :path :orleans .
 #   :orleans :path :bourges .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :bourges
 #   ?P = :path
@@ -276,13 +276,13 @@
 #   :paris :path :chartres .
 #   :chartres :path :lemans .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :lemans
 #   ?P = :path
@@ -300,13 +300,13 @@
 #   :orleans :path :blois .
 #   :blois :path :tours .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :tours
 #   ?P = :path
@@ -324,13 +324,13 @@
 #   :chartres :path :lemans .
 #   :lemans :path :angers .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :angers
 #   ?P = :path
@@ -348,13 +348,13 @@
 #   :chartres :path :lemans .
 #   :lemans :path :tours .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :tours
 #   ?P = :path
@@ -372,13 +372,13 @@
 #   :lemans :path :angers .
 #   :angers :path :nantes .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :nantes
 #   ?P = :path
@@ -396,13 +396,13 @@
 #   :paris :path :orleans .
 #   :orleans :path :tours .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :tours
 #   ?P = :path
@@ -420,13 +420,13 @@
 #   :paris :path :chartres .
 #   :chartres :path :angers .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :angers
 #   ?P = :path
@@ -444,13 +444,13 @@
 #   :chartres :path :lemans .
 #   :lemans :path :nantes .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :nantes
 #   ?P = :path
@@ -468,13 +468,13 @@
 #   :paris :path :lemans .
 #   :lemans :path :nantes .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?P a owl:TransitiveProperty .
 #     ?S ?P ?X .
 #     ?X ?P ?O .
-#   }} => {{
+#   } => {
 #     ?S ?P ?O .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?O = :nantes
 #   ?P = :path

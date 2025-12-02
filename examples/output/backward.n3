@@ -6,11 +6,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   5 :moreInterestingThan 3 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     5 :moreInterestingThan 3 .
-#   }} => {{
+#   } => {
 #     5 :isIndeedMoreInterestingThan 3 .
-#   }}
+#   } .
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 5 :isIndeedMoreInterestingThan 3 .

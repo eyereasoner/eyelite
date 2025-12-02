@@ -11,16 +11,16 @@
 #   (10 4.553470372213121) math:exponentiation 35766 .
 #   (43.82693235899588 4.553470372213121) math:difference 39.27346198678276 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     :input1 :measurement10 ?M1 .
 #     :input2 :measurement2 true .
 #     :disturbance1 :measurement3 ?D1 .
 #     (?M1 19.6) math:product ?C1 .
 #     (10 ?C2) math:exponentiation ?D1 .
 #     (?C1 ?C2) math:difference ?C .
-#   }} => {{
+#   } => {
 #     :actuator1 :control1 ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?C = 39.27346198678276
 #   ?C1 = 43.82693235899588
@@ -46,7 +46,7 @@
 #   (1.46 -2) math:product -2.92 .
 #   (29 -2.92) math:sum 26.08 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     :input3 :measurement3 ?M3 .
 #     :state3 :observation3 ?P3 .
 #     :output2 :measurement4 ?M4 .
@@ -57,9 +57,9 @@
 #     (7.3 ?E) math:quotient ?N .
 #     (?N ?D) math:product ?C2 .
 #     (?C1 ?C2) math:sum ?C .
-#   }} => {{
+#   } => {
 #     :actuator2 :control1 ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?C = 26.08
 #   ?C1 = 29

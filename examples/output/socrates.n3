@@ -7,12 +7,12 @@
 #   :Socrates a :Human .
 #   :Human rdfs:subClassOf :Mortal .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?S a ?_b1 .
 #     ?_b1 rdfs:subClassOf ?B .
-#   }} => {{
+#   } => {
 #     ?S a ?B .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?B = :Mortal
 #   ?S = :Socrates

@@ -6,13 +6,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N1 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N1 .
-#   }} => {{
+#   } => {
 #     ?X a :N2 .
 #     ?X a :I2 .
 #     ?X a :J2 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -25,13 +25,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N1 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N1 .
-#   }} => {{
+#   } => {
 #     ?X a :N2 .
 #     ?X a :I2 .
 #     ?X a :J2 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -44,13 +44,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N1 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N1 .
-#   }} => {{
+#   } => {
 #     ?X a :N2 .
 #     ?X a :I2 .
 #     ?X a :J2 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -63,13 +63,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N2 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N2 .
-#   }} => {{
+#   } => {
 #     ?X a :N3 .
 #     ?X a :I3 .
 #     ?X a :J3 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -82,13 +82,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N2 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N2 .
-#   }} => {{
+#   } => {
 #     ?X a :N3 .
 #     ?X a :I3 .
 #     ?X a :J3 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -101,13 +101,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N2 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N2 .
-#   }} => {{
+#   } => {
 #     ?X a :N3 .
 #     ?X a :I3 .
 #     ?X a :J3 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -120,13 +120,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N3 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N3 .
-#   }} => {{
+#   } => {
 #     ?X a :N4 .
 #     ?X a :I4 .
 #     ?X a :J4 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -139,13 +139,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N3 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N3 .
-#   }} => {{
+#   } => {
 #     ?X a :N4 .
 #     ?X a :I4 .
 #     ?X a :J4 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -158,13 +158,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N3 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N3 .
-#   }} => {{
+#   } => {
 #     ?X a :N4 .
 #     ?X a :I4 .
 #     ?X a :J4 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -177,13 +177,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N4 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N4 .
-#   }} => {{
+#   } => {
 #     ?X a :N5 .
 #     ?X a :I5 .
 #     ?X a :J5 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -196,13 +196,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N4 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N4 .
-#   }} => {{
+#   } => {
 #     ?X a :N5 .
 #     ?X a :I5 .
 #     ?X a :J5 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -215,13 +215,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N4 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N4 .
-#   }} => {{
+#   } => {
 #     ?X a :N5 .
 #     ?X a :I5 .
 #     ?X a :J5 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -234,13 +234,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N5 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N5 .
-#   }} => {{
+#   } => {
 #     ?X a :N6 .
 #     ?X a :I6 .
 #     ?X a :J6 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -253,13 +253,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N5 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N5 .
-#   }} => {{
+#   } => {
 #     ?X a :N6 .
 #     ?X a :I6 .
 #     ?X a :J6 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -272,13 +272,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N5 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N5 .
-#   }} => {{
+#   } => {
 #     ?X a :N6 .
 #     ?X a :I6 .
 #     ?X a :J6 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -291,13 +291,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N6 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N6 .
-#   }} => {{
+#   } => {
 #     ?X a :N7 .
 #     ?X a :I7 .
 #     ?X a :J7 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -310,13 +310,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N6 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N6 .
-#   }} => {{
+#   } => {
 #     ?X a :N7 .
 #     ?X a :I7 .
 #     ?X a :J7 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -329,13 +329,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N6 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N6 .
-#   }} => {{
+#   } => {
 #     ?X a :N7 .
 #     ?X a :I7 .
 #     ?X a :J7 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -348,13 +348,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N7 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N7 .
-#   }} => {{
+#   } => {
 #     ?X a :N8 .
 #     ?X a :I8 .
 #     ?X a :J8 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -367,13 +367,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N7 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N7 .
-#   }} => {{
+#   } => {
 #     ?X a :N8 .
 #     ?X a :I8 .
 #     ?X a :J8 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -386,13 +386,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N7 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N7 .
-#   }} => {{
+#   } => {
 #     ?X a :N8 .
 #     ?X a :I8 .
 #     ?X a :J8 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -405,13 +405,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N8 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N8 .
-#   }} => {{
+#   } => {
 #     ?X a :N9 .
 #     ?X a :I9 .
 #     ?X a :J9 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -424,13 +424,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N8 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N8 .
-#   }} => {{
+#   } => {
 #     ?X a :N9 .
 #     ?X a :I9 .
 #     ?X a :J9 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -443,13 +443,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N8 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N8 .
-#   }} => {{
+#   } => {
 #     ?X a :N9 .
 #     ?X a :I9 .
 #     ?X a :J9 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -462,13 +462,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N9 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N9 .
-#   }} => {{
+#   } => {
 #     ?X a :N10 .
 #     ?X a :I10 .
 #     ?X a :J10 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -481,13 +481,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N9 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N9 .
-#   }} => {{
+#   } => {
 #     ?X a :N10 .
 #     ?X a :I10 .
 #     ?X a :J10 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -500,13 +500,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N9 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N9 .
-#   }} => {{
+#   } => {
 #     ?X a :N10 .
 #     ?X a :I10 .
 #     ?X a :J10 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -519,13 +519,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N10 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N10 .
-#   }} => {{
+#   } => {
 #     ?X a :N11 .
 #     ?X a :I11 .
 #     ?X a :J11 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -538,13 +538,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N10 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N10 .
-#   }} => {{
+#   } => {
 #     ?X a :N11 .
 #     ?X a :I11 .
 #     ?X a :J11 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -557,13 +557,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N10 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N10 .
-#   }} => {{
+#   } => {
 #     ?X a :N11 .
 #     ?X a :I11 .
 #     ?X a :J11 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -576,13 +576,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N11 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N11 .
-#   }} => {{
+#   } => {
 #     ?X a :N12 .
 #     ?X a :I12 .
 #     ?X a :J12 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -595,13 +595,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N11 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N11 .
-#   }} => {{
+#   } => {
 #     ?X a :N12 .
 #     ?X a :I12 .
 #     ?X a :J12 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -614,13 +614,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N11 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N11 .
-#   }} => {{
+#   } => {
 #     ?X a :N12 .
 #     ?X a :I12 .
 #     ?X a :J12 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -633,13 +633,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N12 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N12 .
-#   }} => {{
+#   } => {
 #     ?X a :N13 .
 #     ?X a :I13 .
 #     ?X a :J13 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -652,13 +652,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N12 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N12 .
-#   }} => {{
+#   } => {
 #     ?X a :N13 .
 #     ?X a :I13 .
 #     ?X a :J13 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -671,13 +671,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N12 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N12 .
-#   }} => {{
+#   } => {
 #     ?X a :N13 .
 #     ?X a :I13 .
 #     ?X a :J13 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -690,13 +690,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N13 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N13 .
-#   }} => {{
+#   } => {
 #     ?X a :N14 .
 #     ?X a :I14 .
 #     ?X a :J14 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -709,13 +709,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N13 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N13 .
-#   }} => {{
+#   } => {
 #     ?X a :N14 .
 #     ?X a :I14 .
 #     ?X a :J14 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -728,13 +728,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N13 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N13 .
-#   }} => {{
+#   } => {
 #     ?X a :N14 .
 #     ?X a :I14 .
 #     ?X a :J14 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -747,13 +747,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N14 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N14 .
-#   }} => {{
+#   } => {
 #     ?X a :N15 .
 #     ?X a :I15 .
 #     ?X a :J15 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -766,13 +766,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N14 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N14 .
-#   }} => {{
+#   } => {
 #     ?X a :N15 .
 #     ?X a :I15 .
 #     ?X a :J15 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -785,13 +785,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N14 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N14 .
-#   }} => {{
+#   } => {
 #     ?X a :N15 .
 #     ?X a :I15 .
 #     ?X a :J15 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -804,13 +804,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N15 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N15 .
-#   }} => {{
+#   } => {
 #     ?X a :N16 .
 #     ?X a :I16 .
 #     ?X a :J16 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -823,13 +823,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N15 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N15 .
-#   }} => {{
+#   } => {
 #     ?X a :N16 .
 #     ?X a :I16 .
 #     ?X a :J16 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -842,13 +842,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N15 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N15 .
-#   }} => {{
+#   } => {
 #     ?X a :N16 .
 #     ?X a :I16 .
 #     ?X a :J16 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -861,13 +861,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N16 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N16 .
-#   }} => {{
+#   } => {
 #     ?X a :N17 .
 #     ?X a :I17 .
 #     ?X a :J17 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -880,13 +880,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N16 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N16 .
-#   }} => {{
+#   } => {
 #     ?X a :N17 .
 #     ?X a :I17 .
 #     ?X a :J17 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -899,13 +899,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N16 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N16 .
-#   }} => {{
+#   } => {
 #     ?X a :N17 .
 #     ?X a :I17 .
 #     ?X a :J17 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -918,13 +918,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N17 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N17 .
-#   }} => {{
+#   } => {
 #     ?X a :N18 .
 #     ?X a :I18 .
 #     ?X a :J18 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -937,13 +937,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N17 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N17 .
-#   }} => {{
+#   } => {
 #     ?X a :N18 .
 #     ?X a :I18 .
 #     ?X a :J18 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -956,13 +956,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N17 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N17 .
-#   }} => {{
+#   } => {
 #     ?X a :N18 .
 #     ?X a :I18 .
 #     ?X a :J18 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -975,13 +975,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N18 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N18 .
-#   }} => {{
+#   } => {
 #     ?X a :N19 .
 #     ?X a :I19 .
 #     ?X a :J19 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -994,13 +994,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N18 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N18 .
-#   }} => {{
+#   } => {
 #     ?X a :N19 .
 #     ?X a :I19 .
 #     ?X a :J19 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1013,13 +1013,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N18 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N18 .
-#   }} => {{
+#   } => {
 #     ?X a :N19 .
 #     ?X a :I19 .
 #     ?X a :J19 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1032,13 +1032,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N19 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N19 .
-#   }} => {{
+#   } => {
 #     ?X a :N20 .
 #     ?X a :I20 .
 #     ?X a :J20 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1051,13 +1051,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N19 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N19 .
-#   }} => {{
+#   } => {
 #     ?X a :N20 .
 #     ?X a :I20 .
 #     ?X a :J20 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1070,13 +1070,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N19 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N19 .
-#   }} => {{
+#   } => {
 #     ?X a :N20 .
 #     ?X a :I20 .
 #     ?X a :J20 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1089,13 +1089,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N20 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N20 .
-#   }} => {{
+#   } => {
 #     ?X a :N21 .
 #     ?X a :I21 .
 #     ?X a :J21 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1108,13 +1108,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N20 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N20 .
-#   }} => {{
+#   } => {
 #     ?X a :N21 .
 #     ?X a :I21 .
 #     ?X a :J21 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1127,13 +1127,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N20 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N20 .
-#   }} => {{
+#   } => {
 #     ?X a :N21 .
 #     ?X a :I21 .
 #     ?X a :J21 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1146,13 +1146,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N21 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N21 .
-#   }} => {{
+#   } => {
 #     ?X a :N22 .
 #     ?X a :I22 .
 #     ?X a :J22 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1165,13 +1165,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N21 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N21 .
-#   }} => {{
+#   } => {
 #     ?X a :N22 .
 #     ?X a :I22 .
 #     ?X a :J22 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1184,13 +1184,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N21 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N21 .
-#   }} => {{
+#   } => {
 #     ?X a :N22 .
 #     ?X a :I22 .
 #     ?X a :J22 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1203,13 +1203,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N22 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N22 .
-#   }} => {{
+#   } => {
 #     ?X a :N23 .
 #     ?X a :I23 .
 #     ?X a :J23 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1222,13 +1222,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N22 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N22 .
-#   }} => {{
+#   } => {
 #     ?X a :N23 .
 #     ?X a :I23 .
 #     ?X a :J23 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1241,13 +1241,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N22 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N22 .
-#   }} => {{
+#   } => {
 #     ?X a :N23 .
 #     ?X a :I23 .
 #     ?X a :J23 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1260,13 +1260,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N23 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N23 .
-#   }} => {{
+#   } => {
 #     ?X a :N24 .
 #     ?X a :I24 .
 #     ?X a :J24 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1279,13 +1279,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N23 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N23 .
-#   }} => {{
+#   } => {
 #     ?X a :N24 .
 #     ?X a :I24 .
 #     ?X a :J24 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1298,13 +1298,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N23 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N23 .
-#   }} => {{
+#   } => {
 #     ?X a :N24 .
 #     ?X a :I24 .
 #     ?X a :J24 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1317,13 +1317,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N24 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N24 .
-#   }} => {{
+#   } => {
 #     ?X a :N25 .
 #     ?X a :I25 .
 #     ?X a :J25 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1336,13 +1336,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N24 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N24 .
-#   }} => {{
+#   } => {
 #     ?X a :N25 .
 #     ?X a :I25 .
 #     ?X a :J25 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1355,13 +1355,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N24 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N24 .
-#   }} => {{
+#   } => {
 #     ?X a :N25 .
 #     ?X a :I25 .
 #     ?X a :J25 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1374,13 +1374,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N25 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N25 .
-#   }} => {{
+#   } => {
 #     ?X a :N26 .
 #     ?X a :I26 .
 #     ?X a :J26 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1393,13 +1393,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N25 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N25 .
-#   }} => {{
+#   } => {
 #     ?X a :N26 .
 #     ?X a :I26 .
 #     ?X a :J26 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1412,13 +1412,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N25 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N25 .
-#   }} => {{
+#   } => {
 #     ?X a :N26 .
 #     ?X a :I26 .
 #     ?X a :J26 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1431,13 +1431,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N26 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N26 .
-#   }} => {{
+#   } => {
 #     ?X a :N27 .
 #     ?X a :I27 .
 #     ?X a :J27 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1450,13 +1450,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N26 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N26 .
-#   }} => {{
+#   } => {
 #     ?X a :N27 .
 #     ?X a :I27 .
 #     ?X a :J27 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1469,13 +1469,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N26 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N26 .
-#   }} => {{
+#   } => {
 #     ?X a :N27 .
 #     ?X a :I27 .
 #     ?X a :J27 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1488,13 +1488,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N27 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N27 .
-#   }} => {{
+#   } => {
 #     ?X a :N28 .
 #     ?X a :I28 .
 #     ?X a :J28 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1507,13 +1507,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N27 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N27 .
-#   }} => {{
+#   } => {
 #     ?X a :N28 .
 #     ?X a :I28 .
 #     ?X a :J28 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1526,13 +1526,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N27 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N27 .
-#   }} => {{
+#   } => {
 #     ?X a :N28 .
 #     ?X a :I28 .
 #     ?X a :J28 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1545,13 +1545,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N28 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N28 .
-#   }} => {{
+#   } => {
 #     ?X a :N29 .
 #     ?X a :I29 .
 #     ?X a :J29 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1564,13 +1564,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N28 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N28 .
-#   }} => {{
+#   } => {
 #     ?X a :N29 .
 #     ?X a :I29 .
 #     ?X a :J29 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1583,13 +1583,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N28 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N28 .
-#   }} => {{
+#   } => {
 #     ?X a :N29 .
 #     ?X a :I29 .
 #     ?X a :J29 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1602,13 +1602,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N29 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N29 .
-#   }} => {{
+#   } => {
 #     ?X a :N30 .
 #     ?X a :I30 .
 #     ?X a :J30 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1621,13 +1621,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N29 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N29 .
-#   }} => {{
+#   } => {
 #     ?X a :N30 .
 #     ?X a :I30 .
 #     ?X a :J30 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1640,13 +1640,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N29 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N29 .
-#   }} => {{
+#   } => {
 #     ?X a :N30 .
 #     ?X a :I30 .
 #     ?X a :J30 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1659,13 +1659,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N30 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N30 .
-#   }} => {{
+#   } => {
 #     ?X a :N31 .
 #     ?X a :I31 .
 #     ?X a :J31 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1678,13 +1678,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N30 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N30 .
-#   }} => {{
+#   } => {
 #     ?X a :N31 .
 #     ?X a :I31 .
 #     ?X a :J31 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1697,13 +1697,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N30 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N30 .
-#   }} => {{
+#   } => {
 #     ?X a :N31 .
 #     ?X a :I31 .
 #     ?X a :J31 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1716,13 +1716,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N31 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N31 .
-#   }} => {{
+#   } => {
 #     ?X a :N32 .
 #     ?X a :I32 .
 #     ?X a :J32 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1735,13 +1735,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N31 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N31 .
-#   }} => {{
+#   } => {
 #     ?X a :N32 .
 #     ?X a :I32 .
 #     ?X a :J32 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1754,13 +1754,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N31 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N31 .
-#   }} => {{
+#   } => {
 #     ?X a :N32 .
 #     ?X a :I32 .
 #     ?X a :J32 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1773,13 +1773,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N32 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N32 .
-#   }} => {{
+#   } => {
 #     ?X a :N33 .
 #     ?X a :I33 .
 #     ?X a :J33 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1792,13 +1792,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N32 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N32 .
-#   }} => {{
+#   } => {
 #     ?X a :N33 .
 #     ?X a :I33 .
 #     ?X a :J33 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1811,13 +1811,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N32 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N32 .
-#   }} => {{
+#   } => {
 #     ?X a :N33 .
 #     ?X a :I33 .
 #     ?X a :J33 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1830,13 +1830,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N33 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N33 .
-#   }} => {{
+#   } => {
 #     ?X a :N34 .
 #     ?X a :I34 .
 #     ?X a :J34 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1849,13 +1849,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N33 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N33 .
-#   }} => {{
+#   } => {
 #     ?X a :N34 .
 #     ?X a :I34 .
 #     ?X a :J34 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1868,13 +1868,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N33 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N33 .
-#   }} => {{
+#   } => {
 #     ?X a :N34 .
 #     ?X a :I34 .
 #     ?X a :J34 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1887,13 +1887,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N34 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N34 .
-#   }} => {{
+#   } => {
 #     ?X a :N35 .
 #     ?X a :I35 .
 #     ?X a :J35 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1906,13 +1906,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N34 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N34 .
-#   }} => {{
+#   } => {
 #     ?X a :N35 .
 #     ?X a :I35 .
 #     ?X a :J35 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1925,13 +1925,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N34 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N34 .
-#   }} => {{
+#   } => {
 #     ?X a :N35 .
 #     ?X a :I35 .
 #     ?X a :J35 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1944,13 +1944,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N35 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N35 .
-#   }} => {{
+#   } => {
 #     ?X a :N36 .
 #     ?X a :I36 .
 #     ?X a :J36 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1963,13 +1963,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N35 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N35 .
-#   }} => {{
+#   } => {
 #     ?X a :N36 .
 #     ?X a :I36 .
 #     ?X a :J36 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -1982,13 +1982,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N35 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N35 .
-#   }} => {{
+#   } => {
 #     ?X a :N36 .
 #     ?X a :I36 .
 #     ?X a :J36 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2001,13 +2001,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N36 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N36 .
-#   }} => {{
+#   } => {
 #     ?X a :N37 .
 #     ?X a :I37 .
 #     ?X a :J37 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2020,13 +2020,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N36 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N36 .
-#   }} => {{
+#   } => {
 #     ?X a :N37 .
 #     ?X a :I37 .
 #     ?X a :J37 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2039,13 +2039,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N36 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N36 .
-#   }} => {{
+#   } => {
 #     ?X a :N37 .
 #     ?X a :I37 .
 #     ?X a :J37 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2058,13 +2058,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N37 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N37 .
-#   }} => {{
+#   } => {
 #     ?X a :N38 .
 #     ?X a :I38 .
 #     ?X a :J38 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2077,13 +2077,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N37 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N37 .
-#   }} => {{
+#   } => {
 #     ?X a :N38 .
 #     ?X a :I38 .
 #     ?X a :J38 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2096,13 +2096,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N37 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N37 .
-#   }} => {{
+#   } => {
 #     ?X a :N38 .
 #     ?X a :I38 .
 #     ?X a :J38 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2115,13 +2115,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N38 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N38 .
-#   }} => {{
+#   } => {
 #     ?X a :N39 .
 #     ?X a :I39 .
 #     ?X a :J39 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2134,13 +2134,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N38 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N38 .
-#   }} => {{
+#   } => {
 #     ?X a :N39 .
 #     ?X a :I39 .
 #     ?X a :J39 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2153,13 +2153,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N38 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N38 .
-#   }} => {{
+#   } => {
 #     ?X a :N39 .
 #     ?X a :I39 .
 #     ?X a :J39 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2172,13 +2172,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N39 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N39 .
-#   }} => {{
+#   } => {
 #     ?X a :N40 .
 #     ?X a :I40 .
 #     ?X a :J40 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2191,13 +2191,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N39 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N39 .
-#   }} => {{
+#   } => {
 #     ?X a :N40 .
 #     ?X a :I40 .
 #     ?X a :J40 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2210,13 +2210,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N39 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N39 .
-#   }} => {{
+#   } => {
 #     ?X a :N40 .
 #     ?X a :I40 .
 #     ?X a :J40 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2229,13 +2229,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N40 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N40 .
-#   }} => {{
+#   } => {
 #     ?X a :N41 .
 #     ?X a :I41 .
 #     ?X a :J41 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2248,13 +2248,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N40 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N40 .
-#   }} => {{
+#   } => {
 #     ?X a :N41 .
 #     ?X a :I41 .
 #     ?X a :J41 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2267,13 +2267,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N40 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N40 .
-#   }} => {{
+#   } => {
 #     ?X a :N41 .
 #     ?X a :I41 .
 #     ?X a :J41 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2286,13 +2286,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N41 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N41 .
-#   }} => {{
+#   } => {
 #     ?X a :N42 .
 #     ?X a :I42 .
 #     ?X a :J42 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2305,13 +2305,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N41 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N41 .
-#   }} => {{
+#   } => {
 #     ?X a :N42 .
 #     ?X a :I42 .
 #     ?X a :J42 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2324,13 +2324,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N41 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N41 .
-#   }} => {{
+#   } => {
 #     ?X a :N42 .
 #     ?X a :I42 .
 #     ?X a :J42 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2343,13 +2343,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N42 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N42 .
-#   }} => {{
+#   } => {
 #     ?X a :N43 .
 #     ?X a :I43 .
 #     ?X a :J43 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2362,13 +2362,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N42 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N42 .
-#   }} => {{
+#   } => {
 #     ?X a :N43 .
 #     ?X a :I43 .
 #     ?X a :J43 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2381,13 +2381,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N42 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N42 .
-#   }} => {{
+#   } => {
 #     ?X a :N43 .
 #     ?X a :I43 .
 #     ?X a :J43 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2400,13 +2400,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N43 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N43 .
-#   }} => {{
+#   } => {
 #     ?X a :N44 .
 #     ?X a :I44 .
 #     ?X a :J44 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2419,13 +2419,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N43 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N43 .
-#   }} => {{
+#   } => {
 #     ?X a :N44 .
 #     ?X a :I44 .
 #     ?X a :J44 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2438,13 +2438,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N43 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N43 .
-#   }} => {{
+#   } => {
 #     ?X a :N44 .
 #     ?X a :I44 .
 #     ?X a :J44 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2457,13 +2457,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N44 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N44 .
-#   }} => {{
+#   } => {
 #     ?X a :N45 .
 #     ?X a :I45 .
 #     ?X a :J45 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2476,13 +2476,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N44 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N44 .
-#   }} => {{
+#   } => {
 #     ?X a :N45 .
 #     ?X a :I45 .
 #     ?X a :J45 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2495,13 +2495,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N44 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N44 .
-#   }} => {{
+#   } => {
 #     ?X a :N45 .
 #     ?X a :I45 .
 #     ?X a :J45 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2514,13 +2514,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N45 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N45 .
-#   }} => {{
+#   } => {
 #     ?X a :N46 .
 #     ?X a :I46 .
 #     ?X a :J46 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2533,13 +2533,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N45 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N45 .
-#   }} => {{
+#   } => {
 #     ?X a :N46 .
 #     ?X a :I46 .
 #     ?X a :J46 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2552,13 +2552,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N45 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N45 .
-#   }} => {{
+#   } => {
 #     ?X a :N46 .
 #     ?X a :I46 .
 #     ?X a :J46 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2571,13 +2571,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N46 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N46 .
-#   }} => {{
+#   } => {
 #     ?X a :N47 .
 #     ?X a :I47 .
 #     ?X a :J47 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2590,13 +2590,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N46 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N46 .
-#   }} => {{
+#   } => {
 #     ?X a :N47 .
 #     ?X a :I47 .
 #     ?X a :J47 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2609,13 +2609,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N46 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N46 .
-#   }} => {{
+#   } => {
 #     ?X a :N47 .
 #     ?X a :I47 .
 #     ?X a :J47 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2628,13 +2628,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N47 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N47 .
-#   }} => {{
+#   } => {
 #     ?X a :N48 .
 #     ?X a :I48 .
 #     ?X a :J48 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2647,13 +2647,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N47 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N47 .
-#   }} => {{
+#   } => {
 #     ?X a :N48 .
 #     ?X a :I48 .
 #     ?X a :J48 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2666,13 +2666,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N47 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N47 .
-#   }} => {{
+#   } => {
 #     ?X a :N48 .
 #     ?X a :I48 .
 #     ?X a :J48 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2685,13 +2685,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N48 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N48 .
-#   }} => {{
+#   } => {
 #     ?X a :N49 .
 #     ?X a :I49 .
 #     ?X a :J49 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2704,13 +2704,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N48 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N48 .
-#   }} => {{
+#   } => {
 #     ?X a :N49 .
 #     ?X a :I49 .
 #     ?X a :J49 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2723,13 +2723,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N48 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N48 .
-#   }} => {{
+#   } => {
 #     ?X a :N49 .
 #     ?X a :I49 .
 #     ?X a :J49 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2742,13 +2742,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N49 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N49 .
-#   }} => {{
+#   } => {
 #     ?X a :N50 .
 #     ?X a :I50 .
 #     ?X a :J50 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2761,13 +2761,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N49 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N49 .
-#   }} => {{
+#   } => {
 #     ?X a :N50 .
 #     ?X a :I50 .
 #     ?X a :J50 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2780,13 +2780,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N49 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N49 .
-#   }} => {{
+#   } => {
 #     ?X a :N50 .
 #     ?X a :I50 .
 #     ?X a :J50 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2799,13 +2799,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N50 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N50 .
-#   }} => {{
+#   } => {
 #     ?X a :N51 .
 #     ?X a :I51 .
 #     ?X a :J51 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2818,13 +2818,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N50 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N50 .
-#   }} => {{
+#   } => {
 #     ?X a :N51 .
 #     ?X a :I51 .
 #     ?X a :J51 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2837,13 +2837,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N50 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N50 .
-#   }} => {{
+#   } => {
 #     ?X a :N51 .
 #     ?X a :I51 .
 #     ?X a :J51 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2856,13 +2856,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N51 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N51 .
-#   }} => {{
+#   } => {
 #     ?X a :N52 .
 #     ?X a :I52 .
 #     ?X a :J52 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2875,13 +2875,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N51 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N51 .
-#   }} => {{
+#   } => {
 #     ?X a :N52 .
 #     ?X a :I52 .
 #     ?X a :J52 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2894,13 +2894,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N51 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N51 .
-#   }} => {{
+#   } => {
 #     ?X a :N52 .
 #     ?X a :I52 .
 #     ?X a :J52 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2913,13 +2913,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N52 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N52 .
-#   }} => {{
+#   } => {
 #     ?X a :N53 .
 #     ?X a :I53 .
 #     ?X a :J53 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2932,13 +2932,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N52 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N52 .
-#   }} => {{
+#   } => {
 #     ?X a :N53 .
 #     ?X a :I53 .
 #     ?X a :J53 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2951,13 +2951,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N52 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N52 .
-#   }} => {{
+#   } => {
 #     ?X a :N53 .
 #     ?X a :I53 .
 #     ?X a :J53 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2970,13 +2970,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N53 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N53 .
-#   }} => {{
+#   } => {
 #     ?X a :N54 .
 #     ?X a :I54 .
 #     ?X a :J54 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -2989,13 +2989,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N53 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N53 .
-#   }} => {{
+#   } => {
 #     ?X a :N54 .
 #     ?X a :I54 .
 #     ?X a :J54 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3008,13 +3008,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N53 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N53 .
-#   }} => {{
+#   } => {
 #     ?X a :N54 .
 #     ?X a :I54 .
 #     ?X a :J54 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3027,13 +3027,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N54 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N54 .
-#   }} => {{
+#   } => {
 #     ?X a :N55 .
 #     ?X a :I55 .
 #     ?X a :J55 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3046,13 +3046,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N54 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N54 .
-#   }} => {{
+#   } => {
 #     ?X a :N55 .
 #     ?X a :I55 .
 #     ?X a :J55 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3065,13 +3065,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N54 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N54 .
-#   }} => {{
+#   } => {
 #     ?X a :N55 .
 #     ?X a :I55 .
 #     ?X a :J55 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3084,13 +3084,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N55 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N55 .
-#   }} => {{
+#   } => {
 #     ?X a :N56 .
 #     ?X a :I56 .
 #     ?X a :J56 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3103,13 +3103,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N55 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N55 .
-#   }} => {{
+#   } => {
 #     ?X a :N56 .
 #     ?X a :I56 .
 #     ?X a :J56 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3122,13 +3122,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N55 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N55 .
-#   }} => {{
+#   } => {
 #     ?X a :N56 .
 #     ?X a :I56 .
 #     ?X a :J56 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3141,13 +3141,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N56 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N56 .
-#   }} => {{
+#   } => {
 #     ?X a :N57 .
 #     ?X a :I57 .
 #     ?X a :J57 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3160,13 +3160,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N56 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N56 .
-#   }} => {{
+#   } => {
 #     ?X a :N57 .
 #     ?X a :I57 .
 #     ?X a :J57 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3179,13 +3179,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N56 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N56 .
-#   }} => {{
+#   } => {
 #     ?X a :N57 .
 #     ?X a :I57 .
 #     ?X a :J57 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3198,13 +3198,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N57 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N57 .
-#   }} => {{
+#   } => {
 #     ?X a :N58 .
 #     ?X a :I58 .
 #     ?X a :J58 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3217,13 +3217,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N57 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N57 .
-#   }} => {{
+#   } => {
 #     ?X a :N58 .
 #     ?X a :I58 .
 #     ?X a :J58 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3236,13 +3236,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N57 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N57 .
-#   }} => {{
+#   } => {
 #     ?X a :N58 .
 #     ?X a :I58 .
 #     ?X a :J58 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3255,13 +3255,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N58 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N58 .
-#   }} => {{
+#   } => {
 #     ?X a :N59 .
 #     ?X a :I59 .
 #     ?X a :J59 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3274,13 +3274,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N58 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N58 .
-#   }} => {{
+#   } => {
 #     ?X a :N59 .
 #     ?X a :I59 .
 #     ?X a :J59 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3293,13 +3293,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N58 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N58 .
-#   }} => {{
+#   } => {
 #     ?X a :N59 .
 #     ?X a :I59 .
 #     ?X a :J59 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3312,13 +3312,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N59 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N59 .
-#   }} => {{
+#   } => {
 #     ?X a :N60 .
 #     ?X a :I60 .
 #     ?X a :J60 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3331,13 +3331,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N59 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N59 .
-#   }} => {{
+#   } => {
 #     ?X a :N60 .
 #     ?X a :I60 .
 #     ?X a :J60 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3350,13 +3350,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N59 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N59 .
-#   }} => {{
+#   } => {
 #     ?X a :N60 .
 #     ?X a :I60 .
 #     ?X a :J60 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3369,13 +3369,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N60 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N60 .
-#   }} => {{
+#   } => {
 #     ?X a :N61 .
 #     ?X a :I61 .
 #     ?X a :J61 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3388,13 +3388,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N60 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N60 .
-#   }} => {{
+#   } => {
 #     ?X a :N61 .
 #     ?X a :I61 .
 #     ?X a :J61 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3407,13 +3407,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N60 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N60 .
-#   }} => {{
+#   } => {
 #     ?X a :N61 .
 #     ?X a :I61 .
 #     ?X a :J61 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3426,13 +3426,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N61 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N61 .
-#   }} => {{
+#   } => {
 #     ?X a :N62 .
 #     ?X a :I62 .
 #     ?X a :J62 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3445,13 +3445,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N61 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N61 .
-#   }} => {{
+#   } => {
 #     ?X a :N62 .
 #     ?X a :I62 .
 #     ?X a :J62 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3464,13 +3464,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N61 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N61 .
-#   }} => {{
+#   } => {
 #     ?X a :N62 .
 #     ?X a :I62 .
 #     ?X a :J62 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3483,13 +3483,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N62 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N62 .
-#   }} => {{
+#   } => {
 #     ?X a :N63 .
 #     ?X a :I63 .
 #     ?X a :J63 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3502,13 +3502,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N62 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N62 .
-#   }} => {{
+#   } => {
 #     ?X a :N63 .
 #     ?X a :I63 .
 #     ?X a :J63 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3521,13 +3521,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N62 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N62 .
-#   }} => {{
+#   } => {
 #     ?X a :N63 .
 #     ?X a :I63 .
 #     ?X a :J63 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3540,13 +3540,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N63 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N63 .
-#   }} => {{
+#   } => {
 #     ?X a :N64 .
 #     ?X a :I64 .
 #     ?X a :J64 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3559,13 +3559,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N63 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N63 .
-#   }} => {{
+#   } => {
 #     ?X a :N64 .
 #     ?X a :I64 .
 #     ?X a :J64 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3578,13 +3578,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N63 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N63 .
-#   }} => {{
+#   } => {
 #     ?X a :N64 .
 #     ?X a :I64 .
 #     ?X a :J64 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3597,13 +3597,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N64 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N64 .
-#   }} => {{
+#   } => {
 #     ?X a :N65 .
 #     ?X a :I65 .
 #     ?X a :J65 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3616,13 +3616,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N64 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N64 .
-#   }} => {{
+#   } => {
 #     ?X a :N65 .
 #     ?X a :I65 .
 #     ?X a :J65 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3635,13 +3635,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N64 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N64 .
-#   }} => {{
+#   } => {
 #     ?X a :N65 .
 #     ?X a :I65 .
 #     ?X a :J65 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3654,13 +3654,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N65 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N65 .
-#   }} => {{
+#   } => {
 #     ?X a :N66 .
 #     ?X a :I66 .
 #     ?X a :J66 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3673,13 +3673,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N65 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N65 .
-#   }} => {{
+#   } => {
 #     ?X a :N66 .
 #     ?X a :I66 .
 #     ?X a :J66 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3692,13 +3692,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N65 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N65 .
-#   }} => {{
+#   } => {
 #     ?X a :N66 .
 #     ?X a :I66 .
 #     ?X a :J66 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3711,13 +3711,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N66 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N66 .
-#   }} => {{
+#   } => {
 #     ?X a :N67 .
 #     ?X a :I67 .
 #     ?X a :J67 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3730,13 +3730,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N66 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N66 .
-#   }} => {{
+#   } => {
 #     ?X a :N67 .
 #     ?X a :I67 .
 #     ?X a :J67 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3749,13 +3749,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N66 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N66 .
-#   }} => {{
+#   } => {
 #     ?X a :N67 .
 #     ?X a :I67 .
 #     ?X a :J67 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3768,13 +3768,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N67 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N67 .
-#   }} => {{
+#   } => {
 #     ?X a :N68 .
 #     ?X a :I68 .
 #     ?X a :J68 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3787,13 +3787,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N67 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N67 .
-#   }} => {{
+#   } => {
 #     ?X a :N68 .
 #     ?X a :I68 .
 #     ?X a :J68 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3806,13 +3806,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N67 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N67 .
-#   }} => {{
+#   } => {
 #     ?X a :N68 .
 #     ?X a :I68 .
 #     ?X a :J68 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3825,13 +3825,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N68 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N68 .
-#   }} => {{
+#   } => {
 #     ?X a :N69 .
 #     ?X a :I69 .
 #     ?X a :J69 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3844,13 +3844,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N68 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N68 .
-#   }} => {{
+#   } => {
 #     ?X a :N69 .
 #     ?X a :I69 .
 #     ?X a :J69 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3863,13 +3863,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N68 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N68 .
-#   }} => {{
+#   } => {
 #     ?X a :N69 .
 #     ?X a :I69 .
 #     ?X a :J69 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3882,13 +3882,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N69 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N69 .
-#   }} => {{
+#   } => {
 #     ?X a :N70 .
 #     ?X a :I70 .
 #     ?X a :J70 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3901,13 +3901,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N69 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N69 .
-#   }} => {{
+#   } => {
 #     ?X a :N70 .
 #     ?X a :I70 .
 #     ?X a :J70 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3920,13 +3920,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N69 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N69 .
-#   }} => {{
+#   } => {
 #     ?X a :N70 .
 #     ?X a :I70 .
 #     ?X a :J70 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3939,13 +3939,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N70 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N70 .
-#   }} => {{
+#   } => {
 #     ?X a :N71 .
 #     ?X a :I71 .
 #     ?X a :J71 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3958,13 +3958,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N70 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N70 .
-#   }} => {{
+#   } => {
 #     ?X a :N71 .
 #     ?X a :I71 .
 #     ?X a :J71 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3977,13 +3977,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N70 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N70 .
-#   }} => {{
+#   } => {
 #     ?X a :N71 .
 #     ?X a :I71 .
 #     ?X a :J71 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -3996,13 +3996,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N71 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N71 .
-#   }} => {{
+#   } => {
 #     ?X a :N72 .
 #     ?X a :I72 .
 #     ?X a :J72 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4015,13 +4015,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N71 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N71 .
-#   }} => {{
+#   } => {
 #     ?X a :N72 .
 #     ?X a :I72 .
 #     ?X a :J72 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4034,13 +4034,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N71 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N71 .
-#   }} => {{
+#   } => {
 #     ?X a :N72 .
 #     ?X a :I72 .
 #     ?X a :J72 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4053,13 +4053,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N72 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N72 .
-#   }} => {{
+#   } => {
 #     ?X a :N73 .
 #     ?X a :I73 .
 #     ?X a :J73 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4072,13 +4072,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N72 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N72 .
-#   }} => {{
+#   } => {
 #     ?X a :N73 .
 #     ?X a :I73 .
 #     ?X a :J73 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4091,13 +4091,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N72 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N72 .
-#   }} => {{
+#   } => {
 #     ?X a :N73 .
 #     ?X a :I73 .
 #     ?X a :J73 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4110,13 +4110,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N73 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N73 .
-#   }} => {{
+#   } => {
 #     ?X a :N74 .
 #     ?X a :I74 .
 #     ?X a :J74 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4129,13 +4129,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N73 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N73 .
-#   }} => {{
+#   } => {
 #     ?X a :N74 .
 #     ?X a :I74 .
 #     ?X a :J74 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4148,13 +4148,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N73 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N73 .
-#   }} => {{
+#   } => {
 #     ?X a :N74 .
 #     ?X a :I74 .
 #     ?X a :J74 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4167,13 +4167,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N74 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N74 .
-#   }} => {{
+#   } => {
 #     ?X a :N75 .
 #     ?X a :I75 .
 #     ?X a :J75 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4186,13 +4186,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N74 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N74 .
-#   }} => {{
+#   } => {
 #     ?X a :N75 .
 #     ?X a :I75 .
 #     ?X a :J75 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4205,13 +4205,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N74 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N74 .
-#   }} => {{
+#   } => {
 #     ?X a :N75 .
 #     ?X a :I75 .
 #     ?X a :J75 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4224,13 +4224,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N75 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N75 .
-#   }} => {{
+#   } => {
 #     ?X a :N76 .
 #     ?X a :I76 .
 #     ?X a :J76 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4243,13 +4243,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N75 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N75 .
-#   }} => {{
+#   } => {
 #     ?X a :N76 .
 #     ?X a :I76 .
 #     ?X a :J76 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4262,13 +4262,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N75 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N75 .
-#   }} => {{
+#   } => {
 #     ?X a :N76 .
 #     ?X a :I76 .
 #     ?X a :J76 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4281,13 +4281,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N76 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N76 .
-#   }} => {{
+#   } => {
 #     ?X a :N77 .
 #     ?X a :I77 .
 #     ?X a :J77 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4300,13 +4300,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N76 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N76 .
-#   }} => {{
+#   } => {
 #     ?X a :N77 .
 #     ?X a :I77 .
 #     ?X a :J77 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4319,13 +4319,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N76 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N76 .
-#   }} => {{
+#   } => {
 #     ?X a :N77 .
 #     ?X a :I77 .
 #     ?X a :J77 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4338,13 +4338,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N77 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N77 .
-#   }} => {{
+#   } => {
 #     ?X a :N78 .
 #     ?X a :I78 .
 #     ?X a :J78 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4357,13 +4357,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N77 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N77 .
-#   }} => {{
+#   } => {
 #     ?X a :N78 .
 #     ?X a :I78 .
 #     ?X a :J78 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4376,13 +4376,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N77 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N77 .
-#   }} => {{
+#   } => {
 #     ?X a :N78 .
 #     ?X a :I78 .
 #     ?X a :J78 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4395,13 +4395,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N78 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N78 .
-#   }} => {{
+#   } => {
 #     ?X a :N79 .
 #     ?X a :I79 .
 #     ?X a :J79 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4414,13 +4414,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N78 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N78 .
-#   }} => {{
+#   } => {
 #     ?X a :N79 .
 #     ?X a :I79 .
 #     ?X a :J79 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4433,13 +4433,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N78 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N78 .
-#   }} => {{
+#   } => {
 #     ?X a :N79 .
 #     ?X a :I79 .
 #     ?X a :J79 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4452,13 +4452,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N79 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N79 .
-#   }} => {{
+#   } => {
 #     ?X a :N80 .
 #     ?X a :I80 .
 #     ?X a :J80 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4471,13 +4471,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N79 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N79 .
-#   }} => {{
+#   } => {
 #     ?X a :N80 .
 #     ?X a :I80 .
 #     ?X a :J80 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4490,13 +4490,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N79 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N79 .
-#   }} => {{
+#   } => {
 #     ?X a :N80 .
 #     ?X a :I80 .
 #     ?X a :J80 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4509,13 +4509,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N80 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N80 .
-#   }} => {{
+#   } => {
 #     ?X a :N81 .
 #     ?X a :I81 .
 #     ?X a :J81 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4528,13 +4528,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N80 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N80 .
-#   }} => {{
+#   } => {
 #     ?X a :N81 .
 #     ?X a :I81 .
 #     ?X a :J81 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4547,13 +4547,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N80 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N80 .
-#   }} => {{
+#   } => {
 #     ?X a :N81 .
 #     ?X a :I81 .
 #     ?X a :J81 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4566,13 +4566,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N81 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N81 .
-#   }} => {{
+#   } => {
 #     ?X a :N82 .
 #     ?X a :I82 .
 #     ?X a :J82 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4585,13 +4585,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N81 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N81 .
-#   }} => {{
+#   } => {
 #     ?X a :N82 .
 #     ?X a :I82 .
 #     ?X a :J82 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4604,13 +4604,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N81 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N81 .
-#   }} => {{
+#   } => {
 #     ?X a :N82 .
 #     ?X a :I82 .
 #     ?X a :J82 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4623,13 +4623,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N82 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N82 .
-#   }} => {{
+#   } => {
 #     ?X a :N83 .
 #     ?X a :I83 .
 #     ?X a :J83 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4642,13 +4642,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N82 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N82 .
-#   }} => {{
+#   } => {
 #     ?X a :N83 .
 #     ?X a :I83 .
 #     ?X a :J83 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4661,13 +4661,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N82 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N82 .
-#   }} => {{
+#   } => {
 #     ?X a :N83 .
 #     ?X a :I83 .
 #     ?X a :J83 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4680,13 +4680,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N83 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N83 .
-#   }} => {{
+#   } => {
 #     ?X a :N84 .
 #     ?X a :I84 .
 #     ?X a :J84 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4699,13 +4699,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N83 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N83 .
-#   }} => {{
+#   } => {
 #     ?X a :N84 .
 #     ?X a :I84 .
 #     ?X a :J84 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4718,13 +4718,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N83 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N83 .
-#   }} => {{
+#   } => {
 #     ?X a :N84 .
 #     ?X a :I84 .
 #     ?X a :J84 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4737,13 +4737,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N84 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N84 .
-#   }} => {{
+#   } => {
 #     ?X a :N85 .
 #     ?X a :I85 .
 #     ?X a :J85 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4756,13 +4756,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N84 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N84 .
-#   }} => {{
+#   } => {
 #     ?X a :N85 .
 #     ?X a :I85 .
 #     ?X a :J85 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4775,13 +4775,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N84 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N84 .
-#   }} => {{
+#   } => {
 #     ?X a :N85 .
 #     ?X a :I85 .
 #     ?X a :J85 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4794,13 +4794,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N85 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N85 .
-#   }} => {{
+#   } => {
 #     ?X a :N86 .
 #     ?X a :I86 .
 #     ?X a :J86 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4813,13 +4813,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N85 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N85 .
-#   }} => {{
+#   } => {
 #     ?X a :N86 .
 #     ?X a :I86 .
 #     ?X a :J86 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4832,13 +4832,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N85 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N85 .
-#   }} => {{
+#   } => {
 #     ?X a :N86 .
 #     ?X a :I86 .
 #     ?X a :J86 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4851,13 +4851,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N86 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N86 .
-#   }} => {{
+#   } => {
 #     ?X a :N87 .
 #     ?X a :I87 .
 #     ?X a :J87 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4870,13 +4870,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N86 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N86 .
-#   }} => {{
+#   } => {
 #     ?X a :N87 .
 #     ?X a :I87 .
 #     ?X a :J87 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4889,13 +4889,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N86 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N86 .
-#   }} => {{
+#   } => {
 #     ?X a :N87 .
 #     ?X a :I87 .
 #     ?X a :J87 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4908,13 +4908,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N87 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N87 .
-#   }} => {{
+#   } => {
 #     ?X a :N88 .
 #     ?X a :I88 .
 #     ?X a :J88 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4927,13 +4927,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N87 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N87 .
-#   }} => {{
+#   } => {
 #     ?X a :N88 .
 #     ?X a :I88 .
 #     ?X a :J88 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4946,13 +4946,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N87 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N87 .
-#   }} => {{
+#   } => {
 #     ?X a :N88 .
 #     ?X a :I88 .
 #     ?X a :J88 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4965,13 +4965,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N88 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N88 .
-#   }} => {{
+#   } => {
 #     ?X a :N89 .
 #     ?X a :I89 .
 #     ?X a :J89 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -4984,13 +4984,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N88 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N88 .
-#   }} => {{
+#   } => {
 #     ?X a :N89 .
 #     ?X a :I89 .
 #     ?X a :J89 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5003,13 +5003,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N88 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N88 .
-#   }} => {{
+#   } => {
 #     ?X a :N89 .
 #     ?X a :I89 .
 #     ?X a :J89 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5022,13 +5022,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N89 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N89 .
-#   }} => {{
+#   } => {
 #     ?X a :N90 .
 #     ?X a :I90 .
 #     ?X a :J90 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5041,13 +5041,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N89 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N89 .
-#   }} => {{
+#   } => {
 #     ?X a :N90 .
 #     ?X a :I90 .
 #     ?X a :J90 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5060,13 +5060,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N89 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N89 .
-#   }} => {{
+#   } => {
 #     ?X a :N90 .
 #     ?X a :I90 .
 #     ?X a :J90 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5079,13 +5079,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N90 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N90 .
-#   }} => {{
+#   } => {
 #     ?X a :N91 .
 #     ?X a :I91 .
 #     ?X a :J91 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5098,13 +5098,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N90 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N90 .
-#   }} => {{
+#   } => {
 #     ?X a :N91 .
 #     ?X a :I91 .
 #     ?X a :J91 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5117,13 +5117,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N90 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N90 .
-#   }} => {{
+#   } => {
 #     ?X a :N91 .
 #     ?X a :I91 .
 #     ?X a :J91 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5136,13 +5136,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N91 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N91 .
-#   }} => {{
+#   } => {
 #     ?X a :N92 .
 #     ?X a :I92 .
 #     ?X a :J92 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5155,13 +5155,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N91 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N91 .
-#   }} => {{
+#   } => {
 #     ?X a :N92 .
 #     ?X a :I92 .
 #     ?X a :J92 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5174,13 +5174,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N91 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N91 .
-#   }} => {{
+#   } => {
 #     ?X a :N92 .
 #     ?X a :I92 .
 #     ?X a :J92 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5193,13 +5193,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N92 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N92 .
-#   }} => {{
+#   } => {
 #     ?X a :N93 .
 #     ?X a :I93 .
 #     ?X a :J93 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5212,13 +5212,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N92 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N92 .
-#   }} => {{
+#   } => {
 #     ?X a :N93 .
 #     ?X a :I93 .
 #     ?X a :J93 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5231,13 +5231,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N92 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N92 .
-#   }} => {{
+#   } => {
 #     ?X a :N93 .
 #     ?X a :I93 .
 #     ?X a :J93 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5250,13 +5250,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N93 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N93 .
-#   }} => {{
+#   } => {
 #     ?X a :N94 .
 #     ?X a :I94 .
 #     ?X a :J94 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5269,13 +5269,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N93 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N93 .
-#   }} => {{
+#   } => {
 #     ?X a :N94 .
 #     ?X a :I94 .
 #     ?X a :J94 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5288,13 +5288,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N93 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N93 .
-#   }} => {{
+#   } => {
 #     ?X a :N94 .
 #     ?X a :I94 .
 #     ?X a :J94 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5307,13 +5307,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N94 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N94 .
-#   }} => {{
+#   } => {
 #     ?X a :N95 .
 #     ?X a :I95 .
 #     ?X a :J95 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5326,13 +5326,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N94 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N94 .
-#   }} => {{
+#   } => {
 #     ?X a :N95 .
 #     ?X a :I95 .
 #     ?X a :J95 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5345,13 +5345,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N94 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N94 .
-#   }} => {{
+#   } => {
 #     ?X a :N95 .
 #     ?X a :I95 .
 #     ?X a :J95 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5364,13 +5364,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N95 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N95 .
-#   }} => {{
+#   } => {
 #     ?X a :N96 .
 #     ?X a :I96 .
 #     ?X a :J96 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5383,13 +5383,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N95 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N95 .
-#   }} => {{
+#   } => {
 #     ?X a :N96 .
 #     ?X a :I96 .
 #     ?X a :J96 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5402,13 +5402,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N95 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N95 .
-#   }} => {{
+#   } => {
 #     ?X a :N96 .
 #     ?X a :I96 .
 #     ?X a :J96 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5421,13 +5421,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N96 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N96 .
-#   }} => {{
+#   } => {
 #     ?X a :N97 .
 #     ?X a :I97 .
 #     ?X a :J97 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5440,13 +5440,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N96 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N96 .
-#   }} => {{
+#   } => {
 #     ?X a :N97 .
 #     ?X a :I97 .
 #     ?X a :J97 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5459,13 +5459,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N96 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N96 .
-#   }} => {{
+#   } => {
 #     ?X a :N97 .
 #     ?X a :I97 .
 #     ?X a :J97 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5478,13 +5478,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N97 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N97 .
-#   }} => {{
+#   } => {
 #     ?X a :N98 .
 #     ?X a :I98 .
 #     ?X a :J98 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5497,13 +5497,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N97 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N97 .
-#   }} => {{
+#   } => {
 #     ?X a :N98 .
 #     ?X a :I98 .
 #     ?X a :J98 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5516,13 +5516,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N97 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N97 .
-#   }} => {{
+#   } => {
 #     ?X a :N98 .
 #     ?X a :I98 .
 #     ?X a :J98 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5535,13 +5535,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N98 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N98 .
-#   }} => {{
+#   } => {
 #     ?X a :N99 .
 #     ?X a :I99 .
 #     ?X a :J99 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5554,13 +5554,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N98 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N98 .
-#   }} => {{
+#   } => {
 #     ?X a :N99 .
 #     ?X a :I99 .
 #     ?X a :J99 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5573,13 +5573,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N98 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N98 .
-#   }} => {{
+#   } => {
 #     ?X a :N99 .
 #     ?X a :I99 .
 #     ?X a :J99 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5592,13 +5592,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N99 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N99 .
-#   }} => {{
+#   } => {
 #     ?X a :N100 .
 #     ?X a :I100 .
 #     ?X a :J100 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5611,13 +5611,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N99 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N99 .
-#   }} => {{
+#   } => {
 #     ?X a :N100 .
 #     ?X a :I100 .
 #     ?X a :J100 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -5630,13 +5630,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :ind a :N99 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X a :N99 .
-#   }} => {{
+#   } => {
 #     ?X a :N100 .
 #     ?X a :I100 .
 #     ?X a :J100 .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :ind
 # Therefore the derived triple above is entailed by the rules and facts.

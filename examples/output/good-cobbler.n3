@@ -8,13 +8,13 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :joe :is (:good :Cobbler) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?X :is (:good ?Y) .
-#   }} => {{
+#   } => {
 #     :test :is {
 #         ?X :is (:good ?Y) .
 #     } .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :joe
 #   ?Y = :Cobbler

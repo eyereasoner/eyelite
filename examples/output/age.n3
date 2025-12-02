@@ -6,11 +6,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :patH :ageAbove "P80Y"^^<http://www.w3.org/2001/XMLSchema#duration> .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?S :ageAbove "P80Y"^^<http://www.w3.org/2001/XMLSchema#duration> .
-#   }} => {{
+#   } => {
 #     :test :is true .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?S = :patH
 # Therefore the derived triple above is entailed by the rules and facts.

@@ -11,15 +11,15 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :parentOf :invOf :childOf .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?p :invOf ?q .
-#   }} => {{
+#   } => {
 #     {
 #         ?x ?q ?y .
 #     } <= {
 #         ?y ?p ?x .
 #     } .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?p = :parentOf
 #   ?q = :childOf
@@ -37,11 +37,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :bob :childOf :alice .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?x :childOf ?y .
-#   }} => {{
+#   } => {
 #     ?x :hasParent ?y .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?x = :bob
 #   ?y = :alice

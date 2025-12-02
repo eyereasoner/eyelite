@@ -18,7 +18,7 @@
 #   ((:yellow :norwegian :cats :water :dunhill) (:blue :dane :horse :tea :blends) (:red :brit :birds :milk :pallmall) (:green :german :fish :coffee :prince) (:white :swede :dogs :beer :bluemasters)) list:member (:green :german :fish :coffee :prince) .
 #   ((:yellow :norwegian :cats :water :dunhill) (:blue :dane :horse :tea :blends) (:red :brit :birds :milk :pallmall) (:green :german :fish :coffee :prince) (:white :swede :dogs :beer :bluemasters)) list:member (:green :german :fish :coffee :prince) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?L log:equalTo ((?A1 :norwegian ?A2 ?A3 ?A4) (:blue ?A5 ?A6 ?A7 ?A8) (?A9 ?A10 ?A11 :milk ?A12) ?A13 ?A14) .
 #     ?L :pair ((?A15 ?A16 ?A17 ?A18 :blends) (?A19 ?A20 :cats ?A21 ?A22)) .
 #     ?L :pair ((?A23 ?A24 :horse ?A25 ?A26) (?A27 ?A28 ?A29 ?A30 :dunhill)) .
@@ -32,9 +32,9 @@
 #     ?L list:member (?A61 ?A62 ?A63 :beer :bluemasters) .
 #     ?L list:member (?A64 :german ?A65 ?A66 :prince) .
 #     ?L list:member (?A67 ?B :fish ?A69 ?A70) .
-#   }} => {{
+#   } => {
 #     ?B :eats :fish .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A1 = :yellow
 #   ?A10 = :brit

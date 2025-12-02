@@ -9,14 +9,14 @@
 #   :meas47 :p2xCm 45.1 .
 #   (10.1 45.1) math:difference -35 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p1xCm ?X .
 #     ?M :p2xCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dx12Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 10.1
@@ -35,14 +35,14 @@
 #   :meas47 :p2yCm 5.6 .
 #   (7.8 5.6) math:difference 2.2 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p1yCm ?X .
 #     ?M :p2yCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dy12Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 7.8
@@ -61,14 +61,14 @@
 #   :meas47 :p3yCm 29.8 .
 #   (7.8 29.8) math:difference -22 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p1yCm ?X .
 #     ?M :p3yCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dy13Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 7.8
@@ -87,14 +87,14 @@
 #   :meas47 :p4yCm 28.5 .
 #   (5.6 28.5) math:difference -22.9 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p2yCm ?X .
 #     ?M :p4yCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dy24Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 5.6
@@ -113,14 +113,14 @@
 #   :meas47 :dx12Cm -35 .
 #   (2.2 -35) math:quotient -0.06285714285714286 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dy12Cm ?Y .
 #     ?M :dx12Cm ?X .
 #     (?Y ?X) math:quotient ?Z .
-#   }} => {{
+#   } => {
 #     ?M :cL1 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -35
@@ -138,13 +138,13 @@
 #   :meas47 :cL1 -0.06285714285714286 .
 #   (1 -0.06285714285714286) math:quotient -15.909090909090908 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :cL1 ?X .
 #     (1 ?X) math:quotient ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dL3m ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -0.06285714285714286
@@ -161,13 +161,13 @@
 #   :meas47 :dL3m -15.909090909090908 .
 #   (0 -15.909090909090908) math:difference 15.909090909090908 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dL3m ?X .
 #     (0 ?X) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :cL3 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -15.909090909090908
@@ -185,14 +185,14 @@
 #   :meas47 :p1xCm 10.1 .
 #   (-0.06285714285714286 10.1) math:product -0.6348571428571429 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :cL1 ?X .
 #     ?M :p1xCm ?Y .
 #     (?X ?Y) math:product ?Z .
-#   }} => {{
+#   } => {
 #     ?M :pL1x1Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -0.06285714285714286
@@ -211,14 +211,14 @@
 #   :meas47 :p2xCm 45.1 .
 #   (-0.06285714285714286 45.1) math:product -2.834857142857143 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :cL1 ?X .
 #     ?M :p2xCm ?Y .
 #     (?X ?Y) math:product ?Z .
-#   }} => {{
+#   } => {
 #     ?M :pL1x2Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -0.06285714285714286
@@ -237,14 +237,14 @@
 #   :meas47 :p3xCm 3.6 .
 #   (15.909090909090908 3.6) math:product 57.27272727272727 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :cL3 ?X .
 #     ?M :p3xCm ?Y .
 #     (?X ?Y) math:product ?Z .
-#   }} => {{
+#   } => {
 #     ?M :pL3x3Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 15.909090909090908
@@ -263,14 +263,14 @@
 #   :meas47 :p4xCm 54.7 .
 #   (15.909090909090908 54.7) math:product 870.2272727272727 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :cL3 ?X .
 #     ?M :p4xCm ?Y .
 #     (?X ?Y) math:product ?Z .
-#   }} => {{
+#   } => {
 #     ?M :pL3x4Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 15.909090909090908
@@ -289,14 +289,14 @@
 #   :meas47 :pL3x3Cm 57.27272727272727 .
 #   (-0.6348571428571429 57.27272727272727) math:difference -57.90758441558442 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :pL1x1Cm ?X .
 #     ?M :pL3x3Cm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dd13Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -0.6348571428571429
@@ -315,14 +315,14 @@
 #   :meas47 :dy13Cm -22 .
 #   (-57.90758441558442 -22) math:difference -35.90758441558442 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dd13Cm ?X .
 #     ?M :dy13Cm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :ddy13Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -57.90758441558442
@@ -341,14 +341,14 @@
 #   :meas47 :pL3x4Cm 870.2272727272727 .
 #   (-2.834857142857143 870.2272727272727) math:difference -873.0621298701299 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :pL1x2Cm ?X .
 #     ?M :pL3x4Cm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dd24Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -2.834857142857143
@@ -367,14 +367,14 @@
 #   :meas47 :dy24Cm -22.9 .
 #   (-873.0621298701299 -22.9) math:difference -850.1621298701299 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dd24Cm ?X .
 #     ?M :dy24Cm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :ddy24Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -873.0621298701299
@@ -393,14 +393,14 @@
 #   :meas47 :cL3 15.909090909090908 .
 #   (-0.06285714285714286 15.909090909090908) math:difference -15.97194805194805 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :cL1 ?X .
 #     ?M :cL3 ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :ddL13 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -0.06285714285714286
@@ -419,14 +419,14 @@
 #   :meas47 :ddL13 -15.97194805194805 .
 #   (-35.90758441558442 -15.97194805194805) math:quotient 2.248165615039355 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :ddy13Cm ?X .
 #     ?M :ddL13 ?Y .
 #     (?X ?Y) math:quotient ?Z .
-#   }} => {{
+#   } => {
 #     ?M :p5xCm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -35.90758441558442
@@ -445,14 +445,14 @@
 #   :meas47 :ddL13 -15.97194805194805 .
 #   (-850.1621298701299 -15.97194805194805) math:quotient 53.22845573407923 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :ddy24Cm ?X .
 #     ?M :ddL13 ?Y .
 #     (?X ?Y) math:quotient ?Z .
-#   }} => {{
+#   } => {
 #     ?M :p6xCm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -850.1621298701299
@@ -471,14 +471,14 @@
 #   :meas47 :p1xCm 10.1 .
 #   (2.248165615039355 10.1) math:difference -7.851834384960645 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p5xCm ?X .
 #     ?M :p1xCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dx51Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 2.248165615039355
@@ -497,14 +497,14 @@
 #   :meas47 :p3xCm 3.6 .
 #   (2.248165615039355 3.6) math:difference -1.351834384960645 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p5xCm ?X .
 #     ?M :p3xCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dx53Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 2.248165615039355
@@ -523,14 +523,14 @@
 #   :meas47 :p2xCm 45.1 .
 #   (53.22845573407923 45.1) math:difference 8.128455734079232 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p6xCm ?X .
 #     ?M :p2xCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dx62Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 53.22845573407923
@@ -549,14 +549,14 @@
 #   :meas47 :p4xCm 54.7 .
 #   (53.22845573407923 54.7) math:difference -1.4715442659207696 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p6xCm ?X .
 #     ?M :p4xCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dx64Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 53.22845573407923
@@ -575,14 +575,14 @@
 #   :meas47 :dx51Cm -7.851834384960645 .
 #   (-0.06285714285714286 -7.851834384960645) math:product 0.4935438756260977 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :cL1 ?X .
 #     ?M :dx51Cm ?Y .
 #     (?X ?Y) math:product ?Z .
-#   }} => {{
+#   } => {
 #     ?M :pL1dx51Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -0.06285714285714286
@@ -601,14 +601,14 @@
 #   :meas47 :dx62Cm 8.128455734079232 .
 #   (-0.06285714285714286 8.128455734079232) math:product -0.5109315032849803 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :cL1 ?X .
 #     ?M :dx62Cm ?Y .
 #     (?X ?Y) math:product ?Z .
-#   }} => {{
+#   } => {
 #     ?M :pL1dx62Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -0.06285714285714286
@@ -627,14 +627,14 @@
 #   :meas47 :p1yCm 7.8 .
 #   (0.4935438756260977 7.8) math:sum 8.293543875626098 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :pL1dx51Cm ?X .
 #     ?M :p1yCm ?Y .
 #     (?X ?Y) math:sum ?Z .
-#   }} => {{
+#   } => {
 #     ?M :p5yCm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 0.4935438756260977
@@ -653,14 +653,14 @@
 #   :meas47 :p2yCm 5.6 .
 #   (-0.5109315032849803 5.6) math:sum 5.0890684967150195 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :pL1dx62Cm ?X .
 #     ?M :p2yCm ?Y .
 #     (?X ?Y) math:sum ?Z .
-#   }} => {{
+#   } => {
 #     ?M :p6yCm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -0.5109315032849803
@@ -678,13 +678,13 @@
 #   :meas47 :dx53Cm -1.351834384960645 .
 #   (-1.351834384960645 2) math:exponentiation 1.8274562043619251 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dx53Cm ?X .
 #     (?X 2) math:exponentiation ?Z .
-#   }} => {{
+#   } => {
 #     ?M :sdx53Cm2 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -1.351834384960645
@@ -701,13 +701,13 @@
 #   :meas47 :dx64Cm -1.4715442659207696 .
 #   (-1.4715442659207696 2) math:exponentiation 2.1654425265642967 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dx64Cm ?X .
 #     (?X 2) math:exponentiation ?Z .
-#   }} => {{
+#   } => {
 #     ?M :sdx64Cm2 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -1.4715442659207696
@@ -725,14 +725,14 @@
 #   :meas47 :p3yCm 29.8 .
 #   (8.293543875626098 29.8) math:difference -21.506456124373905 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p5yCm ?X .
 #     ?M :p3yCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dy53Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 8.293543875626098
@@ -751,14 +751,14 @@
 #   :meas47 :p4yCm 28.5 .
 #   (5.0890684967150195 28.5) math:difference -23.41093150328498 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :p6yCm ?X .
 #     ?M :p4yCm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dy64Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 5.0890684967150195
@@ -776,13 +776,13 @@
 #   :meas47 :dy53Cm -21.506456124373905 .
 #   (-21.506456124373905 2) math:exponentiation 462.52765502961984 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dy53Cm ?X .
 #     (?X 2) math:exponentiation ?Z .
-#   }} => {{
+#   } => {
 #     ?M :sdy53Cm2 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -21.506456124373905
@@ -799,13 +799,13 @@
 #   :meas47 :dy64Cm -23.41093150328498 .
 #   (-23.41093150328498 2) math:exponentiation 548.0717138515012 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dy64Cm ?X .
 #     (?X 2) math:exponentiation ?Z .
-#   }} => {{
+#   } => {
 #     ?M :sdy64Cm2 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -23.41093150328498
@@ -823,14 +823,14 @@
 #   :meas47 :sdy53Cm2 462.52765502961984 .
 #   (1.8274562043619251 462.52765502961984) math:sum 464.35511123398175 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :sdx53Cm2 ?X .
 #     ?M :sdy53Cm2 ?Y .
 #     (?X ?Y) math:sum ?Z .
-#   }} => {{
+#   } => {
 #     ?M :ssd53Cm2 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 1.8274562043619251
@@ -849,14 +849,14 @@
 #   :meas47 :sdy64Cm2 548.0717138515012 .
 #   (2.1654425265642967 548.0717138515012) math:sum 550.2371563780655 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :sdx64Cm2 ?X .
 #     ?M :sdy64Cm2 ?Y .
 #     (?X ?Y) math:sum ?Z .
-#   }} => {{
+#   } => {
 #     ?M :ssd64Cm2 ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 2.1654425265642967
@@ -874,13 +874,13 @@
 #   :meas47 :ssd53Cm2 464.35511123398175 .
 #   (464.35511123398175 0.5) math:exponentiation 21.548900464617255 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :ssd53Cm2 ?X .
 #     (?X 0.5) math:exponentiation ?Z .
-#   }} => {{
+#   } => {
 #     ?M :d53Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 464.35511123398175
@@ -897,13 +897,13 @@
 #   :meas47 :ssd64Cm2 550.2371563780655 .
 #   (550.2371563780655 0.5) math:exponentiation 23.45713444515475 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :ssd64Cm2 ?X .
 #     (?X 0.5) math:exponentiation ?Z .
-#   }} => {{
+#   } => {
 #     ?M :d64Cm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 550.2371563780655
@@ -921,14 +921,14 @@
 #   :meas47 :d64Cm 23.45713444515475 .
 #   (21.548900464617255 23.45713444515475) math:difference -1.9082339805374957 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :d53Cm ?X .
 #     ?M :d64Cm ?Y .
 #     (?X ?Y) math:difference ?Z .
-#   }} => {{
+#   } => {
 #     ?M :dCm ?Z .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = 21.548900464617255
@@ -946,13 +946,13 @@
 #   :meas47 :dCm -1.9082339805374957 .
 #   -1.9082339805374957 math:lessThan -1.25 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?M a :Measurement .
 #     ?M :dCm ?X .
 #     ?X math:lessThan -1.25 .
-#   }} => {{
+#   } => {
 #     ?M a :LLDAlarm .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = :meas47
 #   ?X = -1.9082339805374957

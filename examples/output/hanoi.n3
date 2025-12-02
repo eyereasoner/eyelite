@@ -6,11 +6,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (3 :left :right :center) :moves ((:left :right) (:left :center) (:right :center) (:left :right) (:center :left) (:center :right) (:left :right)) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (3 :left :right :center) :moves ?M .
-#   }} => {{
+#   } => {
 #     3 :answer ?M .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?M = ((:left :right) (:left :center) (:right :center) (:left :right) (:center :left) (:center :right) (:left :right))
 # Therefore the derived triple above is entailed by the rules and facts.

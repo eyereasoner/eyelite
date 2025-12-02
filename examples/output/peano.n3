@@ -8,13 +8,13 @@
 #   ((:s (:s 0)) (:s (:s (:s 0)))) :add (:s (:s (:s (:s (:s 0))))) .
 #   (:s (:s (:s (:s (:s 0))))) :factorial (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s (:s 0)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ((:s 0) (:s (:s 0))) :multiply ?A .
 #     (?A (:s (:s (:s 0)))) :add ?B .
 #     ?B :factorial ?C .
-#   }} => {{
+#   } => {
 #     ?B :peanoFactorial ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = (:s (:s 0))
 #   ?B = (:s (:s (:s (:s (:s 0)))))

@@ -9,14 +9,14 @@
 #   } .
 #   :Bob a :Person .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?SCOPE log:notIncludes {
 #         :Alice :hates ?X .
 #     } .
 #     ?X a :Person .
-#   }} => {{
+#   } => {
 #     :Alice :hates :Nobody .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?X = :Bob
 # Therefore the derived triple above is entailed by the rules and facts.

@@ -6,11 +6,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :Socrates a :Human .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?S a :Human .
-#   }} => {{
+#   } => {
 #     ?S :is _:B .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?S = :Socrates
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -23,11 +23,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :Plato a :Human .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?S a :Human .
-#   }} => {{
+#   } => {
 #     ?S :is _:B .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?S = :Plato
 # Therefore the derived triple above is entailed by the rules and facts.

@@ -6,11 +6,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :b) :edge 4 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :a
 #   ?B = :b
@@ -25,11 +25,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :c) :edge 2 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :a
 #   ?B = :c
@@ -44,11 +44,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:b :c) :edge 1 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :b
 #   ?B = :c
@@ -63,11 +63,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:b :d) :edge 5 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :b
 #   ?B = :d
@@ -82,11 +82,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:c :d) :edge 8 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :c
 #   ?B = :d
@@ -101,11 +101,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:c :e) :edge 10 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :c
 #   ?B = :e
@@ -120,11 +120,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:d :e) :edge 2 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :d
 #   ?B = :e
@@ -139,11 +139,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:d :f) :edge 6 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :d
 #   ?B = :f
@@ -158,11 +158,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:e :f) :edge 3 .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (?A ?B) :edge ?C .
-#   }} => {{
+#   } => {
 #     (?B ?A) :edge ?C .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?A = :e
 #   ?B = :f
@@ -177,11 +177,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :f) :dijkstra ((:a :c :b :d :e :f) 13) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
-#   }} => {{
+#   } => {
 #     (:a :f) :path (?Path ?Cost) .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?Cost = 13
 #   ?Path = (:a :c :b :d :e :f)
@@ -195,11 +195,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :f) :dijkstra ((:a :c :b :d :f) 14) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
-#   }} => {{
+#   } => {
 #     (:a :f) :path (?Path ?Cost) .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?Cost = 14
 #   ?Path = (:a :c :b :d :f)
@@ -213,11 +213,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :f) :dijkstra ((:a :b :d :e :f) 14) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
-#   }} => {{
+#   } => {
 #     (:a :f) :path (?Path ?Cost) .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?Cost = 14
 #   ?Path = (:a :b :d :e :f)
@@ -231,11 +231,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :f) :dijkstra ((:a :b :d :f) 15) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
-#   }} => {{
+#   } => {
 #     (:a :f) :path (?Path ?Cost) .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?Cost = 15
 #   ?Path = (:a :b :d :f)
@@ -249,11 +249,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :f) :dijkstra ((:a :c :e :f) 15) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
-#   }} => {{
+#   } => {
 #     (:a :f) :path (?Path ?Cost) .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?Cost = 15
 #   ?Path = (:a :c :e :f)
@@ -267,11 +267,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :f) :dijkstra ((:a :c :d :e :f) 15) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
-#   }} => {{
+#   } => {
 #     (:a :f) :path (?Path ?Cost) .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?Cost = 15
 #   ?Path = (:a :c :d :e :f)
@@ -285,11 +285,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   (:a :f) :dijkstra ((:a :c :d :f) 16) .
 # via the schematic forward rule:
-#   {{
+#   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
-#   }} => {{
+#   } => {
 #     (:a :f) :path (?Path ?Cost) .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?Cost = 16
 #   ?Path = (:a :c :d :f)

@@ -2753,19 +2753,19 @@ def print_explanation(df: DerivedFact, prefixes: PrefixEnv) -> None:
                     print(f"#   {trimmed}")
 
     print("# via the schematic forward rule:")
-    print("#   {{")
+    print("#   {")
     for tr in df.rule.premise:
         for line in triple_to_n3(tr, prefixes).splitlines():
             trimmed = line.rstrip()
             if trimmed:
                 print(f"#     {trimmed}")
-    print("#   }} => {{")
+    print("#   } => {")
     for tr in df.rule.conclusion:
         for line in triple_to_n3(tr, prefixes).splitlines():
             trimmed = line.rstrip()
             if trimmed:
                 print(f"#     {trimmed}")
-    print("#   }}")
+    print("#   } .")
 
     rule_vars = vars_in_rule(df.rule)
 

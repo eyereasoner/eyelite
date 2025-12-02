@@ -12,15 +12,15 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :Minka a :Cat .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?x a :Cat .
-#   }} => {{
+#   } => {
 #     {
 #         ?y a :Dog .
 #     } => {
 #         :test :is true .
 #     } .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?x = :Minka
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -37,11 +37,11 @@
 # It holds because the following instantiated premises are all satisfied:
 #   :Charly a :Dog .
 # via the schematic forward rule:
-#   {{
+#   {
 #     ?y a :Dog .
-#   }} => {{
+#   } => {
 #     :test :is true .
-#   }}
+#   } .
 # with substitution (on rule variables):
 #   ?y = :Charly
 # Therefore the derived triple above is entailed by the rules and facts.
