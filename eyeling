@@ -1,4 +1,0 @@
-#!/bin/bash
-export eyeling=$(dirname "$(readlink -f "$0")")/eyeling.py
-
-python ${eyeling} "$@"

@@ -1,6 +1,6 @@
 # eyeling
 
-A minimal [Notation3 (N3)](https://notation3.org/) reasoner in **Python**.
+A minimal [Notation3 (N3)](https://notation3.org/) reasoner in **JavaScript**.
 
 `eyeling` is meant to be **tiny** and **close in spirit to EYE** on a small but practical fragment of N3. It parses a useful subset of N3 (a superset of common Turtle usage) and does forward + backward chaining over Horn-style rules, with a growing set of N3 built-ins. It also prints **small mathematical-English proofs** as N3 comments for each derived triple.
 
@@ -253,11 +253,11 @@ The `Makefile` / example scripts treat the non-zero exit code for the `fuse.n3` 
 
 Built-ins are recognized by expanded IRIs and evaluated during goal proving (backward phase).
 
-This is a **condensed** overview of what’s currently implemented. For the exact behavior and corner cases, see the `eval_builtin` function in `eyeling.py`.
+This is a **condensed** overview of what’s currently implemented.
 
 ### `math:` namespace
 
-Arithmetic on numeric literals (mostly list forms):
+Arithmetic on numeric literals:
 
 * `math:sum`
 * `math:product`
@@ -283,6 +283,9 @@ Comparison:
 * `math:lessThan`
 * `math:notLessThan`
 * `math:notGreaterThan`
+
+Other:
+* `math:fibonacci`
 
 Dates & durations:
 
@@ -404,7 +407,7 @@ These list built-ins are designed to match common patterns from the N3 builtin r
 
 The project is deliberately small and self-contained:
 
-* `eyeling.py` — everything in one file:
+* `eyeling.js`:
 
   * lexer
   * parser & AST
@@ -416,11 +419,6 @@ The project is deliberately small and self-contained:
   * explanations / proof comments
   * CLI
 
-Dependencies:
-
-* Python 3 (3.10+ recommended).
-* Standard library only (`datetime` for time/date builtins, etc.). No external packages required.
-
 ---
 
 ## Running and examples
@@ -428,7 +426,7 @@ Dependencies:
 To run `eyeling` on a single N3 file:
 
 ```bash
-python eyeling.py examples/socrates.n3
+eyeling.js examples/socrates.n3
 ```
 
 This reads the input file, runs forward + backward reasoning to a fixpoint, and prints:
