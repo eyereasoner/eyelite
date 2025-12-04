@@ -1,8 +1,9 @@
+@prefix : <https://eyereasoner.github.io/eye/reasoning#> .
 @prefix math: <http://www.w3.org/2000/10/swap/math#> .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <:test> <:is> {
+#   :test :is {
 #       0 math:fibonacci 0 .
 #       1 math:fibonacci 1 .
 #       6 math:fibonacci 8 .
@@ -26,7 +27,7 @@
 #     283 math:fibonacci ?F283 .
 #     3674 math:fibonacci ?F3674 .
 #   } => {
-#     <:test> <:is> {
+#     :test :is {
 #         0 math:fibonacci ?F0 .
 #         1 math:fibonacci ?F1 .
 #         6 math:fibonacci ?F6 .
@@ -45,7 +46,7 @@
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<:test> <:is> {
+:test :is {
     0 math:fibonacci 0 .
     1 math:fibonacci 1 .
     6 math:fibonacci 8 .
