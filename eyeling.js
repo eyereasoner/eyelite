@@ -1414,6 +1414,8 @@ function cmpNumericInfo(aInfo, bInfo, op) {
     if (op === "<")  return aInfo.value <  bInfo.value;
     if (op === ">=") return aInfo.value >= bInfo.value;
     if (op === "<=") return aInfo.value <= bInfo.value;
+    if (op === "==") return aInfo.value == bInfo.value;
+    if (op === "!=") return aInfo.value != bInfo.value;
     return false;
   }
 
@@ -1424,6 +1426,8 @@ function cmpNumericInfo(aInfo, bInfo, op) {
   if (op === "<")  return a <  b;
   if (op === ">=") return a >= b;
   if (op === "<=") return a <= b;
+  if (op === "==") return a == b;
+  if (op === "!=") return a != b;
   return false;
 }
 
@@ -1573,6 +1577,32 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
       const b2 = parseNumericForCompareTerm(g.s.elems[1]);
       if (a2 && b2 && cmpNumericInfo(a2, b2, "<=")) return [{ ...subst }];
+    }
+    return [];
+  }
+
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "equalTo") {
+    const aInfo = parseNumericForCompareTerm(g.s);
+    const bInfo = parseNumericForCompareTerm(g.o);
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "==")) return [{ ...subst }];
+
+    if (g.s instanceof ListTerm && g.s.elems.length === 2) {
+      const a2 = parseNumericForCompareTerm(g.s.elems[0]);
+      const b2 = parseNumericForCompareTerm(g.s.elems[1]);
+      if (a2 && b2 && cmpNumericInfo(a2, b2, "==")) return [{ ...subst }];
+    }
+    return [];
+  }
+
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "notEqualTo") {
+    const aInfo = parseNumericForCompareTerm(g.s);
+    const bInfo = parseNumericForCompareTerm(g.o);
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "!=")) return [{ ...subst }];
+
+    if (g.s instanceof ListTerm && g.s.elems.length === 2) {
+      const a2 = parseNumericForCompareTerm(g.s.elems[0]);
+      const b2 = parseNumericForCompareTerm(g.s.elems[1]);
+      if (a2 && b2 && cmpNumericInfo(a2, b2, "!=")) return [{ ...subst }];
     }
     return [];
   }
