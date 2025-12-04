@@ -97,11 +97,13 @@ class Triple {
 }
 
 class Rule {
-  constructor(premise, conclusion, isForward, isFuse) {
+  constructor(premise, conclusion, isForward, isFuse, headBlankLabels) {
     this.premise = premise;       // Triple[]
     this.conclusion = conclusion; // Triple[]
     this.isForward = isForward;   // boolean
     this.isFuse = isFuse;         // boolean
+    // Set<string> of blank-node labels that occur explicitly in the rule head
+    this.headBlankLabels = headBlankLabels || new Set();
   }
 }
 
@@ -458,6 +460,32 @@ function varsInRule(rule) {
   return acc;
 }
 
+function collectBlankLabelsInTerm(t, acc) {
+  if (t instanceof Blank) {
+    acc.add(t.label);
+  } else if (t instanceof ListTerm) {
+    for (const x of t.elems) collectBlankLabelsInTerm(x, acc);
+  } else if (t instanceof OpenListTerm) {
+    for (const x of t.prefix) collectBlankLabelsInTerm(x, acc);
+  } else if (t instanceof FormulaTerm) {
+    for (const tr of t.triples) {
+      collectBlankLabelsInTerm(tr.s, acc);
+      collectBlankLabelsInTerm(tr.p, acc);
+      collectBlankLabelsInTerm(tr.o, acc);
+    }
+  }
+}
+
+function collectBlankLabelsInTriples(triples) {
+  const acc = new Set();
+  for (const tr of triples) {
+    collectBlankLabelsInTerm(tr.s, acc);
+    collectBlankLabelsInTerm(tr.p, acc);
+    collectBlankLabelsInTerm(tr.o, acc);
+  }
+  return acc;
+}
+
 // ============================================================================
 // PARSER
 // ============================================================================
@@ -803,8 +831,11 @@ class Parser {
       rawConclusion = [];
     }
 
+    // Blank nodes that occur explicitly in the head (conclusion)
+    const headBlankLabels = collectBlankLabelsInTriples(rawConclusion);
+
     const [premise, conclusion] = liftBlankRuleVars(rawPremise, rawConclusion);
-    return new Rule(premise, conclusion, isForward, isFuse);
+    return new Rule(premise, conclusion, isForward, isFuse, headBlankLabels);
   }
 }
 
@@ -858,9 +889,13 @@ function liftBlankRuleVars(premise, conclusion) {
   return [newPremise, conclusion];
 }
 
-function skolemizeTerm(t, mapping, skCounter) {
+function skolemizeTermForHeadBlanks(t, headBlankLabels, mapping, skCounter) {
   if (t instanceof Blank) {
     const label = t.label;
+    // Only skolemize blanks that occur explicitly in the rule head
+    if (!headBlankLabels || !headBlankLabels.has(label)) {
+      return t; // this is a data blank (e.g. bound via ?X), keep it
+    }
     if (!mapping.hasOwnProperty(label)) {
       const idx = skCounter[0];
       skCounter[0] += 1;
@@ -868,28 +903,36 @@ function skolemizeTerm(t, mapping, skCounter) {
     }
     return new Blank(mapping[label]);
   }
+
   if (t instanceof ListTerm) {
-    return new ListTerm(t.elems.map(e => skolemizeTerm(e, mapping, skCounter)));
+    return new ListTerm(
+      t.elems.map(e => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter))
+    );
   }
+
   if (t instanceof OpenListTerm) {
     return new OpenListTerm(
-      t.prefix.map(e => skolemizeTerm(e, mapping, skCounter)),
+      t.prefix.map(e => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter)),
       t.tailVar
     );
   }
+
   if (t instanceof FormulaTerm) {
     return new FormulaTerm(
-      t.triples.map(tr => skolemizeTriple(tr, mapping, skCounter))
+      t.triples.map(tr =>
+        skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter)
+      )
     );
   }
+
   return t;
 }
 
-function skolemizeTriple(tr, mapping, skCounter) {
+function skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter) {
   return new Triple(
-    skolemizeTerm(tr.s, mapping, skCounter),
-    skolemizeTerm(tr.p, mapping, skCounter),
-    skolemizeTerm(tr.o, mapping, skCounter)
+    skolemizeTermForHeadBlanks(tr.s, headBlankLabels, mapping, skCounter),
+    skolemizeTermForHeadBlanks(tr.p, headBlankLabels, mapping, skCounter),
+    skolemizeTermForHeadBlanks(tr.o, headBlankLabels, mapping, skCounter)
   );
 }
 
@@ -2292,7 +2335,7 @@ function forwardChain(facts, forwardRules, backRules) {
   const factList = facts.slice();
   const derivedForward = [];
   const varGen = [0];
-  const skolemCounter = [0];
+  const skCounter = [0];
 
   while (true) {
     let changed = false;
@@ -2319,7 +2362,6 @@ function forwardChain(facts, forwardRules, backRules) {
 
       for (const s of sols) {
         const instantiatedPremises = r.premise.map(b => applySubstTriple(b, s));
-        const blankMap = {};
 
         for (const cpat of r.conclusion) {
           const instantiated = applySubstTriple(cpat, s);
@@ -2395,7 +2437,10 @@ function forwardChain(facts, forwardRules, backRules) {
             continue; // skip normal fact handling
           }
 
-          const inst = skolemizeTriple(instantiated, blankMap, skolemCounter);
+          // Only skolemize blank nodes that occur explicitly in the rule head
+          const skMap = {};
+          const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter
+          );
           if (!isGroundTriple(inst)) continue;
           if (hasAlphaEquiv(factList, inst)) continue;
           factList.push(inst);

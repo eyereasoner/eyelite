@@ -1,0 +1,11 @@
+# --------------
+# Monkey example
+# --------------
+#
+# Example from Patrick Hochstenbach
+
+@prefix : <https://eyereasoner.github.io/ns#>.
+
+:Bobo a [ a :Monkey ].
+{ ?X a :Monkey } => { ?X a :Animal }.
+{ ?X a :Monkey .  ?X a :Animal } => { :test :is true }.

@@ -20,7 +20,7 @@ pad () {
     printf "%$2.${2#-}s" "$1"
 }
 
-begin=$(($(date +%s)))
+begin=$(($(date +%s%N)/1000000))
 
 for file in *.n3
 do
@@ -38,10 +38,10 @@ do
     fi
 done
 
-end=$(($(date +%s)))
+end=$(($(date +%s%N)/1000000))
 echo ""
 
-echo -e "${YELLOW}`expr $end - $begin` s${NORMAL} ${GREEN}${OK} OK${NORMAL} ${RED}${DIFF} DIFF${NORMAL}"
+echo -e "${YELLOW}`expr $end - $begin` ms${NORMAL} ${GREEN}${OK} OK${NORMAL} ${RED}${DIFF} DIFF${NORMAL}"
 if [[ ${DIFF} -eq 0 ]]; then
     exit 0
 else
