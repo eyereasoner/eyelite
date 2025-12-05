@@ -1,0 +1,15 @@
+# -------------
+# Rule matching
+# -------------
+#
+# Example from Patrick Hochstenbach
+
+@prefix : <https://eyereasoner.github.io/ns#>.
+
+{
+    ?A => ?B .
+}
+=>
+{
+    :result :is true .
+}.

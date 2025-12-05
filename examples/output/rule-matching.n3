@@ -1,0 +1,29 @@
+@prefix : <https://eyereasoner.github.io/ns#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :result :is true .
+# It holds because the following instantiated premises are all satisfied:
+#   {
+#       ?A__0 log:implies ?B__1 .
+#   } => {
+#       :result :is true .
+#   } .
+# via the schematic forward rule:
+#   {
+#     ?A log:implies ?B .
+#   } => {
+#     :result :is true .
+#   } .
+# with substitution (on rule variables):
+#   ?A = {
+#           ?A__0 log:implies ?B__1 .
+#       }
+#   ?B = {
+#           :result :is true .
+#       }
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:result :is true .
+

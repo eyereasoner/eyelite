@@ -1955,6 +1955,67 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // -----------------------------------------------------------------
+  // log:implies — expose internal forward rules as data
+  // -----------------------------------------------------------------
+  if (g.p instanceof Iri && g.p.value === LOG_NS + "implies") {
+    const allFw = backRules.__allForwardRules || [];
+    const results = [];
+
+    for (const r0 of allFw) {
+      if (!r0.isForward) continue;
+
+      // fresh copy of the rule with fresh variable names
+      const r = standardizeRule(r0, varGen);
+
+      const premF = new FormulaTerm(r.premise);
+      const concF = new FormulaTerm(r.conclusion);
+
+      // unify subject with the premise formula
+      let s2 = unifyTerm(goal.s, premF, subst);
+      if (s2 === null) continue;
+
+      // unify object with the conclusion formula
+      s2 = unifyTerm(goal.o, concF, s2);
+      if (s2 === null) continue;
+
+      results.push(s2);
+    }
+
+    return results;
+  }
+
+  // -----------------------------------------------------------------
+  // log:impliedBy — expose internal backward rules as data
+  // -----------------------------------------------------------------
+  if (g.p instanceof Iri && g.p.value === LOG_NS + "impliedBy") {
+    const allBw = backRules.__allBackwardRules || backRules;
+    const results = [];
+
+    for (const r0 of allBw) {
+      if (r0.isForward) continue; // only backward rules
+
+      // fresh copy of the rule with fresh variable names
+      const r = standardizeRule(r0, varGen);
+
+      // For backward rules, r.conclusion is the head, r.premise is the body
+      const headF = new FormulaTerm(r.conclusion);
+      const bodyF = new FormulaTerm(r.premise);
+
+      // unify subject with the head formula
+      let s2 = unifyTerm(goal.s, headF, subst);
+      if (s2 === null) continue;
+
+      // unify object with the body formula
+      s2 = unifyTerm(goal.o, bodyF, s2);
+      if (s2 === null) continue;
+
+      results.push(s2);
+    }
+
+    return results;
+  }
+
+  // -----------------------------------------------------------------
   // log:notIncludes
   // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "notIncludes") {
@@ -2419,6 +2480,10 @@ function forwardChain(facts, forwardRules, backRules) {
   const varGen = [0];
   const skCounter = [0];
 
+  // Make rules visible to introspection builtins
+  backRules.__allForwardRules  = forwardRules;
+  backRules.__allBackwardRules = backRules;
+
   while (true) {
     let changed = false;
 
@@ -2679,9 +2744,31 @@ function printExplanation(df, prefixes) {
     console.log("# with substitution (on rule variables):");
     for (const v of visibleNames) {
       const fullTerm = applySubstTerm(new Var(v), df.subst);
-      console.log("#   ?" + v + " = " + termToN3(fullTerm, prefixes));
+      const rendered = termToN3(fullTerm, prefixes);
+      const lines = rendered.split(/\r?\n/);
+
+      if (lines.length === 1) {
+        // single-line term
+        const stripped = lines[0].replace(/\s+$/, "");
+        if (stripped) {
+          console.log("#   ?" + v + " = " + stripped);
+        }
+      } else {
+        // multi-line term (e.g. a { ... } formula)
+        const first = lines[0].replace(/\s+$/, "");
+        if (first) {
+          console.log("#   ?" + v + " = " + first);
+        }
+        for (let i = 1; i < lines.length; i++) {
+          const stripped = lines[i].replace(/\s+$/, "");
+          if (stripped) {
+            console.log("#       " + stripped);
+          }
+        }
+      }
     }
   }
+
   console.log(
     "# Therefore the derived triple above is entailed by the rules and facts."
   );
