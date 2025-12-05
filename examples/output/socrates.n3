@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :Socrates a :Mortal .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :Socrates a :Human .
 #   :Human rdfs:subClassOf :Mortal .
 # via the schematic forward rule:

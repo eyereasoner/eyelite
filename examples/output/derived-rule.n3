@@ -9,7 +9,7 @@
 #   } => {
 #       :test :is true .
 #   } .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :Minka a :Cat .
 # via the schematic forward rule:
 #   {
@@ -35,7 +35,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :test :is true .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :Charly a :Dog .
 # via the schematic forward rule:
 #   {

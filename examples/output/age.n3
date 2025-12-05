@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :test :is true .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :patH :ageAbove "P80Y"^^<http://www.w3.org/2001/XMLSchema#duration> .
 # via the schematic forward rule:
 #   {

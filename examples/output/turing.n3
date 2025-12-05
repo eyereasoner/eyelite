@@ -8,7 +8,7 @@
 #       (1 1 1 1 1 1) :compute (1 0 0 0 0 0 0 "#") .
 #       () :compute (1 "#") .
 #   } .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   (1 0 1 0 0 1) :compute (1 0 1 0 1 0 "#") .
 #   (1 0 1 1 1 1) :compute (1 1 0 0 0 0 "#") .
 #   (1 1 1 1 1 1) :compute (1 0 0 0 0 0 0 "#") .

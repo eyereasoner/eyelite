@@ -3,21 +3,21 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :result :is true .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   {
-#       ?A__0 log:implies ?B__1 .
+#       ?A__0 => ?B__1 .
 #   } => {
 #       :result :is true .
 #   } .
 # via the schematic forward rule:
 #   {
-#     ?A log:implies ?B .
+#     ?A => ?B .
 #   } => {
 #     :result :is true .
 #   } .
 # with substitution (on rule variables):
 #   ?A = {
-#     ?A__0 log:implies ?B__1 .
+#     ?A__0 => ?B__1 .
 #   }
 #   ?B = {
 #     :result :is true .

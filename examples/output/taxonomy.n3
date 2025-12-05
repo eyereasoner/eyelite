@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N2 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N1 .
 # via the schematic forward rule:
 #   {
@@ -23,7 +23,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I2 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N1 .
 # via the schematic forward rule:
 #   {
@@ -43,7 +43,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J2 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N1 .
 # via the schematic forward rule:
 #   {
@@ -63,7 +63,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N3 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N2 .
 # via the schematic forward rule:
 #   {
@@ -83,7 +83,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I3 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N2 .
 # via the schematic forward rule:
 #   {
@@ -103,7 +103,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J3 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N2 .
 # via the schematic forward rule:
 #   {
@@ -123,7 +123,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N4 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N3 .
 # via the schematic forward rule:
 #   {
@@ -143,7 +143,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I4 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N3 .
 # via the schematic forward rule:
 #   {
@@ -163,7 +163,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J4 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N3 .
 # via the schematic forward rule:
 #   {
@@ -183,7 +183,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N5 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N4 .
 # via the schematic forward rule:
 #   {
@@ -203,7 +203,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I5 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N4 .
 # via the schematic forward rule:
 #   {
@@ -223,7 +223,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J5 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N4 .
 # via the schematic forward rule:
 #   {
@@ -243,7 +243,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N6 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N5 .
 # via the schematic forward rule:
 #   {
@@ -263,7 +263,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I6 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N5 .
 # via the schematic forward rule:
 #   {
@@ -283,7 +283,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J6 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N5 .
 # via the schematic forward rule:
 #   {
@@ -303,7 +303,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N7 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N6 .
 # via the schematic forward rule:
 #   {
@@ -323,7 +323,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I7 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N6 .
 # via the schematic forward rule:
 #   {
@@ -343,7 +343,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J7 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N6 .
 # via the schematic forward rule:
 #   {
@@ -363,7 +363,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N8 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N7 .
 # via the schematic forward rule:
 #   {
@@ -383,7 +383,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I8 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N7 .
 # via the schematic forward rule:
 #   {
@@ -403,7 +403,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J8 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N7 .
 # via the schematic forward rule:
 #   {
@@ -423,7 +423,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N9 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N8 .
 # via the schematic forward rule:
 #   {
@@ -443,7 +443,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I9 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N8 .
 # via the schematic forward rule:
 #   {
@@ -463,7 +463,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J9 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N8 .
 # via the schematic forward rule:
 #   {
@@ -483,7 +483,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N10 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N9 .
 # via the schematic forward rule:
 #   {
@@ -503,7 +503,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I10 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N9 .
 # via the schematic forward rule:
 #   {
@@ -523,7 +523,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J10 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N9 .
 # via the schematic forward rule:
 #   {
@@ -543,7 +543,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N11 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N10 .
 # via the schematic forward rule:
 #   {
@@ -563,7 +563,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I11 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N10 .
 # via the schematic forward rule:
 #   {
@@ -583,7 +583,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J11 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N10 .
 # via the schematic forward rule:
 #   {
@@ -603,7 +603,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N12 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N11 .
 # via the schematic forward rule:
 #   {
@@ -623,7 +623,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I12 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N11 .
 # via the schematic forward rule:
 #   {
@@ -643,7 +643,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J12 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N11 .
 # via the schematic forward rule:
 #   {
@@ -663,7 +663,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N13 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N12 .
 # via the schematic forward rule:
 #   {
@@ -683,7 +683,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I13 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N12 .
 # via the schematic forward rule:
 #   {
@@ -703,7 +703,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J13 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N12 .
 # via the schematic forward rule:
 #   {
@@ -723,7 +723,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N14 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N13 .
 # via the schematic forward rule:
 #   {
@@ -743,7 +743,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I14 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N13 .
 # via the schematic forward rule:
 #   {
@@ -763,7 +763,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J14 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N13 .
 # via the schematic forward rule:
 #   {
@@ -783,7 +783,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N15 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N14 .
 # via the schematic forward rule:
 #   {
@@ -803,7 +803,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I15 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N14 .
 # via the schematic forward rule:
 #   {
@@ -823,7 +823,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J15 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N14 .
 # via the schematic forward rule:
 #   {
@@ -843,7 +843,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N16 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N15 .
 # via the schematic forward rule:
 #   {
@@ -863,7 +863,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I16 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N15 .
 # via the schematic forward rule:
 #   {
@@ -883,7 +883,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J16 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N15 .
 # via the schematic forward rule:
 #   {
@@ -903,7 +903,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N17 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N16 .
 # via the schematic forward rule:
 #   {
@@ -923,7 +923,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I17 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N16 .
 # via the schematic forward rule:
 #   {
@@ -943,7 +943,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J17 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N16 .
 # via the schematic forward rule:
 #   {
@@ -963,7 +963,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N18 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N17 .
 # via the schematic forward rule:
 #   {
@@ -983,7 +983,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I18 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N17 .
 # via the schematic forward rule:
 #   {
@@ -1003,7 +1003,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J18 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N17 .
 # via the schematic forward rule:
 #   {
@@ -1023,7 +1023,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N19 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N18 .
 # via the schematic forward rule:
 #   {
@@ -1043,7 +1043,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I19 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N18 .
 # via the schematic forward rule:
 #   {
@@ -1063,7 +1063,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J19 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N18 .
 # via the schematic forward rule:
 #   {
@@ -1083,7 +1083,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N20 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N19 .
 # via the schematic forward rule:
 #   {
@@ -1103,7 +1103,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I20 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N19 .
 # via the schematic forward rule:
 #   {
@@ -1123,7 +1123,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J20 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N19 .
 # via the schematic forward rule:
 #   {
@@ -1143,7 +1143,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N21 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N20 .
 # via the schematic forward rule:
 #   {
@@ -1163,7 +1163,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I21 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N20 .
 # via the schematic forward rule:
 #   {
@@ -1183,7 +1183,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J21 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N20 .
 # via the schematic forward rule:
 #   {
@@ -1203,7 +1203,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N22 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N21 .
 # via the schematic forward rule:
 #   {
@@ -1223,7 +1223,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I22 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N21 .
 # via the schematic forward rule:
 #   {
@@ -1243,7 +1243,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J22 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N21 .
 # via the schematic forward rule:
 #   {
@@ -1263,7 +1263,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N23 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N22 .
 # via the schematic forward rule:
 #   {
@@ -1283,7 +1283,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I23 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N22 .
 # via the schematic forward rule:
 #   {
@@ -1303,7 +1303,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J23 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N22 .
 # via the schematic forward rule:
 #   {
@@ -1323,7 +1323,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N24 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N23 .
 # via the schematic forward rule:
 #   {
@@ -1343,7 +1343,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I24 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N23 .
 # via the schematic forward rule:
 #   {
@@ -1363,7 +1363,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J24 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N23 .
 # via the schematic forward rule:
 #   {
@@ -1383,7 +1383,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N25 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N24 .
 # via the schematic forward rule:
 #   {
@@ -1403,7 +1403,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I25 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N24 .
 # via the schematic forward rule:
 #   {
@@ -1423,7 +1423,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J25 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N24 .
 # via the schematic forward rule:
 #   {
@@ -1443,7 +1443,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N26 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N25 .
 # via the schematic forward rule:
 #   {
@@ -1463,7 +1463,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I26 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N25 .
 # via the schematic forward rule:
 #   {
@@ -1483,7 +1483,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J26 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N25 .
 # via the schematic forward rule:
 #   {
@@ -1503,7 +1503,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N27 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N26 .
 # via the schematic forward rule:
 #   {
@@ -1523,7 +1523,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I27 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N26 .
 # via the schematic forward rule:
 #   {
@@ -1543,7 +1543,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J27 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N26 .
 # via the schematic forward rule:
 #   {
@@ -1563,7 +1563,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N28 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N27 .
 # via the schematic forward rule:
 #   {
@@ -1583,7 +1583,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I28 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N27 .
 # via the schematic forward rule:
 #   {
@@ -1603,7 +1603,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J28 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N27 .
 # via the schematic forward rule:
 #   {
@@ -1623,7 +1623,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N29 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N28 .
 # via the schematic forward rule:
 #   {
@@ -1643,7 +1643,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I29 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N28 .
 # via the schematic forward rule:
 #   {
@@ -1663,7 +1663,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J29 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N28 .
 # via the schematic forward rule:
 #   {
@@ -1683,7 +1683,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N30 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N29 .
 # via the schematic forward rule:
 #   {
@@ -1703,7 +1703,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I30 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N29 .
 # via the schematic forward rule:
 #   {
@@ -1723,7 +1723,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J30 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N29 .
 # via the schematic forward rule:
 #   {
@@ -1743,7 +1743,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N31 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N30 .
 # via the schematic forward rule:
 #   {
@@ -1763,7 +1763,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I31 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N30 .
 # via the schematic forward rule:
 #   {
@@ -1783,7 +1783,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J31 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N30 .
 # via the schematic forward rule:
 #   {
@@ -1803,7 +1803,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N32 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N31 .
 # via the schematic forward rule:
 #   {
@@ -1823,7 +1823,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I32 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N31 .
 # via the schematic forward rule:
 #   {
@@ -1843,7 +1843,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J32 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N31 .
 # via the schematic forward rule:
 #   {
@@ -1863,7 +1863,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N33 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N32 .
 # via the schematic forward rule:
 #   {
@@ -1883,7 +1883,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I33 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N32 .
 # via the schematic forward rule:
 #   {
@@ -1903,7 +1903,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J33 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N32 .
 # via the schematic forward rule:
 #   {
@@ -1923,7 +1923,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N34 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N33 .
 # via the schematic forward rule:
 #   {
@@ -1943,7 +1943,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I34 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N33 .
 # via the schematic forward rule:
 #   {
@@ -1963,7 +1963,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J34 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N33 .
 # via the schematic forward rule:
 #   {
@@ -1983,7 +1983,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N35 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N34 .
 # via the schematic forward rule:
 #   {
@@ -2003,7 +2003,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I35 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N34 .
 # via the schematic forward rule:
 #   {
@@ -2023,7 +2023,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J35 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N34 .
 # via the schematic forward rule:
 #   {
@@ -2043,7 +2043,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N36 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N35 .
 # via the schematic forward rule:
 #   {
@@ -2063,7 +2063,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I36 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N35 .
 # via the schematic forward rule:
 #   {
@@ -2083,7 +2083,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J36 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N35 .
 # via the schematic forward rule:
 #   {
@@ -2103,7 +2103,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N37 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N36 .
 # via the schematic forward rule:
 #   {
@@ -2123,7 +2123,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I37 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N36 .
 # via the schematic forward rule:
 #   {
@@ -2143,7 +2143,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J37 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N36 .
 # via the schematic forward rule:
 #   {
@@ -2163,7 +2163,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N38 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N37 .
 # via the schematic forward rule:
 #   {
@@ -2183,7 +2183,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I38 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N37 .
 # via the schematic forward rule:
 #   {
@@ -2203,7 +2203,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J38 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N37 .
 # via the schematic forward rule:
 #   {
@@ -2223,7 +2223,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N39 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N38 .
 # via the schematic forward rule:
 #   {
@@ -2243,7 +2243,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I39 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N38 .
 # via the schematic forward rule:
 #   {
@@ -2263,7 +2263,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J39 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N38 .
 # via the schematic forward rule:
 #   {
@@ -2283,7 +2283,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N40 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N39 .
 # via the schematic forward rule:
 #   {
@@ -2303,7 +2303,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I40 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N39 .
 # via the schematic forward rule:
 #   {
@@ -2323,7 +2323,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J40 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N39 .
 # via the schematic forward rule:
 #   {
@@ -2343,7 +2343,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N41 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N40 .
 # via the schematic forward rule:
 #   {
@@ -2363,7 +2363,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I41 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N40 .
 # via the schematic forward rule:
 #   {
@@ -2383,7 +2383,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J41 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N40 .
 # via the schematic forward rule:
 #   {
@@ -2403,7 +2403,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N42 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N41 .
 # via the schematic forward rule:
 #   {
@@ -2423,7 +2423,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I42 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N41 .
 # via the schematic forward rule:
 #   {
@@ -2443,7 +2443,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J42 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N41 .
 # via the schematic forward rule:
 #   {
@@ -2463,7 +2463,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N43 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N42 .
 # via the schematic forward rule:
 #   {
@@ -2483,7 +2483,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I43 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N42 .
 # via the schematic forward rule:
 #   {
@@ -2503,7 +2503,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J43 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N42 .
 # via the schematic forward rule:
 #   {
@@ -2523,7 +2523,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N44 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N43 .
 # via the schematic forward rule:
 #   {
@@ -2543,7 +2543,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I44 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N43 .
 # via the schematic forward rule:
 #   {
@@ -2563,7 +2563,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J44 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N43 .
 # via the schematic forward rule:
 #   {
@@ -2583,7 +2583,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N45 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N44 .
 # via the schematic forward rule:
 #   {
@@ -2603,7 +2603,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I45 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N44 .
 # via the schematic forward rule:
 #   {
@@ -2623,7 +2623,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J45 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N44 .
 # via the schematic forward rule:
 #   {
@@ -2643,7 +2643,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N46 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N45 .
 # via the schematic forward rule:
 #   {
@@ -2663,7 +2663,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I46 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N45 .
 # via the schematic forward rule:
 #   {
@@ -2683,7 +2683,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J46 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N45 .
 # via the schematic forward rule:
 #   {
@@ -2703,7 +2703,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N47 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N46 .
 # via the schematic forward rule:
 #   {
@@ -2723,7 +2723,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I47 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N46 .
 # via the schematic forward rule:
 #   {
@@ -2743,7 +2743,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J47 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N46 .
 # via the schematic forward rule:
 #   {
@@ -2763,7 +2763,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N48 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N47 .
 # via the schematic forward rule:
 #   {
@@ -2783,7 +2783,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I48 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N47 .
 # via the schematic forward rule:
 #   {
@@ -2803,7 +2803,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J48 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N47 .
 # via the schematic forward rule:
 #   {
@@ -2823,7 +2823,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N49 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N48 .
 # via the schematic forward rule:
 #   {
@@ -2843,7 +2843,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I49 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N48 .
 # via the schematic forward rule:
 #   {
@@ -2863,7 +2863,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J49 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N48 .
 # via the schematic forward rule:
 #   {
@@ -2883,7 +2883,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N50 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N49 .
 # via the schematic forward rule:
 #   {
@@ -2903,7 +2903,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I50 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N49 .
 # via the schematic forward rule:
 #   {
@@ -2923,7 +2923,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J50 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N49 .
 # via the schematic forward rule:
 #   {
@@ -2943,7 +2943,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N51 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N50 .
 # via the schematic forward rule:
 #   {
@@ -2963,7 +2963,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I51 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N50 .
 # via the schematic forward rule:
 #   {
@@ -2983,7 +2983,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J51 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N50 .
 # via the schematic forward rule:
 #   {
@@ -3003,7 +3003,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N52 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N51 .
 # via the schematic forward rule:
 #   {
@@ -3023,7 +3023,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I52 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N51 .
 # via the schematic forward rule:
 #   {
@@ -3043,7 +3043,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J52 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N51 .
 # via the schematic forward rule:
 #   {
@@ -3063,7 +3063,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N53 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N52 .
 # via the schematic forward rule:
 #   {
@@ -3083,7 +3083,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I53 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N52 .
 # via the schematic forward rule:
 #   {
@@ -3103,7 +3103,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J53 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N52 .
 # via the schematic forward rule:
 #   {
@@ -3123,7 +3123,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N54 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N53 .
 # via the schematic forward rule:
 #   {
@@ -3143,7 +3143,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I54 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N53 .
 # via the schematic forward rule:
 #   {
@@ -3163,7 +3163,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J54 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N53 .
 # via the schematic forward rule:
 #   {
@@ -3183,7 +3183,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N55 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N54 .
 # via the schematic forward rule:
 #   {
@@ -3203,7 +3203,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I55 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N54 .
 # via the schematic forward rule:
 #   {
@@ -3223,7 +3223,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J55 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N54 .
 # via the schematic forward rule:
 #   {
@@ -3243,7 +3243,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N56 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N55 .
 # via the schematic forward rule:
 #   {
@@ -3263,7 +3263,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I56 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N55 .
 # via the schematic forward rule:
 #   {
@@ -3283,7 +3283,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J56 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N55 .
 # via the schematic forward rule:
 #   {
@@ -3303,7 +3303,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N57 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N56 .
 # via the schematic forward rule:
 #   {
@@ -3323,7 +3323,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I57 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N56 .
 # via the schematic forward rule:
 #   {
@@ -3343,7 +3343,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J57 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N56 .
 # via the schematic forward rule:
 #   {
@@ -3363,7 +3363,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N58 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N57 .
 # via the schematic forward rule:
 #   {
@@ -3383,7 +3383,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I58 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N57 .
 # via the schematic forward rule:
 #   {
@@ -3403,7 +3403,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J58 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N57 .
 # via the schematic forward rule:
 #   {
@@ -3423,7 +3423,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N59 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N58 .
 # via the schematic forward rule:
 #   {
@@ -3443,7 +3443,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I59 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N58 .
 # via the schematic forward rule:
 #   {
@@ -3463,7 +3463,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J59 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N58 .
 # via the schematic forward rule:
 #   {
@@ -3483,7 +3483,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N60 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N59 .
 # via the schematic forward rule:
 #   {
@@ -3503,7 +3503,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I60 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N59 .
 # via the schematic forward rule:
 #   {
@@ -3523,7 +3523,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J60 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N59 .
 # via the schematic forward rule:
 #   {
@@ -3543,7 +3543,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N61 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N60 .
 # via the schematic forward rule:
 #   {
@@ -3563,7 +3563,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I61 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N60 .
 # via the schematic forward rule:
 #   {
@@ -3583,7 +3583,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J61 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N60 .
 # via the schematic forward rule:
 #   {
@@ -3603,7 +3603,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N62 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N61 .
 # via the schematic forward rule:
 #   {
@@ -3623,7 +3623,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I62 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N61 .
 # via the schematic forward rule:
 #   {
@@ -3643,7 +3643,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J62 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N61 .
 # via the schematic forward rule:
 #   {
@@ -3663,7 +3663,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N63 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N62 .
 # via the schematic forward rule:
 #   {
@@ -3683,7 +3683,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I63 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N62 .
 # via the schematic forward rule:
 #   {
@@ -3703,7 +3703,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J63 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N62 .
 # via the schematic forward rule:
 #   {
@@ -3723,7 +3723,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N64 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N63 .
 # via the schematic forward rule:
 #   {
@@ -3743,7 +3743,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I64 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N63 .
 # via the schematic forward rule:
 #   {
@@ -3763,7 +3763,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J64 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N63 .
 # via the schematic forward rule:
 #   {
@@ -3783,7 +3783,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N65 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N64 .
 # via the schematic forward rule:
 #   {
@@ -3803,7 +3803,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I65 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N64 .
 # via the schematic forward rule:
 #   {
@@ -3823,7 +3823,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J65 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N64 .
 # via the schematic forward rule:
 #   {
@@ -3843,7 +3843,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N66 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N65 .
 # via the schematic forward rule:
 #   {
@@ -3863,7 +3863,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I66 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N65 .
 # via the schematic forward rule:
 #   {
@@ -3883,7 +3883,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J66 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N65 .
 # via the schematic forward rule:
 #   {
@@ -3903,7 +3903,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N67 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N66 .
 # via the schematic forward rule:
 #   {
@@ -3923,7 +3923,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I67 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N66 .
 # via the schematic forward rule:
 #   {
@@ -3943,7 +3943,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J67 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N66 .
 # via the schematic forward rule:
 #   {
@@ -3963,7 +3963,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N68 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N67 .
 # via the schematic forward rule:
 #   {
@@ -3983,7 +3983,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I68 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N67 .
 # via the schematic forward rule:
 #   {
@@ -4003,7 +4003,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J68 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N67 .
 # via the schematic forward rule:
 #   {
@@ -4023,7 +4023,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N69 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N68 .
 # via the schematic forward rule:
 #   {
@@ -4043,7 +4043,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I69 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N68 .
 # via the schematic forward rule:
 #   {
@@ -4063,7 +4063,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J69 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N68 .
 # via the schematic forward rule:
 #   {
@@ -4083,7 +4083,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N70 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N69 .
 # via the schematic forward rule:
 #   {
@@ -4103,7 +4103,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I70 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N69 .
 # via the schematic forward rule:
 #   {
@@ -4123,7 +4123,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J70 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N69 .
 # via the schematic forward rule:
 #   {
@@ -4143,7 +4143,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N71 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N70 .
 # via the schematic forward rule:
 #   {
@@ -4163,7 +4163,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I71 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N70 .
 # via the schematic forward rule:
 #   {
@@ -4183,7 +4183,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J71 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N70 .
 # via the schematic forward rule:
 #   {
@@ -4203,7 +4203,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N72 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N71 .
 # via the schematic forward rule:
 #   {
@@ -4223,7 +4223,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I72 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N71 .
 # via the schematic forward rule:
 #   {
@@ -4243,7 +4243,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J72 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N71 .
 # via the schematic forward rule:
 #   {
@@ -4263,7 +4263,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N73 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N72 .
 # via the schematic forward rule:
 #   {
@@ -4283,7 +4283,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I73 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N72 .
 # via the schematic forward rule:
 #   {
@@ -4303,7 +4303,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J73 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N72 .
 # via the schematic forward rule:
 #   {
@@ -4323,7 +4323,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N74 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N73 .
 # via the schematic forward rule:
 #   {
@@ -4343,7 +4343,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I74 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N73 .
 # via the schematic forward rule:
 #   {
@@ -4363,7 +4363,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J74 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N73 .
 # via the schematic forward rule:
 #   {
@@ -4383,7 +4383,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N75 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N74 .
 # via the schematic forward rule:
 #   {
@@ -4403,7 +4403,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I75 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N74 .
 # via the schematic forward rule:
 #   {
@@ -4423,7 +4423,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J75 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N74 .
 # via the schematic forward rule:
 #   {
@@ -4443,7 +4443,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N76 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N75 .
 # via the schematic forward rule:
 #   {
@@ -4463,7 +4463,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I76 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N75 .
 # via the schematic forward rule:
 #   {
@@ -4483,7 +4483,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J76 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N75 .
 # via the schematic forward rule:
 #   {
@@ -4503,7 +4503,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N77 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N76 .
 # via the schematic forward rule:
 #   {
@@ -4523,7 +4523,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I77 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N76 .
 # via the schematic forward rule:
 #   {
@@ -4543,7 +4543,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J77 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N76 .
 # via the schematic forward rule:
 #   {
@@ -4563,7 +4563,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N78 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N77 .
 # via the schematic forward rule:
 #   {
@@ -4583,7 +4583,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I78 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N77 .
 # via the schematic forward rule:
 #   {
@@ -4603,7 +4603,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J78 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N77 .
 # via the schematic forward rule:
 #   {
@@ -4623,7 +4623,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N79 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N78 .
 # via the schematic forward rule:
 #   {
@@ -4643,7 +4643,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I79 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N78 .
 # via the schematic forward rule:
 #   {
@@ -4663,7 +4663,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J79 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N78 .
 # via the schematic forward rule:
 #   {
@@ -4683,7 +4683,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N80 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N79 .
 # via the schematic forward rule:
 #   {
@@ -4703,7 +4703,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I80 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N79 .
 # via the schematic forward rule:
 #   {
@@ -4723,7 +4723,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J80 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N79 .
 # via the schematic forward rule:
 #   {
@@ -4743,7 +4743,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N81 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N80 .
 # via the schematic forward rule:
 #   {
@@ -4763,7 +4763,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I81 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N80 .
 # via the schematic forward rule:
 #   {
@@ -4783,7 +4783,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J81 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N80 .
 # via the schematic forward rule:
 #   {
@@ -4803,7 +4803,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N82 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N81 .
 # via the schematic forward rule:
 #   {
@@ -4823,7 +4823,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I82 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N81 .
 # via the schematic forward rule:
 #   {
@@ -4843,7 +4843,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J82 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N81 .
 # via the schematic forward rule:
 #   {
@@ -4863,7 +4863,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N83 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N82 .
 # via the schematic forward rule:
 #   {
@@ -4883,7 +4883,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I83 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N82 .
 # via the schematic forward rule:
 #   {
@@ -4903,7 +4903,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J83 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N82 .
 # via the schematic forward rule:
 #   {
@@ -4923,7 +4923,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N84 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N83 .
 # via the schematic forward rule:
 #   {
@@ -4943,7 +4943,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I84 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N83 .
 # via the schematic forward rule:
 #   {
@@ -4963,7 +4963,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J84 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N83 .
 # via the schematic forward rule:
 #   {
@@ -4983,7 +4983,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N85 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N84 .
 # via the schematic forward rule:
 #   {
@@ -5003,7 +5003,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I85 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N84 .
 # via the schematic forward rule:
 #   {
@@ -5023,7 +5023,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J85 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N84 .
 # via the schematic forward rule:
 #   {
@@ -5043,7 +5043,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N86 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N85 .
 # via the schematic forward rule:
 #   {
@@ -5063,7 +5063,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I86 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N85 .
 # via the schematic forward rule:
 #   {
@@ -5083,7 +5083,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J86 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N85 .
 # via the schematic forward rule:
 #   {
@@ -5103,7 +5103,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N87 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N86 .
 # via the schematic forward rule:
 #   {
@@ -5123,7 +5123,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I87 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N86 .
 # via the schematic forward rule:
 #   {
@@ -5143,7 +5143,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J87 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N86 .
 # via the schematic forward rule:
 #   {
@@ -5163,7 +5163,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N88 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N87 .
 # via the schematic forward rule:
 #   {
@@ -5183,7 +5183,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I88 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N87 .
 # via the schematic forward rule:
 #   {
@@ -5203,7 +5203,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J88 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N87 .
 # via the schematic forward rule:
 #   {
@@ -5223,7 +5223,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N89 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N88 .
 # via the schematic forward rule:
 #   {
@@ -5243,7 +5243,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I89 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N88 .
 # via the schematic forward rule:
 #   {
@@ -5263,7 +5263,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J89 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N88 .
 # via the schematic forward rule:
 #   {
@@ -5283,7 +5283,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N90 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N89 .
 # via the schematic forward rule:
 #   {
@@ -5303,7 +5303,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I90 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N89 .
 # via the schematic forward rule:
 #   {
@@ -5323,7 +5323,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J90 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N89 .
 # via the schematic forward rule:
 #   {
@@ -5343,7 +5343,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N91 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N90 .
 # via the schematic forward rule:
 #   {
@@ -5363,7 +5363,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I91 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N90 .
 # via the schematic forward rule:
 #   {
@@ -5383,7 +5383,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J91 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N90 .
 # via the schematic forward rule:
 #   {
@@ -5403,7 +5403,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N92 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N91 .
 # via the schematic forward rule:
 #   {
@@ -5423,7 +5423,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I92 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N91 .
 # via the schematic forward rule:
 #   {
@@ -5443,7 +5443,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J92 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N91 .
 # via the schematic forward rule:
 #   {
@@ -5463,7 +5463,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N93 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N92 .
 # via the schematic forward rule:
 #   {
@@ -5483,7 +5483,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I93 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N92 .
 # via the schematic forward rule:
 #   {
@@ -5503,7 +5503,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J93 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N92 .
 # via the schematic forward rule:
 #   {
@@ -5523,7 +5523,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N94 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N93 .
 # via the schematic forward rule:
 #   {
@@ -5543,7 +5543,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I94 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N93 .
 # via the schematic forward rule:
 #   {
@@ -5563,7 +5563,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J94 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N93 .
 # via the schematic forward rule:
 #   {
@@ -5583,7 +5583,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N95 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N94 .
 # via the schematic forward rule:
 #   {
@@ -5603,7 +5603,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I95 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N94 .
 # via the schematic forward rule:
 #   {
@@ -5623,7 +5623,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J95 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N94 .
 # via the schematic forward rule:
 #   {
@@ -5643,7 +5643,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N96 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N95 .
 # via the schematic forward rule:
 #   {
@@ -5663,7 +5663,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I96 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N95 .
 # via the schematic forward rule:
 #   {
@@ -5683,7 +5683,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J96 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N95 .
 # via the schematic forward rule:
 #   {
@@ -5703,7 +5703,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N97 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N96 .
 # via the schematic forward rule:
 #   {
@@ -5723,7 +5723,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I97 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N96 .
 # via the schematic forward rule:
 #   {
@@ -5743,7 +5743,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J97 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N96 .
 # via the schematic forward rule:
 #   {
@@ -5763,7 +5763,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N98 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N97 .
 # via the schematic forward rule:
 #   {
@@ -5783,7 +5783,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I98 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N97 .
 # via the schematic forward rule:
 #   {
@@ -5803,7 +5803,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J98 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N97 .
 # via the schematic forward rule:
 #   {
@@ -5823,7 +5823,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N99 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N98 .
 # via the schematic forward rule:
 #   {
@@ -5843,7 +5843,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I99 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N98 .
 # via the schematic forward rule:
 #   {
@@ -5863,7 +5863,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J99 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N98 .
 # via the schematic forward rule:
 #   {
@@ -5883,7 +5883,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :N100 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N99 .
 # via the schematic forward rule:
 #   {
@@ -5903,7 +5903,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :I100 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N99 .
 # via the schematic forward rule:
 #   {
@@ -5923,7 +5923,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :ind a :J100 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :ind a :N99 .
 # via the schematic forward rule:
 #   {

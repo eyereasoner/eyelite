@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   5 :isIndeedMoreInterestingThan 3 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   5 :moreInterestingThan 3 .
 # via the schematic forward rule:
 #   {

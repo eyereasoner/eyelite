@@ -2648,21 +2648,19 @@ function termToN3(t, pref) {
 }
 
 function tripleToN3(tr, prefixes) {
-  // { ... } log:implies { ... } as { ... } => { ... } .
+  // log:implies / log:impliedBy as => / <= syntactic sugar everywhere
   if (isLogImplies(tr.p)) {
-    if (tr.s instanceof FormulaTerm && tr.o instanceof FormulaTerm) {
-      const premS = termToN3(new FormulaTerm(tr.s.triples), prefixes);
-      const conclS = termToN3(new FormulaTerm(tr.o.triples), prefixes);
-      return `${premS} => ${conclS} .`;
-    }
+    const s = termToN3(tr.s, prefixes);
+    const o = termToN3(tr.o, prefixes);
+    return `${s} => ${o} .`;
   }
+
   if (isLogImpliedBy(tr.p)) {
-    if (tr.s instanceof FormulaTerm && tr.o instanceof FormulaTerm) {
-      const headS = termToN3(new FormulaTerm(tr.s.triples), prefixes);
-      const bodyS = termToN3(new FormulaTerm(tr.o.triples), prefixes);
-      return `${headS} <= ${bodyS} .`;
-    }
+    const s = termToN3(tr.s, prefixes);
+    const o = termToN3(tr.o, prefixes);
+    return `${s} <= ${o} .`;
   }
+
   const s = termToN3(tr.s, prefixes);
   const p = isRdfTypePred(tr.p) ? "a" : termToN3(tr.p, prefixes);
   const o = termToN3(tr.o, prefixes);
@@ -2692,7 +2690,7 @@ function printExplanation(df, prefixes) {
     );
   } else {
     console.log(
-      "# It holds because the following instantiated premises are all satisfied:"
+      "# It holds because the following instance of the rule body is provable:"
     );
 
     // Premises, also indented 2 spaces after '# '
@@ -2707,12 +2705,7 @@ function printExplanation(df, prefixes) {
 
     console.log("# via the schematic forward rule:");
 
-    // Rule pretty-printed:
-    // #   {
-    // #     (premises)
-    // #   } => {
-    // #     (conclusions)
-    // #   } .
+    // Rule pretty-printed
     console.log("#   {");
     for (const tr of df.rule.premise) {
       for (const line of tripleToN3(tr, prefixes).split(/\r?\n/)) {

@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :orleans .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :paris :oneway :orleans .
 # via the schematic forward rule:
@@ -26,7 +26,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :chartres .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :paris :oneway :chartres .
 # via the schematic forward rule:
@@ -49,7 +49,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :amiens .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :paris :oneway :amiens .
 # via the schematic forward rule:
@@ -72,7 +72,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :orleans :path :blois .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :orleans :oneway :blois .
 # via the schematic forward rule:
@@ -95,7 +95,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :orleans :path :bourges .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :orleans :oneway :bourges .
 # via the schematic forward rule:
@@ -118,7 +118,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :blois :path :tours .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :blois :oneway :tours .
 # via the schematic forward rule:
@@ -141,7 +141,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :chartres :path :lemans .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :chartres :oneway :lemans .
 # via the schematic forward rule:
@@ -164,7 +164,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :lemans :path :angers .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :lemans :oneway :angers .
 # via the schematic forward rule:
@@ -187,7 +187,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :lemans :path :tours .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :lemans :oneway :tours .
 # via the schematic forward rule:
@@ -210,7 +210,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :angers :path :nantes .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :oneway rdfs:subPropertyOf :path .
 #   :angers :oneway :nantes .
 # via the schematic forward rule:
@@ -233,7 +233,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :blois .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :paris :path :orleans .
 #   :orleans :path :blois .
@@ -258,7 +258,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :bourges .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :paris :path :orleans .
 #   :orleans :path :bourges .
@@ -283,7 +283,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :lemans .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :paris :path :chartres .
 #   :chartres :path :lemans .
@@ -308,7 +308,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :orleans :path :tours .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :orleans :path :blois .
 #   :blois :path :tours .
@@ -333,7 +333,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :chartres :path :angers .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :chartres :path :lemans .
 #   :lemans :path :angers .
@@ -358,7 +358,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :chartres :path :tours .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :chartres :path :lemans .
 #   :lemans :path :tours .
@@ -383,7 +383,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :lemans :path :nantes .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :lemans :path :angers .
 #   :angers :path :nantes .
@@ -408,7 +408,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :tours .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :paris :path :orleans .
 #   :orleans :path :tours .
@@ -433,7 +433,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :angers .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :paris :path :chartres .
 #   :chartres :path :angers .
@@ -458,7 +458,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :chartres :path :nantes .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :chartres :path :lemans .
 #   :lemans :path :nantes .
@@ -483,7 +483,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :nantes .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
 #   :paris :path :lemans .
 #   :lemans :path :nantes .

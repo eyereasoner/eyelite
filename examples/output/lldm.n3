@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dx12Cm -35 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p1xCm 10.1 .
 #   :meas47 :p2xCm 45.1 .
@@ -30,7 +30,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dy12Cm 2.2 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p1yCm 7.8 .
 #   :meas47 :p2yCm 5.6 .
@@ -57,7 +57,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dy13Cm -22 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p1yCm 7.8 .
 #   :meas47 :p3yCm 29.8 .
@@ -84,7 +84,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dy24Cm -22.9 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p2yCm 5.6 .
 #   :meas47 :p4yCm 28.5 .
@@ -111,7 +111,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :cL1 -0.06285714285714286 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dy12Cm 2.2 .
 #   :meas47 :dx12Cm -35 .
@@ -138,7 +138,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dL3m -15.909090909090908 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :cL1 -0.06285714285714286 .
 #   (1 -0.06285714285714286) math:quotient -15.909090909090908 .
@@ -162,7 +162,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :cL3 15.909090909090908 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dL3m -15.909090909090908 .
 #   (0 -15.909090909090908) math:difference 15.909090909090908 .
@@ -186,7 +186,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :pL1x1Cm -0.6348571428571429 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :cL1 -0.06285714285714286 .
 #   :meas47 :p1xCm 10.1 .
@@ -213,7 +213,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :pL1x2Cm -2.834857142857143 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :cL1 -0.06285714285714286 .
 #   :meas47 :p2xCm 45.1 .
@@ -240,7 +240,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :pL3x3Cm 57.27272727272727 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :cL3 15.909090909090908 .
 #   :meas47 :p3xCm 3.6 .
@@ -267,7 +267,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :pL3x4Cm 870.2272727272727 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :cL3 15.909090909090908 .
 #   :meas47 :p4xCm 54.7 .
@@ -294,7 +294,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dd13Cm -57.90758441558442 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :pL1x1Cm -0.6348571428571429 .
 #   :meas47 :pL3x3Cm 57.27272727272727 .
@@ -321,7 +321,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :ddy13Cm -35.90758441558442 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dd13Cm -57.90758441558442 .
 #   :meas47 :dy13Cm -22 .
@@ -348,7 +348,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dd24Cm -873.0621298701299 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :pL1x2Cm -2.834857142857143 .
 #   :meas47 :pL3x4Cm 870.2272727272727 .
@@ -375,7 +375,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :ddy24Cm -850.1621298701299 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dd24Cm -873.0621298701299 .
 #   :meas47 :dy24Cm -22.9 .
@@ -402,7 +402,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :ddL13 -15.97194805194805 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :cL1 -0.06285714285714286 .
 #   :meas47 :cL3 15.909090909090908 .
@@ -429,7 +429,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :p5xCm 2.248165615039355 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :ddy13Cm -35.90758441558442 .
 #   :meas47 :ddL13 -15.97194805194805 .
@@ -456,7 +456,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :p6xCm 53.22845573407923 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :ddy24Cm -850.1621298701299 .
 #   :meas47 :ddL13 -15.97194805194805 .
@@ -483,7 +483,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dx51Cm -7.851834384960645 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p5xCm 2.248165615039355 .
 #   :meas47 :p1xCm 10.1 .
@@ -510,7 +510,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dx53Cm -1.351834384960645 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p5xCm 2.248165615039355 .
 #   :meas47 :p3xCm 3.6 .
@@ -537,7 +537,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dx62Cm 8.128455734079232 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p6xCm 53.22845573407923 .
 #   :meas47 :p2xCm 45.1 .
@@ -564,7 +564,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dx64Cm -1.4715442659207696 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p6xCm 53.22845573407923 .
 #   :meas47 :p4xCm 54.7 .
@@ -591,7 +591,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :pL1dx51Cm 0.4935438756260977 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :cL1 -0.06285714285714286 .
 #   :meas47 :dx51Cm -7.851834384960645 .
@@ -618,7 +618,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :pL1dx62Cm -0.5109315032849803 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :cL1 -0.06285714285714286 .
 #   :meas47 :dx62Cm 8.128455734079232 .
@@ -645,7 +645,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :p5yCm 8.293543875626098 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :pL1dx51Cm 0.4935438756260977 .
 #   :meas47 :p1yCm 7.8 .
@@ -672,7 +672,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :p6yCm 5.0890684967150195 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :pL1dx62Cm -0.5109315032849803 .
 #   :meas47 :p2yCm 5.6 .
@@ -699,7 +699,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :sdx53Cm2 1.8274562043619251 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dx53Cm -1.351834384960645 .
 #   (-1.351834384960645 2) math:exponentiation 1.8274562043619251 .
@@ -723,7 +723,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :sdx64Cm2 2.1654425265642967 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dx64Cm -1.4715442659207696 .
 #   (-1.4715442659207696 2) math:exponentiation 2.1654425265642967 .
@@ -747,7 +747,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dy53Cm -21.506456124373905 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p5yCm 8.293543875626098 .
 #   :meas47 :p3yCm 29.8 .
@@ -774,7 +774,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dy64Cm -23.41093150328498 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :p6yCm 5.0890684967150195 .
 #   :meas47 :p4yCm 28.5 .
@@ -801,7 +801,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :sdy53Cm2 462.52765502961984 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dy53Cm -21.506456124373905 .
 #   (-21.506456124373905 2) math:exponentiation 462.52765502961984 .
@@ -825,7 +825,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :sdy64Cm2 548.0717138515012 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dy64Cm -23.41093150328498 .
 #   (-23.41093150328498 2) math:exponentiation 548.0717138515012 .
@@ -849,7 +849,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :ssd53Cm2 464.35511123398175 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :sdx53Cm2 1.8274562043619251 .
 #   :meas47 :sdy53Cm2 462.52765502961984 .
@@ -876,7 +876,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :ssd64Cm2 550.2371563780655 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :sdx64Cm2 2.1654425265642967 .
 #   :meas47 :sdy64Cm2 548.0717138515012 .
@@ -903,7 +903,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :d53Cm 21.548900464617255 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :ssd53Cm2 464.35511123398175 .
 #   (464.35511123398175 0.5) math:exponentiation 21.548900464617255 .
@@ -927,7 +927,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :d64Cm 23.45713444515475 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :ssd64Cm2 550.2371563780655 .
 #   (550.2371563780655 0.5) math:exponentiation 23.45713444515475 .
@@ -951,7 +951,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 :dCm -1.9082339805374957 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :d53Cm 21.548900464617255 .
 #   :meas47 :d64Cm 23.45713444515475 .
@@ -978,7 +978,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :meas47 a :LLDAlarm .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :meas47 a :Measurement .
 #   :meas47 :dCm -1.9082339805374957 .
 #   -1.9082339805374957 math:lessThan -1.25 .

@@ -8,7 +8,7 @@
 #   } <= {
 #       ?y :parentOf ?x .
 #   } .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :parentOf :invOf :childOf .
 # via the schematic forward rule:
 #   {
@@ -35,7 +35,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :bob :hasParent :alice .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :bob :childOf :alice .
 # via the schematic forward rule:
 #   {

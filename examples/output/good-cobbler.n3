@@ -5,7 +5,7 @@
 #   :test :is {
 #       :joe :is (:good :Cobbler) .
 #   } .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :joe :is (:good :Cobbler) .
 # via the schematic forward rule:
 #   {

@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   _:b1 a :Animal .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   _:b1 a :Monkey .
 # via the schematic forward rule:
 #   {
@@ -21,7 +21,7 @@ _:b1 a :Animal .
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :test :is true .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   _:b1 a :Monkey .
 #   _:b1 a :Animal .
 # via the schematic forward rule:

@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :german :eats :fish .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   ((:yellow :norwegian :cats :water :dunhill) (:blue :dane :horse :tea :blends) (:red :brit :birds :milk :pallmall) (:green :german :fish :coffee :prince) (:white :swede :dogs :beer :bluemasters)) log:equalTo ((:yellow :norwegian :cats :water :dunhill) (:blue :dane :horse :tea :blends) (:red :brit :birds :milk :pallmall) (:green :german :fish :coffee :prince) (:white :swede :dogs :beer :bluemasters)) .
 #   ((:yellow :norwegian :cats :water :dunhill) (:blue :dane :horse :tea :blends) (:red :brit :birds :milk :pallmall) (:green :german :fish :coffee :prince) (:white :swede :dogs :beer :bluemasters)) :pair ((:blue :dane :horse :tea :blends) (:yellow :norwegian :cats :water :dunhill)) .
 #   ((:yellow :norwegian :cats :water :dunhill) (:blue :dane :horse :tea :blends) (:red :brit :birds :milk :pallmall) (:green :german :fish :coffee :prince) (:white :swede :dogs :beer :bluemasters)) :pair ((:blue :dane :horse :tea :blends) (:yellow :norwegian :cats :water :dunhill)) .

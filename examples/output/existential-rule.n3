@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :Socrates :is _:sk_0 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :Socrates a :Human .
 # via the schematic forward rule:
 #   {
@@ -21,7 +21,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :Plato :is _:sk_1 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :Plato a :Human .
 # via the schematic forward rule:
 #   {

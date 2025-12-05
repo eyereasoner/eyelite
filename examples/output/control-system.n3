@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :actuator1 :control1 39.27346198678276 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :input1 :measurement10 2.23606797749979 .
 #   :input2 :measurement2 true .
 #   :disturbance1 :measurement3 35766 .
@@ -35,7 +35,7 @@
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :actuator2 :control1 26.08 .
-# It holds because the following instantiated premises are all satisfied:
+# It holds because the following instance of the rule body is provable:
 #   :input3 :measurement3 56967 .
 #   :state3 :observation3 22 .
 #   :output2 :measurement4 24 .
