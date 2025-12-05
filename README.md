@@ -380,6 +380,33 @@ Dates & durations:
     current substitution.
   * Does not introduce new bindings; acts as a constraint.
 
+* `log:implies` / `log:impliedBy` (rule introspection)
+  * These do **intensional introspection** over the current rulebase, not over ordinary data triples.
+  * `log:implies` — forward rules:
+    * Shape: `?P log:implies ?C .`
+    * For each forward rule currently known to `eyeling`:
+      ```n3
+      { P0 } => { C0 } .
+      ```
+      this goal succeeds once, unifying:
+      * `?P` with `{ P0 }` and
+      * `?C` with `{ C0 }`
+      as quoted formulas.
+  * `log:impliedBy` — backward rules:
+    * Shape: `?H log:impliedBy ?B .`
+    * For each backward rule:
+      ```n3
+      { H0 } <= { B0 } .
+      ```
+      this goal succeeds once, unifying:
+      * `?H` with `{ H0 }` and
+      * `?B` with `{ B0 }`
+      as quoted formulas.
+  * The rulebase seen by these built-ins includes:
+    * rules written directly as `{ ... } => { ... } .` / `{ ... } <= { ... } .`, and
+    * rules **generated at runtime** via the `log:implies` / `log:impliedBy` meta-rule idiom described above.
+  * Implementation detail: each introspected rule is **standardized apart** before being exposed, so its internal variables show up with fresh names like `?X__0`. This avoids cyclic substitutions (occurs-check issues) even when a rule introspects *itself*. As elsewhere in `eyeling`, quoted formulas are matched as **whole formulas**; there is no pattern-matching *inside* them yet.
+
 * `log:collectAllIn` (pragmatic subset)
 
   * Subject shape: `( ?V { WHERE } ?List )`.
