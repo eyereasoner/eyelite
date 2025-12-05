@@ -17,11 +17,11 @@
 #   } .
 # with substitution (on rule variables):
 #   ?A = {
-#           ?A__0 log:implies ?B__1 .
-#       }
+#     ?A__0 log:implies ?B__1 .
+#   }
 #   ?B = {
-#           :result :is true .
-#       }
+#     :result :is true .
+#   }
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 

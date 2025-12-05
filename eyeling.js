@@ -2754,15 +2754,20 @@ function printExplanation(df, prefixes) {
           console.log("#   ?" + v + " = " + stripped);
         }
       } else {
-        // multi-line term (e.g. a { ... } formula)
-        const first = lines[0].replace(/\s+$/, "");
+        // multi-line term (e.g. a formula)
+        const first = lines[0].trimEnd(); // usually "{"
         if (first) {
           console.log("#   ?" + v + " = " + first);
         }
         for (let i = 1; i < lines.length; i++) {
-          const stripped = lines[i].replace(/\s+$/, "");
-          if (stripped) {
-            console.log("#       " + stripped);
+          const stripped = lines[i].trim();
+          if (!stripped) continue;
+          if (i === lines.length - 1) {
+            // closing brace
+            console.log("#   " + stripped);
+          } else {
+            // inner triple lines
+            console.log("#     " + stripped);
           }
         }
       }
