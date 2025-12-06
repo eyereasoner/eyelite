@@ -1,0 +1,26 @@
+# -------
+# Polygon
+# -------
+#
+# Calculate the area of a polygon.
+# See https://www.mathopenref.com/coordpolygonarea.html
+
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix polygon: <https://eyereasoner.github.io/eye/reasoning/polygon#>.
+
+# calculating the area of a polygon
+{ (?POINT) polygon:area 0 } <= true.
+{ ?POINTS polygon:area ?AREA } <= {
+    ?POINTS list:firstRest ((?X1 ?Y1) ?POINTS1).
+    ?POINTS1 list:firstRest ((?X2 ?Y2) ?POINTS2).
+    ?POINTS1 polygon:area ?AREA1.
+    (?X1 ?Y2) math:product ?Z1.
+    (?Y1 ?X2) math:product ?Z2.
+    (?Z1 ?Z2) math:difference ?Z3.
+    (?Z3 2) math:quotient ?Z4.
+    (?Z4 ?AREA1) math:sum ?AREA.
+}.
+
+# test
+{ ((4 2) (6 2) (7 6) (4 6) (5 5) (5 3) (4 2)) polygon:area ?AREA } => { ((4 2) (6 2) (7 6) (4 6) (5 5) (5 3) (4 2)) polygon:area ?AREA }.
