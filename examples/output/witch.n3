@@ -1,0 +1,115 @@
+@prefix : <https://eyereasoner.github.io/eye/reasoning/witch#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :DUCK a :ISMADEOFWOOD .
+# It holds because the following instance of the rule body is provable:
+#   :DUCK a :FLOATS .
+# via the schematic forward rule:
+#   {
+#     ?x a :FLOATS .
+#   } => {
+#     ?x a :ISMADEOFWOOD .
+#   } .
+# with substitution (on rule variables):
+#   ?x = :DUCK
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:DUCK a :ISMADEOFWOOD .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :GIRL a :FLOATS .
+# It holds because the following instance of the rule body is provable:
+#   :DUCK a :FLOATS .
+#   :DUCK :SAMEWEIGHT :GIRL .
+# via the schematic forward rule:
+#   {
+#     ?x a :FLOATS .
+#     ?x :SAMEWEIGHT ?y .
+#   } => {
+#     ?y a :FLOATS .
+#   } .
+# with substitution (on rule variables):
+#   ?x = :DUCK
+#   ?y = :GIRL
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:GIRL a :FLOATS .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :DUCK a :BURNS .
+# It holds because the following instance of the rule body is provable:
+#   :DUCK a :ISMADEOFWOOD .
+# via the schematic forward rule:
+#   {
+#     ?x a :ISMADEOFWOOD .
+#   } => {
+#     ?x a :BURNS .
+#   } .
+# with substitution (on rule variables):
+#   ?x = :DUCK
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:DUCK a :BURNS .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :GIRL a :ISMADEOFWOOD .
+# It holds because the following instance of the rule body is provable:
+#   :GIRL a :FLOATS .
+# via the schematic forward rule:
+#   {
+#     ?x a :FLOATS .
+#   } => {
+#     ?x a :ISMADEOFWOOD .
+#   } .
+# with substitution (on rule variables):
+#   ?x = :GIRL
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:GIRL a :ISMADEOFWOOD .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :GIRL a :BURNS .
+# It holds because the following instance of the rule body is provable:
+#   :GIRL a :ISMADEOFWOOD .
+# via the schematic forward rule:
+#   {
+#     ?x a :ISMADEOFWOOD .
+#   } => {
+#     ?x a :BURNS .
+#   } .
+# with substitution (on rule variables):
+#   ?x = :GIRL
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:GIRL a :BURNS .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :GIRL a :WITCH .
+# It holds because the following instance of the rule body is provable:
+#   :GIRL a :BURNS .
+#   :GIRL a :WOMAN .
+# via the schematic forward rule:
+#   {
+#     ?x a :BURNS .
+#     ?x a :WOMAN .
+#   } => {
+#     ?x a :WITCH .
+#   } .
+# with substitution (on rule variables):
+#   ?x = :GIRL
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:GIRL a :WITCH .
+
