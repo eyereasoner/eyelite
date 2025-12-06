@@ -1,0 +1,23 @@
+# --------------------------
+# Premise reordering example
+# --------------------------
+#
+# Example from Patrick Hochstenbach
+
+@prefix : <https://eyereasoner.github.io/ns#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+:Alice :has (:Book 1).
+:Bob :has (:Table 1).
+
+{
+    ?O1 log:notEqualTo ?O2.
+
+    ?W1 :has (?O1 ?N1).
+    ?W2 :has (?O2 ?N2).
+}
+=>
+{
+    :test :is true .
+}.

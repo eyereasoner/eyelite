@@ -841,7 +841,11 @@ class Parser {
     // Blank nodes that occur explicitly in the head (conclusion)
     const headBlankLabels = collectBlankLabelsInTriples(rawConclusion);
 
-    const [premise, conclusion] = liftBlankRuleVars(rawPremise, rawConclusion);
+    const [premise0, conclusion] = liftBlankRuleVars(rawPremise, rawConclusion);
+
+    // Reorder constraints for *forward* rules.
+    const premise = isForward ? reorderPremiseForConstraints(premise0) : premise0;
+
     return new Rule(premise, conclusion, isForward, isFuse, headBlankLabels);
   }
 }
@@ -1053,6 +1057,55 @@ function isLogImplies(p) {
 
 function isLogImpliedBy(p) {
   return p instanceof Iri && p.value === LOG_NS + "impliedBy";
+}
+
+// ============================================================================
+// Constraint / "test" builtins
+// ============================================================================
+
+function isConstraintBuiltin(tr) {
+  if (!(tr.p instanceof Iri)) return false;
+  const v = tr.p.value;
+
+  // log: tests that are purely constraints
+  if (v === LOG_NS + "notEqualTo") return true;
+  if (v === LOG_NS + "notIncludes") return true;
+
+  // math: numeric comparisons (no new bindings, just tests)
+  if (
+    v === MATH_NS + "greaterThan" ||
+    v === MATH_NS + "lessThan" ||
+    v === MATH_NS + "notLessThan" ||
+    v === MATH_NS + "notGreaterThan" ||
+    v === MATH_NS + "equalTo" ||
+    v === MATH_NS + "notEqualTo"
+  ) {
+    return true;
+  }
+
+  // list: membership test with no bindings
+  if (v === LIST_NS + "notMember") return true;
+
+  return false;
+}
+
+/**
+ * Move constraint builtins to the end of the rule premise.
+ * This is a simple "delaying" strategy similar in spirit to Prolog's when/2:
+ * - normal goals first (can bind variables),
+ * - pure test / constraint builtins last (checked once bindings are in place).
+ */
+function reorderPremiseForConstraints(premise) {
+  if (!premise || premise.length === 0) return premise;
+
+  const normal = [];
+  const delayed = [];
+
+  for (const tr of premise) {
+    if (isConstraintBuiltin(tr)) delayed.push(tr);
+    else normal.push(tr);
+  }
+  return normal.concat(delayed);
 }
 
 // ============================================================================
@@ -2547,7 +2600,8 @@ function forwardChain(facts, forwardRules, backRules) {
               const left = instantiated.s.triples;
               const right = instantiated.o.triples;
               if (isFwRuleTriple) {
-                const [premise, conclusion] = liftBlankRuleVars(left, right);
+                const [premise0, conclusion] = liftBlankRuleVars(left, right);
+                const premise = reorderPremiseForConstraints(premise0);
                 const newRule = new Rule(
                   premise,
                   conclusion,

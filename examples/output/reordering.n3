@@ -1,26 +1,29 @@
-@prefix : <http://example.org/> .
+@prefix : <https://eyereasoner.github.io/ns#> .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   :Alice :hates :Nobody .
+#   :test :is true .
 # It holds because the following instance of the rule body is provable:
-#   :Bob a :Person .
-#   ?SCOPE log:notIncludes {
-#       :Alice :hates :Bob .
-#   } .
+#   :Alice :has (:Book 1) .
+#   :Bob :has (:Table 1) .
+#   :Book log:notEqualTo :Table .
 # via the schematic forward rule:
 #   {
-#     ?X a :Person .
-#     ?SCOPE log:notIncludes {
-#         :Alice :hates ?X .
-#     } .
+#     ?W1 :has (?O1 ?N1) .
+#     ?W2 :has (?O2 ?N2) .
+#     ?O1 log:notEqualTo ?O2 .
 #   } => {
-#     :Alice :hates :Nobody .
+#     :test :is true .
 #   } .
 # with substitution (on rule variables):
-#   ?X = :Bob
+#   ?N1 = 1
+#   ?N2 = 1
+#   ?O1 = :Book
+#   ?O2 = :Table
+#   ?W1 = :Alice
+#   ?W2 = :Bob
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-:Alice :hates :Nobody .
+:test :is true .
 
