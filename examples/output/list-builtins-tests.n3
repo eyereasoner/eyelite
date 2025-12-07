@@ -1,0 +1,148 @@
+@prefix : <https://eyereasoner.github.io/ns#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_append_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   ((1 2) (3 4)) list:append (1 2 3 4) .
+# via the schematic forward rule:
+#   {
+#     ((1 2) (3 4)) list:append (1 2 3 4) .
+#   } => {
+#     :ok_list_append_1 a :Pass .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_append_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_first_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   (1 2 3 4) list:first 1 .
+# via the schematic forward rule:
+#   {
+#     (1 2 3 4) list:first 1 .
+#   } => {
+#     :ok_list_first_1 a :Pass .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_first_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_in_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   "cat" list:in ("dog" "penguin" "cat") .
+# via the schematic forward rule:
+#   {
+#     "cat" list:in ("dog" "penguin" "cat") .
+#   } => {
+#     :ok_list_in_1 a :Pass .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_in_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_iterate_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   ("dog" "penguin" "cat") list:iterate (2 "cat") .
+# via the schematic forward rule:
+#   {
+#     ("dog" "penguin" "cat") list:iterate (?index "cat") .
+#   } => {
+#     :ok_list_iterate_1 a :Pass .
+#   } .
+# with substitution (on rule variables):
+#   ?index = 2
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_iterate_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_last_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   (1 2 3 4) list:last 4 .
+# via the schematic forward rule:
+#   {
+#     (1 2 3 4) list:last 4 .
+#   } => {
+#     :ok_list_last_1 a :Pass .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_last_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_length_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   (1 2 3 4) list:length 4 .
+# via the schematic forward rule:
+#   {
+#     (1 2 3 4) list:length 4 .
+#   } => {
+#     :ok_list_length_1 a :Pass .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_length_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_member_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   ("dog" "penguin" "cat") list:member "cat" .
+# via the schematic forward rule:
+#   {
+#     ("dog" "penguin" "cat") list:member "cat" .
+#   } => {
+#     :ok_list_member_1 a :Pass .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_member_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_memberAt_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   (("dog" "penguin" "cat") 2) list:memberAt "cat" .
+# via the schematic forward rule:
+#   {
+#     (("dog" "penguin" "cat") 2) list:memberAt "cat" .
+#   } => {
+#     :ok_list_memberAt_1 a :Pass .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_memberAt_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ok_list_remove_1 a :Pass .
+# It holds because the following instance of the rule body is provable:
+#   (("dog" "penguin" "cat" "penguin") "penguin") list:remove ("dog" "cat") .
+# via the schematic forward rule:
+#   {
+#     (("dog" "penguin" "cat" "penguin") "penguin") list:remove ("dog" "cat") .
+#   } => {
+#     :ok_list_remove_1 a :Pass .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ok_list_remove_1 a :Pass .
+

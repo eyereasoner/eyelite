@@ -1,0 +1,80 @@
+@prefix :      <https://eyereasoner.github.io/ns#> .
+@prefix list:  <http://www.w3.org/2000/10/swap/list#> .
+@prefix log:   <http://www.w3.org/2000/10/swap/log#> .
+
+# ============================================================
+# 4.4 list: builtins
+# ============================================================
+
+# 4.4.1 list:append
+# ( (1 2) (3 4) ) list:append (1 2 3 4) .
+{
+    ( (1 2) (3 4) ) list:append (1 2 3 4) .
+} => {
+    :ok_list_append_1 a :Pass .
+} .
+
+# 4.4.2 list:first
+# (1 2 3 4) list:first 1 .
+{
+    (1 2 3 4) list:first 1 .
+} => {
+    :ok_list_first_1 a :Pass .
+} .
+
+# 4.4.3 list:in
+# "cat" list:in ( "dog" "penguin" "cat" ) .
+{
+    "cat" list:in ( "dog" "penguin" "cat" ) .
+} => {
+    :ok_list_in_1 a :Pass .
+} .
+
+# 4.4.4 list:iterate
+# ("dog" "penguin" "cat") list:iterate (?index "cat") .
+{
+    ("dog" "penguin" "cat") list:iterate (?index "cat") .
+} => {
+    :ok_list_iterate_1 a :Pass .
+} .
+
+# 4.4.5 list:last
+# (1 2 3 4) list:last 4 .
+{
+    (1 2 3 4) list:last 4 .
+} => {
+    :ok_list_last_1 a :Pass .
+} .
+
+# 4.4.6 list:length
+# (1 2 3 4) list:length 4 .
+{
+    (1 2 3 4) list:length 4 .
+} => {
+    :ok_list_length_1 a :Pass .
+} .
+
+# 4.4.7 list:member
+# ("dog" "penguin" "cat") list:member "cat" .
+{
+    ("dog" "penguin" "cat") list:member "cat" .
+} => {
+    :ok_list_member_1 a :Pass .
+} .
+
+# 4.4.8 list:memberAt
+# (("dog" "penguin" "cat") 2) list:memberAt "cat" .
+{
+    (("dog" "penguin" "cat") 2) list:memberAt "cat" .
+} => {
+    :ok_list_memberAt_1 a :Pass .
+} .
+
+# 4.4.9 list:remove
+# (("dog" "penguin" "cat" "penguin") "penguin") list:remove ("dog" "cat") .
+{
+    (("dog" "penguin" "cat" "penguin") "penguin") list:remove ("dog" "cat") .
+} => {
+    :ok_list_remove_1 a :Pass .
+} .
+

@@ -2437,6 +2437,93 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // -----------------------------------------------------------------
+  // 4.4 list: builtins
+  // -----------------------------------------------------------------
+
+  // 4.4.2 list:first
+  // true iff $s is a list and $o is the first member of that list.
+  // Schema: $s+ list:first $o-
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "first") {
+    if (!(g.s instanceof ListTerm)) return [];
+    if (!g.s.elems.length) return [];
+    const first = g.s.elems[0];
+    const s2 = unifyTerm(g.o, first, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.4.4 list:iterate
+  // true iff $s is a list and $o is a list (index value),
+  // where index is a valid 0-based index into $s and value is the element at that index.
+  // Schema: $s+ list:iterate ( $o.1?[*] $o.2?[*] )?[*]
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "iterate") {
+    if (!(g.s instanceof ListTerm)) return [];
+    if (!(g.o instanceof ListTerm) || g.o.elems.length !== 2) return [];
+    const [idxTerm, valTerm] = g.o.elems;
+    const xs = g.s.elems;
+    const outs = [];
+
+    for (let i = 0; i < xs.length; i++) {
+      const idxLit = new Literal(String(i)); // index starts at 0
+      let s1 = unifyTerm(idxTerm, idxLit, subst);
+      if (s1 === null) continue;
+      let s2 = unifyTerm(valTerm, xs[i], s1);
+      if (s2 === null) continue;
+      outs.push(s2);
+    }
+    return outs;
+  }
+
+  // 4.4.5 list:last
+  // true iff $s is a list and $o is the last member of that list.
+  // Schema: $s+ list:last $o-
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "last") {
+    if (!(g.s instanceof ListTerm)) return [];
+    const xs = g.s.elems;
+    if (!xs.length) return [];
+    const last = xs[xs.length - 1];
+    const s2 = unifyTerm(g.o, last, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.4.8 list:memberAt
+  // true iff $s.1 is a list, $s.2 is a valid index, and $o is the member at that index.
+  // Schema: ( $s.1+ $s.2?[*] )+ list:memberAt $o?[*]
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "memberAt") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
+    const [listTerm, indexTerm] = g.s.elems;
+    if (!(listTerm instanceof ListTerm)) return [];
+    const xs = listTerm.elems;
+    const outs = [];
+
+    for (let i = 0; i < xs.length; i++) {
+      const idxLit = new Literal(String(i)); // index starts at 0
+      let s1 = unifyTerm(indexTerm, idxLit, subst);
+      if (s1 === null) continue;
+      let s2 = unifyTerm(g.o, xs[i], s1);
+      if (s2 === null) continue;
+      outs.push(s2);
+    }
+    return outs;
+  }
+
+  // 4.4.9 list:remove
+  // true iff $s.1 is a list and $o is that list with all occurrences of $s.2 removed.
+  // Schema: ( $s.1+ $s.2+ )+ list:remove $o-
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "remove") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
+    const [listTerm, itemTerm] = g.s.elems;
+    if (!(listTerm instanceof ListTerm)) return [];
+    const xs = listTerm.elems;
+    const filtered = [];
+    for (const e of xs) {
+      if (!termsEqual(e, itemTerm)) filtered.push(e);
+    }
+    const resList = new ListTerm(filtered);
+    const s2 = unifyTerm(g.o, resList, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // -----------------------------------------------------------------
   // list:member / list:in / list:length / list:notMember / list:reverse / list:sort / list:map
   // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LIST_NS + "member") {

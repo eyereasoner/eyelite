@@ -355,6 +355,18 @@ The `examples/test` script treats this non-zero exit code for the `fuse.n3` exam
 
 ## Built-ins (overview)
 
+`eyeling` implements a pragmatic subset of the core N3 builtin vocabularies, roughly following the “Notation3 Builtin Functions” report (sections 4.2–4.6 for math, time, list, log, and string).  
+
+#### Quick map (by namespace)
+
+| Namespace | Role / topic                                        | N3 Builtins section | Notes in `eyeling` |
+|-----------|-----------------------------------------------------|---------------------|--------------------|
+| `math:`   | Arithmetic, trig, comparisons, Fibonacci, date diffs | §4.2 math           | Core numeric ops (`sum`, `product`, comparisons, …) plus a few extras (e.g. `math:fibonacci`). |
+| `time:`   | Time and dates                                      | §4.3 time           | Currently only `time:localTime` (SWAP-style). |
+| `list:`   | List/collection utilities                           | §4.4 list           | Includes `list:append`, `first`, `last`, `in`, `member`, `memberAt`, `iterate`, `length`, `remove`, `reverse`, `sort`, `map`, `notMember`. |
+| `log:`    | Logical / meta reasoning, SNAF, rule introspection  | §4.5 log            | Includes `log:equalTo`, `log:notEqualTo`, `log:implies`, `log:impliedBy`, `log:collectAllIn`, `log:notIncludes`, etc. |
+| `string:` | String processing and regex-like operations         | §4.6 string         | Includes concatenation, containment, case-insensitive equality, comparisons, `string:format`, `matches`/`notMatches`, `replace`, `scrape`, etc. |
+
 Built-ins are recognized by expanded IRIs and evaluated during **backward** goal proving. This is a **condensed** overview of what’s currently implemented. For exact behavior and corner cases, see the `evalBuiltin` function in `eyeling.js`.
 
 ### `math:` namespace
@@ -497,68 +509,117 @@ Dates & durations:
 
   Binds `?D` to the current local time as `xsd:dateTime`.
 
+### `string:` namespace
+
+String built-ins following section 4.6 of the Notation3 builtin report (2023-07-03).  
+They operate on literals; the lexical form is used as a JavaScript string, and the datatype is ignored.
+
+Core operators:
+
+* `string:concatenation` (4.6.1)  
+  Build a string by concatenating a list of input strings.
+
+* `string:contains` / `string:containsIgnoringCase` (4.6.2, 4.6.3)  
+  Succeeds iff the subject string contains the object string (case-sensitive / case-insensitive).
+
+* `string:endsWith` / `string:startsWith` (4.6.4, 4.6.16)  
+  Succeeds iff the subject ends with / starts with the object.
+
+* `string:equalIgnoringCase` / `string:notEqualIgnoringCase` (4.6.5, 4.6.10)  
+  Case-insensitive equality and its negation.
+
+* `string:greaterThan` / `string:lessThan` (4.6.7, 4.6.8)  
+  Compare strings using JavaScript’s lexicographic order (Unicode code units).
+
+* `string:notGreaterThan` / `string:notLessThan` (4.6.11, 4.6.12)  
+  The ≤ / ≥ counterparts of the comparison built-ins.
+
+Formatting and regex-style operations:
+
+* `string:format` (4.6.6)  
+  Pragmatic subset: only `%s` and `%%` are supported. Anything else causes the builtin to fail.  
+  Example shape:  
+  ```n3
+  ("%s://%s/%s" "https" "w3c.github.io" "N3/spec/")
+      string:format ?Out .
+
+* `string:matches` / `string:notMatches` (4.6.9, 4.6.13)
+  Regular-expression match and its negation. Patterns are interpreted as JavaScript `RegExp` source.
+
+* `string:replace` (4.6.14)
+  Global regex replace: subject is `( data pattern replacement )`; object is the result string.
+  Implemented via `new RegExp(pattern, "g")` in JavaScript.
+
+* `string:scrape` (4.6.15)
+  Regex “extract”: subject is `( data pattern )`; object is the first capturing group of the first match.
+
 ### `list:` namespace
 
-Operations on lists:
+Operations on lists, roughly following section 4.4 of the Notation3 builtin report, plus a few pragmatic extras.
 
-* `list:append`
+Construction and reshaping:
 
-  * Relational, Prolog-style **append over a list of lists**.
-  * Subject is a list-of-lists; object is the concatenation of those lists.
-  * Works in multiple “directions”, e.g.:
-
-    ```n3
-    ((1 2) (3 4)) list:append ?L.
-    (?P (3 4))     list:append (1 2 3 4).
-    ((1 2) ?S)     list:append (1 2 3 4).
-    ```
+* `list:append` (4.4.1)  
+  Relational, Prolog-style append over a **list of lists**.  
+  Subject is a list of lists; object is the concatenation of those lists. Works in multiple “directions”, e.g.
+  ```n3
+  ((1 2) (3 4)) list:append ?L .
+  (?P (3 4))    list:append (1 2 3 4) .
+  ((1 2) ?S)    list:append (1 2 3 4) .
 
 * `list:firstRest`
+  Split or construct a list from `( first rest )`.
+  Used internally to support some inverse modes.
 
-  * Split or construct a list from `(first rest)`.
-  * Supports an internal open-tail representation for some inverse cases (used when the “rest” is a variable/open list).
+* `list:first` (4.4.2) / `list:last` (4.4.5)
+  First and last element of a list.
 
-* `list:member`
+* `list:remove` (4.4.9)
+  `( List Item ) list:remove OutList` removes **all** occurrences of `Item` from `List`.
 
-  * Membership; bidirectional over (effectively) ground lists.
+Membership and indexing:
 
-* `list:in`
+* `list:member` (4.4.7)
+  Membership; bidirectional over (effectively) ground lists.
 
-  * Dual of `list:member` (element on subject side).
-
-* `list:length`
-
-  * Length of a list (integer literal).
-
-* `list:map` (pragmatic subset)
-
-  * Shape: `( (inputList) predicateIRI ) list:map outputList`.
-  * Only works when:
-
-    * the predicate is itself a builtin, and
-    * the input list is ground.
-  * Example:
-
-    ```n3
-    ( ( (1 -2 3) math:absoluteValue ) list:map (1 2 3) ).
-    ```
+* `list:in` (4.4.3)
+  Dual of `list:member` with the element on the subject side.
 
 * `list:notMember`
+  Succeeds iff the element does **not** occur in the list. Useful for patterns like “not visited yet” in graph algorithms.
 
-  * Succeeds iff the element does **not** occur in the list.
-  * Used for scoped negation patterns like “not visited yet” in graph algorithms.
-  * Pure test; treated as a **constraint** for goal ordering in forward rules.
+* `list:length` (4.4.6)
+  Length of a list, returned as an integer literal.
+
+* `list:memberAt` (4.4.8)
+  `((List Index) list:memberAt Elem)` relates a list element to its **0-based** index.
+
+* `list:iterate` (4.4.4)
+  Iterates over a list as `( index value )` pairs. Example shape:
+
+  ```n3
+  ("dog" "penguin" "cat") list:iterate (?I "cat") .
+  ```
+
+  This will succeed for `?I = 2`.
+
+Ordering and mapping:
 
 * `list:reverse`
-
-  * Reverses a list (useful to flip accumulated paths).
+  Reverse the order of a list.
 
 * `list:sort`
+  Sort a list with a pragmatic comparator; good enough for the bundled examples (e.g., Dijkstra priority queues).
 
-  * Sorts a list using a pragmatic comparator, good enough for the examples.
-  * In the Dijkstra example, it’s used to sort the priority queue by cost.
+* `list:map` (pragmatic subset)
+  Shape: `( (InputList) PredicateIRI ) list:map OutputList`.
+  Currently only supports cases where the predicate is itself a builtin and the input list is ground, e.g.
 
-These list built-ins aim to match common patterns from the N3 builtin report, not every corner case.
+  ```n3
+  (( (1 -2 3) math:absoluteValue) list:map (1 2 3)) .
+  ```
+
+These list built-ins aim to mirror the common cases from the N3 builtin report. They’re not a complete re-implementation of every mode and corner case, but they should match EYE on the typical patterns used in the examples.
 
 ---
 
