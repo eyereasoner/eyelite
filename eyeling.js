@@ -1342,6 +1342,52 @@ function stripQuotes(lex) {
   return lex;
 }
 
+function termToJsString(t) {
+  // Accept any Literal and interpret its lexical form as a JS string.
+  if (!(t instanceof Literal)) return null;
+  const [lex, _dt] = literalParts(t.value);
+  return stripQuotes(lex);
+}
+
+function makeStringLiteral(str) {
+  // JSON.stringify gives us a valid N3/Turtle-style quoted string
+  // (with proper escaping for quotes, backslashes, newlines, …).
+  return new Literal(JSON.stringify(str));
+}
+
+// Tiny subset of sprintf: supports only %s and %%.
+// Good enough for most N3 string:format use cases that just splice strings.
+function simpleStringFormat(fmt, args) {
+  let out = "";
+  let argIndex = 0;
+
+  for (let i = 0; i < fmt.length; i++) {
+    const ch = fmt[i];
+    if (ch === "%" && i + 1 < fmt.length) {
+      const spec = fmt[i + 1];
+
+      if (spec === "s") {
+        const arg = argIndex < args.length ? args[argIndex++] : "";
+        out += arg;
+        i++;
+        continue;
+      }
+
+      if (spec === "%") {
+        out += "%";
+        i++;
+        continue;
+      }
+
+      // Unsupported specifier (like %d, %f, …) ⇒ fail the builtin.
+      return null;
+    }
+    out += ch;
+  }
+
+  return out;
+}
+
 function parseNum(t) {
   // Parse as JS Number (for floats, dates-as-seconds, etc.)
   if (!(t instanceof Literal)) return null;
@@ -2105,6 +2151,229 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     const collectedList = new ListTerm(collected);
     const s2 = unifyTerm(listTerm, collectedList, subst);
     return s2 !== null ? [s2] : [];
+  }
+
+  // -----------------------------------------------------------------
+  // string: builtins (Notation3 Builtin Functions §4.6)
+  // -----------------------------------------------------------------
+
+  // 4.6.1 string:concatenation
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "concatenation") {
+    if (!(g.s instanceof ListTerm)) return [];
+    const parts = [];
+    for (const t of g.s.elems) {
+      const sStr = termToJsString(t);
+      if (sStr === null) return [];
+      parts.push(sStr);
+    }
+    const lit = makeStringLiteral(parts.join(""));
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.6.2 string:contains
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "contains") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr.includes(oStr) ? [{ ...subst }] : [];
+  }
+
+  // 4.6.3 string:containsIgnoringCase
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "containsIgnoringCase") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr.toLowerCase().includes(oStr.toLowerCase())
+      ? [{ ...subst }]
+      : [];
+  }
+
+  // 4.6.4 string:endsWith
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "endsWith") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr.endsWith(oStr) ? [{ ...subst }] : [];
+  }
+
+  // 4.6.5 string:equalIgnoringCase
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "equalIgnoringCase") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr.toLowerCase() === oStr.toLowerCase()
+      ? [{ ...subst }]
+      : [];
+  }
+
+  // 4.6.6 string:format
+  // (limited: only %s and %% are supported, anything else ⇒ builtin fails)
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "format") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length < 1) return [];
+    const fmtStr = termToJsString(g.s.elems[0]);
+    if (fmtStr === null) return [];
+
+    const args = [];
+    for (let i = 1; i < g.s.elems.length; i++) {
+      const aStr = termToJsString(g.s.elems[i]);
+      if (aStr === null) return [];
+      args.push(aStr);
+    }
+
+    const formatted = simpleStringFormat(fmtStr, args);
+    if (formatted === null) return []; // unsupported format specifier(s)
+
+    const lit = makeStringLiteral(formatted);
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.6.7 string:greaterThan
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "greaterThan") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr > oStr ? [{ ...subst }] : [];
+  }
+
+  // 4.6.8 string:lessThan
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "lessThan") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr < oStr ? [{ ...subst }] : [];
+  }
+
+  // 4.6.9 string:matches
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "matches") {
+    const sStr = termToJsString(g.s);
+    const pattern = termToJsString(g.o);
+    if (sStr === null || pattern === null) return [];
+    let re;
+    try {
+      // Perl/Python-style in the spec; JS RegExp is close enough for most patterns.
+      re = new RegExp(pattern);
+    } catch (e) {
+      return [];
+    }
+    return re.test(sStr) ? [{ ...subst }] : [];
+  }
+
+  // 4.6.10 string:notEqualIgnoringCase
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "notEqualIgnoringCase") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr.toLowerCase() !== oStr.toLowerCase()
+      ? [{ ...subst }]
+      : [];
+  }
+
+  // 4.6.11 string:notGreaterThan  (≤ in Unicode code order)
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "notGreaterThan") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr <= oStr ? [{ ...subst }] : [];
+  }
+
+  // 4.6.12 string:notLessThan  (≥ in Unicode code order)
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "notLessThan") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr >= oStr ? [{ ...subst }] : [];
+  }
+
+  // 4.6.13 string:notMatches
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "notMatches") {
+    const sStr = termToJsString(g.s);
+    const pattern = termToJsString(g.o);
+    if (sStr === null || pattern === null) return [];
+    let re;
+    try {
+      re = new RegExp(pattern);
+    } catch (e) {
+      return [];
+    }
+    return re.test(sStr) ? [] : [{ ...subst }];
+  }
+
+  // 4.6.14 string:replace
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "replace") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 3) return [];
+    const dataStr   = termToJsString(g.s.elems[0]);
+    const searchStr = termToJsString(g.s.elems[1]);
+    const replStr   = termToJsString(g.s.elems[2]);
+    if (dataStr === null || searchStr === null || replStr === null) return [];
+
+    let re;
+    try {
+      // Global replacement
+      re = new RegExp(searchStr, "g");
+    } catch (e) {
+      return [];
+    }
+
+    const outStr = dataStr.replace(re, replStr);
+    const lit = makeStringLiteral(outStr);
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.6.15 string:scrape
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "scrape") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
+    const dataStr = termToJsString(g.s.elems[0]);
+    const pattern = termToJsString(g.s.elems[1]);
+    if (dataStr === null || pattern === null) return [];
+
+    let re;
+    try {
+      re = new RegExp(pattern);
+    } catch (e) {
+      return [];
+    }
+
+    const m = re.exec(dataStr);
+    // Spec says “exactly 1 group”; we just use the first capturing group if present.
+    if (!m || m.length < 2) return [];
+    const group = m[1];
+    const lit = makeStringLiteral(group);
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.6.16 string:startsWith
+  if (g.p instanceof Iri && g.p.value === STRING_NS + "startsWith") {
+    const sStr = termToJsString(g.s);
+    const oStr = termToJsString(g.o);
+    if (sStr === null || oStr === null) return [];
+    return sStr.startsWith(oStr) ? [{ ...subst }] : [];
   }
 
   // -----------------------------------------------------------------

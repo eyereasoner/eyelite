@@ -1,0 +1,211 @@
+# ----------------------------------------------------------------------
+# String builtins test suite (Notation3 §4.6)
+# Intended for EYE and eyeling
+# ----------------------------------------------------------------------
+
+@prefix :       <https://eyereasoner.github.io/ns#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log:    <http://www.w3.org/2000/10/swap/log#> .
+@prefix list:   <http://www.w3.org/2000/10/swap/list#> .
+@prefix math:   <http://www.w3.org/2000/10/swap/math#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+# Each rule checks one builtin and, if it behaves as specified,
+# derives a single marker triple:
+#   :ok_string_<name>_1 a :Pass .
+
+# ----------------------------------------------------------------------
+# 4.6.1 string:concatenation
+# ----------------------------------------------------------------------
+
+{
+    ("hello" " " "world!") string:concatenation "hello world!" .
+}
+=>
+{
+    :ok_string_concatenation_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.2 string:contains
+# ----------------------------------------------------------------------
+
+{
+    "hello world!" string:contains "llo worl" .
+}
+=>
+{
+    :ok_string_contains_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.3 string:containsIgnoringCase
+# ----------------------------------------------------------------------
+
+{
+    "hello world!" string:containsIgnoringCase "lLO woRl" .
+}
+=>
+{
+    :ok_string_containsIgnoringCase_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.4 string:endsWith
+# ----------------------------------------------------------------------
+
+{
+    "hello world!" string:endsWith "orld!" .
+}
+=>
+{
+    :ok_string_endsWith_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.5 string:equalIgnoringCase
+# ----------------------------------------------------------------------
+
+{
+    "hello world!" string:equalIgnoringCase "hELLo wORld!" .
+}
+=>
+{
+    :ok_string_equalIgnoringCase_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.6 string:format
+# (eyeling implementation: only %s and %% are required / used here)
+# ----------------------------------------------------------------------
+
+{
+    ("%s://%s/%s" "https" "w3c.github.io" "N3/spec/") 
+        string:format "https://w3c.github.io/N3/spec/" .
+}
+=>
+{
+    :ok_string_format_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.7 string:greaterThan
+# ----------------------------------------------------------------------
+
+{
+    "Penguin" string:greaterThan "Cat" .
+}
+=>
+{
+    :ok_string_greaterThan_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.8 string:lessThan
+# ----------------------------------------------------------------------
+
+{
+    "Cat" string:lessThan "Penguin" .
+}
+=>
+{
+    :ok_string_lessThan_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.9 string:matches
+# ----------------------------------------------------------------------
+
+{
+    "hello world!" string:matches ".*(l)+o wo.*" .
+}
+=>
+{
+    :ok_string_matches_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.10 string:notEqualIgnoringCase
+# ----------------------------------------------------------------------
+
+{
+    "hello world!" string:notEqualIgnoringCase "hELLo dunia!" .
+}
+=>
+{
+    :ok_string_notEqualIgnoringCase_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.11 string:notGreaterThan
+# ----------------------------------------------------------------------
+
+{
+    "Cat" string:notGreaterThan "Penguin" .
+}
+=>
+{
+    :ok_string_notGreaterThan_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.12 string:notLessThan
+# ----------------------------------------------------------------------
+
+{
+    "Penguin" string:notLessThan "Cat" .
+}
+=>
+{
+    :ok_string_notLessThan_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.13 string:notMatches
+# ----------------------------------------------------------------------
+
+{
+    "hello world!" string:notMatches ".*(l)+o dunia.*" .
+}
+=>
+{
+    :ok_string_notMatches_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.14 string:replace
+# ----------------------------------------------------------------------
+
+{
+    ("fofof bar" "of" "baz") string:replace "fbazbaz bar" .
+}
+=>
+{
+    :ok_string_replace_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.15 string:scrape
+# (extracts the first capturing group)
+# ----------------------------------------------------------------------
+
+{
+    ("id=abc&x=123&y=zzz" "x=([0-9]+)") string:scrape "123" .
+}
+=>
+{
+    :ok_string_scrape_1 a :Pass .
+} .
+
+# ----------------------------------------------------------------------
+# 4.6.16 string:startsWith
+# ----------------------------------------------------------------------
+
+{
+    "hello world!" string:startsWith "hello" .
+}
+=>
+{
+    :ok_string_startsWith_1 a :Pass .
+} .
+

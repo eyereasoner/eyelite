@@ -1,0 +1,122 @@
+@prefix : <http://example.org/> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :result1 :is ("Huey" "Dewey" "Louie") .
+# It holds because the following instance of the rule body is provable:
+#   (?param {
+#       :Let :param ?param .
+#   } ("Huey" "Dewey" "Louie")) log:collectAllIn ?_b1 .
+#   ((?param) {
+#       :Let :param ?param .
+#   } (("Huey") ("Dewey") ("Louie"))) log:collectAllIn ?_b1 .
+#   (?param {
+#       :Let :param ?param .
+#       ?param string:lessThan "Louie" .
+#   } ("Huey" "Dewey")) log:collectAllIn ?_b1 .
+# via the schematic forward rule:
+#   {
+#     (?param {
+#         :Let :param ?param .
+#     } ?allParams) log:collectAllIn ?_b1 .
+#     ((?param) {
+#         :Let :param ?param .
+#     } ?nestedParams) log:collectAllIn ?_b1 .
+#     (?param {
+#         :Let :param ?param .
+#         ?param string:lessThan "Louie" .
+#     } ?filteredParams) log:collectAllIn ?_b1 .
+#   } => {
+#     :result1 :is ?allParams .
+#     :result2 :is ?nestedParams .
+#     :result3 :is ?filteredParams .
+#   } .
+# with substitution (on rule variables):
+#   ?allParams = ("Huey" "Dewey" "Louie")
+#   ?filteredParams = ("Huey" "Dewey")
+#   ?nestedParams = (("Huey") ("Dewey") ("Louie"))
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:result1 :is ("Huey" "Dewey" "Louie") .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :result2 :is (("Huey") ("Dewey") ("Louie")) .
+# It holds because the following instance of the rule body is provable:
+#   (?param {
+#       :Let :param ?param .
+#   } ("Huey" "Dewey" "Louie")) log:collectAllIn ?_b1 .
+#   ((?param) {
+#       :Let :param ?param .
+#   } (("Huey") ("Dewey") ("Louie"))) log:collectAllIn ?_b1 .
+#   (?param {
+#       :Let :param ?param .
+#       ?param string:lessThan "Louie" .
+#   } ("Huey" "Dewey")) log:collectAllIn ?_b1 .
+# via the schematic forward rule:
+#   {
+#     (?param {
+#         :Let :param ?param .
+#     } ?allParams) log:collectAllIn ?_b1 .
+#     ((?param) {
+#         :Let :param ?param .
+#     } ?nestedParams) log:collectAllIn ?_b1 .
+#     (?param {
+#         :Let :param ?param .
+#         ?param string:lessThan "Louie" .
+#     } ?filteredParams) log:collectAllIn ?_b1 .
+#   } => {
+#     :result1 :is ?allParams .
+#     :result2 :is ?nestedParams .
+#     :result3 :is ?filteredParams .
+#   } .
+# with substitution (on rule variables):
+#   ?allParams = ("Huey" "Dewey" "Louie")
+#   ?filteredParams = ("Huey" "Dewey")
+#   ?nestedParams = (("Huey") ("Dewey") ("Louie"))
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:result2 :is (("Huey") ("Dewey") ("Louie")) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :result3 :is ("Huey" "Dewey") .
+# It holds because the following instance of the rule body is provable:
+#   (?param {
+#       :Let :param ?param .
+#   } ("Huey" "Dewey" "Louie")) log:collectAllIn ?_b1 .
+#   ((?param) {
+#       :Let :param ?param .
+#   } (("Huey") ("Dewey") ("Louie"))) log:collectAllIn ?_b1 .
+#   (?param {
+#       :Let :param ?param .
+#       ?param string:lessThan "Louie" .
+#   } ("Huey" "Dewey")) log:collectAllIn ?_b1 .
+# via the schematic forward rule:
+#   {
+#     (?param {
+#         :Let :param ?param .
+#     } ?allParams) log:collectAllIn ?_b1 .
+#     ((?param) {
+#         :Let :param ?param .
+#     } ?nestedParams) log:collectAllIn ?_b1 .
+#     (?param {
+#         :Let :param ?param .
+#         ?param string:lessThan "Louie" .
+#     } ?filteredParams) log:collectAllIn ?_b1 .
+#   } => {
+#     :result1 :is ?allParams .
+#     :result2 :is ?nestedParams .
+#     :result3 :is ?filteredParams .
+#   } .
+# with substitution (on rule variables):
+#   ?allParams = ("Huey" "Dewey" "Louie")
+#   ?filteredParams = ("Huey" "Dewey")
+#   ?nestedParams = (("Huey") ("Dewey") ("Louie"))
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:result3 :is ("Huey" "Dewey") .
+

@@ -1,0 +1,28 @@
+@prefix : <http://example.org/>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+:Let :param "Huey" .
+:Let :param "Dewey" .
+:Let :param "Louie" .
+
+{
+    ( ?param { :Let :param ?param } ?allParams ) log:collectAllIn _:x .
+
+    # Variable to be collected can also be part of a list or graph term
+    ( (?param) { :Let :param ?param } ?nestedParams ) log:collectAllIn _:x .
+
+    # Add some extra criteria on variable values to be collected
+    ( ?param
+        { 
+            :Let :param ?param .
+            ?param string:lessThan "Louie"  .
+        } 
+      ?filteredParams ) log:collectAllIn _:x .
+}
+=> 
+{   
+    :result1 :is ?allParams .
+    :result2 :is ?nestedParams .
+    :result3 :is ?filteredParams .
+} .
