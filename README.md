@@ -359,8 +359,11 @@ The `examples/test` script treats this non-zero exit code for the `fuse.n3` exam
 
 #### Quick map (by namespace)
 
+#### Quick map (by namespace)
+
 | Namespace | Role / topic                                        | N3 Builtins section | Notes in `eyeling` (implemented built-ins) |
 |-----------|-----------------------------------------------------|---------------------|--------------------------------------------|
+| `crypto:` | Cryptographic hashes                                | §4.1 crypto         | Implements: `crypto:sha` (SHA-1, as in the N3 Builtins report), plus EYE-style `crypto:md5`, `crypto:sha256`, `crypto:sha512`. All operate on the lexical form of the subject literal (as UTF-8) and return the lowercase hex digest as a plain string literal. |
 | `math:`   | Arithmetic, trig, comparisons, misc.                | §4.2 math           | Implements: `math:greaterThan`, `math:lessThan`, `math:notLessThan`, `math:notGreaterThan`, `math:equalTo`, `math:notEqualTo`, `math:sum`, `math:product`, `math:difference`, `math:quotient`, `math:exponentiation`, `math:negation`, `math:absoluteValue`, `math:cos`, `math:sin`, `math:acos`, `math:asin`, `math:fibonacci`. |
 | `time:`   | Time and dates                                      | §4.3 time           | Implements: `time:localTime`. |
 | `list:`   | List/collection utilities                           | §4.4 list           | Implements: `list:append`, `list:firstRest`, `list:first`, `list:last`, `list:in`, `list:member`, `list:memberAt`, `list:iterate`, `list:length`, `list:remove`, `list:notMember`, `list:reverse`, `list:sort`, `list:map`. |
@@ -368,6 +371,32 @@ The `examples/test` script treats this non-zero exit code for the `fuse.n3` exam
 | `string:` | String processing and regex-like operations         | §4.6 string         | Implements: `string:concatenation`, `string:contains`, `string:containsIgnoringCase`, `string:endsWith`, `string:equalIgnoringCase`, `string:format` (subset: `%s`, `%%`), `string:greaterThan`, `string:lessThan`, `string:matches`, `string:notEqualIgnoringCase`, `string:notGreaterThan`, `string:notLessThan`, `string:notMatches`, `string:replace`, `string:scrape`, `string:startsWith`. |
 
 Built-ins are recognized by expanded IRIs and evaluated during **backward** goal proving. This is a **condensed** overview of what’s currently implemented. For exact behavior and corner cases, see the `evalBuiltin` function in `eyeling.js`.
+
+### `crypto:` namespace
+
+Cryptographic hashes using the SWAP `crypto:` vocabulary (and aligned with section 4.1 of the Notation3 Builtin Functions report).  
+All `crypto:` builtins in `eyeling` are **functional**: the subject is a literal whose lexical form is hashed as UTF-8, and the object is the lowercase hexadecimal digest as a plain string literal.
+
+Implemented built-ins:
+
+* `crypto:sha`  
+  SHA-1 hash of the subject string (the one specified in the N3 Builtins report).  
+  Example:  
+  ```n3
+  "hello world" crypto:sha ?Digest .
+
+derives `?Digest = "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"`.
+
+* `crypto:md5`
+  MD5 hash of the subject string, EYE-style extension.
+
+* `crypto:sha256`
+  SHA-256 hash of the subject string.
+
+* `crypto:sha512`
+  SHA-512 hash of the subject string.
+
+These are thin wrappers around Node’s `crypto.createHash(alg).update(lexicalForm, "utf8").digest("hex")`, so behavior should match EYE on typical use cases.
 
 ### `math:` namespace
 
@@ -415,6 +444,84 @@ Dates & durations:
 
 * `math:difference` can take `xsd:date` / `xsd:dateTime` and returns an `xsd:duration`.
 * Duration and date/dateTime values are internally mapped to seconds to allow comparisons.
+
+### `time:` namespace
+
+* `time:localTime` — SWAP-style:
+
+  ```n3
+  "" time:localTime ?D.
+  ```
+
+  Binds `?D` to the current local time as `xsd:dateTime`.
+
+### `list:` namespace
+
+Operations on lists, roughly following section 4.4 of the Notation3 builtin report, plus a few pragmatic extras.
+
+Construction and reshaping:
+
+* `list:append` (4.4.1)  
+  Relational, Prolog-style append over a **list of lists**.  
+  Subject is a list of lists; object is the concatenation of those lists. Works in multiple “directions”, e.g.
+  ```n3
+  ((1 2) (3 4)) list:append ?L .
+  (?P (3 4))    list:append (1 2 3 4) .
+  ((1 2) ?S)    list:append (1 2 3 4) .
+
+* `list:firstRest`
+  Split or construct a list from `( first rest )`.
+  Used internally to support some inverse modes.
+
+* `list:first` (4.4.2) / `list:last` (4.4.5)
+  First and last element of a list.
+
+* `list:remove` (4.4.9)
+  `( List Item ) list:remove OutList` removes **all** occurrences of `Item` from `List`.
+
+Membership and indexing:
+
+* `list:member` (4.4.7)
+  Membership; bidirectional over (effectively) ground lists.
+
+* `list:in` (4.4.3)
+  Dual of `list:member` with the element on the subject side.
+
+* `list:notMember`
+  Succeeds iff the element does **not** occur in the list. Useful for patterns like “not visited yet” in graph algorithms.
+
+* `list:length` (4.4.6)
+  Length of a list, returned as an integer literal.
+
+* `list:memberAt` (4.4.8)
+  `((List Index) list:memberAt Elem)` relates a list element to its **0-based** index.
+
+* `list:iterate` (4.4.4)
+  Iterates over a list as `( index value )` pairs. Example shape:
+
+  ```n3
+  ("dog" "penguin" "cat") list:iterate (?I "cat") .
+  ```
+
+  This will succeed for `?I = 2`.
+
+Ordering and mapping:
+
+* `list:reverse`
+  Reverse the order of a list.
+
+* `list:sort`
+  Sort a list with a pragmatic comparator; good enough for the bundled examples (e.g., Dijkstra priority queues).
+
+* `list:map` (pragmatic subset)
+  Shape: `( (InputList) PredicateIRI ) list:map OutputList`.
+  Currently only supports cases where the predicate is itself a builtin and the input list is ground, e.g.
+
+  ```n3
+  (( (1 -2 3) math:absoluteValue) list:map (1 2 3)) .
+  ```
+
+These list built-ins aim to mirror the common cases from the N3 builtin report. They’re not a complete re-implementation of every mode and corner case, but they should match EYE on the typical patterns used in the examples.
 
 ### `log:` namespace
 
@@ -499,16 +606,6 @@ Dates & durations:
 
   * This is a pure test and is also treated as a **constraint** for goal ordering in forward rules.
 
-### `time:` namespace
-
-* `time:localTime` — SWAP-style:
-
-  ```n3
-  "" time:localTime ?D.
-  ```
-
-  Binds `?D` to the current local time as `xsd:dateTime`.
-
 ### `string:` namespace
 
 String built-ins following section 4.6 of the Notation3 builtin report (2023-07-03).  
@@ -552,74 +649,6 @@ Formatting and regex-style operations:
 
 * `string:scrape` (4.6.15)
   Regex “extract”: subject is `( data pattern )`; object is the first capturing group of the first match.
-
-### `list:` namespace
-
-Operations on lists, roughly following section 4.4 of the Notation3 builtin report, plus a few pragmatic extras.
-
-Construction and reshaping:
-
-* `list:append` (4.4.1)  
-  Relational, Prolog-style append over a **list of lists**.  
-  Subject is a list of lists; object is the concatenation of those lists. Works in multiple “directions”, e.g.
-  ```n3
-  ((1 2) (3 4)) list:append ?L .
-  (?P (3 4))    list:append (1 2 3 4) .
-  ((1 2) ?S)    list:append (1 2 3 4) .
-
-* `list:firstRest`
-  Split or construct a list from `( first rest )`.
-  Used internally to support some inverse modes.
-
-* `list:first` (4.4.2) / `list:last` (4.4.5)
-  First and last element of a list.
-
-* `list:remove` (4.4.9)
-  `( List Item ) list:remove OutList` removes **all** occurrences of `Item` from `List`.
-
-Membership and indexing:
-
-* `list:member` (4.4.7)
-  Membership; bidirectional over (effectively) ground lists.
-
-* `list:in` (4.4.3)
-  Dual of `list:member` with the element on the subject side.
-
-* `list:notMember`
-  Succeeds iff the element does **not** occur in the list. Useful for patterns like “not visited yet” in graph algorithms.
-
-* `list:length` (4.4.6)
-  Length of a list, returned as an integer literal.
-
-* `list:memberAt` (4.4.8)
-  `((List Index) list:memberAt Elem)` relates a list element to its **0-based** index.
-
-* `list:iterate` (4.4.4)
-  Iterates over a list as `( index value )` pairs. Example shape:
-
-  ```n3
-  ("dog" "penguin" "cat") list:iterate (?I "cat") .
-  ```
-
-  This will succeed for `?I = 2`.
-
-Ordering and mapping:
-
-* `list:reverse`
-  Reverse the order of a list.
-
-* `list:sort`
-  Sort a list with a pragmatic comparator; good enough for the bundled examples (e.g., Dijkstra priority queues).
-
-* `list:map` (pragmatic subset)
-  Shape: `( (InputList) PredicateIRI ) list:map OutputList`.
-  Currently only supports cases where the predicate is itself a builtin and the input list is ground, e.g.
-
-  ```n3
-  (( (1 -2 3) math:absoluteValue) list:map (1 2 3)) .
-  ```
-
-These list built-ins aim to mirror the common cases from the N3 builtin report. They’re not a complete re-implementation of every mode and corner case, but they should match EYE on the typical patterns used in the examples.
 
 ---
 

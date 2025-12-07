@@ -17,6 +17,7 @@
  */
 
 const { version } = require('./package.json');
+const nodeCrypto = require("crypto");
 
 if (process.argv.includes('--version') || process.argv.includes('-v')) {
   console.log(`eyeling v${version}`);
@@ -30,11 +31,12 @@ if (process.argv.includes('--version') || process.argv.includes('-v')) {
 const RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 const RDFS_NS = "http://www.w3.org/2000/01/rdf-schema#";
 const XSD_NS = "http://www.w3.org/2001/XMLSchema#";
-const LOG_NS = "http://www.w3.org/2000/10/swap/log#";
+const CRYPTO_NS = "http://www.w3.org/2000/10/swap/crypto#";
 const MATH_NS = "http://www.w3.org/2000/10/swap/math#";
-const STRING_NS = "http://www.w3.org/2000/10/swap/string#";
-const LIST_NS = "http://www.w3.org/2000/10/swap/list#";
 const TIME_NS = "http://www.w3.org/2000/10/swap/time#";
+const LIST_NS = "http://www.w3.org/2000/10/swap/list#";
+const LOG_NS = "http://www.w3.org/2000/10/swap/log#";
+const STRING_NS = "http://www.w3.org/2000/10/swap/string#";
 
 // Safety valve so backward proof doesn’t loop forever in degenerate cases.
 const MAX_BACKWARD_DEPTH = 50000;
@@ -1619,22 +1621,76 @@ function listAppendSplit(parts, resElems, subst) {
 function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   const g = applySubstTriple(goal, subst);
 
+  function hashLiteral(t, algo) {
+    // Accept only literals, interpret lexical form as UTF-8 string
+    if (!(t instanceof Literal)) return null;
+    const [lex, _dt] = literalParts(t.value);
+    const input = stripQuotes(lex);
+    try {
+      const digest = nodeCrypto
+        .createHash(algo)
+        .update(input, "utf8")
+        .digest("hex");
+      // plain string literal with the hex digest
+      return new Literal(JSON.stringify(digest));
+    } catch (e) {
+      return null;
+    }
+  }
+
   // -----------------------------------------------------------------
-  // time:localTime
+  // 4.1 crypto: builtins
   // -----------------------------------------------------------------
-  if (g.p instanceof Iri && g.p.value === TIME_NS + "localTime") {
-    // "" time:localTime ?D.  binds ?D to “now” as xsd:dateTime.
-    const now = localIsoDateTimeString(new Date());
+
+  // 4.1.1 crypto:sha
+  // true iff ?o is the SHA-1 hash of the subject string. 
+  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha") {
+    const lit = hashLiteral(g.s, "sha1");
+    if (!lit) return [];
     if (g.o instanceof Var) {
       const s2 = { ...subst };
-      s2[g.o.name] = new Literal(`"${now}"^^<${XSD_NS}dateTime>`);
+      s2[g.o.name] = lit;
       return [s2];
     }
-    if (g.o instanceof Literal) {
-      const [lexO] = literalParts(g.o.value);
-      if (stripQuotes(lexO) === now) return [{ ...subst }];
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // Extra (EYE-style) crypto builtins: md5, sha256, sha512. 
+  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "md5") {
+    const lit = hashLiteral(g.s, "md5");
+    if (!lit) return [];
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
     }
-    return [];
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha256") {
+    const lit = hashLiteral(g.s, "sha256");
+    if (!lit) return [];
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha512") {
+    const lit = hashLiteral(g.s, "sha512");
+    if (!lit) return [];
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
   }
 
   // -----------------------------------------------------------------
@@ -2026,6 +2082,317 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // -----------------------------------------------------------------
+  // time:localTime
+  // -----------------------------------------------------------------
+  if (g.p instanceof Iri && g.p.value === TIME_NS + "localTime") {
+    // "" time:localTime ?D.  binds ?D to “now” as xsd:dateTime.
+    const now = localIsoDateTimeString(new Date());
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = new Literal(`"${now}"^^<${XSD_NS}dateTime>`);
+      return [s2];
+    }
+    if (g.o instanceof Literal) {
+      const [lexO] = literalParts(g.o.value);
+      if (stripQuotes(lexO) === now) return [{ ...subst }];
+    }
+    return [];
+  }
+
+  // -----------------------------------------------------------------
+  // 4.4 list: builtins
+  // -----------------------------------------------------------------
+
+  // 4.4.1 list:append
+  // true if and only if $o is the concatenation of all lists $s.i.
+  // Schema: ( $s.i?[*] )+ list:append $o?
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "append") {
+    if (!(g.s instanceof ListTerm)) return [];
+    const parts = g.s.elems;
+    if (g.o instanceof ListTerm) {
+      return listAppendSplit(parts, g.o.elems, subst);
+    }
+    const outElems = [];
+    for (const part of parts) {
+      if (!(part instanceof ListTerm)) return [];
+      outElems.push(...part.elems);
+    }
+    const result = new ListTerm(outElems);
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = result;
+      return [s2];
+    }
+    if (termsEqual(g.o, result)) return [{ ...subst }];
+    return [];
+  }
+
+  // 4.4.2 list:first
+  // true iff $s is a list and $o is the first member of that list.
+  // Schema: $s+ list:first $o-
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "first") {
+    if (!(g.s instanceof ListTerm)) return [];
+    if (!g.s.elems.length) return [];
+    const first = g.s.elems[0];
+    const s2 = unifyTerm(g.o, first, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.4.4 list:iterate
+  // true iff $s is a list and $o is a list (index value),
+  // where index is a valid 0-based index into $s and value is the element at that index.
+  // Schema: $s+ list:iterate ( $o.1?[*] $o.2?[*] )?[*]
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "iterate") {
+    if (!(g.s instanceof ListTerm)) return [];
+    if (!(g.o instanceof ListTerm) || g.o.elems.length !== 2) return [];
+    const [idxTerm, valTerm] = g.o.elems;
+    const xs = g.s.elems;
+    const outs = [];
+
+    for (let i = 0; i < xs.length; i++) {
+      const idxLit = new Literal(String(i)); // index starts at 0
+      let s1 = unifyTerm(idxTerm, idxLit, subst);
+      if (s1 === null) continue;
+      let s2 = unifyTerm(valTerm, xs[i], s1);
+      if (s2 === null) continue;
+      outs.push(s2);
+    }
+    return outs;
+  }
+
+  // 4.4.5 list:last
+  // true iff $s is a list and $o is the last member of that list.
+  // Schema: $s+ list:last $o-
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "last") {
+    if (!(g.s instanceof ListTerm)) return [];
+    const xs = g.s.elems;
+    if (!xs.length) return [];
+    const last = xs[xs.length - 1];
+    const s2 = unifyTerm(g.o, last, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.4.8 list:memberAt
+  // true iff $s.1 is a list, $s.2 is a valid index, and $o is the member at that index.
+  // Schema: ( $s.1+ $s.2?[*] )+ list:memberAt $o?[*]
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "memberAt") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
+    const [listTerm, indexTerm] = g.s.elems;
+    if (!(listTerm instanceof ListTerm)) return [];
+    const xs = listTerm.elems;
+    const outs = [];
+
+    for (let i = 0; i < xs.length; i++) {
+      const idxLit = new Literal(String(i)); // index starts at 0
+      let s1 = unifyTerm(indexTerm, idxLit, subst);
+      if (s1 === null) continue;
+      let s2 = unifyTerm(g.o, xs[i], s1);
+      if (s2 === null) continue;
+      outs.push(s2);
+    }
+    return outs;
+  }
+
+  // 4.4.9 list:remove
+  // true iff $s.1 is a list and $o is that list with all occurrences of $s.2 removed.
+  // Schema: ( $s.1+ $s.2+ )+ list:remove $o-
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "remove") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
+    const [listTerm, itemTerm] = g.s.elems;
+    if (!(listTerm instanceof ListTerm)) return [];
+    const xs = listTerm.elems;
+    const filtered = [];
+    for (const e of xs) {
+      if (!termsEqual(e, itemTerm)) filtered.push(e);
+    }
+    const resList = new ListTerm(filtered);
+    const s2 = unifyTerm(g.o, resList, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // -----------------------------------------------------------------
+  // list:member / list:in / list:length / list:notMember / list:reverse / list:sort / list:map
+  // -----------------------------------------------------------------
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "member") {
+    if (!(g.s instanceof ListTerm)) return [];
+    const outs = [];
+    for (const x of g.s.elems) {
+      const s2 = unifyTerm(g.o, x, subst);
+      if (s2 !== null) outs.push(s2);
+    }
+    return outs;
+  }
+
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "in") {
+    if (!(g.o instanceof ListTerm)) return [];
+    const outs = [];
+    for (const x of g.o.elems) {
+      const s2 = unifyTerm(g.s, x, subst);
+      if (s2 !== null) outs.push(s2);
+    }
+    return outs;
+  }
+
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "length") {
+    if (!(g.s instanceof ListTerm)) return [];
+    const nTerm = new Literal(String(g.s.elems.length));
+    const s2 = unifyTerm(g.o, nTerm, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "notMember") {
+    if (!(g.s instanceof ListTerm)) return [];
+    for (const el of g.s.elems) {
+      if (unifyTerm(g.o, el, subst) !== null) return [];
+    }
+    return [{ ...subst }];
+  }
+
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "reverse") {
+    if (g.s instanceof ListTerm) {
+      const rev = [...g.s.elems].reverse();
+      const rterm = new ListTerm(rev);
+      const s2 = unifyTerm(g.o, rterm, subst);
+      return s2 !== null ? [s2] : [];
+    }
+    if (g.o instanceof ListTerm) {
+      const rev = [...g.o.elems].reverse();
+      const rterm = new ListTerm(rev);
+      const s2 = unifyTerm(g.s, rterm, subst);
+      return s2 !== null ? [s2] : [];
+    }
+    return [];
+  }
+
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "sort") {
+    function cmpTermForSort(a, b) {
+      if (a instanceof Literal && b instanceof Literal) {
+        const [lexA] = literalParts(a.value);
+        const [lexB] = literalParts(b.value);
+        const sa = stripQuotes(lexA);
+        const sb = stripQuotes(lexB);
+        const na = Number(sa);
+        const nb = Number(sb);
+        if (!Number.isNaN(na) && !Number.isNaN(nb)) {
+          if (na < nb) return -1;
+          if (na > nb) return 1;
+          return 0;
+        }
+        if (sa < sb) return -1;
+        if (sa > sb) return 1;
+        return 0;
+      }
+      if (a instanceof ListTerm && b instanceof ListTerm) {
+        const xs = a.elems;
+        const ys = b.elems;
+        let i = 0;
+        // lexicographic
+        while (true) {
+          if (i >= xs.length && i >= ys.length) return 0;
+          if (i >= xs.length) return -1;
+          if (i >= ys.length) return 1;
+          const c = cmpTermForSort(xs[i], ys[i]);
+          if (c !== 0) return c;
+          i++;
+        }
+      }
+      if (a instanceof Iri && b instanceof Iri) {
+        if (a.value < b.value) return -1;
+        if (a.value > b.value) return 1;
+        return 0;
+      }
+      // lists before non-lists
+      if (a instanceof ListTerm && !(b instanceof ListTerm)) return -1;
+      if (!(a instanceof ListTerm) && b instanceof ListTerm) return 1;
+      const sa = JSON.stringify(a);
+      const sb = JSON.stringify(b);
+      if (sa < sb) return -1;
+      if (sa > sb) return 1;
+      return 0;
+    }
+
+    let inputList;
+    if (g.s instanceof ListTerm) inputList = g.s.elems;
+    else if (g.o instanceof ListTerm) inputList = g.o.elems;
+    else return [];
+
+    if (!inputList.every(e => isGroundTerm(e))) return [];
+
+    const sortedList = [...inputList].sort(cmpTermForSort);
+    const sortedTerm = new ListTerm(sortedList);
+    if (g.s instanceof ListTerm) {
+      const s2 = unifyTerm(g.o, sortedTerm, subst);
+      return s2 !== null ? [s2] : [];
+    }
+    if (g.o instanceof ListTerm) {
+      const s2 = unifyTerm(g.s, sortedTerm, subst);
+      return s2 !== null ? [s2] : [];
+    }
+    return [];
+  }
+
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "map") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
+    const [inputTerm, predTerm] = g.s.elems;
+    if (!(inputTerm instanceof ListTerm)) return [];
+    const inputList = inputTerm.elems;
+    if (!(predTerm instanceof Iri)) return [];
+    const pred = new Iri(predTerm.value);
+    if (!isBuiltinPred(pred)) return [];
+    if (!inputList.every(e => isGroundTerm(e))) return [];
+
+    const results = [];
+    for (const el of inputList) {
+      const yvar = new Var("_mapY");
+      const goal2 = new Triple(el, pred, yvar);
+      const sols = evalBuiltin(goal2, subst, facts, backRules, depth + 1, varGen);
+      if (!sols.length) return [];
+      const yval = applySubstTerm(yvar, sols[0]);
+      if (yval instanceof Var) return [];
+      results.push(yval);
+    }
+    const outList = new ListTerm(results);
+    const s2 = unifyTerm(g.o, outList, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // -----------------------------------------------------------------
+  // list:firstRest
+  // -----------------------------------------------------------------
+  if (g.p instanceof Iri && g.p.value === LIST_NS + "firstRest") {
+    if (g.s instanceof ListTerm) {
+      if (!g.s.elems.length) return [];
+      const first = g.s.elems[0];
+      const rest = new ListTerm(g.s.elems.slice(1));
+      const pair = new ListTerm([first, rest]);
+      const s2 = unifyTerm(g.o, pair, subst);
+      return s2 !== null ? [s2] : [];
+    }
+    if (g.o instanceof ListTerm && g.o.elems.length === 2) {
+      const first = g.o.elems[0];
+      const rest = g.o.elems[1];
+      if (rest instanceof ListTerm) {
+        const xs = [first, ...rest.elems];
+        const constructed = new ListTerm(xs);
+        const s2 = unifyTerm(g.s, constructed, subst);
+        return s2 !== null ? [s2] : [];
+      }
+      if (rest instanceof Var) {
+        const constructed = new OpenListTerm([first], rest.name);
+        const s2 = unifyTerm(g.s, constructed, subst);
+        return s2 !== null ? [s2] : [];
+      }
+      if (rest instanceof OpenListTerm) {
+        const newPrefix = [first, ...rest.prefix];
+        const constructed = new OpenListTerm(newPrefix, rest.tailVar);
+        const s2 = unifyTerm(g.s, constructed, subst);
+        return s2 !== null ? [s2] : [];
+      }
+    }
+    return [];
+  }
+
+  // -----------------------------------------------------------------
   // log: equality builtins
   // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "equalTo") {
@@ -2376,311 +2743,20 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return sStr.startsWith(oStr) ? [{ ...subst }] : [];
   }
 
-  // -----------------------------------------------------------------
-  // list:append
-  // -----------------------------------------------------------------
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "append") {
-    if (!(g.s instanceof ListTerm)) return [];
-    const parts = g.s.elems;
-    if (g.o instanceof ListTerm) {
-      return listAppendSplit(parts, g.o.elems, subst);
-    }
-    const outElems = [];
-    for (const part of parts) {
-      if (!(part instanceof ListTerm)) return [];
-      outElems.push(...part.elems);
-    }
-    const result = new ListTerm(outElems);
-    if (g.o instanceof Var) {
-      const s2 = { ...subst };
-      s2[g.o.name] = result;
-      return [s2];
-    }
-    if (termsEqual(g.o, result)) return [{ ...subst }];
-    return [];
-  }
-
-  // -----------------------------------------------------------------
-  // list:firstRest
-  // -----------------------------------------------------------------
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "firstRest") {
-    if (g.s instanceof ListTerm) {
-      if (!g.s.elems.length) return [];
-      const first = g.s.elems[0];
-      const rest = new ListTerm(g.s.elems.slice(1));
-      const pair = new ListTerm([first, rest]);
-      const s2 = unifyTerm(g.o, pair, subst);
-      return s2 !== null ? [s2] : [];
-    }
-    if (g.o instanceof ListTerm && g.o.elems.length === 2) {
-      const first = g.o.elems[0];
-      const rest = g.o.elems[1];
-      if (rest instanceof ListTerm) {
-        const xs = [first, ...rest.elems];
-        const constructed = new ListTerm(xs);
-        const s2 = unifyTerm(g.s, constructed, subst);
-        return s2 !== null ? [s2] : [];
-      }
-      if (rest instanceof Var) {
-        const constructed = new OpenListTerm([first], rest.name);
-        const s2 = unifyTerm(g.s, constructed, subst);
-        return s2 !== null ? [s2] : [];
-      }
-      if (rest instanceof OpenListTerm) {
-        const newPrefix = [first, ...rest.prefix];
-        const constructed = new OpenListTerm(newPrefix, rest.tailVar);
-        const s2 = unifyTerm(g.s, constructed, subst);
-        return s2 !== null ? [s2] : [];
-      }
-    }
-    return [];
-  }
-
-  // -----------------------------------------------------------------
-  // 4.4 list: builtins
-  // -----------------------------------------------------------------
-
-  // 4.4.2 list:first
-  // true iff $s is a list and $o is the first member of that list.
-  // Schema: $s+ list:first $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "first") {
-    if (!(g.s instanceof ListTerm)) return [];
-    if (!g.s.elems.length) return [];
-    const first = g.s.elems[0];
-    const s2 = unifyTerm(g.o, first, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // 4.4.4 list:iterate
-  // true iff $s is a list and $o is a list (index value),
-  // where index is a valid 0-based index into $s and value is the element at that index.
-  // Schema: $s+ list:iterate ( $o.1?[*] $o.2?[*] )?[*]
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "iterate") {
-    if (!(g.s instanceof ListTerm)) return [];
-    if (!(g.o instanceof ListTerm) || g.o.elems.length !== 2) return [];
-    const [idxTerm, valTerm] = g.o.elems;
-    const xs = g.s.elems;
-    const outs = [];
-
-    for (let i = 0; i < xs.length; i++) {
-      const idxLit = new Literal(String(i)); // index starts at 0
-      let s1 = unifyTerm(idxTerm, idxLit, subst);
-      if (s1 === null) continue;
-      let s2 = unifyTerm(valTerm, xs[i], s1);
-      if (s2 === null) continue;
-      outs.push(s2);
-    }
-    return outs;
-  }
-
-  // 4.4.5 list:last
-  // true iff $s is a list and $o is the last member of that list.
-  // Schema: $s+ list:last $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "last") {
-    if (!(g.s instanceof ListTerm)) return [];
-    const xs = g.s.elems;
-    if (!xs.length) return [];
-    const last = xs[xs.length - 1];
-    const s2 = unifyTerm(g.o, last, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // 4.4.8 list:memberAt
-  // true iff $s.1 is a list, $s.2 is a valid index, and $o is the member at that index.
-  // Schema: ( $s.1+ $s.2?[*] )+ list:memberAt $o?[*]
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "memberAt") {
-    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
-    const [listTerm, indexTerm] = g.s.elems;
-    if (!(listTerm instanceof ListTerm)) return [];
-    const xs = listTerm.elems;
-    const outs = [];
-
-    for (let i = 0; i < xs.length; i++) {
-      const idxLit = new Literal(String(i)); // index starts at 0
-      let s1 = unifyTerm(indexTerm, idxLit, subst);
-      if (s1 === null) continue;
-      let s2 = unifyTerm(g.o, xs[i], s1);
-      if (s2 === null) continue;
-      outs.push(s2);
-    }
-    return outs;
-  }
-
-  // 4.4.9 list:remove
-  // true iff $s.1 is a list and $o is that list with all occurrences of $s.2 removed.
-  // Schema: ( $s.1+ $s.2+ )+ list:remove $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "remove") {
-    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
-    const [listTerm, itemTerm] = g.s.elems;
-    if (!(listTerm instanceof ListTerm)) return [];
-    const xs = listTerm.elems;
-    const filtered = [];
-    for (const e of xs) {
-      if (!termsEqual(e, itemTerm)) filtered.push(e);
-    }
-    const resList = new ListTerm(filtered);
-    const s2 = unifyTerm(g.o, resList, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // -----------------------------------------------------------------
-  // list:member / list:in / list:length / list:notMember / list:reverse / list:sort / list:map
-  // -----------------------------------------------------------------
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "member") {
-    if (!(g.s instanceof ListTerm)) return [];
-    const outs = [];
-    for (const x of g.s.elems) {
-      const s2 = unifyTerm(g.o, x, subst);
-      if (s2 !== null) outs.push(s2);
-    }
-    return outs;
-  }
-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "in") {
-    if (!(g.o instanceof ListTerm)) return [];
-    const outs = [];
-    for (const x of g.o.elems) {
-      const s2 = unifyTerm(g.s, x, subst);
-      if (s2 !== null) outs.push(s2);
-    }
-    return outs;
-  }
-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "length") {
-    if (!(g.s instanceof ListTerm)) return [];
-    const nTerm = new Literal(String(g.s.elems.length));
-    const s2 = unifyTerm(g.o, nTerm, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "notMember") {
-    if (!(g.s instanceof ListTerm)) return [];
-    for (const el of g.s.elems) {
-      if (unifyTerm(g.o, el, subst) !== null) return [];
-    }
-    return [{ ...subst }];
-  }
-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "reverse") {
-    if (g.s instanceof ListTerm) {
-      const rev = [...g.s.elems].reverse();
-      const rterm = new ListTerm(rev);
-      const s2 = unifyTerm(g.o, rterm, subst);
-      return s2 !== null ? [s2] : [];
-    }
-    if (g.o instanceof ListTerm) {
-      const rev = [...g.o.elems].reverse();
-      const rterm = new ListTerm(rev);
-      const s2 = unifyTerm(g.s, rterm, subst);
-      return s2 !== null ? [s2] : [];
-    }
-    return [];
-  }
-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "sort") {
-    function cmpTermForSort(a, b) {
-      if (a instanceof Literal && b instanceof Literal) {
-        const [lexA] = literalParts(a.value);
-        const [lexB] = literalParts(b.value);
-        const sa = stripQuotes(lexA);
-        const sb = stripQuotes(lexB);
-        const na = Number(sa);
-        const nb = Number(sb);
-        if (!Number.isNaN(na) && !Number.isNaN(nb)) {
-          if (na < nb) return -1;
-          if (na > nb) return 1;
-          return 0;
-        }
-        if (sa < sb) return -1;
-        if (sa > sb) return 1;
-        return 0;
-      }
-      if (a instanceof ListTerm && b instanceof ListTerm) {
-        const xs = a.elems;
-        const ys = b.elems;
-        let i = 0;
-        // lexicographic
-        while (true) {
-          if (i >= xs.length && i >= ys.length) return 0;
-          if (i >= xs.length) return -1;
-          if (i >= ys.length) return 1;
-          const c = cmpTermForSort(xs[i], ys[i]);
-          if (c !== 0) return c;
-          i++;
-        }
-      }
-      if (a instanceof Iri && b instanceof Iri) {
-        if (a.value < b.value) return -1;
-        if (a.value > b.value) return 1;
-        return 0;
-      }
-      // lists before non-lists
-      if (a instanceof ListTerm && !(b instanceof ListTerm)) return -1;
-      if (!(a instanceof ListTerm) && b instanceof ListTerm) return 1;
-      const sa = JSON.stringify(a);
-      const sb = JSON.stringify(b);
-      if (sa < sb) return -1;
-      if (sa > sb) return 1;
-      return 0;
-    }
-
-    let inputList;
-    if (g.s instanceof ListTerm) inputList = g.s.elems;
-    else if (g.o instanceof ListTerm) inputList = g.o.elems;
-    else return [];
-
-    if (!inputList.every(e => isGroundTerm(e))) return [];
-
-    const sortedList = [...inputList].sort(cmpTermForSort);
-    const sortedTerm = new ListTerm(sortedList);
-    if (g.s instanceof ListTerm) {
-      const s2 = unifyTerm(g.o, sortedTerm, subst);
-      return s2 !== null ? [s2] : [];
-    }
-    if (g.o instanceof ListTerm) {
-      const s2 = unifyTerm(g.s, sortedTerm, subst);
-      return s2 !== null ? [s2] : [];
-    }
-    return [];
-  }
-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "map") {
-    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
-    const [inputTerm, predTerm] = g.s.elems;
-    if (!(inputTerm instanceof ListTerm)) return [];
-    const inputList = inputTerm.elems;
-    if (!(predTerm instanceof Iri)) return [];
-    const pred = new Iri(predTerm.value);
-    if (!isBuiltinPred(pred)) return [];
-    if (!inputList.every(e => isGroundTerm(e))) return [];
-
-    const results = [];
-    for (const el of inputList) {
-      const yvar = new Var("_mapY");
-      const goal2 = new Triple(el, pred, yvar);
-      const sols = evalBuiltin(goal2, subst, facts, backRules, depth + 1, varGen);
-      if (!sols.length) return [];
-      const yval = applySubstTerm(yvar, sols[0]);
-      if (yval instanceof Var) return [];
-      results.push(yval);
-    }
-    const outList = new ListTerm(results);
-    const s2 = unifyTerm(g.o, outList, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
   // Unknown builtin
   return [];
 }
 
 function isBuiltinPred(p) {
+  if (!(p instanceof Iri)) return false;
+  const v = p.value;
   return (
-    p instanceof Iri &&
-    (p.value.startsWith(MATH_NS) ||
-      p.value.startsWith(LOG_NS) ||
-      p.value.startsWith(STRING_NS) ||
-      p.value.startsWith(TIME_NS) ||
-      p.value.startsWith(LIST_NS))
+    v.startsWith(CRYPTO_NS) ||
+    v.startsWith(MATH_NS)   ||
+    v.startsWith(LOG_NS)    ||
+    v.startsWith(STRING_NS) ||
+    v.startsWith(TIME_NS)   ||
+    v.startsWith(LIST_NS)
   );
 }
 
