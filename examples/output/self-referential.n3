@@ -1,0 +1,88 @@
+@prefix : <https://eyereasoner.github.io/ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :answer :contains log:implies .
+# It holds because the following instance of the rule body is provable:
+#   {
+#       ?X__0 ?Y__1 ?Z__2 .
+#   } => {
+#       :answer :contains ?Y__1 .
+#   } .
+# via the schematic forward rule:
+#   {
+#     ?X => ?Z .
+#   } => {
+#     :answer :contains log:implies .
+#   } .
+# with substitution (on rule variables):
+#   ?X = {
+#     ?X__0 ?Y__1 ?Z__2 .
+#   }
+#   ?Z = {
+#     :answer :contains ?Y__1 .
+#   }
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:answer :contains log:implies .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :answer :contains :contains .
+# It holds because the following instance of the rule body is provable:
+#   :answer :contains log:implies .
+# via the schematic forward rule:
+#   {
+#     ?X ?Y ?Z .
+#   } => {
+#     :answer :contains ?Y .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :answer
+#   ?Y = :contains
+#   ?Z = log:implies
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:answer :contains :contains .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :test :is true .
+# It holds because the following instance of the rule body is provable:
+#   :answer :contains :contains .
+#   :answer :contains log:implies .
+# via the schematic forward rule:
+#   {
+#     :answer :contains :contains .
+#     :answer :contains log:implies .
+#   } => {
+#     :test :is true .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:test :is true .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :answer :contains :is .
+# It holds because the following instance of the rule body is provable:
+#   :test :is true .
+# via the schematic forward rule:
+#   {
+#     ?X ?Y ?Z .
+#   } => {
+#     :answer :contains ?Y .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :test
+#   ?Y = :is
+#   ?Z = true
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:answer :contains :is .
+

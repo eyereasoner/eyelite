@@ -1,0 +1,32 @@
+# ----------------
+# Self referential
+# ----------------
+#
+# Example from Patrick Hochstenbach
+
+@prefix : <https://eyereasoner.github.io/ns#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+{
+    ?X ?Y ?Z
+}
+=>
+{
+    :answer :contains ?Y
+}.
+
+{
+    ?X => ?Z
+}
+=>
+{
+    :answer :contains log:implies.
+}.
+
+{
+    :answer :contains :contains, log:implies .
+}
+=> 
+{
+    :test :is true
+}.
