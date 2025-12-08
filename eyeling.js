@@ -37,9 +37,53 @@ const TIME_NS = "http://www.w3.org/2000/10/swap/time#";
 const LIST_NS = "http://www.w3.org/2000/10/swap/list#";
 const LOG_NS = "http://www.w3.org/2000/10/swap/log#";
 const STRING_NS = "http://www.w3.org/2000/10/swap/string#";
+const SKOLEM_NS = "https://eyereasoner.github.io/.well-known/genid/";
 
 // Safety valve so backward proof doesn’t loop forever in degenerate cases.
 const MAX_BACKWARD_DEPTH = 50000;
+
+// For a single reasoning run, this maps a canonical representation
+// of the subject term in log:skolem to a Skolem IRI.
+const skolemCache = new Map();
+
+// Deterministic pseudo-UUID from a string key (for log:skolem).
+// Not cryptographically strong, but stable and platform-independent.
+function deterministicSkolemIdFromKey(key) {
+  // Four 32-bit FNV-1a style accumulators with slight variation
+  let h1 = 0x811c9dc5;
+  let h2 = 0x811c9dc5;
+  let h3 = 0x811c9dc5;
+  let h4 = 0x811c9dc5;
+
+  for (let i = 0; i < key.length; i++) {
+    const c = key.charCodeAt(i);
+
+    h1 ^= c;
+    h1 = (h1 * 0x01000193) >>> 0;
+
+    h2 ^= c + 1;
+    h2 = (h2 * 0x01000193) >>> 0;
+
+    h3 ^= c + 2;
+    h3 = (h3 * 0x01000193) >>> 0;
+
+    h4 ^= c + 3;
+    h4 = (h4 * 0x01000193) >>> 0;
+  }
+
+  const hex = [h1, h2, h3, h4]
+    .map(h => h.toString(16).padStart(8, "0"))
+    .join(""); // 32 hex chars
+
+  // Format like a UUID: 8-4-4-4-12
+  return (
+    hex.slice(0, 8) + "-" +
+    hex.slice(8, 12) + "-" +
+    hex.slice(12, 16) + "-" +
+    hex.slice(16, 20) + "-" +
+    hex.slice(20)
+  );
+}
 
 // ============================================================================
 // AST (Abstract Syntax Tree)
@@ -1167,6 +1211,32 @@ function isGroundTerm(t) {
 
 function isGroundTriple(tr) {
   return isGroundTerm(tr.s) && isGroundTerm(tr.p) && isGroundTerm(tr.o);
+}
+
+// Canonical JSON-ish encoding for use as a Skolem cache key.
+// We only *call* this on ground terms in log:skolem, but it is
+// robust to seeing vars/open lists anyway.
+function skolemKeyFromTerm(t) {
+  function enc(u) {
+    if (u instanceof Iri)      return ["I", u.value];
+    if (u instanceof Literal)  return ["L", u.value];
+    if (u instanceof Blank)    return ["B", u.label];
+    if (u instanceof Var)      return ["V", u.name];
+    if (u instanceof ListTerm) return ["List", u.elems.map(enc)];
+    if (u instanceof OpenListTerm)
+      return ["OpenList", u.prefix.map(enc), u.tailVar];
+    if (u instanceof FormulaTerm)
+      return [
+        "Formula",
+        u.triples.map(tr => [
+          enc(tr.s),
+          enc(tr.p),
+          enc(tr.o)
+        ])
+      ];
+    return ["Other", String(u)];
+  }
+  return JSON.stringify(enc(t));
 }
 
 function applySubstTerm(t, s) {
@@ -2878,6 +2948,25 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
     // All matches pass (or there were no matches) → builtin succeeds as a pure test.
     return [{ ...subst }];
+  }
+
+  // -----------------------------------------------------------------
+  // log:skolem
+  // -----------------------------------------------------------------
+  if (g.p instanceof Iri && g.p.value === LOG_NS + "skolem") {
+    // Subject must be ground; commonly a list, but we allow any ground term.
+    if (!isGroundTerm(g.s)) return [];
+
+    const key = skolemKeyFromTerm(g.s);
+    let iri = skolemCache.get(key);
+    if (!iri) {
+      const id = deterministicSkolemIdFromKey(key);
+      iri = new Iri(SKOLEM_NS + id);
+      skolemCache.set(key, iri);
+    }
+
+    const s2 = unifyTerm(goal.o, iri, subst);
+    return s2 !== null ? [s2] : [];
   }
 
   // -----------------------------------------------------------------

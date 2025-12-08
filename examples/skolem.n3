@@ -1,0 +1,15 @@
+# ------------------
+# log:skolem example
+# ------------------
+
+@prefix :   <http://example.org/> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+{
+  (:abc 77 "xyz") log:skolem ?Y .
+}
+=>
+{
+  :Result :skolem ?Y .
+}.
+

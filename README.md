@@ -383,7 +383,7 @@ The `examples/test` script treats this non-zero exit code for the `fuse.n3` exam
 | `math:`   | Arithmetic, trig, comparisons, misc.                | §4.2 math           | Implements: `math:greaterThan`, `math:lessThan`, `math:notLessThan`, `math:notGreaterThan`, `math:equalTo`, `math:notEqualTo`, `math:sum`, `math:product`, `math:difference`, `math:quotient`, `math:exponentiation`, `math:negation`, `math:absoluteValue`, `math:cos`, `math:sin`, `math:acos`, `math:asin`, `math:atan`, `math:cosh`, `math:sinh`, `math:degrees`, `math:remainder`, `math:rounded`, `math:tan`, `math:tanh`, `math:fibonacci`. |
 | `time:`   | Time and dates                                      | §4.3 time           | Implements: `time:day`, `time:month`, `time:year`, `time:minute`, `time:second`, `time:timeZone`, `time:localTime`. |
 | `list:`   | List/collection utilities                           | §4.4 list           | Implements: `list:append`, `list:firstRest`, `list:first`, `list:last`, `list:in`, `list:member`, `list:memberAt`, `list:iterate`, `list:length`, `list:remove`, `list:notMember`, `list:reverse`, `list:sort`, `list:map`. |
-| `log:`    | Logical / meta reasoning, SNAF, rule introspection  | §4.5 log            | Implements: `log:equalTo`, `log:notEqualTo`, `log:implies`, `log:impliedBy`, `log:notIncludes`, `log:collectAllIn`, `log:forAllIn`, `log:uri`. |
+| `log:`    | Logical / meta reasoning, SNAF, rule introspection  | §4.5 log           | Implements: `log:equalTo`, `log:notEqualTo`, `log:implies`, `log:impliedBy`, `log:notIncludes`, `log:collectAllIn`, `log:forAllIn`, `log:uri`, `log:skolem`. |
 | `string:` | String processing and regex-like operations         | §4.6 string         | Implements: `string:concatenation`, `string:contains`, `string:containsIgnoringCase`, `string:endsWith`, `string:equalIgnoringCase`, `string:format` (subset: `%s`, `%%`), `string:greaterThan`, `string:lessThan`, `string:matches`, `string:notEqualIgnoringCase`, `string:notGreaterThan`, `string:notLessThan`, `string:notMatches`, `string:replace`, `string:scrape`, `string:startsWith`. |
 
 Built-ins are recognized by expanded IRIs and evaluated during **backward** goal proving. This is a **condensed** overview of what’s currently implemented. For exact behavior and corner cases, see the `evalBuiltin` function in `eyeling.js`.
@@ -667,13 +667,66 @@ These list built-ins aim to mirror the common cases from the N3 builtin report. 
 
   * This is a pure test and is also treated as a **constraint** for goal ordering in forward rules.
 
-* `log:forAllIn`
+* `log:forAllIn` (universal condition over a where/then pair)
 
-  * Two clauses are given in the subject list: for every match of the first clause, the builtin checks whether the second clause also holds for that match.
+  * Subject shape (current `eyeling` implementation):
 
-* `log:uri`
+    ```n3
+    ( { WHERE } { THEN } ) log:forAllIn ?Scope .
+    ```
 
-  * Gets as object the string representation of the subject URI and is bidirectional.
+    `?Scope` is currently just a placeholder; the scope is “this reasoning run”.
+
+  * Semantics (as implemented):
+
+    1. Evaluate `{ WHERE }` against the current closure (facts + rules + builtins), collecting all substitutions that make it true.
+    2. For **every** such substitution, check that `{ THEN }` also holds under that substitution.
+    3. If there is a substitution that satisfies `{ WHERE }` but **not** `{ THEN }`, the builtin fails.
+    4. If there are no matches for `{ WHERE }` at all, the builtin is **vacuously true**.
+
+  * It does **not** introduce new bindings; it’s a pure test and is treated as a **constraint** in forward-rule bodies (run after other goals have bound the variables).
+
+* `log:uri` (IRI ↔ string literal bridge)
+
+  * Direction 1 (IRI → string):
+
+    ```n3
+    <https://www.w3.org/> log:uri ?S .
+    ```
+
+    Succeeds with `?S` bound to `"https://www.w3.org/"`.
+
+  * Direction 2 (string → IRI):
+
+    ```n3
+    ?R log:uri "https://www.w3.org/" .
+    ```
+
+    Succeeds with `?R` bound to `<https://www.w3.org/>`.
+
+  * If both sides are ground, it just checks they match. If neither side is sufficiently instantiated (both variables, or wrong types), the builtin fails rather than enumerating IRIs.
+
+* `log:skolem` (Skolem IRI generator)
+
+  * Shape:
+
+    ```n3
+    ?Term log:skolem ?Sk .
+    ```
+
+  * Subject must be **ground** (often a list, but any ground term is allowed).
+
+  * Within one eyeling run:
+
+    * For each distinct subject, `log:skolem` produces a fresh Skolem IRI of the form:
+
+      ```n3
+      <urn:eyeling:skolem:UUID>   # e.g., urn:eyeling:skolem:5c0b89f4-6e0d-4f04-8b8a-5fba5a42b807
+      ```
+
+    * Repeated calls with the **same** subject produce the **same** IRI (via an internal cache).
+
+  * This builtin **does** introduce bindings (it generates the Skolem IRI), so it is *not* a constraint; it behaves more like a function.
 
 ### `string:` namespace
 

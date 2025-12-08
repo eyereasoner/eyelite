@@ -1,0 +1,20 @@
+@prefix : <http://example.org/> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Result :skolem <https://eyereasoner.github.io/.well-known/genid/0c562a90-a44f-264a-86e5-9664948aa178> .
+# It holds because the following instance of the rule body is provable:
+#   (:abc 77 "xyz") log:skolem <https://eyereasoner.github.io/.well-known/genid/0c562a90-a44f-264a-86e5-9664948aa178> .
+# via the schematic forward rule:
+#   {
+#     (:abc 77 "xyz") log:skolem ?Y .
+#   } => {
+#     :Result :skolem ?Y .
+#   } .
+# with substitution (on rule variables):
+#   ?Y = <https://eyereasoner.github.io/.well-known/genid/0c562a90-a44f-264a-86e5-9664948aa178>
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Result :skolem <https://eyereasoner.github.io/.well-known/genid/0c562a90-a44f-264a-86e5-9664948aa178> .
+
