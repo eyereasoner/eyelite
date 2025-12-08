@@ -1069,28 +1069,29 @@ function isConstraintBuiltin(tr) {
   if (!(tr.p instanceof Iri)) return false;
   const v = tr.p.value;
 
-  // log: tests that are purely constraints (no new bindings)
-  if (
-    v === LOG_NS + "notEqualTo" ||
-    v === LOG_NS + "notIncludes"
-  ) {
-    return true;
-  }
-
   // math: numeric comparisons (no new bindings, just tests)
   if (
-    v === MATH_NS + "greaterThan"   ||
-    v === MATH_NS + "lessThan"      ||
-    v === MATH_NS + "notLessThan"   ||
-    v === MATH_NS + "notGreaterThan"||
-    v === MATH_NS + "equalTo"       ||
-    v === MATH_NS + "notEqualTo"
+    v === MATH_NS + "equalTo"         ||
+    v === MATH_NS + "greaterThan"     ||
+    v === MATH_NS + "lessThan"        ||
+    v === MATH_NS + "notEqualTo"      ||
+    v === MATH_NS + "notGreaterThan"  ||
+    v === MATH_NS + "notLessThan"
   ) {
     return true;
   }
 
   // list: membership test with no bindings
   if (v === LIST_NS + "notMember") {
+    return true;
+  }
+
+  // log: tests that are purely constraints (no new bindings)
+  if (
+    v === LOG_NS + "forAllIn"     ||
+    v === LOG_NS + "notEqualTo"   ||
+    v === LOG_NS + "notIncludes"
+  ) {
     return true;
   }
 
@@ -2832,6 +2833,51 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     const collectedList = new ListTerm(collected);
     const s2 = unifyTerm(listTerm, collectedList, subst);
     return s2 !== null ? [s2] : [];
+  }
+
+  // -----------------------------------------------------------------
+  // log:forAllIn
+  // -----------------------------------------------------------------
+  if (g.p instanceof Iri && g.p.value === LOG_NS + "forAllIn") {
+    // Subject: list with two clauses (where-clause, then-clause)
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
+    const [whereClause, thenClause] = g.s.elems;
+    if (!(whereClause instanceof FormulaTerm)) return [];
+    if (!(thenClause instanceof FormulaTerm)) return [];
+
+    if (depth >= MAX_BACKWARD_DEPTH) return [];
+
+    // 1. Find all substitutions that make the first clause true
+    const visited1 = [];
+    const sols1 = proveGoals(
+      Array.from(whereClause.triples),
+      {},
+      facts,
+      backRules,
+      depth + 1,
+      visited1,
+      varGen
+    );
+
+    // 2. For every such substitution, check that the second clause holds too.
+    //    If there are no matches for the first clause, this is vacuously true.
+    for (const s1 of sols1) {
+      const visited2 = [];
+      const sols2 = proveGoals(
+        Array.from(thenClause.triples),
+        s1,
+        facts,
+        backRules,
+        depth + 1,
+        visited2,
+        varGen
+      );
+      // Found a counterexample: whereClause holds but thenClause does not
+      if (!sols2.length) return [];
+    }
+
+    // All matches pass (or there were no matches) → builtin succeeds as a pure test.
+    return [{ ...subst }];
   }
 
   // -----------------------------------------------------------------
