@@ -1,0 +1,29 @@
+# --------
+# Cat Koko
+#---------
+#
+# Example from Patrick Hochstenbach
+
+@prefix : <https://eyereasoner.github.io/ns#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+:Koko a :Animal.
+
+{
+    :Koko a :Animal 
+} 
+=> 
+{
+    { :Koko a :Animal } => { _:x a :Cat } .
+    { :Koko a :Animal } => { _:x a :BritishShortHair } .
+}.
+
+{
+    ?X a :Cat .
+    ?Y a :BritishShortHair .
+    ?X log:notEqualTo ?Y.
+}
+=>
+{
+    :test :is true .
+}.

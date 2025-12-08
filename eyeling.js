@@ -3108,7 +3108,13 @@ function standardizeRule(rule, gen) {
         renameTerm(tr.o, vmap2, gen)
       )
   );
-  return new Rule(premise, conclusion, rule.isForward, rule.isFuse);
+  return new Rule(
+    premise,
+    conclusion,
+    rule.isForward,
+    rule.isFuse,
+    rule.headBlankLabels
+  );
 }
 
 function listHasTriple(list, tr) {
@@ -3301,12 +3307,18 @@ function forwardChain(facts, forwardRules, backRules) {
               if (isFwRuleTriple) {
                 const [premise0, conclusion] = liftBlankRuleVars(left, right);
                 const premise = reorderPremiseForConstraints(premise0);
+
+                // compute head blanks for the derived forward rule
+                const headBlankLabels = collectBlankLabelsInTriples(conclusion);
+
                 const newRule = new Rule(
                   premise,
                   conclusion,
                   true,
-                  false
+                  false,
+                  headBlankLabels
                 );
+
                 const already = forwardRules.some(
                   rr =>
                     rr.isForward === newRule.isForward &&
@@ -3317,12 +3329,18 @@ function forwardChain(facts, forwardRules, backRules) {
                 if (!already) forwardRules.push(newRule);
               } else if (isBwRuleTriple) {
                 const [premise, conclusion] = liftBlankRuleVars(right, left);
+
+                // (Optional but consistent) compute head blanks for derived backward rule
+                const headBlankLabels = collectBlankLabelsInTriples(conclusion);
+
                 const newRule = new Rule(
                   premise,
                   conclusion,
                   false,
-                  false
+                  false,
+                  headBlankLabels
                 );
+
                 const already = backRules.some(
                   rr =>
                     rr.isForward === newRule.isForward &&
