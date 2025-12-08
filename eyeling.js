@@ -2058,6 +2058,161 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // 4.2.4 math:atan
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "atan") {
+    const a = parseNum(g.s);
+    if (a !== null) {
+      const cVal = Math.atan(a);
+      if (Number.isFinite(cVal)) {
+        if (g.o instanceof Var) {
+          const s2 = { ...subst };
+          s2[g.o.name] = new Literal(formatNum(cVal));
+          return [s2];
+        }
+        if (g.o instanceof Literal && g.o.value === formatNum(cVal)) {
+          return [{ ...subst }];
+        }
+      }
+    }
+    return [];
+  }
+
+  // 4.2.6 math:cosh
+  // Hyperbolic cosine
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "cosh") {
+    const a = parseNum(g.s);
+    if (a !== null && typeof Math.cosh === "function") {
+      const cVal = Math.cosh(a);
+      if (Number.isFinite(cVal)) {
+        if (g.o instanceof Var) {
+          const s2 = { ...subst };
+          s2[g.o.name] = new Literal(formatNum(cVal));
+          return [s2];
+        }
+        if (g.o instanceof Literal && g.o.value === formatNum(cVal)) {
+          return [{ ...subst }];
+        }
+      }
+    }
+    return [];
+  }
+
+  // 4.2.7 math:degrees
+  // Convert radians -> degrees
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "degrees") {
+    const a = parseNum(g.s);
+    if (a !== null) {
+      const cVal = (a * 180.0) / Math.PI;
+      if (Number.isFinite(cVal)) {
+        if (g.o instanceof Var) {
+          const s2 = { ...subst };
+          s2[g.o.name] = new Literal(formatNum(cVal));
+          return [s2];
+        }
+        if (g.o instanceof Literal && g.o.value === formatNum(cVal)) {
+          return [{ ...subst }];
+        }
+      }
+    }
+    return [];
+  }
+
+  // 4.2.19 math:remainder
+  // Subject is a list (dividend divisor); object is the remainder.
+  // Schema: ( $a $b ) math:remainder $r
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "remainder") {
+    if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
+    const a = parseNum(g.s.elems[0]);
+    const b = parseNum(g.s.elems[1]);
+    if (a === null || b === null || b === 0) return [];
+    const rVal = a % b;
+    if (!Number.isFinite(rVal)) return [];
+    const lit = new Literal(formatNum(rVal));
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.2.20 math:rounded
+  // Round to nearest integer (using JS Math.round semantics).
+  // Schema: $s math:rounded $o
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "rounded") {
+    const a = parseNum(g.s);
+    if (a === null) return [];
+    const rVal = Math.round(a);
+    const lit = new Literal(formatNum(rVal));
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.2.21 math:sinh
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "sinh") {
+    const a = parseNum(g.s);
+    if (a !== null && typeof Math.sinh === "function") {
+      const cVal = Math.sinh(a);
+      if (Number.isFinite(cVal)) {
+        if (g.o instanceof Var) {
+          const s2 = { ...subst };
+          s2[g.o.name] = new Literal(formatNum(cVal));
+          return [s2];
+        }
+        if (g.o instanceof Literal && g.o.value === formatNum(cVal)) {
+          return [{ ...subst }];
+        }
+      }
+    }
+    return [];
+  }
+
+  // 4.2.22 math:tan
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "tan") {
+    const a = parseNum(g.s);
+    if (a !== null) {
+      const cVal = Math.tan(a);
+      if (Number.isFinite(cVal)) {
+        if (g.o instanceof Var) {
+          const s2 = { ...subst };
+          s2[g.o.name] = new Literal(formatNum(cVal));
+          return [s2];
+        }
+        if (g.o instanceof Literal && g.o.value === formatNum(cVal)) {
+          return [{ ...subst }];
+        }
+      }
+    }
+    return [];
+  }
+
+  // 4.2.23 math:tanh
+  if (g.p instanceof Iri && g.p.value === MATH_NS + "tanh") {
+    const a = parseNum(g.s);
+    if (a !== null && typeof Math.tanh === "function") {
+      const cVal = Math.tanh(a);
+      if (Number.isFinite(cVal)) {
+        if (g.o instanceof Var) {
+          const s2 = { ...subst };
+          s2[g.o.name] = new Literal(formatNum(cVal));
+          return [s2];
+        }
+        if (g.o instanceof Literal && g.o.value === formatNum(cVal)) {
+          return [{ ...subst }];
+        }
+      }
+    }
+    return [];
+  }
+
   // fibonacci
   if (g.p instanceof Iri && g.p.value === MATH_NS + "fibonacci") {
     const n = parseIntLiteral(g.s);
@@ -2082,10 +2237,145 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // -----------------------------------------------------------------
-  // time:localTime
+  // 4.3 time: builtins
   // -----------------------------------------------------------------
+
+  // Helper: extract a JS Date from an xsd:date / xsd:dateTime literal.
+  // Uses the existing parseDatetimeLike(t).
+  function timeExtractDate(t) {
+    return parseDatetimeLike(t); // returns Date or null
+  }
+
+  // Helper: create an xsd:integer literal from a JS integer.
+  function timeIntLiteral(n) {
+    return new Literal(`"${n}"^^<${XSD_NS}integer>`);
+  }
+
+  // Helper: parse timezone offset (in minutes) from a dateTime lexical form.
+  // Returns an integer (minutes East of UTC) or null.
+  function timeZoneOffsetMinutes(t) {
+    if (!(t instanceof Literal)) return null;
+    const [lex, _dt] = literalParts(t.value);
+    const val = stripQuotes(lex);
+
+    // Z means UTC
+    if (val.endsWith("Z")) return 0;
+
+    // Look for +HH:MM or -HH:MM at the end
+    const m = val.match(/([+-])(\d{2}):(\d{2})$/);
+    if (!m) return null;
+    const sign = m[1] === "-" ? -1 : 1;
+    const hh = Number(m[2]);
+    const mm = Number(m[3]);
+    if (!Number.isFinite(hh) || !Number.isFinite(mm)) return null;
+    return sign * (hh * 60 + mm);
+  }
+
+  // 4.3.1 time:day
+  // true iff ?o is the (1–31) day-of-month of the date/datetime ?s.
+  if (g.p instanceof Iri && g.p.value === TIME_NS + "day") {
+    const d = timeExtractDate(g.s);
+    if (!d) return [];
+    const day = d.getUTCDate();
+    const lit = timeIntLiteral(day);
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.3.2 time:month
+  // true iff ?o is the (1–12) month number of the date/datetime ?s.
+  if (g.p instanceof Iri && g.p.value === TIME_NS + "month") {
+    const d = timeExtractDate(g.s);
+    if (!d) return [];
+    const month = d.getUTCMonth() + 1; // JS months are 0–11
+    const lit = timeIntLiteral(month);
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.3.3 time:year
+  // true iff ?o is the year of the date/datetime ?s.
+  if (g.p instanceof Iri && g.p.value === TIME_NS + "year") {
+    const d = timeExtractDate(g.s);
+    if (!d) return [];
+    const year = d.getUTCFullYear();
+    const lit = timeIntLiteral(year);
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.3.4 time:minute
+  // true iff ?o is the minute field (0–59) of the dateTime ?s.
+  if (g.p instanceof Iri && g.p.value === TIME_NS + "minute") {
+    const d = timeExtractDate(g.s);
+    if (!d) return [];
+    const minute = d.getUTCMinutes();
+    const lit = timeIntLiteral(minute);
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.3.5 time:second
+  // true iff ?o is the second field (0–59) of the dateTime ?s.
+  if (g.p instanceof Iri && g.p.value === TIME_NS + "second") {
+    const d = timeExtractDate(g.s);
+    if (!d) return [];
+    const second = d.getUTCSeconds();
+    const lit = timeIntLiteral(second);
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // 4.3.6 time:timeZone
+  // true iff ?o is the timezone offset (in minutes east of UTC) of ?s.
+  // e.g. "2025-01-01T00:00:00+02:00"^^xsd:dateTime ⇒ 120
+  if (g.p instanceof Iri && g.p.value === TIME_NS + "timeZone") {
+    const offset = timeZoneOffsetMinutes(g.s);
+    if (offset === null) return [];
+    const lit = timeIntLiteral(offset);
+
+    if (g.o instanceof Var) {
+      const s2 = { ...subst };
+      s2[g.o.name] = lit;
+      return [s2];
+    }
+    const s2 = unifyTerm(g.o, lit, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // Extra: time:localTime (EYE-style)
+  // "" time:localTime ?D.  binds ?D to “now” as xsd:dateTime.
   if (g.p instanceof Iri && g.p.value === TIME_NS + "localTime") {
-    // "" time:localTime ?D.  binds ?D to “now” as xsd:dateTime.
     const now = localIsoDateTimeString(new Date());
     if (g.o instanceof Var) {
       const s2 = { ...subst };
@@ -3049,8 +3339,7 @@ function forwardChain(facts, forwardRules, backRules) {
 
           // Only skolemize blank nodes that occur explicitly in the rule head
           const skMap = {};
-          const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter
-          );
+          const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter);
           if (!isGroundTriple(inst)) continue;
           if (hasAlphaEquiv(factList, inst)) continue;
           factList.push(inst);

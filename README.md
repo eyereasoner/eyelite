@@ -359,8 +359,6 @@ The `examples/test` script treats this non-zero exit code for the `fuse.n3` exam
 
 #### Quick map (by namespace)
 
-#### Quick map (by namespace)
-
 | Namespace | Role / topic                                        | N3 Builtins section | Notes in `eyeling` (implemented built-ins) |
 |-----------|-----------------------------------------------------|---------------------|--------------------------------------------|
 | `crypto:` | Cryptographic hashes                                | §4.1 crypto         | Implements: `crypto:sha` (SHA-1, as in the N3 Builtins report), plus EYE-style `crypto:md5`, `crypto:sha256`, `crypto:sha512`. All operate on the lexical form of the subject literal (as UTF-8) and return the lowercase hex digest as a plain string literal. |
