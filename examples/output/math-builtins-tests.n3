@@ -3581,22 +3581,22 @@
 # Proof for derived triple:
 #   :test-rounded-3 a :MathBuiltinTest .
 # It holds because the following instance of the rule body is provable:
-#   -1.5 math:rounded -2 .
-#   -2 math:equalTo -2 .
+#   -1.5 math:rounded -1 .
+#   -1 math:equalTo -1 .
 # via the schematic forward rule:
 #   {
 #     -1.5 math:rounded ?r .
-#     ?r math:equalTo -2 .
+#     ?r math:equalTo -1 .
 #   } => {
 #     :test-rounded-3 a :MathBuiltinTest .
 #     :test-rounded-3 :builtin math:rounded .
 #     :test-rounded-3 :input -1.5 .
-#     :test-rounded-3 :expected -2 .
+#     :test-rounded-3 :expected -1 .
 #     :test-rounded-3 :actual ?r .
 #     :test-rounded-3 :status :pass .
 #   } .
 # with substitution (on rule variables):
-#   ?r = -2
+#   ?r = -1
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
@@ -3606,22 +3606,22 @@
 # Proof for derived triple:
 #   :test-rounded-3 :builtin math:rounded .
 # It holds because the following instance of the rule body is provable:
-#   -1.5 math:rounded -2 .
-#   -2 math:equalTo -2 .
+#   -1.5 math:rounded -1 .
+#   -1 math:equalTo -1 .
 # via the schematic forward rule:
 #   {
 #     -1.5 math:rounded ?r .
-#     ?r math:equalTo -2 .
+#     ?r math:equalTo -1 .
 #   } => {
 #     :test-rounded-3 a :MathBuiltinTest .
 #     :test-rounded-3 :builtin math:rounded .
 #     :test-rounded-3 :input -1.5 .
-#     :test-rounded-3 :expected -2 .
+#     :test-rounded-3 :expected -1 .
 #     :test-rounded-3 :actual ?r .
 #     :test-rounded-3 :status :pass .
 #   } .
 # with substitution (on rule variables):
-#   ?r = -2
+#   ?r = -1
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
@@ -3631,22 +3631,22 @@
 # Proof for derived triple:
 #   :test-rounded-3 :input -1.5 .
 # It holds because the following instance of the rule body is provable:
-#   -1.5 math:rounded -2 .
-#   -2 math:equalTo -2 .
+#   -1.5 math:rounded -1 .
+#   -1 math:equalTo -1 .
 # via the schematic forward rule:
 #   {
 #     -1.5 math:rounded ?r .
-#     ?r math:equalTo -2 .
+#     ?r math:equalTo -1 .
 #   } => {
 #     :test-rounded-3 a :MathBuiltinTest .
 #     :test-rounded-3 :builtin math:rounded .
 #     :test-rounded-3 :input -1.5 .
-#     :test-rounded-3 :expected -2 .
+#     :test-rounded-3 :expected -1 .
 #     :test-rounded-3 :actual ?r .
 #     :test-rounded-3 :status :pass .
 #   } .
 # with substitution (on rule variables):
-#   ?r = -2
+#   ?r = -1
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
@@ -3654,74 +3654,74 @@
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   :test-rounded-3 :expected -2 .
+#   :test-rounded-3 :expected -1 .
 # It holds because the following instance of the rule body is provable:
-#   -1.5 math:rounded -2 .
-#   -2 math:equalTo -2 .
+#   -1.5 math:rounded -1 .
+#   -1 math:equalTo -1 .
 # via the schematic forward rule:
 #   {
 #     -1.5 math:rounded ?r .
-#     ?r math:equalTo -2 .
+#     ?r math:equalTo -1 .
 #   } => {
 #     :test-rounded-3 a :MathBuiltinTest .
 #     :test-rounded-3 :builtin math:rounded .
 #     :test-rounded-3 :input -1.5 .
-#     :test-rounded-3 :expected -2 .
+#     :test-rounded-3 :expected -1 .
 #     :test-rounded-3 :actual ?r .
 #     :test-rounded-3 :status :pass .
 #   } .
 # with substitution (on rule variables):
-#   ?r = -2
+#   ?r = -1
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-:test-rounded-3 :expected -2 .
+:test-rounded-3 :expected -1 .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   :test-rounded-3 :actual -2 .
+#   :test-rounded-3 :actual -1 .
 # It holds because the following instance of the rule body is provable:
-#   -1.5 math:rounded -2 .
-#   -2 math:equalTo -2 .
+#   -1.5 math:rounded -1 .
+#   -1 math:equalTo -1 .
 # via the schematic forward rule:
 #   {
 #     -1.5 math:rounded ?r .
-#     ?r math:equalTo -2 .
+#     ?r math:equalTo -1 .
 #   } => {
 #     :test-rounded-3 a :MathBuiltinTest .
 #     :test-rounded-3 :builtin math:rounded .
 #     :test-rounded-3 :input -1.5 .
-#     :test-rounded-3 :expected -2 .
+#     :test-rounded-3 :expected -1 .
 #     :test-rounded-3 :actual ?r .
 #     :test-rounded-3 :status :pass .
 #   } .
 # with substitution (on rule variables):
-#   ?r = -2
+#   ?r = -1
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-:test-rounded-3 :actual -2 .
+:test-rounded-3 :actual -1 .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :test-rounded-3 :status :pass .
 # It holds because the following instance of the rule body is provable:
-#   -1.5 math:rounded -2 .
-#   -2 math:equalTo -2 .
+#   -1.5 math:rounded -1 .
+#   -1 math:equalTo -1 .
 # via the schematic forward rule:
 #   {
 #     -1.5 math:rounded ?r .
-#     ?r math:equalTo -2 .
+#     ?r math:equalTo -1 .
 #   } => {
 #     :test-rounded-3 a :MathBuiltinTest .
 #     :test-rounded-3 :builtin math:rounded .
 #     :test-rounded-3 :input -1.5 .
-#     :test-rounded-3 :expected -2 .
+#     :test-rounded-3 :expected -1 .
 #     :test-rounded-3 :actual ?r .
 #     :test-rounded-3 :status :pass .
 #   } .
 # with substitution (on rule variables):
-#   ?r = -2
+#   ?r = -1
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 

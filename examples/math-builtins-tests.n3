@@ -496,18 +496,17 @@
     :status   :pass .
 } .
 
-# Negative tie: -1.5 -> -2
-# Rounding semantics: ties go away from zero (3.5 -> 4, -1.5 -> -2)
+# Negative tie-breaking towards +infinity: -1.5 -> -1
 {
   -1.5 math:rounded ?r .
-  ?r math:equalTo -2 .
+  ?r math:equalTo -1 .
 }
 =>
 {
   :test-rounded-3 a :MathBuiltinTest;
     :builtin  math:rounded;
     :input    -1.5;
-    :expected -2;
+    :expected -1;
     :actual   ?r;
     :status   :pass .
 } .
