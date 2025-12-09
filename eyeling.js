@@ -608,6 +608,7 @@ class Parser {
       }
     }
 
+    // console.log(JSON.stringify([this.prefixes, triples, forwardRules, backwardRules], null, 2));
     return [this.prefixes, triples, forwardRules, backwardRules];
   }
 
