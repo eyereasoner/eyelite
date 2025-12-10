@@ -682,7 +682,7 @@ These list built-ins aim to mirror the common cases from the N3 builtin report. 
     * For each distinct subject, `log:skolem` produces a fresh Skolem IRI of the form:
 
       ```n3
-      <urn:eyeling:skolem:UUID>   # e.g., urn:eyeling:skolem:5c0b89f4-6e0d-4f04-8b8a-5fba5a42b807
+      <https://eyereasoner.github.io/.well-known/genid/UUID>
       ```
 
     * Repeated calls with the **same** subject produce the **same** IRI (via an internal cache).
