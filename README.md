@@ -375,17 +375,6 @@ The `examples/test` script treats this non-zero exit code for the `fuse.n3` exam
 
 `eyeling` implements a pragmatic subset of the core N3 builtin vocabularies, roughly following the “Notation3 Builtin Functions” report (sections 4.2–4.6 for math, time, list, log, and string).  
 
-#### Quick map (by namespace)
-
-| Namespace | Role / topic                                        | N3 Builtins section | Notes in `eyeling` (implemented built-ins) |
-|-----------|-----------------------------------------------------|---------------------|--------------------------------------------|
-| `crypto:` | Cryptographic hashes                                | §4.1 crypto         | Implements: `crypto:sha` (SHA-1, as in the N3 Builtins report), plus EYE-style `crypto:md5`, `crypto:sha256`, `crypto:sha512`. All operate on the lexical form of the subject literal (as UTF-8) and return the lowercase hex digest as a plain string literal. |
-| `math:`   | Arithmetic, trig, comparisons, misc.                | §4.2 math           | Implements: `math:greaterThan`, `math:lessThan`, `math:notLessThan`, `math:notGreaterThan`, `math:equalTo`, `math:notEqualTo`, `math:sum`, `math:product`, `math:difference`, `math:quotient`, `math:exponentiation`, `math:negation`, `math:absoluteValue`, `math:cos`, `math:sin`, `math:acos`, `math:asin`, `math:atan`, `math:cosh`, `math:sinh`, `math:degrees`, `math:remainder`, `math:rounded`, `math:tan`, `math:tanh`, `math:fibonacci`. |
-| `time:`   | Time and dates                                      | §4.3 time           | Implements: `time:day`, `time:month`, `time:year`, `time:minute`, `time:second`, `time:timeZone`, `time:localTime`. |
-| `list:`   | List/collection utilities                           | §4.4 list           | Implements: `list:append`, `list:firstRest`, `list:first`, `list:last`, `list:in`, `list:member`, `list:memberAt`, `list:iterate`, `list:length`, `list:remove`, `list:notMember`, `list:reverse`, `list:sort`, `list:map`. |
-| `log:`    | Logical / meta reasoning, SNAF, rule introspection  | §4.5 log           | Implements: `log:equalTo`, `log:notEqualTo`, `log:implies`, `log:impliedBy`, `log:notIncludes`, `log:collectAllIn`, `log:forAllIn`, `log:uri`, `log:skolem`. |
-| `string:` | String processing and regex-like operations         | §4.6 string         | Implements: `string:concatenation`, `string:contains`, `string:containsIgnoringCase`, `string:endsWith`, `string:equalIgnoringCase`, `string:format` (subset: `%s`, `%%`), `string:greaterThan`, `string:lessThan`, `string:matches`, `string:notEqualIgnoringCase`, `string:notGreaterThan`, `string:notLessThan`, `string:notMatches`, `string:replace`, `string:scrape`, `string:startsWith`. |
-
 Built-ins are recognized by expanded IRIs and evaluated during **backward** goal proving. This is a **condensed** overview of what’s currently implemented. For exact behavior and corner cases, see the `evalBuiltin` function in `eyeling.js`.
 
 ### `crypto:` namespace
@@ -482,29 +471,6 @@ Dates & durations:
 * Duration and date/dateTime values are internally mapped to seconds to allow comparisons.
 
 ### `time:` namespace
-
-Helpers for working with dates and dateTimes, loosely following section 4.3 of the Notation3 Builtins report. All of these operate on the lexical form of the subject literal and return `xsd:integer` results where applicable.
-
-Extraction built-ins (subject is an `xsd:date` or `xsd:dateTime` literal):
-
-* `time:day`  
-  True iff the object is the (1–31) day-of-month of the date/datetime subject.
-
-* `time:month`  
-  True iff the object is the (1–12) month number of the subject.
-
-* `time:year`  
-  True iff the object is the year of the subject.
-
-* `time:minute`  
-  True iff the object is the minute field (0–59) of the `xsd:dateTime` subject, interpreted in UTC.
-
-* `time:second`  
-  True iff the object is the second field (0–59) of the `xsd:dateTime` subject, interpreted in UTC.
-
-* `time:timeZone`  
-  True iff the object is the time zone offset in **minutes east of UTC** encoded in the `xsd:dateTime` subject.  
-  Example: `"2025-01-01T00:00:00+02:00"^^xsd:dateTime` ⇒ `120`.
 
 Current local time:
 

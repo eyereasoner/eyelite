@@ -1736,7 +1736,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // 4.1 crypto: builtins
   // -----------------------------------------------------------------
 
-  // 4.1.1 crypto:sha
+  // crypto:sha
   // true iff ?o is the SHA-1 hash of the subject string.
   if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha") {
     const lit = hashLiteral(g.s, "sha1");
@@ -1750,7 +1750,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // Extra (EYE-style) crypto builtins: md5, sha256, sha512.
+  // crypto:md5
   if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "md5") {
     const lit = hashLiteral(g.s, "md5");
     if (!lit) return [];
@@ -1763,6 +1763,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
+  // crypto:sha256
   if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha256") {
     const lit = hashLiteral(g.s, "sha256");
     if (!lit) return [];
@@ -1775,6 +1776,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
+  // crypto:sha512
   if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha512") {
     const lit = hashLiteral(g.s, "sha512");
     if (!lit) return [];
@@ -1788,8 +1790,10 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // -----------------------------------------------------------------
-  // math: comparisons (binary OR list form)
+  // 4.2 math: builtins
   // -----------------------------------------------------------------
+
+  // math:greaterThan
   if (g.p instanceof Iri && g.p.value === MATH_NS + "greaterThan") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
@@ -1803,6 +1807,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:lessThan
   if (g.p instanceof Iri && g.p.value === MATH_NS + "lessThan") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
@@ -1816,6 +1821,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:notLessThan
   if (g.p instanceof Iri && g.p.value === MATH_NS + "notLessThan") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
@@ -1829,6 +1835,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:notGreaterThan
   if (g.p instanceof Iri && g.p.value === MATH_NS + "notGreaterThan") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
@@ -1842,6 +1849,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:equalTo
   if (g.p instanceof Iri && g.p.value === MATH_NS + "equalTo") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
@@ -1855,6 +1863,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:notEqualTo
   if (g.p instanceof Iri && g.p.value === MATH_NS + "notEqualTo") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
@@ -1868,9 +1877,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // -----------------------------------------------------------------
-  // math: arithmetic
-  // -----------------------------------------------------------------
+  // math:sum
   if (g.p instanceof Iri && g.p.value === MATH_NS + "sum") {
     if (g.s instanceof ListTerm && g.s.elems.length >= 2) {
       const xs = g.s.elems;
@@ -1906,6 +1913,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:product
   if (g.p instanceof Iri && g.p.value === MATH_NS + "product") {
     if (g.s instanceof ListTerm && g.s.elems.length >= 2) {
       const xs = g.s.elems;
@@ -1942,6 +1950,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     }
   }
 
+  // math:difference
   if (g.p instanceof Iri && g.p.value === MATH_NS + "difference") {
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const [a0, b0] = g.s.elems;
@@ -1996,6 +2005,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     }
   }
 
+  // math:quotient
   if (g.p instanceof Iri && g.p.value === MATH_NS + "quotient") {
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a = parseNum(g.s.elems[0]);
@@ -2015,6 +2025,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     }
   }
 
+  // math:exponentiation
   if (g.p instanceof Iri && g.p.value === MATH_NS + "exponentiation") {
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a = parseNum(g.s.elems[0]);
@@ -2048,6 +2059,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     }
   }
 
+  // math:negation
   if (g.p instanceof Iri && g.p.value === MATH_NS + "negation") {
     const a = parseNum(g.s);
     if (a !== null && g.o instanceof Var) {
@@ -2069,6 +2081,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:absoluteValue
   if (g.p instanceof Iri && g.p.value === MATH_NS + "absoluteValue") {
     const a = parseNum(g.s);
     if (a !== null && g.o instanceof Var) {
@@ -2083,7 +2096,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // Trig
+  // math:cos
   if (g.p instanceof Iri && g.p.value === MATH_NS + "cos") {
     const a = parseNum(g.s);
     if (a !== null) {
@@ -2100,6 +2113,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:sin
   if (g.p instanceof Iri && g.p.value === MATH_NS + "sin") {
     const a = parseNum(g.s);
     if (a !== null) {
@@ -2116,6 +2130,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:acos
   if (g.p instanceof Iri && g.p.value === MATH_NS + "acos") {
     const a = parseNum(g.s);
     if (a !== null) {
@@ -2134,6 +2149,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // math:asin
   if (g.p instanceof Iri && g.p.value === MATH_NS + "asin") {
     const a = parseNum(g.s);
     if (a !== null) {
@@ -2152,7 +2168,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // 4.2.4 math:atan
+  // math:atan
   if (g.p instanceof Iri && g.p.value === MATH_NS + "atan") {
     const a = parseNum(g.s);
     if (a !== null) {
@@ -2171,7 +2187,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // 4.2.6 math:cosh
+  // math:cosh
   // Hyperbolic cosine
   if (g.p instanceof Iri && g.p.value === MATH_NS + "cosh") {
     const a = parseNum(g.s);
@@ -2191,7 +2207,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // 4.2.7 math:degrees
+  // math:degrees
   // Convert radians -> degrees
   if (g.p instanceof Iri && g.p.value === MATH_NS + "degrees") {
     const a = parseNum(g.s);
@@ -2211,7 +2227,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // 4.2.19 math:remainder
+  // math:remainder
   // Subject is a list (dividend divisor); object is the remainder.
   // Schema: ( $a $b ) math:remainder $r
   if (g.p instanceof Iri && g.p.value === MATH_NS + "remainder") {
@@ -2232,7 +2248,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // 4.2.20 math:rounded
+  // math:rounded
   // Round to nearest integer.
   // If there are two such numbers, then the one closest to positive infinity is returned.
   // Schema: $s math:rounded $o
@@ -2251,7 +2267,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // 4.2.21 math:sinh
+  // math:sinh
   if (g.p instanceof Iri && g.p.value === MATH_NS + "sinh") {
     const a = parseNum(g.s);
     if (a !== null && typeof Math.sinh === "function") {
@@ -2270,7 +2286,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // 4.2.22 math:tan
+  // math:tan
   if (g.p instanceof Iri && g.p.value === MATH_NS + "tan") {
     const a = parseNum(g.s);
     if (a !== null) {
@@ -2289,7 +2305,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // 4.2.23 math:tanh
+  // math:tanh
   if (g.p instanceof Iri && g.p.value === MATH_NS + "tanh") {
     const a = parseNum(g.s);
     if (a !== null && typeof Math.tanh === "function") {
@@ -2308,7 +2324,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // fibonacci
+  // math:fibonacci
   if (g.p instanceof Iri && g.p.value === MATH_NS + "fibonacci") {
     const n = parseIntLiteral(g.s);
     if (n !== null) {
@@ -2335,140 +2351,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // 4.3 time: builtins
   // -----------------------------------------------------------------
 
-  // Helper: extract a JS Date from an xsd:date / xsd:dateTime literal.
-  // Uses the existing parseDatetimeLike(t).
-  function timeExtractDate(t) {
-    return parseDatetimeLike(t); // returns Date or null
-  }
-
-  // Helper: create an xsd:integer literal from a JS integer.
-  function timeIntLiteral(n) {
-    return new Literal(`"${n}"^^<${XSD_NS}integer>`);
-  }
-
-  // Helper: parse timezone offset (in minutes) from a dateTime lexical form.
-  // Returns an integer (minutes East of UTC) or null.
-  function timeZoneOffsetMinutes(t) {
-    if (!(t instanceof Literal)) return null;
-    const [lex, _dt] = literalParts(t.value);
-    const val = stripQuotes(lex);
-
-    // Z means UTC
-    if (val.endsWith("Z")) return 0;
-
-    // Look for +HH:MM or -HH:MM at the end
-    const m = val.match(/([+-])(\d{2}):(\d{2})$/);
-    if (!m) return null;
-    const sign = m[1] === "-" ? -1 : 1;
-    const hh = Number(m[2]);
-    const mm = Number(m[3]);
-    if (!Number.isFinite(hh) || !Number.isFinite(mm)) return null;
-    return sign * (hh * 60 + mm);
-  }
-
-  // 4.3.1 time:day
-  // true iff ?o is the (1–31) day-of-month of the date/datetime ?s.
-  if (g.p instanceof Iri && g.p.value === TIME_NS + "day") {
-    const d = timeExtractDate(g.s);
-    if (!d) return [];
-    const day = d.getUTCDate();
-    const lit = timeIntLiteral(day);
-
-    if (g.o instanceof Var) {
-      const s2 = { ...subst };
-      s2[g.o.name] = lit;
-      return [s2];
-    }
-    const s2 = unifyTerm(g.o, lit, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // 4.3.2 time:month
-  // true iff ?o is the (1–12) month number of the date/datetime ?s.
-  if (g.p instanceof Iri && g.p.value === TIME_NS + "month") {
-    const d = timeExtractDate(g.s);
-    if (!d) return [];
-    const month = d.getUTCMonth() + 1; // JS months are 0–11
-    const lit = timeIntLiteral(month);
-
-    if (g.o instanceof Var) {
-      const s2 = { ...subst };
-      s2[g.o.name] = lit;
-      return [s2];
-    }
-    const s2 = unifyTerm(g.o, lit, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // 4.3.3 time:year
-  // true iff ?o is the year of the date/datetime ?s.
-  if (g.p instanceof Iri && g.p.value === TIME_NS + "year") {
-    const d = timeExtractDate(g.s);
-    if (!d) return [];
-    const year = d.getUTCFullYear();
-    const lit = timeIntLiteral(year);
-
-    if (g.o instanceof Var) {
-      const s2 = { ...subst };
-      s2[g.o.name] = lit;
-      return [s2];
-    }
-    const s2 = unifyTerm(g.o, lit, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // 4.3.4 time:minute
-  // true iff ?o is the minute field (0–59) of the dateTime ?s.
-  if (g.p instanceof Iri && g.p.value === TIME_NS + "minute") {
-    const d = timeExtractDate(g.s);
-    if (!d) return [];
-    const minute = d.getUTCMinutes();
-    const lit = timeIntLiteral(minute);
-
-    if (g.o instanceof Var) {
-      const s2 = { ...subst };
-      s2[g.o.name] = lit;
-      return [s2];
-    }
-    const s2 = unifyTerm(g.o, lit, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // 4.3.5 time:second
-  // true iff ?o is the second field (0–59) of the dateTime ?s.
-  if (g.p instanceof Iri && g.p.value === TIME_NS + "second") {
-    const d = timeExtractDate(g.s);
-    if (!d) return [];
-    const second = d.getUTCSeconds();
-    const lit = timeIntLiteral(second);
-
-    if (g.o instanceof Var) {
-      const s2 = { ...subst };
-      s2[g.o.name] = lit;
-      return [s2];
-    }
-    const s2 = unifyTerm(g.o, lit, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // 4.3.6 time:timeZone
-  // true iff ?o is the timezone offset (in minutes east of UTC) of ?s.
-  // e.g. "2025-01-01T00:00:00+02:00"^^xsd:dateTime ⇒ 120
-  if (g.p instanceof Iri && g.p.value === TIME_NS + "timeZone") {
-    const offset = timeZoneOffsetMinutes(g.s);
-    if (offset === null) return [];
-    const lit = timeIntLiteral(offset);
-
-    if (g.o instanceof Var) {
-      const s2 = { ...subst };
-      s2[g.o.name] = lit;
-      return [s2];
-    }
-    const s2 = unifyTerm(g.o, lit, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // Extra: time:localTime (EYE-style)
+  // time:localTime
   // "" time:localTime ?D.  binds ?D to “now” as xsd:dateTime.
   if (g.p instanceof Iri && g.p.value === TIME_NS + "localTime") {
     const now = localIsoDateTimeString(new Date());
@@ -2488,7 +2371,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // 4.4 list: builtins
   // -----------------------------------------------------------------
 
-  // 4.4.1 list:append
+  // list:append
   // true if and only if $o is the concatenation of all lists $s.i.
   // Schema: ( $s.i?[*] )+ list:append $o?
   if (g.p instanceof Iri && g.p.value === LIST_NS + "append") {
@@ -2512,7 +2395,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // 4.4.2 list:first
+  // list:first
   // true iff $s is a list and $o is the first member of that list.
   // Schema: $s+ list:first $o-
   if (g.p instanceof Iri && g.p.value === LIST_NS + "first") {
@@ -2523,7 +2406,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // 4.4.4 list:iterate
+  // list:iterate
   // true iff $s is a list and $o is a list (index value),
   // where index is a valid 0-based index into $s and value is the element at that index.
   // Schema: $s+ list:iterate ( $o.1?[*] $o.2?[*] )?[*]
@@ -2545,7 +2428,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return outs;
   }
 
-  // 4.4.5 list:last
+  // list:last
   // true iff $s is a list and $o is the last member of that list.
   // Schema: $s+ list:last $o-
   if (g.p instanceof Iri && g.p.value === LIST_NS + "last") {
@@ -2557,7 +2440,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // 4.4.8 list:memberAt
+  // list:memberAt
   // true iff $s.1 is a list, $s.2 is a valid index, and $o is the member at that index.
   // Schema: ( $s.1+ $s.2?[*] )+ list:memberAt $o?[*]
   if (g.p instanceof Iri && g.p.value === LIST_NS + "memberAt") {
@@ -2578,7 +2461,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return outs;
   }
 
-  // 4.4.9 list:remove
+  // list:remove
   // true iff $s.1 is a list and $o is that list with all occurrences of $s.2 removed.
   // Schema: ( $s.1+ $s.2+ )+ list:remove $o-
   if (g.p instanceof Iri && g.p.value === LIST_NS + "remove") {
@@ -2595,9 +2478,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // -----------------------------------------------------------------
-  // list:member / list:in / list:length / list:notMember / list:reverse / list:sort / list:map
-  // -----------------------------------------------------------------
+  // list:member
   if (g.p instanceof Iri && g.p.value === LIST_NS + "member") {
     if (!(g.s instanceof ListTerm)) return [];
     const outs = [];
@@ -2608,6 +2489,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return outs;
   }
 
+  // list:in
   if (g.p instanceof Iri && g.p.value === LIST_NS + "in") {
     if (!(g.o instanceof ListTerm)) return [];
     const outs = [];
@@ -2618,6 +2500,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return outs;
   }
 
+  // list:length
   if (g.p instanceof Iri && g.p.value === LIST_NS + "length") {
     if (!(g.s instanceof ListTerm)) return [];
     const nTerm = new Literal(String(g.s.elems.length));
@@ -2625,6 +2508,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
+  // list:notMember
   if (g.p instanceof Iri && g.p.value === LIST_NS + "notMember") {
     if (!(g.s instanceof ListTerm)) return [];
     for (const el of g.s.elems) {
@@ -2633,6 +2517,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [{ ...subst }];
   }
 
+  // list:reverse
   if (g.p instanceof Iri && g.p.value === LIST_NS + "reverse") {
     if (g.s instanceof ListTerm) {
       const rev = [...g.s.elems].reverse();
@@ -2649,6 +2534,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // list:sort
   if (g.p instanceof Iri && g.p.value === LIST_NS + "sort") {
     function cmpTermForSort(a, b) {
       if (a instanceof Literal && b instanceof Literal) {
@@ -2716,6 +2602,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
+  // list:map
   if (g.p instanceof Iri && g.p.value === LIST_NS + "map") {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const [inputTerm, predTerm] = g.s.elems;
@@ -2741,9 +2628,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // -----------------------------------------------------------------
   // list:firstRest
-  // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LIST_NS + "firstRest") {
     if (g.s instanceof ListTerm) {
       if (!g.s.elems.length) return [];
@@ -2778,22 +2663,23 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // -----------------------------------------------------------------
-  // log: equality builtins
+  // 4.5 log: builtins
   // -----------------------------------------------------------------
+
+  // log:equalTo
   if (g.p instanceof Iri && g.p.value === LOG_NS + "equalTo") {
     const s2 = unifyTerm(goal.s, goal.o, subst);
     return s2 !== null ? [s2] : [];
   }
 
+  // log:notEqualTo
   if (g.p instanceof Iri && g.p.value === LOG_NS + "notEqualTo") {
     const s2 = unifyTerm(goal.s, goal.o, subst);
     if (s2 !== null) return [];
     return [{ ...subst }];
   }
 
-  // -----------------------------------------------------------------
   // log:implies — expose internal forward rules as data
-  // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "implies") {
     const allFw = backRules.__allForwardRules || [];
     const results = [];
@@ -2821,9 +2707,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return results;
   }
 
-  // -----------------------------------------------------------------
   // log:impliedBy — expose internal backward rules as data
-  // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "impliedBy") {
     const allBw = backRules.__allBackwardRules || backRules;
     const results = [];
@@ -2852,9 +2736,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return results;
   }
 
-  // -----------------------------------------------------------------
   // log:notIncludes
-  // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "notIncludes") {
     if (!(g.o instanceof FormulaTerm)) return [];
     const body = g.o.triples;
@@ -2873,9 +2755,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // -----------------------------------------------------------------
   // log:collectAllIn
-  // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "collectAllIn") {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 3) return [];
     const [valueTempl, clauseTerm, listTerm] = g.s.elems;
@@ -2905,9 +2785,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // -----------------------------------------------------------------
   // log:forAllIn
-  // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "forAllIn") {
     // Subject: list with two clauses (where-clause, then-clause)
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
@@ -2950,9 +2828,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [{ ...subst }];
   }
 
-  // -----------------------------------------------------------------
   // log:skolem
-  // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "skolem") {
     // Subject must be ground; commonly a list, but we allow any ground term.
     if (!isGroundTerm(g.s)) return [];
@@ -2969,9 +2845,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // -----------------------------------------------------------------
   // log:uri
-  // -----------------------------------------------------------------
   if (g.p instanceof Iri && g.p.value === LOG_NS + "uri") {
     // Direction 1: subject is an IRI -> object is its string representation
     if (g.s instanceof Iri) {
@@ -2996,10 +2870,10 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // -----------------------------------------------------------------
-  // string: builtins (Notation3 Builtin Functions §4.6)
+  // 4.6 string: builtins
   // -----------------------------------------------------------------
 
-  // 4.6.1 string:concatenation
+  // string:concatenation
   if (g.p instanceof Iri && g.p.value === STRING_NS + "concatenation") {
     if (!(g.s instanceof ListTerm)) return [];
     const parts = [];
@@ -3019,7 +2893,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // 4.6.2 string:contains
+  // string:contains
   if (g.p instanceof Iri && g.p.value === STRING_NS + "contains") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3027,7 +2901,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return sStr.includes(oStr) ? [{ ...subst }] : [];
   }
 
-  // 4.6.3 string:containsIgnoringCase
+  // string:containsIgnoringCase
   if (g.p instanceof Iri && g.p.value === STRING_NS + "containsIgnoringCase") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3037,7 +2911,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       : [];
   }
 
-  // 4.6.4 string:endsWith
+  // string:endsWith
   if (g.p instanceof Iri && g.p.value === STRING_NS + "endsWith") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3045,7 +2919,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return sStr.endsWith(oStr) ? [{ ...subst }] : [];
   }
 
-  // 4.6.5 string:equalIgnoringCase
+  // string:equalIgnoringCase
   if (g.p instanceof Iri && g.p.value === STRING_NS + "equalIgnoringCase") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3055,7 +2929,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       : [];
   }
 
-  // 4.6.6 string:format
+  // string:format
   // (limited: only %s and %% are supported, anything else ⇒ builtin fails)
   if (g.p instanceof Iri && g.p.value === STRING_NS + "format") {
     if (!(g.s instanceof ListTerm) || g.s.elems.length < 1) return [];
@@ -3082,7 +2956,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // 4.6.7 string:greaterThan
+  // string:greaterThan
   if (g.p instanceof Iri && g.p.value === STRING_NS + "greaterThan") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3090,7 +2964,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return sStr > oStr ? [{ ...subst }] : [];
   }
 
-  // 4.6.8 string:lessThan
+  // string:lessThan
   if (g.p instanceof Iri && g.p.value === STRING_NS + "lessThan") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3098,7 +2972,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return sStr < oStr ? [{ ...subst }] : [];
   }
 
-  // 4.6.9 string:matches
+  // string:matches
   if (g.p instanceof Iri && g.p.value === STRING_NS + "matches") {
     const sStr = termToJsString(g.s);
     const pattern = termToJsString(g.o);
@@ -3113,7 +2987,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return re.test(sStr) ? [{ ...subst }] : [];
   }
 
-  // 4.6.10 string:notEqualIgnoringCase
+  // string:notEqualIgnoringCase
   if (g.p instanceof Iri && g.p.value === STRING_NS + "notEqualIgnoringCase") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3123,7 +2997,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       : [];
   }
 
-  // 4.6.11 string:notGreaterThan  (≤ in Unicode code order)
+  // string:notGreaterThan  (≤ in Unicode code order)
   if (g.p instanceof Iri && g.p.value === STRING_NS + "notGreaterThan") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3131,7 +3005,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return sStr <= oStr ? [{ ...subst }] : [];
   }
 
-  // 4.6.12 string:notLessThan  (≥ in Unicode code order)
+  // string:notLessThan  (≥ in Unicode code order)
   if (g.p instanceof Iri && g.p.value === STRING_NS + "notLessThan") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
@@ -3139,7 +3013,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return sStr >= oStr ? [{ ...subst }] : [];
   }
 
-  // 4.6.13 string:notMatches
+  // string:notMatches
   if (g.p instanceof Iri && g.p.value === STRING_NS + "notMatches") {
     const sStr = termToJsString(g.s);
     const pattern = termToJsString(g.o);
@@ -3153,7 +3027,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return re.test(sStr) ? [] : [{ ...subst }];
   }
 
-  // 4.6.14 string:replace
+  // string:replace
   if (g.p instanceof Iri && g.p.value === STRING_NS + "replace") {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 3) return [];
     const dataStr   = termToJsString(g.s.elems[0]);
@@ -3181,7 +3055,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // 4.6.15 string:scrape
+  // string:scrape
   if (g.p instanceof Iri && g.p.value === STRING_NS + "scrape") {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const dataStr = termToJsString(g.s.elems[0]);
@@ -3210,7 +3084,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return s2 !== null ? [s2] : [];
   }
 
-  // 4.6.16 string:startsWith
+  // string:startsWith
   if (g.p instanceof Iri && g.p.value === STRING_NS + "startsWith") {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
