@@ -4,7 +4,7 @@
 # Proof for derived triple:
 #   :alice :mustHave :dogLicense .
 # It holds because the following instance of the rule body is provable:
-#   :alice :hasDog :dog1 .
+#   :alice :hasDog :dog5 .
 #   (1 {
 #       :alice :hasDog ?Dog .
 #   } (1 1 1 1 1)) log:collectAllIn ?Scope .
@@ -22,7 +22,7 @@
 #     ?Subject :mustHave :dogLicense .
 #   } .
 # with substitution (on rule variables):
-#   ?Any = :dog1
+#   ?Any = :dog5
 #   ?Count = 5
 #   ?List = (1 1 1 1 1)
 #   ?Subject = :alice

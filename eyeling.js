@@ -34,9 +34,6 @@ const LOG_NS = "http://www.w3.org/2000/10/swap/log#";
 const STRING_NS = "http://www.w3.org/2000/10/swap/string#";
 const SKOLEM_NS = "https://eyereasoner.github.io/.well-known/genid/";
 
-// Safety valve so backward proof doesn’t loop forever in degenerate cases.
-const MAX_BACKWARD_DEPTH = 50000;
-
 // For a single reasoning run, this maps a canonical representation
 // of the subject term in log:skolem to a Skolem IRI.
 const skolemCache = new Map();
@@ -2717,7 +2714,6 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === LOG_NS + "notIncludes") {
     if (!(g.o instanceof FormulaTerm)) return [];
     const body = g.o.triples;
-    if (depth >= MAX_BACKWARD_DEPTH) return [];
     const visited2 = [];
     const sols = proveGoals(
       Array.from(body),
@@ -2738,7 +2734,6 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     const [valueTempl, clauseTerm, listTerm] = g.s.elems;
     if (!(clauseTerm instanceof FormulaTerm)) return [];
     const body = clauseTerm.triples;
-    if (depth >= MAX_BACKWARD_DEPTH) return [];
     const visited2 = [];
     const sols = proveGoals(
       Array.from(body),
@@ -2769,8 +2764,6 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     const [whereClause, thenClause] = g.s.elems;
     if (!(whereClause instanceof FormulaTerm)) return [];
     if (!(thenClause instanceof FormulaTerm)) return [];
-
-    if (depth >= MAX_BACKWARD_DEPTH) return [];
 
     // 1. Find all substitutions that make the first clause true
     const visited1 = [];
@@ -3157,74 +3150,6 @@ function listHasTriple(list, tr) {
   return list.some(t => triplesEqual(t, tr));
 }
 
-function solveSingleGoal(goal, facts, backRules, depth, visited, varGen) {
-  // builtins are pure
-  if (isBuiltinPred(goal.p)) {
-    return evalBuiltin(goal, {}, facts, backRules, depth, varGen);
-  }
-  if (depth > MAX_BACKWARD_DEPTH) return [];
-  if (listHasTriple(visited, goal)) return [];
-  visited.push(goal);
-
-  const results = [];
-
-  // -------------------------------------------------------------------
-  // 1) Match known facts, with cheap predicate filtering
-  // -------------------------------------------------------------------
-  if (goal.p instanceof Iri) {
-    const targetPred = goal.p.value;
-    for (const f of facts) {
-      const fp = f.p;
-      // Facts are ground; if predicate IRIs don't match, skip unify.
-      if (fp instanceof Iri && fp.value !== targetPred) continue;
-      const s2 = unifyTriple(goal, f, {});
-      if (s2 !== null) results.push(s2);
-    }
-  } else {
-    // Non-IRI predicate (variable, blank, etc.) → must try all facts.
-    for (const f of facts) {
-      const s2 = unifyTriple(goal, f, {});
-      if (s2 !== null) results.push(s2);
-    }
-  }
-
-  // -------------------------------------------------------------------
-  // 2) Backward rules, also filtered by head predicate before renaming
-  // -------------------------------------------------------------------
-  for (const r of backRules) {
-    if (r.conclusion.length !== 1) continue;
-
-    // Use the original rule head (before standardization) for a cheap filter
-    if (goal.p instanceof Iri) {
-      const rawHead = r.conclusion[0];
-      if (rawHead.p instanceof Iri && rawHead.p.value !== goal.p.value) {
-        continue;
-      }
-    }
-
-    const rStd = standardizeRule(r, varGen);
-    const head = rStd.conclusion[0];
-
-    const s2 = unifyTriple(head, goal, {});
-    if (s2 === null) continue;
-
-    const body = rStd.premise.map(b => applySubstTriple(b, s2));
-    const bodySolutions = proveGoals(
-      body,
-      s2,
-      facts,
-      backRules,
-      depth + 1,
-      visited,
-      varGen
-    );
-    results.push(...bodySolutions);
-  }
-
-  visited.pop();
-  return results;
-}
-
 function proveGoals(
   goals,
   subst,
@@ -3234,30 +3159,182 @@ function proveGoals(
   visited,
   varGen
 ) {
-  if (!goals.length) return [{ ...subst }];
-  if (depth > MAX_BACKWARD_DEPTH) return [];
-
-  const goal0 = applySubstTriple(goals[0], subst);
-  const rest = goals.slice(1);
+  // Iterative DFS over proof states using an explicit stack.
+  // Each state carries its own substitution and remaining goals.
   const results = [];
 
-  const deltas = solveSingleGoal(goal0, facts, backRules, depth, visited, varGen);
-  for (const delta of deltas) {
-    const composed = composeSubst(subst, delta);
-    if (composed === null) continue;
-    if (!rest.length) {
-      results.push(composed);
-    } else {
-      const tailSolutions = proveGoals(
-        rest,
-        composed,
+  // Normalize initial arguments so we can mutate them safely.
+  const initialGoals   = Array.isArray(goals) ? goals.slice() : [];
+  const initialSubst   = subst ? { ...subst } : {};
+  const initialVisited = visited ? visited.slice() : [];
+
+  // Quick exit: empty goal list succeeds with current substitution.
+  if (!initialGoals.length) {
+    results.push({ ...initialSubst });
+    return results;
+  }
+
+  const stack = [
+    {
+      goals:   initialGoals,
+      subst:   initialSubst,
+      depth:   depth || 0,
+      visited: initialVisited
+    }
+  ];
+
+  while (stack.length) {
+    const state = stack.pop();
+
+    // No more goals → we found a full solution.
+    if (!state.goals.length) {
+      results.push({ ...state.subst });
+      continue;
+    }
+
+    const rawGoal   = state.goals[0];
+    const restGoals = state.goals.slice(1);
+
+    // Always work with the goal under the current substitution.
+    const goal0 = applySubstTriple(rawGoal, state.subst);
+
+    // ------------------------------------------------------------------
+    // 1) Builtins: delegate to evalBuiltin (which may call proveGoals
+    //    itself for nested formulas, but this is now a fresh *iterative*
+    //    call and no longer grows a deep JS stack.
+    // ------------------------------------------------------------------
+    if (isBuiltinPred(goal0.p)) {
+      const deltas = evalBuiltin(
+        goal0,
+        {},
         facts,
         backRules,
-        depth + 1,
-        visited,
+        state.depth,
         varGen
       );
-      results.push(...tailSolutions);
+
+      for (const delta of deltas) {
+        const composed = composeSubst(state.subst, delta);
+        if (composed === null) continue;
+
+        if (!restGoals.length) {
+          results.push({ ...composed });
+        } else {
+          stack.push({
+            goals:   restGoals,
+            subst:   composed,
+            depth:   state.depth + 1,
+            // Builtins never participate in backward loops, so we
+            // keep the original visited set.
+            visited: state.visited
+          });
+        }
+      }
+      continue;
+    }
+
+    // ------------------------------------------------------------------
+    // 2) Loop check for backward reasoning.
+    //    We only use `visited` to guard against recursive use of
+    //    backward rules. If this exact goal is already on the path,
+    //    we abandon this branch.
+    // ------------------------------------------------------------------
+    if (listHasTriple(state.visited, goal0)) {
+      continue;
+    }
+    const visitedForRules = state.visited.concat([goal0]);
+
+    // ------------------------------------------------------------------
+    // 3) Try to satisfy the goal from known facts.
+    // ------------------------------------------------------------------
+    if (goal0.p instanceof Iri) {
+      const targetPred = goal0.p.value;
+      for (const f of facts) {
+        const fp = f.p;
+        if (fp instanceof Iri && fp.value !== targetPred) continue;
+
+        const delta = unifyTriple(goal0, f, {});
+        if (delta === null) continue;
+
+        const composed = composeSubst(state.subst, delta);
+        if (composed === null) continue;
+
+        if (!restGoals.length) {
+          results.push({ ...composed });
+        } else {
+          stack.push({
+            goals:   restGoals,
+            subst:   composed,
+            depth:   state.depth + 1,
+            // Matching against facts cannot introduce new cycles, so
+            // we do *not* add `goal0` to the visited set here.
+            visited: state.visited
+          });
+        }
+      }
+    } else {
+      // Non-IRI predicate → must try all facts.
+      for (const f of facts) {
+        const delta = unifyTriple(goal0, f, {});
+        if (delta === null) continue;
+
+        const composed = composeSubst(state.subst, delta);
+        if (composed === null) continue;
+
+        if (!restGoals.length) {
+          results.push({ ...composed });
+        } else {
+          stack.push({
+            goals:   restGoals,
+            subst:   composed,
+            depth:   state.depth + 1,
+            visited: state.visited
+          });
+        }
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // 4) Backward rules: use the rule head to reduce the goal, then
+    //    push the rule body + remaining goals as a new state.
+    // ------------------------------------------------------------------
+    for (const r of backRules) {
+      if (r.conclusion.length !== 1) continue;
+
+      // Cheap pre-filter on the rule head's predicate.
+      if (goal0.p instanceof Iri) {
+        const rawHead = r.conclusion[0];
+        if (
+          rawHead.p instanceof Iri &&
+          rawHead.p.value !== goal0.p.value
+        ) {
+          continue;
+        }
+      }
+
+      const rStd = standardizeRule(r, varGen);
+      const head = rStd.conclusion[0];
+
+      const deltaHead = unifyTriple(head, goal0, {});
+      if (deltaHead === null) continue;
+
+      // Instantiate the rule body with the head substitution.
+      const body = rStd.premise.map(b => applySubstTriple(b, deltaHead));
+
+      // Compose the head substitution with the current substitution.
+      const composed = composeSubst(state.subst, deltaHead);
+      if (composed === null) continue;
+
+      const newGoals = body.concat(restGoals);
+
+      stack.push({
+        goals:   newGoals,
+        subst:   composed,
+        depth:   state.depth + 1,
+        // For rule applications, record that we've seen `goal0` on
+        // this path to avoid recursive loops.
+        visited: visitedForRules
+      });
     }
   }
 

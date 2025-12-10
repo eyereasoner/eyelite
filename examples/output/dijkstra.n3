@@ -182,9 +182,9 @@
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   (:a :f) :path ((:a :c :b :d :e :f) 13) .
+#   (:a :f) :path ((:a :c :d :f) 16) .
 # It holds because the following instance of the rule body is provable:
-#   (:a :f) :dijkstra ((:a :c :b :d :e :f) 13) .
+#   (:a :f) :dijkstra ((:a :c :d :f) 16) .
 # via the schematic forward rule:
 #   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
@@ -192,88 +192,12 @@
 #     (:a :f) :path (?Path ?Cost) .
 #   } .
 # with substitution (on rule variables):
-#   ?Cost = 13
-#   ?Path = (:a :c :b :d :e :f)
+#   ?Cost = 16
+#   ?Path = (:a :c :d :f)
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-(:a :f) :path ((:a :c :b :d :e :f) 13) .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   (:a :f) :path ((:a :c :b :d :f) 14) .
-# It holds because the following instance of the rule body is provable:
-#   (:a :f) :dijkstra ((:a :c :b :d :f) 14) .
-# via the schematic forward rule:
-#   {
-#     (:a :f) :dijkstra (?Path ?Cost) .
-#   } => {
-#     (:a :f) :path (?Path ?Cost) .
-#   } .
-# with substitution (on rule variables):
-#   ?Cost = 14
-#   ?Path = (:a :c :b :d :f)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
-(:a :f) :path ((:a :c :b :d :f) 14) .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   (:a :f) :path ((:a :b :d :e :f) 14) .
-# It holds because the following instance of the rule body is provable:
-#   (:a :f) :dijkstra ((:a :b :d :e :f) 14) .
-# via the schematic forward rule:
-#   {
-#     (:a :f) :dijkstra (?Path ?Cost) .
-#   } => {
-#     (:a :f) :path (?Path ?Cost) .
-#   } .
-# with substitution (on rule variables):
-#   ?Cost = 14
-#   ?Path = (:a :b :d :e :f)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
-(:a :f) :path ((:a :b :d :e :f) 14) .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   (:a :f) :path ((:a :b :d :f) 15) .
-# It holds because the following instance of the rule body is provable:
-#   (:a :f) :dijkstra ((:a :b :d :f) 15) .
-# via the schematic forward rule:
-#   {
-#     (:a :f) :dijkstra (?Path ?Cost) .
-#   } => {
-#     (:a :f) :path (?Path ?Cost) .
-#   } .
-# with substitution (on rule variables):
-#   ?Cost = 15
-#   ?Path = (:a :b :d :f)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
-(:a :f) :path ((:a :b :d :f) 15) .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   (:a :f) :path ((:a :c :e :f) 15) .
-# It holds because the following instance of the rule body is provable:
-#   (:a :f) :dijkstra ((:a :c :e :f) 15) .
-# via the schematic forward rule:
-#   {
-#     (:a :f) :dijkstra (?Path ?Cost) .
-#   } => {
-#     (:a :f) :path (?Path ?Cost) .
-#   } .
-# with substitution (on rule variables):
-#   ?Cost = 15
-#   ?Path = (:a :c :e :f)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
-(:a :f) :path ((:a :c :e :f) 15) .
+(:a :f) :path ((:a :c :d :f) 16) .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
@@ -296,9 +220,9 @@
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   (:a :f) :path ((:a :c :d :f) 16) .
+#   (:a :f) :path ((:a :c :e :f) 15) .
 # It holds because the following instance of the rule body is provable:
-#   (:a :f) :dijkstra ((:a :c :d :f) 16) .
+#   (:a :f) :dijkstra ((:a :c :e :f) 15) .
 # via the schematic forward rule:
 #   {
 #     (:a :f) :dijkstra (?Path ?Cost) .
@@ -306,10 +230,86 @@
 #     (:a :f) :path (?Path ?Cost) .
 #   } .
 # with substitution (on rule variables):
-#   ?Cost = 16
-#   ?Path = (:a :c :d :f)
+#   ?Cost = 15
+#   ?Path = (:a :c :e :f)
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-(:a :f) :path ((:a :c :d :f) 16) .
+(:a :f) :path ((:a :c :e :f) 15) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :b :d :f) 15) .
+# It holds because the following instance of the rule body is provable:
+#   (:a :f) :dijkstra ((:a :b :d :f) 15) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   } .
+# with substitution (on rule variables):
+#   ?Cost = 15
+#   ?Path = (:a :b :d :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+(:a :f) :path ((:a :b :d :f) 15) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :b :d :e :f) 14) .
+# It holds because the following instance of the rule body is provable:
+#   (:a :f) :dijkstra ((:a :b :d :e :f) 14) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   } .
+# with substitution (on rule variables):
+#   ?Cost = 14
+#   ?Path = (:a :b :d :e :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+(:a :f) :path ((:a :b :d :e :f) 14) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :c :b :d :f) 14) .
+# It holds because the following instance of the rule body is provable:
+#   (:a :f) :dijkstra ((:a :c :b :d :f) 14) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   } .
+# with substitution (on rule variables):
+#   ?Cost = 14
+#   ?Path = (:a :c :b :d :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+(:a :f) :path ((:a :c :b :d :f) 14) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   (:a :f) :path ((:a :c :b :d :e :f) 13) .
+# It holds because the following instance of the rule body is provable:
+#   (:a :f) :dijkstra ((:a :c :b :d :e :f) 13) .
+# via the schematic forward rule:
+#   {
+#     (:a :f) :dijkstra (?Path ?Cost) .
+#   } => {
+#     (:a :f) :path (?Path ?Cost) .
+#   } .
+# with substitution (on rule variables):
+#   ?Cost = 13
+#   ?Path = (:a :c :b :d :e :f)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+(:a :f) :path ((:a :c :b :d :e :f) 13) .
 

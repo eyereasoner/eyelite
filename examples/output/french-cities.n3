@@ -232,11 +232,11 @@
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   :paris :path :blois .
+#   :lemans :path :nantes .
 # It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
-#   :paris :path :orleans .
-#   :orleans :path :blois .
+#   :lemans :path :angers .
+#   :angers :path :nantes .
 # via the schematic forward rule:
 #   {
 #     ?P a owl:TransitiveProperty .
@@ -246,89 +246,14 @@
 #     ?S ?P ?O .
 #   } .
 # with substitution (on rule variables):
-#   ?O = :blois
+#   ?O = :nantes
 #   ?P = :path
-#   ?S = :paris
-#   ?X = :orleans
+#   ?S = :lemans
+#   ?X = :angers
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-:paris :path :blois .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :paris :path :bourges .
-# It holds because the following instance of the rule body is provable:
-#   :path a owl:TransitiveProperty .
-#   :paris :path :orleans .
-#   :orleans :path :bourges .
-# via the schematic forward rule:
-#   {
-#     ?P a owl:TransitiveProperty .
-#     ?S ?P ?X .
-#     ?X ?P ?O .
-#   } => {
-#     ?S ?P ?O .
-#   } .
-# with substitution (on rule variables):
-#   ?O = :bourges
-#   ?P = :path
-#   ?S = :paris
-#   ?X = :orleans
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
-:paris :path :bourges .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :paris :path :lemans .
-# It holds because the following instance of the rule body is provable:
-#   :path a owl:TransitiveProperty .
-#   :paris :path :chartres .
-#   :chartres :path :lemans .
-# via the schematic forward rule:
-#   {
-#     ?P a owl:TransitiveProperty .
-#     ?S ?P ?X .
-#     ?X ?P ?O .
-#   } => {
-#     ?S ?P ?O .
-#   } .
-# with substitution (on rule variables):
-#   ?O = :lemans
-#   ?P = :path
-#   ?S = :paris
-#   ?X = :chartres
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
-:paris :path :lemans .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :orleans :path :tours .
-# It holds because the following instance of the rule body is provable:
-#   :path a owl:TransitiveProperty .
-#   :orleans :path :blois .
-#   :blois :path :tours .
-# via the schematic forward rule:
-#   {
-#     ?P a owl:TransitiveProperty .
-#     ?S ?P ?X .
-#     ?X ?P ?O .
-#   } => {
-#     ?S ?P ?O .
-#   } .
-# with substitution (on rule variables):
-#   ?O = :tours
-#   ?P = :path
-#   ?S = :orleans
-#   ?X = :blois
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
-:orleans :path :tours .
+:lemans :path :nantes .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
@@ -382,11 +307,11 @@
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   :lemans :path :nantes .
+#   :orleans :path :tours .
 # It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
-#   :lemans :path :angers .
-#   :angers :path :nantes .
+#   :orleans :path :blois .
+#   :blois :path :tours .
 # via the schematic forward rule:
 #   {
 #     ?P a owl:TransitiveProperty .
@@ -396,22 +321,97 @@
 #     ?S ?P ?O .
 #   } .
 # with substitution (on rule variables):
-#   ?O = :nantes
+#   ?O = :tours
 #   ?P = :path
-#   ?S = :lemans
-#   ?X = :angers
+#   ?S = :orleans
+#   ?X = :blois
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-:lemans :path :nantes .
+:orleans :path :tours .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :paris :path :lemans .
+# It holds because the following instance of the rule body is provable:
+#   :path a owl:TransitiveProperty .
+#   :paris :path :chartres .
+#   :chartres :path :lemans .
+# via the schematic forward rule:
+#   {
+#     ?P a owl:TransitiveProperty .
+#     ?S ?P ?X .
+#     ?X ?P ?O .
+#   } => {
+#     ?S ?P ?O .
+#   } .
+# with substitution (on rule variables):
+#   ?O = :lemans
+#   ?P = :path
+#   ?S = :paris
+#   ?X = :chartres
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:paris :path :lemans .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :paris :path :blois .
+# It holds because the following instance of the rule body is provable:
+#   :path a owl:TransitiveProperty .
+#   :paris :path :orleans .
+#   :orleans :path :blois .
+# via the schematic forward rule:
+#   {
+#     ?P a owl:TransitiveProperty .
+#     ?S ?P ?X .
+#     ?X ?P ?O .
+#   } => {
+#     ?S ?P ?O .
+#   } .
+# with substitution (on rule variables):
+#   ?O = :blois
+#   ?P = :path
+#   ?S = :paris
+#   ?X = :orleans
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:paris :path :blois .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :paris :path :bourges .
+# It holds because the following instance of the rule body is provable:
+#   :path a owl:TransitiveProperty .
+#   :paris :path :orleans .
+#   :orleans :path :bourges .
+# via the schematic forward rule:
+#   {
+#     ?P a owl:TransitiveProperty .
+#     ?S ?P ?X .
+#     ?X ?P ?O .
+#   } => {
+#     ?S ?P ?O .
+#   } .
+# with substitution (on rule variables):
+#   ?O = :bourges
+#   ?P = :path
+#   ?S = :paris
+#   ?X = :orleans
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:paris :path :bourges .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
 #   :paris :path :tours .
 # It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
-#   :paris :path :orleans .
-#   :orleans :path :tours .
+#   :paris :path :blois .
+#   :blois :path :tours .
 # via the schematic forward rule:
 #   {
 #     ?P a owl:TransitiveProperty .
@@ -424,7 +424,7 @@
 #   ?O = :tours
 #   ?P = :path
 #   ?S = :paris
-#   ?X = :orleans
+#   ?X = :blois
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
@@ -435,8 +435,8 @@
 #   :paris :path :angers .
 # It holds because the following instance of the rule body is provable:
 #   :path a owl:TransitiveProperty .
-#   :paris :path :chartres .
-#   :chartres :path :angers .
+#   :paris :path :lemans .
+#   :lemans :path :angers .
 # via the schematic forward rule:
 #   {
 #     ?P a owl:TransitiveProperty .
@@ -449,36 +449,11 @@
 #   ?O = :angers
 #   ?P = :path
 #   ?S = :paris
-#   ?X = :chartres
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
-:paris :path :angers .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :chartres :path :nantes .
-# It holds because the following instance of the rule body is provable:
-#   :path a owl:TransitiveProperty .
-#   :chartres :path :lemans .
-#   :lemans :path :nantes .
-# via the schematic forward rule:
-#   {
-#     ?P a owl:TransitiveProperty .
-#     ?S ?P ?X .
-#     ?X ?P ?O .
-#   } => {
-#     ?S ?P ?O .
-#   } .
-# with substitution (on rule variables):
-#   ?O = :nantes
-#   ?P = :path
-#   ?S = :chartres
 #   ?X = :lemans
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-:chartres :path :nantes .
+:paris :path :angers .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
@@ -504,4 +479,29 @@
 # ----------------------------------------------------------------------
 
 :paris :path :nantes .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :chartres :path :nantes .
+# It holds because the following instance of the rule body is provable:
+#   :path a owl:TransitiveProperty .
+#   :chartres :path :angers .
+#   :angers :path :nantes .
+# via the schematic forward rule:
+#   {
+#     ?P a owl:TransitiveProperty .
+#     ?S ?P ?X .
+#     ?X ?P ?O .
+#   } => {
+#     ?S ?P ?O .
+#   } .
+# with substitution (on rule variables):
+#   ?O = :nantes
+#   ?P = :path
+#   ?S = :chartres
+#   ?X = :angers
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:chartres :path :nantes .
 
