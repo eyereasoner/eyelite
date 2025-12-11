@@ -3295,46 +3295,44 @@ function proveGoals(
     }
 
     // ------------------------------------------------------------------
-    // 4) Backward rules: use the rule head to reduce the goal, then
-    //    push the rule body + remaining goals as a new state.
+    // 4) Backward rules: only when the goal's predicate is an IRI.
+    //
+    // This prevents pathological meta-recursion on goals like ?S ?P ?O,
+    // where ?P is a variable. Those should usually be satisfied from
+    // facts (and forward-derived facts), not via backward rules.
     // ------------------------------------------------------------------
-    for (const r of backRules) {
-      if (r.conclusion.length !== 1) continue;
+    if (goal0.p instanceof Iri) {
+      for (const r of backRules) {
+        if (r.conclusion.length !== 1) continue;
 
-      // Cheap pre-filter on the rule head's predicate.
-      if (goal0.p instanceof Iri) {
+        // Cheap pre-filter on the rule head's predicate.
         const rawHead = r.conclusion[0];
-        if (
-          rawHead.p instanceof Iri &&
-          rawHead.p.value !== goal0.p.value
-        ) {
+        if (rawHead.p instanceof Iri && rawHead.p.value !== goal0.p.value) {
           continue;
         }
+
+        const rStd = standardizeRule(r, varGen);
+        const head = rStd.conclusion[0];
+        const deltaHead = unifyTriple(head, goal0, {});
+        if (deltaHead === null) continue;
+
+        // Instantiate the rule body with the head substitution.
+        const body = rStd.premise.map(b => applySubstTriple(b, deltaHead));
+
+        // Compose the head substitution with the current substitution.
+        const composed = composeSubst(state.subst, deltaHead);
+        if (composed === null) continue;
+        const newGoals = body.concat(restGoals);
+
+        stack.push({
+          goals: newGoals,
+          subst: composed,
+          depth: state.depth + 1,
+          // For rule applications, record that we've seen `goal0` on
+          // this path to avoid recursive loops on concrete predicates.
+          visited: visitedForRules
+        });
       }
-
-      const rStd = standardizeRule(r, varGen);
-      const head = rStd.conclusion[0];
-
-      const deltaHead = unifyTriple(head, goal0, {});
-      if (deltaHead === null) continue;
-
-      // Instantiate the rule body with the head substitution.
-      const body = rStd.premise.map(b => applySubstTriple(b, deltaHead));
-
-      // Compose the head substitution with the current substitution.
-      const composed = composeSubst(state.subst, deltaHead);
-      if (composed === null) continue;
-
-      const newGoals = body.concat(restGoals);
-
-      stack.push({
-        goals:   newGoals,
-        subst:   composed,
-        depth:   state.depth + 1,
-        // For rule applications, record that we've seen `goal0` on
-        // this path to avoid recursive loops.
-        visited: visitedForRules
-      });
     }
   }
 

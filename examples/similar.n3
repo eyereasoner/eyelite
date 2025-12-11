@@ -1,0 +1,28 @@
+# -------
+# Similar
+# -------
+#
+# Example from Patrick Hochstenbach
+
+@prefix : <https://eyereasoner.github.io/ns#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+:Alice a :Human .
+:Bob a :Human .
+
+{
+    :Alice :similar :Bob .
+}
+=>
+{
+    :test :is true .
+}.
+
+{
+    ?A :similar ?B .
+}
+<=
+{
+    ?A ?Pred ?Obj .
+    ?B ?Pred ?Obj .
+}. 
