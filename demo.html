@@ -177,7 +177,10 @@
   <div class="page">
     <header>
       <h1>Eyeling N3 Playground</h1>
-      <p>Edit the N3 program below, or load it from a URL, and run the Eyeling reasoner in your browser.</p>
+      <p>
+        Edit the N3 program below, load it from a URL, or share this page with the program encoded
+        in the <code>n3_program</code> query parameter.
+      </p>
     </header>
 
     <section class="card">
@@ -240,7 +243,12 @@
       const uriInput = document.getElementById("n3-uri");
       const loadUriBtn = document.getElementById("load-uri-btn");
 
-      editor.value = defaultN3;
+      // --- INITIAL CONTENT FROM QUERY PARAM OR DEFAULT ---
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramProgram = urlParams.get("n3_program");
+      const initialN3 = paramProgram !== null ? paramProgram : defaultN3;
+
+      editor.value = initialN3;
 
       function autoResize(el) {
         el.style.height = "auto";
@@ -248,10 +256,33 @@
       }
 
       autoResize(editor);
+
+      // --- URL SHARING SUPPORT ---
+      let shareUrlUpdateTimeout = null;
+
+      function updateShareUrl() {
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set("n3_program", editor.value);
+          // Keep everything else (hash, other params) intact
+          window.history.replaceState(null, "", url.toString());
+        } catch (e) {
+          // Non-fatal; just don't update URL
+          console && console.warn && console.warn("Failed to update URL:", e);
+        }
+      }
+
+      function scheduleUpdateShareUrl() {
+        clearTimeout(shareUrlUpdateTimeout);
+        shareUrlUpdateTimeout = setTimeout(updateShareUrl, 300);
+      }
+
       editor.addEventListener("input", function () {
         autoResize(editor);
+        scheduleUpdateShareUrl();
       });
 
+      // --- EYELING RUNNER SETUP ---
       let runnerPromise = null;
 
       async function getEyelingRunner() {
@@ -357,6 +388,8 @@
         runBtn.disabled = true;
         statusEl.textContent = "Running reasoning...";
         outputEl.textContent = "";
+        // Ensure URL is in sync with what we're running
+        updateShareUrl();
 
         try {
           const runner = await getEyelingRunner();
@@ -388,6 +421,7 @@
           editor.value = text;
           autoResize(editor);
           statusEl.textContent = "Loaded N3 from URL.";
+          updateShareUrl();
         } catch (e) {
           statusEl.textContent = "Failed to load URL.";
           outputEl.textContent =
@@ -401,8 +435,8 @@
       runBtn.addEventListener("click", runReasoner);
       loadUriBtn.addEventListener("click", loadFromUri);
 
-      // Optional: you could auto-load the default URL here:
-      // loadFromUri();
+      // Make sure URL is initialized with whatever we started with
+      updateShareUrl();
     })();
   </script>
 </body>
