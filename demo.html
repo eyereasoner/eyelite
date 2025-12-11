@@ -135,17 +135,69 @@
       margin: 0 0 0.5rem;
       color: #111827;
     }
+
+    .uri-row {
+      margin-bottom: 0.75rem;
+    }
+
+    .uri-input-row {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 0.25rem;
+    }
+
+    .uri-input-row input[type="text"] {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      padding: 0.45rem 0.75rem;
+      font-size: 0.85rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f9fafb;
+    }
+
+    .uri-input-row input[type="text"]:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+      background: #ffffff;
+    }
+
+    .hint {
+      display: block;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-top: 0.15rem;
+    }
   </style>
 </head>
 <body>
   <div class="page">
     <header>
       <h1>Eyeling N3 Playground</h1>
-      <p>Edit the N3 program below and run the Eyeling reasoner in your browser.</p>
+      <p>Edit the N3 program below, or load it from a URL, and run the Eyeling reasoner in your browser.</p>
     </header>
 
     <section class="card">
       <h2 class="section-title">Input N3</h2>
+
+      <div class="uri-row">
+        <label for="n3-uri">Load N3 from URL</label>
+        <div class="uri-input-row">
+          <input
+            id="n3-uri"
+            type="text"
+            value="https://raw.githubusercontent.com/eyereasoner/eyeling/refs/heads/main/examples/witch.n3"
+          />
+          <button id="load-uri-btn" type="button">Load from URL</button>
+        </div>
+        <span class="hint">
+          Enter any N3 file URL (raw GitHub URLs work well) and click “Load from URL”.
+        </span>
+      </div>
+
       <label for="n3-editor">Editable N3 program</label>
       <textarea id="n3-editor" spellcheck="false"></textarea>
       <div class="controls">
@@ -185,6 +237,8 @@
       const outputEl = document.getElementById("output");
       const runBtn = document.getElementById("run-btn");
       const statusEl = document.getElementById("status");
+      const uriInput = document.getElementById("n3-uri");
+      const loadUriBtn = document.getElementById("load-uri-btn");
 
       editor.value = defaultN3;
 
@@ -319,10 +373,36 @@
         }
       }
 
-      runBtn.addEventListener("click", runReasoner);
+      async function loadFromUri() {
+        const uri = uriInput.value.trim();
+        if (!uri) return;
 
-      // Optional: uncomment to run once on load.
-      // runReasoner();
+        loadUriBtn.disabled = true;
+        statusEl.textContent = "Loading N3 from URL...";
+        try {
+          const resp = await fetch(uri);
+          if (!resp.ok) {
+            throw new Error("HTTP " + resp.status + " when fetching " + uri);
+          }
+          const text = await resp.text();
+          editor.value = text;
+          autoResize(editor);
+          statusEl.textContent = "Loaded N3 from URL.";
+        } catch (e) {
+          statusEl.textContent = "Failed to load URL.";
+          outputEl.textContent =
+            "Error while loading N3 from URL:\n" +
+            (e && e.message ? e.message : String(e));
+        } finally {
+          loadUriBtn.disabled = false;
+        }
+      }
+
+      runBtn.addEventListener("click", runReasoner);
+      loadUriBtn.addEventListener("click", loadFromUri);
+
+      // Optional: you could auto-load the default URL here:
+      // loadFromUri();
     })();
   </script>
 </body>
