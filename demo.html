@@ -4,7 +4,9 @@
   <meta charset="utf-8" />
   <title>Eyeling N3 Playground</title>
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -29,33 +31,9 @@
     }
 
     header p {
-      margin: 0.35rem 0 0;
-      font-size: 0.92rem;
+      margin: 0.25rem 0 0;
+      font-size: 0.9rem;
       color: #6b7280;
-      line-height: 1.35;
-    }
-
-    a { color: #2563eb; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    .meta {
-      margin-top: 0.4rem;
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      align-items: center;
-      font-size: 0.85rem;
-      color: #6b7280;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      background: rgba(255,255,255,0.7);
     }
 
     label {
@@ -75,7 +53,7 @@
       font-size: 0.9rem;
       line-height: 1.4;
       resize: none;
-      overflow: hidden; /* no scrollbars inside editor */
+      overflow: hidden; /* no scrollbars inside the editor */
       background: #ffffff;
     }
 
@@ -91,26 +69,6 @@
       align-items: center;
       gap: 0.75rem;
       margin-top: 0.25rem;
-      flex-wrap: wrap;
-    }
-
-    .checkbox {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      background: rgba(255,255,255,0.7);
-      color: #374151;
-      font-size: 0.85rem;
-      user-select: none;
-    }
-
-    .checkbox input {
-      width: 16px;
-      height: 16px;
-      margin: 0;
     }
 
     button {
@@ -159,7 +117,7 @@
       line-height: 1.4;
       white-space: pre-wrap;
       word-break: break-word;
-      overflow: hidden; /* no scrollbars inside output */
+      overflow: hidden; /* no scrollbars inside the output box */
       min-height: 5rem;
     }
 
@@ -178,7 +136,9 @@
       color: #111827;
     }
 
-    .uri-row { margin-bottom: 0.75rem; }
+    .uri-row {
+      margin-bottom: 0.75rem;
+    }
 
     .uri-input-row {
       display: flex;
@@ -218,13 +178,8 @@
     <header>
       <h1>Eyeling N3 Playground</h1>
       <p>
-        Powered by <a href="https://eyereasoner.github.io/eyeling/" target="_blank" rel="noreferrer">Eyeling</a> —
-        a minimal Notation3 (N3) reasoner in JavaScript.
+        Edit the N3 program below, load it from a URL, or share this page with the program encoded in the fragment.
       </p>
-      <div class="meta">
-        <span class="pill">Eyeling version: <strong id="eyeling-version">loading…</strong></span>
-        <span class="pill">Proof comments: <strong id="proof-mode">on</strong></span>
-      </div>
     </header>
 
     <section class="card">
@@ -240,20 +195,15 @@
           />
           <button id="load-uri-btn" type="button">Load from URL</button>
         </div>
-        <span class="hint">Enter any N3 file URL (raw GitHub URLs work well) and click “Load from URL”.</span>
+        <span class="hint">
+          Enter any N3 file URL (raw GitHub URLs work well) and click “Load from URL”.
+        </span>
       </div>
 
       <label for="n3-editor">Editable N3 program</label>
       <textarea id="n3-editor" spellcheck="false"></textarea>
-
       <div class="controls">
         <button id="run-btn">Run reasoning</button>
-
-        <label class="checkbox" title="Passes --no-proof-comments to eyeling">
-          <input id="no-proof-checkbox" type="checkbox" />
-          Turn proof comments off
-        </label>
-
         <span class="status" id="status">Idle.</span>
       </div>
     </section>
@@ -266,11 +216,6 @@
 
   <script>
     (function () {
-      const EYELING_JS_URL =
-        "https://raw.githubusercontent.com/eyereasoner/eyeling/refs/heads/main/eyeling.js";
-      const EYELING_PKG_URL =
-        "https://raw.githubusercontent.com/eyereasoner/eyeling/refs/heads/main/package.json";
-
       const defaultN3 = `# ------------------
 # Socrates inference
 # ------------------
@@ -296,31 +241,48 @@
       const statusEl = document.getElementById("status");
       const uriInput = document.getElementById("n3-uri");
       const loadUriBtn = document.getElementById("load-uri-btn");
-      const noProofCheckbox = document.getElementById("no-proof-checkbox");
-      const versionEl = document.getElementById("eyeling-version");
-      const proofModeEl = document.getElementById("proof-mode");
 
-      // --- INITIAL CONTENT FROM QUERY PARAM OR DEFAULT ---
-      const urlParams = new URLSearchParams(window.location.search);
-      const paramProgram = urlParams.get("n3_program");
-      editor.value = (paramProgram !== null ? paramProgram : defaultN3);
+      // --- INITIAL CONTENT FROM HASH OR DEFAULT ---
+      function getProgramFromHash() {
+        const hash = window.location.hash || "";
+        if (!hash) return null;
+        // Remove leading '#'
+        const raw = hash.startsWith("#") ? hash.slice(1) : hash;
+        if (!raw) return null;
+        try {
+          return decodeURIComponent(raw);
+        } catch (e) {
+          // If decoding fails, just use the raw string
+          return raw;
+        }
+      }
+
+      const paramProgram = getProgramFromHash();
+      const initialN3 = paramProgram !== null ? paramProgram : defaultN3;
+      editor.value = initialN3;
+      autoResize(editor);
+
+      editor.value = initialN3;
 
       function autoResize(el) {
         el.style.height = "auto";
         el.style.height = el.scrollHeight + "px";
       }
+
       autoResize(editor);
 
-      // --- URL SHARING SUPPORT (query param n3_program) ---
+      // --- URL SHARING SUPPORT ---
       let shareUrlUpdateTimeout = null;
 
       function updateShareUrl() {
         try {
+          const encoded = encodeURIComponent(editor.value);
+          // Keep path + query as-is, only change hash
           const url = new URL(window.location.href);
-          url.searchParams.set("n3_program", editor.value);
+          url.hash = encoded;
           window.history.replaceState(null, "", url.toString());
         } catch (e) {
-          console && console.warn && console.warn("Failed to update URL:", e);
+          console && console.warn && console.warn("Failed to update URL hash:", e);
         }
       }
 
@@ -334,33 +296,6 @@
         scheduleUpdateShareUrl();
       });
 
-      // --- display proof mode pill ---
-      function syncProofModePill() {
-        proofModeEl.textContent = noProofCheckbox.checked ? "off" : "on";
-      }
-      noProofCheckbox.addEventListener("change", syncProofModePill);
-      syncProofModePill();
-
-      // --- Fetch package.json to show version (and feed require('./package.json')) ---
-      let pkgPromise = null;
-      function getPkg() {
-        if (pkgPromise) return pkgPromise;
-        pkgPromise = (async () => {
-          try {
-            const resp = await fetch(EYELING_PKG_URL);
-            if (!resp.ok) throw new Error("HTTP " + resp.status);
-            const pkg = await resp.json();
-            versionEl.textContent = pkg && pkg.version ? pkg.version : "unknown";
-            return pkg || { version: "unknown" };
-          } catch (e) {
-            versionEl.textContent = "unknown";
-            return { version: "unknown" };
-          }
-        })();
-        return pkgPromise;
-      }
-      getPkg(); // kick off early
-
       // --- EYELING RUNNER SETUP ---
       let runnerPromise = null;
 
@@ -368,61 +303,90 @@
         if (runnerPromise) return runnerPromise;
 
         runnerPromise = (async () => {
-          const [pkg, jsResp] = await Promise.all([
-            getPkg(),
-            fetch(EYELING_JS_URL),
-          ]);
+          const url =
+            "https://raw.githubusercontent.com/eyereasoner/eyeling/refs/heads/main/eyeling.js";
 
-          if (!jsResp.ok) {
-            throw new Error("Failed to load eyeling.js (" + jsResp.status + ")");
+          const resp = await fetch(url);
+          if (!resp.ok) {
+            throw new Error("Failed to load eyeling.js (" + resp.status + ")");
           }
 
-          const rawSource = await jsResp.text();
-          const cleanedSource = rawSource.replace(/^#![^\n]*\n/, ""); // remove shebang
+          const rawSource = await resp.text();
 
-          function runOnce(n3Input, opts) {
-            const options = opts || {};
+          // Remove Node shebang for browser eval.
+          const cleanedSource = rawSource.replace(/^#![^\n]*\n/, "");
+
+          // Build a function that runs eyeling as a CLI once, given N3 text.
+          function runOnce(n3Input) {
             const lines = [];
 
             const consoleShim = {
-              log: (...args) => lines.push(args.join(" ")),
-              error: (...args) => lines.push(args.join(" ")),
+              log: (...args) => {
+                lines.push(args.join(" "));
+              },
+              error: (...args) => {
+                lines.push(args.join(" "));
+              },
             };
 
             const fsShim = {
-              readFileSync: () => n3Input, // ignore path, use provided input
+              readFileSync: (path, options) => {
+                // Ignore path and just return the provided N3 program.
+                return n3Input;
+              },
             };
 
-            const extraArgs = [];
-            if (options.noProofComments) extraArgs.push("--no-proof-comments");
-
             const processShim = {
-              argv: ["node", "eyeling.js", ...extraArgs, "input.n3"],
-              exit: (code) => { throw { __eyelingExit: true, code }; },
+              // Simulate: node eyeling.js input.n3
+              argv: ["node", "eyeling.js", "input.n3"],
+              exit: (code) => {
+                // Use a special object so we can detect "normal" exits.
+                throw { __eyelingExit: true, code };
+              },
             };
 
             const moduleShim = { exports: {} };
 
             function requireShim(id) {
-              if (id === "./package.json") return pkg || { version: "unknown" };
-              if (id === "fs") return fsShim;
+              if (id === "./package.json") {
+                return { version: "browser" };
+              }
+              if (id === "fs") {
+                return fsShim;
+              }
               if (id === "crypto") {
-                // Minimal stub: enough for examples that don't depend on crypto.
+                // Minimal stub – enough for examples that don't depend on crypto.
                 return {
-                  createHash: () => ({ update: () => {}, digest: () => "" }),
+                  createHash: () => ({
+                    update: () => {},
+                    digest: () => "",
+                  }),
                 };
               }
               return {};
             }
-            requireShim.main = moduleShim; // make eyeling think it's the entry point
+
+            // Make eyeling think this is the main module so `main()` runs.
+            requireShim.main = moduleShim;
 
             try {
-              const fn = new Function("require", "module", "exports", "process", "console", cleanedSource);
+              const fn = new Function(
+                "require",
+                "module",
+                "exports",
+                "process",
+                "console",
+                cleanedSource
+              );
               fn(requireShim, moduleShim, moduleShim.exports, processShim, consoleShim);
             } catch (e) {
               if (!e || !e.__eyelingExit) {
-                lines.push("JavaScript error: " + (e && e.message ? e.message : String(e)));
+                lines.push(
+                  "JavaScript error: " + (e && e.message ? e.message : String(e))
+                );
               }
+              // For __eyelingExit we just stop without adding extra noise;
+              // CLI output is already captured via consoleShim.
             }
 
             return lines.join("\n");
@@ -438,15 +402,18 @@
         runBtn.disabled = true;
         statusEl.textContent = "Running reasoning...";
         outputEl.textContent = "";
+        // Ensure URL is in sync with what we're running
         updateShareUrl();
 
         try {
           const runner = await getEyelingRunner();
-          const result = runner(editor.value, { noProofComments: noProofCheckbox.checked });
+          const result = runner(editor.value);
           outputEl.textContent = result || "(no output)";
           statusEl.textContent = "Done.";
         } catch (e) {
-          outputEl.textContent = "Failed to run Eyeling: " + (e && e.message ? e.message : String(e));
+          outputEl.textContent =
+            "Failed to run Eyeling: " +
+            (e && e.message ? e.message : String(e));
           statusEl.textContent = "Error.";
         } finally {
           runBtn.disabled = false;
@@ -461,7 +428,9 @@
         statusEl.textContent = "Loading N3 from URL...";
         try {
           const resp = await fetch(uri);
-          if (!resp.ok) throw new Error("HTTP " + resp.status + " when fetching " + uri);
+          if (!resp.ok) {
+            throw new Error("HTTP " + resp.status + " when fetching " + uri);
+          }
           const text = await resp.text();
           editor.value = text;
           autoResize(editor);
@@ -469,7 +438,9 @@
           updateShareUrl();
         } catch (e) {
           statusEl.textContent = "Failed to load URL.";
-          outputEl.textContent = "Error while loading N3 from URL:\n" + (e && e.message ? e.message : String(e));
+          outputEl.textContent =
+            "Error while loading N3 from URL:\n" +
+            (e && e.message ? e.message : String(e));
         } finally {
           loadUriBtn.disabled = false;
         }
@@ -478,7 +449,7 @@
       runBtn.addEventListener("click", runReasoner);
       loadUriBtn.addEventListener("click", loadFromUri);
 
-      // Initialize URL with current content on first load
+      // Make sure URL is initialized with whatever we started with
       updateShareUrl();
     })();
   </script>
