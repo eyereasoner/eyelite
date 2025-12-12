@@ -1,0 +1,21 @@
+@prefix : <http://eulersharp.sourceforge.net/2009/12dtb/test#>.
+
+# fact
+:ind a :N0.
+
+# rules
+
+{:ind a :A2} => {:test :is true}.
+
+{?X a :N0} => {?X a :N1, :I1, :J1}.
+{?X a :N1} => {?X a :N2, :I2, :J2}.
+{?X a :N2} => {?X a :N3, :I3, :J3}.
+{?X a :N3} => {?X a :N4, :I4, :J4}.
+{?X a :N4} => {?X a :N5, :I5, :J5}.
+{?X a :N5} => {?X a :N6, :I6, :J6}.
+{?X a :N6} => {?X a :N7, :I7, :J7}.
+{?X a :N7} => {?X a :N8, :I8, :J8}.
+{?X a :N8} => {?X a :N9, :I9, :J9}.
+{?X a :N9} => {?X a :N10, :I10, :J10}.
+
+{?X a :N10} => {?X a :A2}.

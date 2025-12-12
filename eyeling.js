@@ -1086,6 +1086,139 @@ function hasAlphaEquiv(triples, tr) {
 }
 
 // ============================================================================
+// Indexes (facts + backward rules)
+// ============================================================================
+//
+// Facts:
+//   - __byPred: Map<predicateIRI, Triple[]>
+//   - __byPO:   Map<predicateIRI, Map<objectKey, Triple[]>>
+//   - __keySet: Set<"S\tP\tO"> for IRI/Literal-only triples (fast dup check)
+//
+// Backward rules:
+//   - __byHeadPred:   Map<headPredicateIRI, Rule[]>
+//   - __wildHeadPred: Rule[] (non-IRI head predicate)
+
+function termFastKey(t) {
+  if (t instanceof Iri) return "I:" + t.value;
+  if (t instanceof Literal) return "L:" + t.value;
+  return null;
+}
+
+function tripleFastKey(tr) {
+  const ks = termFastKey(tr.s);
+  const kp = termFastKey(tr.p);
+  const ko = termFastKey(tr.o);
+  if (ks === null || kp === null || ko === null) return null;
+  return ks + "\t" + kp + "\t" + ko;
+}
+
+function ensureFactIndexes(facts) {
+  if (facts.__byPred && facts.__byPO && facts.__keySet) return;
+
+  Object.defineProperty(facts, "__byPred", { value: new Map(), enumerable: false, writable: true });
+  Object.defineProperty(facts, "__byPO",   { value: new Map(), enumerable: false, writable: true });
+  Object.defineProperty(facts, "__keySet", { value: new Set(), enumerable: false, writable: true });
+
+  for (const f of facts) indexFact(facts, f);
+}
+
+function indexFact(facts, tr) {
+  if (tr.p instanceof Iri) {
+    const pk = tr.p.value;
+
+    let pb = facts.__byPred.get(pk);
+    if (!pb) { pb = []; facts.__byPred.set(pk, pb); }
+    pb.push(tr);
+
+    const ok = termFastKey(tr.o);
+    if (ok !== null) {
+      let po = facts.__byPO.get(pk);
+      if (!po) { po = new Map(); facts.__byPO.set(pk, po); }
+      let pob = po.get(ok);
+      if (!pob) { pob = []; po.set(ok, pob); }
+      pob.push(tr);
+    }
+  }
+
+  const key = tripleFastKey(tr);
+  if (key !== null) facts.__keySet.add(key);
+}
+
+function candidateFacts(facts, goal) {
+  ensureFactIndexes(facts);
+
+  if (goal.p instanceof Iri) {
+    const pk = goal.p.value;
+
+    const ok = termFastKey(goal.o);
+    if (ok !== null) {
+      const po = facts.__byPO.get(pk);
+      if (po) {
+        const pob = po.get(ok);
+        if (pob) return pob;
+      }
+    }
+
+    return facts.__byPred.get(pk) || [];
+  }
+
+  return facts;
+}
+
+function hasFactIndexed(facts, tr) {
+  ensureFactIndexes(facts);
+
+  const key = tripleFastKey(tr);
+  if (key !== null) return facts.__keySet.has(key);
+
+  if (tr.p instanceof Iri) {
+    const pk = tr.p.value;
+
+    const ok = termFastKey(tr.o);
+    if (ok !== null) {
+      const po = facts.__byPO.get(pk);
+      if (po) {
+        const pob = po.get(ok) || [];
+        return pob.some(t => alphaEqTriple(t, tr));
+      }
+    }
+
+    const pb = facts.__byPred.get(pk) || [];
+    return pb.some(t => alphaEqTriple(t, tr));
+  }
+
+  return hasAlphaEquiv(facts, tr);
+}
+
+function pushFactIndexed(facts, tr) {
+  ensureFactIndexes(facts);
+  facts.push(tr);
+  indexFact(facts, tr);
+}
+
+function ensureBackRuleIndexes(backRules) {
+  if (backRules.__byHeadPred && backRules.__wildHeadPred) return;
+
+  Object.defineProperty(backRules, "__byHeadPred",   { value: new Map(), enumerable: false, writable: true });
+  Object.defineProperty(backRules, "__wildHeadPred", { value: [], enumerable: false, writable: true });
+
+  for (const r of backRules) indexBackRule(backRules, r);
+}
+
+function indexBackRule(backRules, r) {
+  if (!r || !r.conclusion || r.conclusion.length !== 1) return;
+  const head = r.conclusion[0];
+  if (head && head.p instanceof Iri) {
+    const k = head.p.value;
+    let bucket = backRules.__byHeadPred.get(k);
+    if (!bucket) { bucket = []; backRules.__byHeadPred.set(k, bucket); }
+    bucket.push(r);
+  } else {
+    backRules.__wildHeadPred.push(r);
+  }
+}
+
+// ============================================================================
 // Special predicate helpers
 // ============================================================================
 
@@ -3152,69 +3285,39 @@ function listHasTriple(list, tr) {
   return list.some(t => triplesEqual(t, tr));
 }
 
-function proveGoals(
-  goals,
-  subst,
-  facts,
-  backRules,
-  depth,
-  visited,
-  varGen
-) {
+function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
   // Iterative DFS over proof states using an explicit stack.
   // Each state carries its own substitution and remaining goals.
   const results = [];
 
-  // Normalize initial arguments so we can mutate them safely.
-  const initialGoals   = Array.isArray(goals) ? goals.slice() : [];
-  const initialSubst   = subst ? { ...subst } : {};
+  const initialGoals = Array.isArray(goals) ? goals.slice() : [];
+  const initialSubst = subst ? { ...subst } : {};
   const initialVisited = visited ? visited.slice() : [];
 
-  // Quick exit: empty goal list succeeds with current substitution.
   if (!initialGoals.length) {
     results.push({ ...initialSubst });
     return results;
   }
 
   const stack = [
-    {
-      goals:   initialGoals,
-      subst:   initialSubst,
-      depth:   depth || 0,
-      visited: initialVisited
-    }
+    { goals: initialGoals, subst: initialSubst, depth: depth || 0, visited: initialVisited }
   ];
 
   while (stack.length) {
     const state = stack.pop();
 
-    // No more goals → we found a full solution.
     if (!state.goals.length) {
       results.push({ ...state.subst });
       continue;
     }
 
-    const rawGoal   = state.goals[0];
+    const rawGoal = state.goals[0];
     const restGoals = state.goals.slice(1);
-
-    // Always work with the goal under the current substitution.
     const goal0 = applySubstTriple(rawGoal, state.subst);
 
-    // ------------------------------------------------------------------
-    // 1) Builtins: delegate to evalBuiltin (which may call proveGoals
-    //    itself for nested formulas, but this is now a fresh *iterative*
-    //    call and no longer grows a deep JS stack.
-    // ------------------------------------------------------------------
+    // 1) Builtins
     if (isBuiltinPred(goal0.p)) {
-      const deltas = evalBuiltin(
-        goal0,
-        {},
-        facts,
-        backRules,
-        state.depth,
-        varGen
-      );
-
+      const deltas = evalBuiltin(goal0, {}, facts, backRules, state.depth, varGen);
       for (const delta of deltas) {
         const composed = composeSubst(state.subst, delta);
         if (composed === null) continue;
@@ -3223,11 +3326,9 @@ function proveGoals(
           results.push({ ...composed });
         } else {
           stack.push({
-            goals:   restGoals,
-            subst:   composed,
-            depth:   state.depth + 1,
-            // Builtins never participate in backward loops, so we
-            // keep the original visited set.
+            goals: restGoals,
+            subst: composed,
+            depth: state.depth + 1,
             visited: state.visited
           });
         }
@@ -3235,26 +3336,14 @@ function proveGoals(
       continue;
     }
 
-    // ------------------------------------------------------------------
-    // 2) Loop check for backward reasoning.
-    //    We only use `visited` to guard against recursive use of
-    //    backward rules. If this exact goal is already on the path,
-    //    we abandon this branch.
-    // ------------------------------------------------------------------
-    if (listHasTriple(state.visited, goal0)) {
-      continue;
-    }
+    // 2) Loop check for backward reasoning
+    if (listHasTriple(state.visited, goal0)) continue;
     const visitedForRules = state.visited.concat([goal0]);
 
-    // ------------------------------------------------------------------
-    // 3) Try to satisfy the goal from known facts.
-    // ------------------------------------------------------------------
+    // 3) Try to satisfy the goal from known facts (NOW indexed by (p,o) when possible)
     if (goal0.p instanceof Iri) {
-      const targetPred = goal0.p.value;
-      for (const f of facts) {
-        const fp = f.p;
-        if (fp instanceof Iri && fp.value !== targetPred) continue;
-
+      const candidates = candidateFacts(facts, goal0);
+      for (const f of candidates) {
         const delta = unifyTriple(goal0, f, {});
         if (delta === null) continue;
 
@@ -3265,11 +3354,9 @@ function proveGoals(
           results.push({ ...composed });
         } else {
           stack.push({
-            goals:   restGoals,
-            subst:   composed,
-            depth:   state.depth + 1,
-            // Matching against facts cannot introduce new cycles, so
-            // we do *not* add `goal0` to the visited set here.
+            goals: restGoals,
+            subst: composed,
+            depth: state.depth + 1,
             visited: state.visited
           });
         }
@@ -3287,51 +3374,41 @@ function proveGoals(
           results.push({ ...composed });
         } else {
           stack.push({
-            goals:   restGoals,
-            subst:   composed,
-            depth:   state.depth + 1,
+            goals: restGoals,
+            subst: composed,
+            depth: state.depth + 1,
             visited: state.visited
           });
         }
       }
     }
 
-    // ------------------------------------------------------------------
-    // 4) Backward rules: only when the goal's predicate is an IRI.
-    //
-    // This prevents pathological meta-recursion on goals like ?S ?P ?O,
-    // where ?P is a variable. Those should usually be satisfied from
-    // facts (and forward-derived facts), not via backward rules.
-    // ------------------------------------------------------------------
+    // 4) Backward rules (indexed by head predicate)
     if (goal0.p instanceof Iri) {
-      for (const r of backRules) {
+      ensureBackRuleIndexes(backRules);
+      const candRules =
+        (backRules.__byHeadPred.get(goal0.p.value) || []).concat(backRules.__wildHeadPred);
+
+      for (const r of candRules) {
         if (r.conclusion.length !== 1) continue;
 
-        // Cheap pre-filter on the rule head's predicate.
         const rawHead = r.conclusion[0];
-        if (rawHead.p instanceof Iri && rawHead.p.value !== goal0.p.value) {
-          continue;
-        }
+        if (rawHead.p instanceof Iri && rawHead.p.value !== goal0.p.value) continue;
 
         const rStd = standardizeRule(r, varGen);
         const head = rStd.conclusion[0];
         const deltaHead = unifyTriple(head, goal0, {});
         if (deltaHead === null) continue;
 
-        // Instantiate the rule body with the head substitution.
         const body = rStd.premise.map(b => applySubstTriple(b, deltaHead));
-
-        // Compose the head substitution with the current substitution.
         const composed = composeSubst(state.subst, deltaHead);
         if (composed === null) continue;
-        const newGoals = body.concat(restGoals);
 
+        const newGoals = body.concat(restGoals);
         stack.push({
           goals: newGoals,
           subst: composed,
           depth: state.depth + 1,
-          // For rule applications, record that we've seen `goal0` on
-          // this path to avoid recursive loops on concrete predicates.
           visited: visitedForRules
         });
       }
@@ -3346,13 +3423,16 @@ function proveGoals(
 // ============================================================================
 
 function forwardChain(facts, forwardRules, backRules) {
+  ensureFactIndexes(facts);
+  ensureBackRuleIndexes(backRules);
+
   const factList = facts.slice();
   const derivedForward = [];
   const varGen = [0];
   const skCounter = [0];
 
   // Make rules visible to introspection builtins
-  backRules.__allForwardRules  = forwardRules;
+  backRules.__allForwardRules = forwardRules;
   backRules.__allBackwardRules = backRules;
 
   while (true) {
@@ -3362,15 +3442,8 @@ function forwardChain(facts, forwardRules, backRules) {
       const r = forwardRules[i];
       const empty = {};
       const visited = [];
-      const sols = proveGoals(
-        r.premise.slice(),
-        empty,
-        facts,
-        backRules,
-        0,
-        visited,
-        varGen
-      );
+
+      const sols = proveGoals(r.premise.slice(), empty, facts, backRules, 0, visited, varGen);
 
       // Inference fuse
       if (r.isFuse && sols.length) {
@@ -3395,42 +3468,23 @@ function forwardChain(facts, forwardRules, backRules) {
             instantiated.o instanceof FormulaTerm;
 
           if (isFwRuleTriple || isBwRuleTriple) {
-            if (
-              !hasAlphaEquiv(factList, instantiated)
-            ) {
+            if (!hasFactIndexed(facts, instantiated)) {
               factList.push(instantiated);
-              facts.push(instantiated);
-              derivedForward.push(
-                new DerivedFact(
-                  instantiated,
-                  r,
-                  instantiatedPremises.slice(),
-                  { ...s }
-                )
-              );
+              pushFactIndexed(facts, instantiated);
+              derivedForward.push(new DerivedFact(instantiated, r, instantiatedPremises.slice(), { ...s }));
               changed = true;
             }
 
-            if (
-              instantiated.s instanceof FormulaTerm &&
-              instantiated.o instanceof FormulaTerm
-            ) {
+            if (instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) {
               const left = instantiated.s.triples;
               const right = instantiated.o.triples;
+
               if (isFwRuleTriple) {
                 const [premise0, conclusion] = liftBlankRuleVars(left, right);
                 const premise = reorderPremiseForConstraints(premise0);
 
-                // compute head blanks for the derived forward rule
                 const headBlankLabels = collectBlankLabelsInTriples(conclusion);
-
-                const newRule = new Rule(
-                  premise,
-                  conclusion,
-                  true,
-                  false,
-                  headBlankLabels
-                );
+                const newRule = new Rule(premise, conclusion, true, false, headBlankLabels);
 
                 const already = forwardRules.some(
                   rr =>
@@ -3443,16 +3497,8 @@ function forwardChain(facts, forwardRules, backRules) {
               } else if (isBwRuleTriple) {
                 const [premise, conclusion] = liftBlankRuleVars(right, left);
 
-                // (Optional but consistent) compute head blanks for derived backward rule
                 const headBlankLabels = collectBlankLabelsInTriples(conclusion);
-
-                const newRule = new Rule(
-                  premise,
-                  conclusion,
-                  false,
-                  false,
-                  headBlankLabels
-                );
+                const newRule = new Rule(premise, conclusion, false, false, headBlankLabels);
 
                 const already = backRules.some(
                   rr =>
@@ -3461,7 +3507,10 @@ function forwardChain(facts, forwardRules, backRules) {
                     triplesListEqual(rr.premise, newRule.premise) &&
                     triplesListEqual(rr.conclusion, newRule.conclusion)
                 );
-                if (!already) backRules.push(newRule);
+                if (!already) {
+                  backRules.push(newRule);
+                  indexBackRule(backRules, newRule);
+                }
               }
             }
 
@@ -3471,18 +3520,14 @@ function forwardChain(facts, forwardRules, backRules) {
           // Only skolemize blank nodes that occur explicitly in the rule head
           const skMap = {};
           const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter);
+
           if (!isGroundTriple(inst)) continue;
-          if (hasAlphaEquiv(factList, inst)) continue;
+          if (hasFactIndexed(facts, inst)) continue;
+
           factList.push(inst);
-          facts.push(inst);
-          derivedForward.push(
-            new DerivedFact(
-              inst,
-              r,
-              instantiatedPremises.slice(),
-              { ...s }
-            )
-          );
+          pushFactIndexed(facts, inst);
+
+          derivedForward.push(new DerivedFact(inst, r, instantiatedPremises.slice(), { ...s }));
           changed = true;
         }
       }

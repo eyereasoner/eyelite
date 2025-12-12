@@ -1,0 +1,636 @@
+@prefix : <http://eulersharp.sourceforge.net/2009/12dtb/test#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N1 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N0 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N0 .
+#   } => {
+#     ?X a :N1 .
+#     ?X a :I1 .
+#     ?X a :J1 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N1 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I1 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N0 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N0 .
+#   } => {
+#     ?X a :N1 .
+#     ?X a :I1 .
+#     ?X a :J1 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I1 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J1 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N0 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N0 .
+#   } => {
+#     ?X a :N1 .
+#     ?X a :I1 .
+#     ?X a :J1 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J1 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N2 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N1 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N1 .
+#   } => {
+#     ?X a :N2 .
+#     ?X a :I2 .
+#     ?X a :J2 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N2 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I2 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N1 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N1 .
+#   } => {
+#     ?X a :N2 .
+#     ?X a :I2 .
+#     ?X a :J2 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I2 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J2 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N1 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N1 .
+#   } => {
+#     ?X a :N2 .
+#     ?X a :I2 .
+#     ?X a :J2 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J2 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N3 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N2 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N2 .
+#   } => {
+#     ?X a :N3 .
+#     ?X a :I3 .
+#     ?X a :J3 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N3 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I3 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N2 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N2 .
+#   } => {
+#     ?X a :N3 .
+#     ?X a :I3 .
+#     ?X a :J3 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I3 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J3 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N2 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N2 .
+#   } => {
+#     ?X a :N3 .
+#     ?X a :I3 .
+#     ?X a :J3 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J3 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N4 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N3 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N3 .
+#   } => {
+#     ?X a :N4 .
+#     ?X a :I4 .
+#     ?X a :J4 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N4 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I4 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N3 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N3 .
+#   } => {
+#     ?X a :N4 .
+#     ?X a :I4 .
+#     ?X a :J4 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I4 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J4 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N3 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N3 .
+#   } => {
+#     ?X a :N4 .
+#     ?X a :I4 .
+#     ?X a :J4 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J4 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N5 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N4 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N4 .
+#   } => {
+#     ?X a :N5 .
+#     ?X a :I5 .
+#     ?X a :J5 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N5 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I5 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N4 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N4 .
+#   } => {
+#     ?X a :N5 .
+#     ?X a :I5 .
+#     ?X a :J5 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I5 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J5 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N4 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N4 .
+#   } => {
+#     ?X a :N5 .
+#     ?X a :I5 .
+#     ?X a :J5 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J5 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N6 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N5 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N5 .
+#   } => {
+#     ?X a :N6 .
+#     ?X a :I6 .
+#     ?X a :J6 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N6 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I6 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N5 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N5 .
+#   } => {
+#     ?X a :N6 .
+#     ?X a :I6 .
+#     ?X a :J6 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I6 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J6 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N5 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N5 .
+#   } => {
+#     ?X a :N6 .
+#     ?X a :I6 .
+#     ?X a :J6 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J6 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N7 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N6 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N6 .
+#   } => {
+#     ?X a :N7 .
+#     ?X a :I7 .
+#     ?X a :J7 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N7 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I7 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N6 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N6 .
+#   } => {
+#     ?X a :N7 .
+#     ?X a :I7 .
+#     ?X a :J7 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I7 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J7 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N6 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N6 .
+#   } => {
+#     ?X a :N7 .
+#     ?X a :I7 .
+#     ?X a :J7 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J7 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N8 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N7 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N7 .
+#   } => {
+#     ?X a :N8 .
+#     ?X a :I8 .
+#     ?X a :J8 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N8 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I8 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N7 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N7 .
+#   } => {
+#     ?X a :N8 .
+#     ?X a :I8 .
+#     ?X a :J8 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I8 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J8 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N7 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N7 .
+#   } => {
+#     ?X a :N8 .
+#     ?X a :I8 .
+#     ?X a :J8 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J8 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N9 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N8 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N8 .
+#   } => {
+#     ?X a :N9 .
+#     ?X a :I9 .
+#     ?X a :J9 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N9 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I9 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N8 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N8 .
+#   } => {
+#     ?X a :N9 .
+#     ?X a :I9 .
+#     ?X a :J9 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I9 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J9 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N8 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N8 .
+#   } => {
+#     ?X a :N9 .
+#     ?X a :I9 .
+#     ?X a :J9 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J9 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :N10 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N9 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N9 .
+#   } => {
+#     ?X a :N10 .
+#     ?X a :I10 .
+#     ?X a :J10 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :N10 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :I10 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N9 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N9 .
+#   } => {
+#     ?X a :N10 .
+#     ?X a :I10 .
+#     ?X a :J10 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :I10 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :J10 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N9 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N9 .
+#   } => {
+#     ?X a :N10 .
+#     ?X a :I10 .
+#     ?X a :J10 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :J10 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :ind a :A2 .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :N10 .
+# via the schematic forward rule:
+#   {
+#     ?X a :N10 .
+#   } => {
+#     ?X a :A2 .
+#   } .
+# with substitution (on rule variables):
+#   ?X = :ind
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:ind a :A2 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :test :is true .
+# It holds because the following instance of the rule body is provable:
+#   :ind a :A2 .
+# via the schematic forward rule:
+#   {
+#     :ind a :A2 .
+#   } => {
+#     :test :is true .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:test :is true .
+
