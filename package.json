@@ -20,6 +20,8 @@
   "files": [
     "index.js",
     "eyeling.js",
+    "test",
+    "examples",
     "README.md",
     "LICENSE.md"
   ],
@@ -27,6 +29,8 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node test/api.test.js"
+    "test:api": "node test/api.test.js",
+    "test:examples": "bash -lc 'cd examples && ./test'",
+    "test": "npm run test:api && npm run test:examples"
   }
 }

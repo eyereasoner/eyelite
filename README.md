@@ -113,8 +113,7 @@ node eyeling.js -n examples/socrates.n3
 ### Run all examples
 
 ```bash
-cd examples
-./test
+npm run test:examples
 ```
 
 This runs `eyeling.js` over each example and compares against the golden outputs in `examples/output`.
