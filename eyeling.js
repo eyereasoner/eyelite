@@ -25,6 +25,7 @@ const nodeCrypto = require("crypto");
 
 const RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 const RDFS_NS = "http://www.w3.org/2000/01/rdf-schema#";
+const OWL_NS = "http://www.w3.org/2002/07/owl#";
 const XSD_NS = "http://www.w3.org/2001/XMLSchema#";
 const CRYPTO_NS = "http://www.w3.org/2000/10/swap/crypto#";
 const MATH_NS = "http://www.w3.org/2000/10/swap/math#";
@@ -221,7 +222,10 @@ function lex(inputText) {
         i += 2;
         continue;
       } else {
-        throw new Error("Unexpected '='");
+        // N3 syntactic sugar: '=' means owl:sameAs
+        tokens.push(new Token("Equals"));
+        i += 1;
+        continue;
       }
     }
 
@@ -656,6 +660,10 @@ class Parser {
     const tok = this.next();
     const typ = tok.typ;
     const val = tok.value;
+
+    if (typ === "Equals") {
+      return new Iri(OWL_NS + "sameAs");
+    }
 
     if (typ === "IriRef") {
       return new Iri(val || "");
@@ -1224,6 +1232,10 @@ function indexBackRule(backRules, r) {
 
 function isRdfTypePred(p) {
   return p instanceof Iri && p.value === RDF_NS + "type";
+}
+
+function isOwlSameAsPred(t) {
+  return t instanceof Iri && t.value === (OWL_NS + "sameAs");
 }
 
 function isLogImplies(p) {
@@ -3683,7 +3695,10 @@ function tripleToN3(tr, prefixes) {
   }
 
   const s = termToN3(tr.s, prefixes);
-  const p = isRdfTypePred(tr.p) ? "a" : termToN3(tr.p, prefixes);
+  const p =
+    isRdfTypePred(tr.p) ? "a"
+    : isOwlSameAsPred(tr.p) ? "="
+    : termToN3(tr.p, prefixes);
   const o = termToN3(tr.o, prefixes);
   return `${s} ${p} ${o} .`;
 }

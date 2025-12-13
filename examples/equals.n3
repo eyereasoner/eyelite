@@ -1,0 +1,12 @@
+# -----------
+# Equals test
+# -----------
+#
+# Example from Patrick Hochstenbach
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://example.org/socrates#>.
+
+:X = :Y . 
+
+{ :X owl:sameAs :Y } => { :test :is true }.

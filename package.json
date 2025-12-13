@@ -1,12 +1,13 @@
 {
   "name": "eyeling",
-  "version": "1.5.4",
+  "version": "0.1.0",
   "description": "A minimal Notation3 (N3) reasoner in JavaScript.",
-  "main": "eyeling.js",
-  "keywords": [
-    "N3",
-    "reasoner"
-  ],
+  "keywords": ["N3", "reasoner"],
+  "license": "MIT",
   "author": "Jos De Roo",
-  "license": "MIT"
+  "repository": { "type": "git", "url": "git+https://github.com/eyereasoner/eyeling.git" },
+  "homepage": "https://github.com/eyereasoner/eyeling#readme",
+  "bin": { "eyeling": "./eyeling.js" },
+  "files": ["eyeling.js", "README.md", "LICENSE.md"],
+  "engines": { "node": ">=18" }
 }
