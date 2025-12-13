@@ -1,0 +1,28 @@
+# ---------------------
+# Derived backward rule
+# ---------------------
+#
+# Example from Patrick Hochstenbach
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix : <http://example.org/socrates#>.
+
+true => {
+    { :Socrates a :Human. } <= true .
+    { :Human rdfs:subClassOf :Mortal } <= true.
+}.
+
+{
+    ?S a ?A.
+    ?A rdfs:subClassOf ?B.
+} => {
+    ?S a ?B.
+}.
+
+{
+    :Socrates a :Mortal .
+}
+=>
+{
+    :test :is true .
+} .

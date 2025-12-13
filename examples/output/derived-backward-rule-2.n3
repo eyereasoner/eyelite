@@ -1,0 +1,71 @@
+@prefix : <http://example.org/socrates#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   {
+#       :Socrates a :Human .
+#   } <= true .
+# This triple is the head of a forward rule with an empty premise,
+# so it holds unconditionally whenever the program is loaded.
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+{
+    :Socrates a :Human .
+} <= true .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   {
+#       :Human rdfs:subClassOf :Mortal .
+#   } <= true .
+# This triple is the head of a forward rule with an empty premise,
+# so it holds unconditionally whenever the program is loaded.
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+{
+    :Human rdfs:subClassOf :Mortal .
+} <= true .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Socrates a :Mortal .
+# It holds because the following instance of the rule body is provable:
+#   :Socrates a :Human .
+#   :Human rdfs:subClassOf :Mortal .
+# via the schematic forward rule:
+#   {
+#     ?S a ?A .
+#     ?A rdfs:subClassOf ?B .
+#   } => {
+#     ?S a ?B .
+#   } .
+# with substitution (on rule variables):
+#   ?A = :Human
+#   ?B = :Mortal
+#   ?S = :Socrates
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Socrates a :Mortal .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :test :is true .
+# It holds because the following instance of the rule body is provable:
+#   :Socrates a :Mortal .
+# via the schematic forward rule:
+#   {
+#     :Socrates a :Mortal .
+#   } => {
+#     :test :is true .
+#   } .
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:test :is true .
+

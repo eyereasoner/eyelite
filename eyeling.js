@@ -3564,13 +3564,19 @@ function forwardChain(facts, forwardRules, backRules) {
 
           const isFwRuleTriple =
             isLogImplies(instantiated.p) &&
-            instantiated.s instanceof FormulaTerm &&
-            instantiated.o instanceof FormulaTerm;
+            (
+              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof Literal && instantiated.s.value === "true" && instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === "true")
+            );
 
           const isBwRuleTriple =
             isLogImpliedBy(instantiated.p) &&
-            instantiated.s instanceof FormulaTerm &&
-            instantiated.o instanceof FormulaTerm;
+            (
+              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === "true") ||
+              (instantiated.s instanceof Literal && instantiated.s.value === "true" && instantiated.o instanceof FormulaTerm)
+            );
 
           if (isFwRuleTriple || isBwRuleTriple) {
             if (!hasFactIndexed(facts, instantiated)) {
@@ -3580,10 +3586,18 @@ function forwardChain(facts, forwardRules, backRules) {
               changed = true;
             }
 
-            if (instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) {
-              const left = instantiated.s.triples;
-              const right = instantiated.o.triples;
+            // Promote rule-producing triples to live rules, treating literal true as {}.
+            const left =
+              instantiated.s instanceof FormulaTerm ? instantiated.s.triples :
+              (instantiated.s instanceof Literal && instantiated.s.value === "true") ? [] :
+              null;
 
+            const right =
+              instantiated.o instanceof FormulaTerm ? instantiated.o.triples :
+              (instantiated.o instanceof Literal && instantiated.o.value === "true") ? [] :
+              null;
+
+            if (left !== null && right !== null) {
               if (isFwRuleTriple) {
                 const [premise0, conclusion] = liftBlankRuleVars(left, right);
                 const premise = reorderPremiseForConstraints(premise0);
