@@ -8,7 +8,8 @@ A minimal [Notation3 (N3)](https://notation3.org/) reasoner in **JavaScript**.
 - intentionally tiny and close in spirit to EYE,
 - a practical N3/Turtle superset (enough for lots of real rulesets),
 - supports forward (`=>`) + backward (`<=`) chaining over Horn-style rules,
-- prints only newly derived forward facts, optionally preceded by compact proof comments.
+- prints only newly derived forward facts, optionally preceded by compact proof comments,
+- we never want to leak raw data, hence pass-only-new and backward rules for functions that work with raw data, and of course we also keep all reasoning in the browser.
 
 ## Playground (in your browser)
 
