@@ -186,3 +186,4 @@ As soon as the premise is provable, `eyeling` exits with status code `2`.
 ## License
 
 MIT (see [LICENSE](https://github.com/eyereasoner/eyeling/blob/main/LICENSE.md)).
+
