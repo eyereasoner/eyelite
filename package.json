@@ -2,6 +2,7 @@
   "name": "eyeling",
   "version": "1.5.10",
   "description": "A minimal Notation3 (N3) reasoner in JavaScript.",
+  "main": "./index.js",
   "keywords": [
     "N3",
     "reasoner"
@@ -17,11 +18,18 @@
     "eyeling": "./eyeling.js"
   },
   "files": [
+    "index.js",
     "eyeling.js",
     "README.md",
     "LICENSE.md"
   ],
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "eyeling": "^1.5.10"
+  },
+  "scripts": {
+    "test": "node test/api.test.js"
   }
 }

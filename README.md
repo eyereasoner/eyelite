@@ -34,6 +34,53 @@ This link preloads a small “Socrates is Mortal” ruleset:
 
 - A reasonably recent Node.js (anything modern with `BigInt` support is fine).
 
+```md
+## Install (npm)
+
+```bash
+npm i eyeling
+```
+
+## CLI (npm)
+
+Run on a file:
+
+```bash
+npx eyeling examples/socrates.n3
+```
+
+(Or install globally: `npm i -g eyeling` and run `eyeling ...`.)
+
+## JavaScript API (Node)
+
+```js
+const { reason } = require('eyeling');
+
+const input = `
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix : <http://example.org/socrates#>.
+
+:Socrates a :Human.
+:Human rdfs:subClassOf :Mortal.
+
+{ ?S a ?A. ?A rdfs:subClassOf ?B } => { ?S a ?B }.
+`;
+
+const output = reason({ proofComments: false }, input);
+console.log(output);
+```
+
+ESM:
+
+```js
+import eyeling from 'eyeling';
+
+const output = eyeling.reason({ proofComments: false }, input);
+console.log(output);
+```
+
+Note: the API currently shells out to the bundled `eyeling.js` CLI under the hood (simple + robust).
+
 ### Run a single file
 
 From the repo root:
