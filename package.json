@@ -31,6 +31,7 @@
   "scripts": {
     "test:api": "node test/api.test.js",
     "test:examples": "bash -lc 'cd examples && ./test'",
+    "test:package": "bash test/package-smoke.sh",
     "test": "npm run test:api && npm run test:examples"
   }
 }
