@@ -14,7 +14,7 @@ A minimal [Notation3 (N3)](https://notation3.org/) reasoner in **JavaScript**.
 
 Try it here:
 
-- https://eyereasoner.github.io/eyeling/demo
+- [Eyeling playground](https://eyereasoner.github.io/eyeling/demo)
 
 The playground runs `eyeling` client-side. You can:
 - edit an N3 program directly,
@@ -25,7 +25,7 @@ The playground runs `eyeling` client-side. You can:
 
 This link preloads a small “Socrates is Mortal” ruleset:
 
-https://eyereasoner.github.io/eyeling/demo#%23%20------------------%0A%23%20Socrates%20inference%0A%23%20------------------%0A%0A%40prefix%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E.%0A%40prefix%20%3A%20%3Chttp%3A%2F%2Fexample.org%2Fsocrates%23%3E.%0A%0A%23%20facts%0A%3ASocrates%20a%20%3AHuman.%0A%3AHuman%20rdfs%3AsubClassOf%20%3AMortal.%0A%0A%23%20subclass%20rule%0A%7B%0A%20%20%20%20%3FS%20a%20%3FA.%0A%20%20%20%20%3FA%20rdfs%3AsubClassOf%20%3FB.%0A%7D%20%3D%3E%20%7B%0A%20%20%20%20%3FS%20a%20%3FB.%0A%7D%2E%0A
+[Socrates example](https://eyereasoner.github.io/eyeling/demo#%23%20------------------%0A%23%20Socrates%20inference%0A%23%20------------------%0A%0A%40prefix%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E.%0A%40prefix%20%3A%20%3Chttp%3A%2F%2Fexample.org%2Fsocrates%23%3E.%0A%0A%23%20facts%0A%3ASocrates%20a%20%3AHuman.%0A%3AHuman%20rdfs%3AsubClassOf%20%3AMortal.%0A%0A%23%20subclass%20rule%0A%7B%0A%20%20%20%20%3FS%20a%20%3FA.%0A%20%20%20%20%3FA%20rdfs%3AsubClassOf%20%3FB.%0A%7D%20%3D%3E%20%7B%0A%20%20%20%20%3FS%20a%20%3FB.%0A%7D%2E%0A)
 
 ## Quick start (Node.js)
 
@@ -173,15 +173,14 @@ As soon as the premise is provable, `eyeling` exits with status code `2`.
 
 `eyeling` implements a pragmatic subset of common N3 builtin families and evaluates them during backward goal proving:
 
-* `crypto:`
-* `math:`
-* `time:`
-* `list:`
-* `log:`
-* `string:`
+* **crypto**: `crypto:md5` `crypto:sha` `crypto:sha256` `crypto:sha512`
+* **list**: `list:append` `list:first` `list:firstRest` `list:in` `list:iterate` `list:last` `list:length` `list:map` `list:member` `list:memberAt` `list:notMember` `list:remove` `list:reverse` `list:sort`
+* **log**: `log:collectAllIn` `log:equalTo` `log:forAllIn` `log:impliedBy` `log:implies` `log:notEqualTo` `log:notIncludes` `log:skolem` `log:uri`
+* **math**: `math:absoluteValue` `math:acos` `math:asin` `math:atan` `math:cos` `math:cosh` `math:degrees` `math:difference` `math:equalTo` `math:exponentiation` `math:greaterThan` `math:lessThan` `math:negation` `math:notEqualTo` `math:notGreaterThan` `math:notLessThan` `math:product` `math:quotient` `math:remainder` `math:rounded` `math:sin` `math:sinh` `math:sum` `math:tan` `math:tanh`
+* **string**: `string:concatenation` `string:contains` `string:containsIgnoringCase` `string:endsWith` `string:equalIgnoringCase` `string:format` `string:greaterThan` `string:lessThan` `string:matches` `string:notEqualIgnoringCase` `string:notGreaterThan` `string:notLessThan` `string:notMatches` `string:replace` `string:scrape` `string:startsWith`
+* **time**: `time:localTime`
 
-For the exact list and corner cases, see `evalBuiltin(...)` in `eyeling.js`.
 
 ## License
 
-MIT (see `LICENSE.md`).
+MIT (see [LICENSE](https://eyereasoner.github.io/eyeling/LICENSE)).
