@@ -10,11 +10,6 @@ pushd ~/github.com/eyereasoner/eyeling > /dev/null
 
 git commit -a -m "$2"
 npm version "$1"
-
-# ✅ publish (will prompt for OTP because you enabled 2FA for writes)
-npm publish --access public
-
-# ✅ push commit + tag
 git push origin main --follow-tags
 
 popd > /dev/null

@@ -1,0 +1,28 @@
+name: Publish to npm (OIDC)
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  id-token: write   # nodig voor OIDC naar npm
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      # npm docs: zorg voor npm 11.5.1+ voor trusted publishing
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - run: npm publish
+
