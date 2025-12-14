@@ -556,6 +556,7 @@ let passed = 0;
 let failed = 0;
 
 (async function main() {
+  const suiteStart = Date.now();
   info(`Running ${cases.length} API tests (independent of examples/)`);
 
   for (const tc of cases) {
@@ -602,6 +603,8 @@ let failed = 0;
   }
 
   console.log('');
+  const suiteMs = Date.now() - suiteStart;
+  console.log(`${C.y}==${C.n} Total elapsed: ${suiteMs} ms`);
   if (failed === 0) {
     ok(`All API tests passed (${passed}/${cases.length})`);
     process.exit(0);

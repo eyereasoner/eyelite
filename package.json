@@ -31,8 +31,10 @@
   "scripts": {
     "test:packlist": "node test/packlist.test.js",
     "test:api": "node test/api.test.js",
-    "test:examples": "bash -lc 'cd examples && ./test'",
-    "test:package": "bash test/package-smoke.sh",
-    "test": "npm run test:packlist && npm run test:api && npm run test:examples"
+    "test:examples": "node test/examples.test.js",
+    "test:package": "node test/package.test.js",
+    "test": "npm run test:packlist && npm run test:api && npm run test:examples",
+    "preversion": "npm test",
+    "postversion": "git push origin HEAD --follow-tags"
   }
 }
