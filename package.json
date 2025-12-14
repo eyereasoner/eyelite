@@ -1,6 +1,6 @@
 {
   "name": "eyeling",
-  "version": "1.5.18",
+  "version": "1.5.19",
   "description": "A minimal Notation3 (N3) reasoner in JavaScript.",
   "main": "./index.js",
   "keywords": [
