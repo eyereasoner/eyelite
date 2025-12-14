@@ -164,20 +164,18 @@ function main() {
     }
 
     // Run eyeling on this file (cwd examplesDir so relative behavior matches old script)
-    const r = run(nodePath, [eyelingJsPath, file], { cwd: examplesDir });
-    const rc = (r.status == null) ? 1 : r.status;
+    const outFd = fs.openSync(generatedPath, 'w');
 
-    // Write stdout to file (expectedPath in git mode; tmp in npm mode)
-    try {
-      fs.writeFileSync(generatedPath, r.stdout || '', 'utf8');
-    } catch (e) {
-      const ms = Date.now() - start;
-      fail(`${idx} ${file} (${ms} ms)`);
-      fail(`Cannot write output: ${e.message}`);
-      failed++;
-      if (tmpDir) rmrf(tmpDir);
-      continue;
-    }
+    const r = cp.spawnSync(nodePath, [eyelingJsPath, file], {
+      cwd: examplesDir,
+      stdio: ['ignore', outFd, 'pipe'], // stdout -> file, stderr captured
+      maxBuffer: 200 * 1024 * 1024,
+      encoding: 'utf8'
+    });
+
+    fs.closeSync(outFd);
+
+    const rc = (r.status == null) ? 1 : r.status;
 
     const ms = Date.now() - start;
 
