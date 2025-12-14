@@ -100,7 +100,7 @@ npm run test:packlist
 ```
 
 - `test:api` runs an independent JS API test suite (does not rely on `examples/`).
-- `test:examples` runs the `examples/test` runner and compares against the golden outputs in `examples/output`.
+- `test:examples` runs the examples in `examples` directory and compares against the golden outputs in `examples/output`.
 - `test:package` does a “real consumer” smoke test: `npm pack` → install tarball into a temp project → run API + CLI + examples.
 - `test:packlist` sanity-checks what will be published in the npm tarball (and the CLI shebang/bin wiring).
 

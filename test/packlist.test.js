@@ -45,7 +45,6 @@ try {
     'LICENSE.md',
     'eyeling.js',
     'index.js',
-    'examples/test',
   ];
 
   for (const p of mustHave) assert.ok(paths.has(p), `missing from npm pack: ${p}`);
