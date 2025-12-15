@@ -1,9 +1,62 @@
-# -------------------------
-# Drone Corridor Planner v2
-# -------------------------
+# =============================================================================
+# Drone Corridor Planner v2 (example N3 program)
 #
-# Fuel-bounded drone planning in N3: chain quoted-state transitions, aggregate weights,
-# and enforce permit/battery constraints while remaining safe under cycles.
+# What this file is
+# - A tiny “planner” written in Notation3 (N3): it searches for a sequence of
+#   actions that moves a drone from a start state to a goal state.
+# - Intended to run in an N3 reasoner that supports forward rules (`=>`),
+#   backward rules (`<=`), and a few built-ins (e.g., `math:*`, `list:*`).
+#
+# How to run (one simple option)
+# - With the JavaScript `eyeling` CLI:
+#     npx eyeling examples/drone-corridor-planner-v2.n3
+#   The output will be newly derived facts, including one or more `gps:plan`
+#   results (see “Output” below).
+#
+# Big idea (in plain terms)
+# - We describe a “world” as a small set of facts: location, battery level,
+#   and whether the drone has a permit.
+# - We describe each possible action (fly, train, charge, buy/get permit) as a
+#   state transition:  FROM-state  ->  TO-state  plus some numeric “weights”.
+# - The rules then *compose* these transitions into multi-step plans while
+#   aggregating the weights (e.g., add durations, multiply beliefs).
+#
+# Reading the action descriptions
+# - Each action is encoded as a `gps:description` with this shape:
+#     ( FROM  true  TO  :actionName  duration  cost  belief  comfort )
+#   where:
+#   - FROM / TO are little graphs in `{ ... }` describing the state.
+#   - `true` is a placeholder “precondition” (kept for symmetry with richer
+#     variants where extra conditions may appear).
+#   - duration/cost/belief/comfort are example numbers used for scoring/pruning.
+#
+# Bounded search (why it doesn’t loop forever)
+# - The planner is *fuel-bounded*: it carries a list of “fuel tokens” and
+#   consumes one token per step. When fuel runs out, expansion stops.
+# - This is important because the map can contain cycles (e.g., going back to a
+#   previous city). Fuel-bounding keeps the search safe and finite.
+#
+# How scores are combined across a multi-step plan
+# - Duration and cost are summed.
+# - Belief and comfort are multiplied (so long plans tend to reduce them).
+# - The list of actions is built by appending each step’s action name.
+#
+# Output (what you should expect to see)
+# - The “Query” section asks for plans that take the drone from the initial
+#   state to the goal (Oostende), then prunes bad plans using thresholds like:
+#     belief > ...  and  cost < ...
+# - Each surviving plan is reported as a derived fact like:
+#     :d1 gps:plan ( ...actions... duration cost belief comfort battery permit fuelLeft ).
+#
+# Customizing this example
+# - Add/edit `gps:description` lines to introduce new routes/actions.
+# - Change the initial state (`:d1 :location ...`, `:battery ...`, `:permit ...`).
+# - Adjust `:fuel7` (more/less steps) and the pruning thresholds in the Query.
+#
+# Notes
+# - This is a *toy* corridor-planning model meant to illustrate rule-based
+#   planning patterns. The numeric values and “units” are illustrative.
+# =============================================================================
 
 @prefix math: <http://www.w3.org/2000/10/swap/math#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
