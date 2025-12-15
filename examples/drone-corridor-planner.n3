@@ -1,0 +1,132 @@
+# ----------------------
+# Drone Corridor Planner
+# ----------------------
+#
+# Fuel-bounded drone planning in N3: chain quoted-state transitions, aggregate weights,
+# and enforce permit/battery constraints while remaining safe under cycles.
+
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix gps:  <https://eyereasoner.github.io/eye/reasoning/gps/gps-schema#>.
+@prefix :     <https://eyereasoner.github.io/eye/reasoning#>.
+
+# Fuel-bounded drone planning in N3: chain quoted-state transitions, aggregate weights, and enforce permit/battery constraints while remaining safe under cycles.
+
+# ----------------
+# current state
+# ----------------
+:d1 :location :Gent.
+:d1 :battery  :full.
+:d1 :permit   :none.
+
+# bounded search horizon (6 steps max)
+:fuel6 :value (:t :t :t :t :t :t).
+
+# -------------------------------------------------
+# "map" / action descriptions (as backward rules)
+# -------------------------------------------------
+{:map-DRONE gps:description (
+  {?S :location :Gent.     ?S :battery :full. ?S :permit ?P.}  true
+  {?S :location :Brugge.   ?S :battery :mid.  ?S :permit ?P.}
+  :fly_gent_brugge
+  1500.0 0.006 0.99 0.99
+)} <= true.
+
+{:map-DRONE gps:description (
+  {?S :location :Gent.     ?S :battery :full. ?S :permit ?P.}  true
+  {?S :location :Kortrijk. ?S :battery :mid.  ?S :permit ?P.}
+  :fly_gent_kortrijk
+  1600.0 0.007 0.99 0.99
+)} <= true.
+
+{:map-DRONE gps:description (
+  {?S :location :Kortrijk. ?S :battery :mid.  ?S :permit ?P.}  true
+  {?S :location :Brugge.   ?S :battery :low.  ?S :permit ?P.}
+  :fly_kortrijk_brugge
+  1600.0 0.007 0.99 0.99
+)} <= true.
+
+# cycle edge (safe due to fuel bound)
+{:map-DRONE gps:description (
+  {?S :location :Brugge.   ?S :battery :mid.  ?S :permit ?P.}  true
+  {?S :location :Kortrijk. ?S :battery :low.  ?S :permit ?P.}
+  :fly_brugge_kortrijk
+  1600.0 0.007 0.985 0.98
+)} <= true.
+
+# permit acquisition (only in Kortrijk)
+{:map-DRONE gps:description (
+  {?S :location :Kortrijk. ?S :battery ?B.    ?S :permit :none.} true
+  {?S :location :Kortrijk. ?S :battery ?B.    ?S :permit :yes.}
+  :get_zone_permit
+  300.0 0.001 0.999 1.0
+)} <= true.
+
+# charging (low -> full)
+{:map-DRONE gps:description (
+  {?S :location :Brugge.   ?S :battery :low.  ?S :permit ?P.}  true
+  {?S :location :Brugge.   ?S :battery :full. ?S :permit ?P.}
+  :quick_charge_brugge
+  600.0 0.004 0.999 0.97
+)} <= true.
+
+# restricted corridor to Oostende requires permit=yes
+{:map-DRONE gps:description (
+  {?S :location :Brugge.   ?S :battery :full. ?S :permit :yes.} true
+  {?S :location :Oostende. ?S :battery :mid.  ?S :permit :yes.}
+  :cross_corridor_brugge_oostende
+  900.0 0.004 0.98 1.0
+)} <= true.
+
+# -------------------------------------------------
+# planner: compute all bounded paths
+# -------------------------------------------------
+# Base: one description is a path (consume 1 fuel token)
+{
+  (?From ?To (?Act) ?Dur ?Cost ?Bel ?Comf ?FuelIn ?FuelOut) :path true.
+}
+<=
+{
+  :map-DRONE gps:description (?From true ?To ?Act ?Dur ?Cost ?Bel ?Comf).
+  ?FuelIn list:rest ?FuelOut.
+}.
+
+# Recursive: chain one step + rest path, aggregate weights, consume 1 fuel token
+{
+  (?From ?To ?Actions ?Dur ?Cost ?Bel ?Comf ?FuelIn ?FuelOut) :path true.
+}
+<=
+{
+  :map-DRONE gps:description (?From true ?Mid ?Act ?Dur1 ?Cost1 ?Bel1 ?Comf1).
+
+  ?FuelIn list:rest ?FuelMid.
+  (?Mid ?To ?RestActs ?Dur2 ?Cost2 ?Bel2 ?Comf2 ?FuelMid ?FuelOut) :path true.
+
+  ((?Act) ?RestActs) list:append ?Actions.
+
+  (?Dur1  ?Dur2)  math:sum     ?Dur.
+  (?Cost1 ?Cost2) math:sum     ?Cost.
+  (?Bel1  ?Bel2)  math:product ?Bel.
+  (?Comf1 ?Comf2) math:product ?Comf.
+}.
+
+# -------------------------------------------------
+# Query: plans for d1 to Oostende with thresholds
+# -------------------------------------------------
+{
+  :fuel6 :value ?Fuel.
+
+  ({:d1 :location :Gent. :d1 :battery :full. :d1 :permit :none.}
+   {:d1 :location :Oostende. :d1 :battery ?B. :d1 :permit ?P.}
+   ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true.
+
+  ?Bel  math:greaterThan 0.95.
+  ?Cost math:lessThan    0.05.
+}
+=>
+{
+  :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?FuelLeft).
+  :d1 :finalBattery ?B.
+  :d1 :finalPermit  ?P.
+}.
+

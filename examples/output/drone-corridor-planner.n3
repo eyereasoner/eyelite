@@ -1,0 +1,153 @@
+@prefix : <https://eyereasoner.github.io/eye/reasoning#> .
+@prefix gps: <https://eyereasoner.github.io/eye/reasoning/gps/gps-schema#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_kortrijk :get_zone_permit :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5000 0.023 0.958577964498 0.9506969999999999 (:t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel6 :value (:t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :get_zone_permit :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5000 0.023 0.958577964498 0.9506969999999999 (:t :t :t :t :t :t) (:t)) :path true .
+#   0.958577964498 math:greaterThan 0.95 .
+#   0.023 math:lessThan 0.05 .
+# via the schematic forward rule:
+#   {
+#     :fuel6 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.95 .
+#     ?Cost math:lessThan 0.05 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?FuelLeft) .
+#     :d1 :finalBattery ?B .
+#     :d1 :finalPermit ?P .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :get_zone_permit :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.958577964498
+#   ?Comf = 0.9506969999999999
+#   ?Cost = 0.023
+#   ?Dur = 5000
+#   ?Fuel = (:t :t :t :t :t :t)
+#   ?FuelLeft = (:t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_kortrijk :get_zone_permit :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5000 0.023 0.958577964498 0.9506969999999999 (:t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 :finalBattery :mid .
+# It holds because the following instance of the rule body is provable:
+#   :fuel6 :value (:t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :get_zone_permit :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5000 0.023 0.958577964498 0.9506969999999999 (:t :t :t :t :t :t) (:t)) :path true .
+#   0.958577964498 math:greaterThan 0.95 .
+#   0.023 math:lessThan 0.05 .
+# via the schematic forward rule:
+#   {
+#     :fuel6 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.95 .
+#     ?Cost math:lessThan 0.05 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?FuelLeft) .
+#     :d1 :finalBattery ?B .
+#     :d1 :finalPermit ?P .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :get_zone_permit :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.958577964498
+#   ?Comf = 0.9506969999999999
+#   ?Cost = 0.023
+#   ?Dur = 5000
+#   ?Fuel = (:t :t :t :t :t :t)
+#   ?FuelLeft = (:t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 :finalBattery :mid .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 :finalPermit :yes .
+# It holds because the following instance of the rule body is provable:
+#   :fuel6 :value (:t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :get_zone_permit :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5000 0.023 0.958577964498 0.9506969999999999 (:t :t :t :t :t :t) (:t)) :path true .
+#   0.958577964498 math:greaterThan 0.95 .
+#   0.023 math:lessThan 0.05 .
+# via the schematic forward rule:
+#   {
+#     :fuel6 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.95 .
+#     ?Cost math:lessThan 0.05 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?FuelLeft) .
+#     :d1 :finalBattery ?B .
+#     :d1 :finalPermit ?P .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :get_zone_permit :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.958577964498
+#   ?Comf = 0.9506969999999999
+#   ?Cost = 0.023
+#   ?Dur = 5000
+#   ?Fuel = (:t :t :t :t :t :t)
+#   ?FuelLeft = (:t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 :finalPermit :yes .
+
