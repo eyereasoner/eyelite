@@ -353,7 +353,40 @@
         }
       }
 
+      // --- Prefill + auto-load "Load N3 from URL" via query string ---
+      // Usage:
+      //   demo?url=https://example.com/file.n3
+      // Notes:
+      //   - If a #fragment is present, it takes precedence (existing behavior).
+      //   - When loading from ?url=..., we avoid rewriting the hash until the user edits,
+      //     so you can keep sharing a clean ?url=... link.
+      function getN3UriFromQuery() {
+        try {
+          const url = new URL(window.location.href);
+          // support a few aliases, but "url" is the main one
+          return (
+            url.searchParams.get("url") ||
+            url.searchParams.get("n3url") ||
+            url.searchParams.get("n3") ||
+            url.searchParams.get("load") ||
+            null
+          );
+        } catch (e) {
+          return null;
+        }
+      }
+
       const paramProgram = getProgramFromHash();
+      const paramN3Uri = getN3UriFromQuery();
+
+      if (paramN3Uri) {
+        uriInput.value = paramN3Uri;
+      }
+
+      // In "URL-load mode" (no fragment, but ?url=...), don't start syncing to #hash
+      // until the user actually edits the editor.
+      let hashSyncEnabled = paramProgram !== null || !paramN3Uri;
+
       const initialN3 = paramProgram !== null ? paramProgram : defaultN3;
 
       // CodeMirror editors (syntax-highlighted)
@@ -398,8 +431,18 @@
         shareUrlUpdateTimeout = setTimeout(updateShareUrl, 300);
       }
 
-      editor.on("change", function () {
+      editor.on("change", function (_cm, changeObj) {
         autoResizeCodeMirror(editor, 220);
+
+        if (!hashSyncEnabled) {
+          // Only start syncing once the user actually edits (not programmatic setValue).
+          if (changeObj && changeObj.origin && changeObj.origin !== "setValue") {
+            hashSyncEnabled = true;
+          } else {
+            return;
+          }
+        }
+
         scheduleUpdateShareUrl();
       });
 
@@ -529,7 +572,7 @@
         statusEl.textContent = "Running reasoning...";
         outputEl.setValue("");
         autoResizeCodeMirror(outputEl, 80);
-        updateShareUrl();
+        if (hashSyncEnabled) updateShareUrl();
 
         try {
           const runner = await getEyelingRunner();
@@ -563,7 +606,7 @@
           editor.setValue(text);
           autoResizeCodeMirror(editor, 220);
           statusEl.textContent = "Loaded N3 from URL.";
-          updateShareUrl();
+          if (hashSyncEnabled) updateShareUrl();
         } catch (e) {
           statusEl.textContent = "Failed to load URL.";
           outputEl.setValue(
@@ -579,8 +622,13 @@
       runBtn.addEventListener("click", runReasoner);
       loadUriBtn.addEventListener("click", loadFromUri);
 
-      // Initialize URL hash with whatever we started with
-      updateShareUrl();
+      // Initialize URL hash with whatever we started with (unless we're in URL-load mode)
+      if (hashSyncEnabled) updateShareUrl();
+
+      // If ?url=... is present (and there's no #fragment), auto-load it.
+      if (paramN3Uri && paramProgram === null) {
+        loadFromUri();
+      }
     })();
   </script>
 </body>
