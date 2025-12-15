@@ -1,0 +1,819 @@
+@prefix : <https://eyereasoner.github.io/eye/reasoning#> .
+@prefix gps: <https://eyereasoner.github.io/eye/reasoning/gps/gps-schema#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_kortrijk :emergency_charge_kortrijk :get_zone_permit_kortrijk :direct_corridor_kortrijk_oostende) 3500 0.019999999999999997 0.9435600454499999 0.86526 :mid :yes (:t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :emergency_charge_kortrijk :get_zone_permit_kortrijk :direct_corridor_kortrijk_oostende) 3500 0.019999999999999997 0.9435600454499999 0.86526 (:t :t :t :t :t :t :t) (:t :t :t)) :path true .
+#   0.9435600454499999 math:greaterThan 0.94 .
+#   0.019999999999999997 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :emergency_charge_kortrijk :get_zone_permit_kortrijk :direct_corridor_kortrijk_oostende)
+#   ?B = :mid
+#   ?Bel = 0.9435600454499999
+#   ?Comf = 0.86526
+#   ?Cost = 0.019999999999999997
+#   ?Dur = 3500
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_kortrijk :emergency_charge_kortrijk :get_zone_permit_kortrijk :direct_corridor_kortrijk_oostende) 3500 0.019999999999999997 0.9435600454499999 0.86526 :mid :yes (:t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_kortrijk :get_zone_permit_kortrijk :emergency_charge_kortrijk :direct_corridor_kortrijk_oostende) 3500 0.02 0.9435600454499999 0.86526 :mid :yes (:t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :get_zone_permit_kortrijk :emergency_charge_kortrijk :direct_corridor_kortrijk_oostende) 3500 0.02 0.9435600454499999 0.86526 (:t :t :t :t :t :t :t) (:t :t :t)) :path true .
+#   0.9435600454499999 math:greaterThan 0.94 .
+#   0.02 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :get_zone_permit_kortrijk :emergency_charge_kortrijk :direct_corridor_kortrijk_oostende)
+#   ?B = :mid
+#   ?Bel = 0.9435600454499999
+#   ?Comf = 0.86526
+#   ?Cost = 0.02
+#   ?Dur = 3500
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_kortrijk :get_zone_permit_kortrijk :emergency_charge_kortrijk :direct_corridor_kortrijk_oostende) 3500 0.02 0.9435600454499999 0.86526 :mid :yes (:t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_kortrijk :get_zone_permit_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :public_coastline_brugge_oostende) 5300 0.025 0.9536872605975 0.9126691199999999 :mid :yes (:t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :get_zone_permit_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :public_coastline_brugge_oostende) 5300 0.025 0.9536872605975 0.9126691199999999 (:t :t :t :t :t :t :t) (:t :t)) :path true .
+#   0.9536872605975 math:greaterThan 0.94 .
+#   0.025 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :get_zone_permit_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :public_coastline_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.9536872605975
+#   ?Comf = 0.9126691199999999
+#   ?Cost = 0.025
+#   ?Dur = 5300
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_kortrijk :get_zone_permit_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :public_coastline_brugge_oostende) 5300 0.025 0.9536872605975 0.9126691199999999 :mid :yes (:t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_kortrijk :get_zone_permit_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5000 0.023 0.958577964498 0.9506969999999999 :mid :yes (:t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :get_zone_permit_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5000 0.023 0.958577964498 0.9506969999999999 (:t :t :t :t :t :t :t) (:t :t)) :path true .
+#   0.958577964498 math:greaterThan 0.94 .
+#   0.023 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :get_zone_permit_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.958577964498
+#   ?Comf = 0.9506969999999999
+#   ?Cost = 0.023
+#   ?Dur = 5000
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_kortrijk :get_zone_permit_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5000 0.023 0.958577964498 0.9506969999999999 :mid :yes (:t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 5150 0.024 0.94034675196 0.9506969999999999 :mid :yes (:t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 5150 0.024 0.94034675196 0.9506969999999999 (:t :t :t :t :t :t :t) (:t :t)) :path true .
+#   0.94034675196 math:greaterThan 0.94 .
+#   0.024 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :buy_permit_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.94034675196
+#   ?Comf = 0.9506969999999999
+#   ?Cost = 0.024
+#   ?Dur = 5150
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 5150 0.024 0.94034675196 0.9506969999999999 :mid :yes (:t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :public_coastline_brugge_oostende) 5000 0.024 0.9546419025 0.9126691199999999 :mid :none (:t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :none .
+#   } (:fly_gent_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :public_coastline_brugge_oostende) 5000 0.024 0.9546419025 0.9126691199999999 (:t :t :t :t :t :t :t) (:t :t :t)) :path true .
+#   0.9546419025 math:greaterThan 0.94 .
+#   0.024 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :public_coastline_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.9546419025
+#   ?Comf = 0.9126691199999999
+#   ?Cost = 0.024
+#   ?Dur = 5000
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t)
+#   ?P = :none
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_kortrijk :fly_kortrijk_brugge :quick_charge_brugge :public_coastline_brugge_oostende) 5000 0.024 0.9546419025 0.9126691199999999 :mid :none (:t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_kortrijk :fly_kortrijk_brugge :buy_permit_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5150 0.024 0.94034675196 0.9506969999999999 :mid :yes (:t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_kortrijk :fly_kortrijk_brugge :buy_permit_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5150 0.024 0.94034675196 0.9506969999999999 (:t :t :t :t :t :t :t) (:t :t)) :path true .
+#   0.94034675196 math:greaterThan 0.94 .
+#   0.024 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_kortrijk :fly_kortrijk_brugge :buy_permit_brugge :quick_charge_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.94034675196
+#   ?Comf = 0.9506969999999999
+#   ?Cost = 0.024
+#   ?Dur = 5150
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_kortrijk :fly_kortrijk_brugge :buy_permit_brugge :quick_charge_brugge :cross_corridor_brugge_oostende) 5150 0.024 0.94034675196 0.9506969999999999 :mid :yes (:t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:train_gent_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3350 0.02 0.9545445 0.9551999999999999 :mid :yes (:t :t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:train_gent_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3350 0.02 0.9545445 0.9551999999999999 (:t :t :t :t :t :t :t) (:t :t :t :t)) :path true .
+#   0.9545445 math:greaterThan 0.94 .
+#   0.02 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:train_gent_brugge :buy_permit_brugge :public_coastline_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.9545445
+#   ?Comf = 0.9551999999999999
+#   ?Cost = 0.02
+#   ?Dur = 3350
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:train_gent_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3350 0.02 0.9545445 0.9551999999999999 :mid :yes (:t :t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:train_gent_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 3050 0.018000000000000002 0.9594396 0.995 :mid :yes (:t :t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:train_gent_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 3050 0.018000000000000002 0.9594396 0.995 (:t :t :t :t :t :t :t) (:t :t :t :t)) :path true .
+#   0.9594396 math:greaterThan 0.94 .
+#   0.018000000000000002 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:train_gent_brugge :buy_permit_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.9594396
+#   ?Comf = 0.995
+#   ?Cost = 0.018000000000000002
+#   ?Dur = 3050
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:train_gent_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 3050 0.018000000000000002 0.9594396 0.995 :mid :yes (:t :t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:train_gent_brugge :public_coastline_brugge_oostende) 2900 0.018000000000000002 0.974025 0.9551999999999999 :mid :none (:t :t :t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :none .
+#   } (:train_gent_brugge :public_coastline_brugge_oostende) 2900 0.018000000000000002 0.974025 0.9551999999999999 (:t :t :t :t :t :t :t) (:t :t :t :t :t)) :path true .
+#   0.974025 math:greaterThan 0.94 .
+#   0.018000000000000002 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:train_gent_brugge :public_coastline_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.974025
+#   ?Comf = 0.9551999999999999
+#   ?Cost = 0.018000000000000002
+#   ?Dur = 2900
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t :t :t)
+#   ?P = :none
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:train_gent_brugge :public_coastline_brugge_oostende) 2900 0.018000000000000002 0.974025 0.9551999999999999 :mid :none (:t :t :t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_brugge :topup_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3550 0.017 0.944999055 0.931392 :mid :yes (:t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_brugge :topup_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3550 0.017 0.944999055 0.931392 (:t :t :t :t :t :t :t) (:t :t :t)) :path true .
+#   0.944999055 math:greaterThan 0.94 .
+#   0.017 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_brugge :topup_brugge :buy_permit_brugge :public_coastline_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.944999055
+#   ?Comf = 0.931392
+#   ?Cost = 0.017
+#   ?Dur = 3550
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_brugge :topup_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3550 0.017 0.944999055 0.931392 :mid :yes (:t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_brugge :topup_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 3250 0.015000000000000001 0.9498452039999999 0.9702 :mid :yes (:t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_brugge :topup_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 3250 0.015000000000000001 0.9498452039999999 0.9702 (:t :t :t :t :t :t :t) (:t :t :t)) :path true .
+#   0.9498452039999999 math:greaterThan 0.94 .
+#   0.015000000000000001 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_brugge :topup_brugge :buy_permit_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.9498452039999999
+#   ?Comf = 0.9702
+#   ?Cost = 0.015000000000000001
+#   ?Dur = 3250
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_brugge :topup_brugge :buy_permit_brugge :cross_corridor_brugge_oostende) 3250 0.015000000000000001 0.9498452039999999 0.9702 :mid :yes (:t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_brugge :topup_brugge :public_coastline_brugge_oostende) 3100 0.015000000000000001 0.96428475 0.931392 :mid :none (:t :t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :none .
+#   } (:fly_gent_brugge :topup_brugge :public_coastline_brugge_oostende) 3100 0.015000000000000001 0.96428475 0.931392 (:t :t :t :t :t :t :t) (:t :t :t :t)) :path true .
+#   0.96428475 math:greaterThan 0.94 .
+#   0.015000000000000001 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_brugge :topup_brugge :public_coastline_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.96428475
+#   ?Comf = 0.931392
+#   ?Cost = 0.015000000000000001
+#   ?Dur = 3100
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t :t)
+#   ?P = :none
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_brugge :topup_brugge :public_coastline_brugge_oostende) 3100 0.015000000000000001 0.96428475 0.931392 :mid :none (:t :t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_brugge :buy_permit_brugge :topup_brugge :public_coastline_brugge_oostende) 3550 0.017 0.944999055 0.931392 :mid :yes (:t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_brugge :buy_permit_brugge :topup_brugge :public_coastline_brugge_oostende) 3550 0.017 0.944999055 0.931392 (:t :t :t :t :t :t :t) (:t :t :t)) :path true .
+#   0.944999055 math:greaterThan 0.94 .
+#   0.017 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_brugge :buy_permit_brugge :topup_brugge :public_coastline_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.944999055
+#   ?Comf = 0.931392
+#   ?Cost = 0.017
+#   ?Dur = 3550
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_brugge :buy_permit_brugge :topup_brugge :public_coastline_brugge_oostende) 3550 0.017 0.944999055 0.931392 :mid :yes (:t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_brugge :buy_permit_brugge :topup_brugge :cross_corridor_brugge_oostende) 3250 0.015000000000000001 0.9498452039999999 0.9702 :mid :yes (:t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :mid .
+#       :d1 :permit :yes .
+#   } (:fly_gent_brugge :buy_permit_brugge :topup_brugge :cross_corridor_brugge_oostende) 3250 0.015000000000000001 0.9498452039999999 0.9702 (:t :t :t :t :t :t :t) (:t :t :t)) :path true .
+#   0.9498452039999999 math:greaterThan 0.94 .
+#   0.015000000000000001 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_brugge :buy_permit_brugge :topup_brugge :cross_corridor_brugge_oostende)
+#   ?B = :mid
+#   ?Bel = 0.9498452039999999
+#   ?Comf = 0.9702
+#   ?Cost = 0.015000000000000001
+#   ?Dur = 3250
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_brugge :buy_permit_brugge :topup_brugge :cross_corridor_brugge_oostende) 3250 0.015000000000000001 0.9498452039999999 0.9702 :mid :yes (:t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3250 0.014 0.941094 0.9503999999999999 :low :yes (:t :t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :low .
+#       :d1 :permit :yes .
+#   } (:fly_gent_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3250 0.014 0.941094 0.9503999999999999 (:t :t :t :t :t :t :t) (:t :t :t :t)) :path true .
+#   0.941094 math:greaterThan 0.94 .
+#   0.014 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_brugge :buy_permit_brugge :public_coastline_brugge_oostende)
+#   ?B = :low
+#   ?Bel = 0.941094
+#   ?Comf = 0.9503999999999999
+#   ?Cost = 0.014
+#   ?Dur = 3250
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t :t)
+#   ?P = :yes
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_brugge :buy_permit_brugge :public_coastline_brugge_oostende) 3250 0.014 0.941094 0.9503999999999999 :low :yes (:t :t :t :t)) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :d1 gps:plan ((:fly_gent_brugge :public_coastline_brugge_oostende) 2800 0.012 0.9602999999999999 0.9503999999999999 :low :none (:t :t :t :t :t)) .
+# It holds because the following instance of the rule body is provable:
+#   :fuel7 :value (:t :t :t :t :t :t :t) .
+#   ({
+#       :d1 :location :Gent .
+#       :d1 :battery :full .
+#       :d1 :permit :none .
+#   } {
+#       :d1 :location :Oostende .
+#       :d1 :battery :low .
+#       :d1 :permit :none .
+#   } (:fly_gent_brugge :public_coastline_brugge_oostende) 2800 0.012 0.9602999999999999 0.9503999999999999 (:t :t :t :t :t :t :t) (:t :t :t :t :t)) :path true .
+#   0.9602999999999999 math:greaterThan 0.94 .
+#   0.012 math:lessThan 0.03 .
+# via the schematic forward rule:
+#   {
+#     :fuel7 :value ?Fuel .
+#     ({
+#         :d1 :location :Gent .
+#         :d1 :battery :full .
+#         :d1 :permit :none .
+#     } {
+#         :d1 :location :Oostende .
+#         :d1 :battery ?B .
+#         :d1 :permit ?P .
+#     } ?Acts ?Dur ?Cost ?Bel ?Comf ?Fuel ?FuelLeft) :path true .
+#     ?Bel math:greaterThan 0.94 .
+#     ?Cost math:lessThan 0.03 .
+#   } => {
+#     :d1 gps:plan (?Acts ?Dur ?Cost ?Bel ?Comf ?B ?P ?FuelLeft) .
+#   } .
+# with substitution (on rule variables):
+#   ?Acts = (:fly_gent_brugge :public_coastline_brugge_oostende)
+#   ?B = :low
+#   ?Bel = 0.9602999999999999
+#   ?Comf = 0.9503999999999999
+#   ?Cost = 0.012
+#   ?Dur = 2800
+#   ?Fuel = (:t :t :t :t :t :t :t)
+#   ?FuelLeft = (:t :t :t :t :t)
+#   ?P = :none
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:d1 gps:plan ((:fly_gent_brugge :public_coastline_brugge_oostende) 2800 0.012 0.9602999999999999 0.9503999999999999 :low :none (:t :t :t :t :t)) .
+
