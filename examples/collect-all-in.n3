@@ -18,14 +18,14 @@
 
     # Add some extra criteria on variable values to be collected
     ( ?param
-        { 
+        {
             :Let :param ?param .
             ?param string:lessThan "Louie"  .
-        } 
+        }
       ?filteredParams ) log:collectAllIn _:x .
 }
-=> 
-{   
+=>
+{
     :result1 :is ?allParams .
     :result2 :is ?nestedParams .
     :result3 :is ?filteredParams .

@@ -79,7 +79,7 @@
 # ----------------------------------------------------------------------
 
 {
-    ("%s://%s/%s" "https" "w3c.github.io" "N3/spec/") 
+    ("%s://%s/%s" "https" "w3c.github.io" "N3/spec/")
         string:format "https://w3c.github.io/N3/spec/" .
 }
 =>

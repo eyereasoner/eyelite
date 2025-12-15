@@ -25,4 +25,4 @@
 {
     ?A ?Pred ?Obj .
     ?B ?Pred ?Obj .
-}. 
+}.

@@ -41,7 +41,6 @@
     (?T2 ?T3) :or ?Q2.
 }.
 
-
 {(?C (?Qa ?Qb ?Qc)) :gcc (?Za ?Zb ?Zc)} <= {
     (?Qa ?Qb ?Qc) :netb (?D1 ?D2).
     (?Qa ?Qb) :neta ?D3.
@@ -49,7 +48,6 @@
     (?D2 ?C ?Qb) :dff ?Zb.
     (?D3 ?C ?Qc) :dff ?Zc.
 }.
-
 
 {(() ?S) :testgcc ()} <= true.
 {(?Cc ?S) :testgcc ?Nc} <= {

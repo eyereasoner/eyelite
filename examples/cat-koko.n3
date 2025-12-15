@@ -10,9 +10,9 @@
 :Koko a :Animal.
 
 {
-    :Koko a :Animal 
-} 
-=> 
+    :Koko a :Animal
+}
+=>
 {
     { :Koko a :Animal } => { _:x a :Cat } .
     { :Koko a :Animal } => { _:x a :BritishShortHair } .

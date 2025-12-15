@@ -33,7 +33,7 @@
 :L4 a :Line.
 
 :incident rdfs:domain :Point; rdfs:range :Line; owl:inverseOf :contains.
-:perpendicular rdfs:domain :Line; rdfs:range :Line; a owl:SymmetricProperty. 
+:perpendicular rdfs:domain :Line; rdfs:range :Line; a owl:SymmetricProperty.
 
 :p1xCm rdfs:domain :Measurement; rdfs:range :Quantity.
 :p1yCm rdfs:domain :Measurement; rdfs:range :Quantity.
