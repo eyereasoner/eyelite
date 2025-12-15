@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>Eyeling N3 Playground</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.css">
   <style>
     * { box-sizing: border-box; }
 
@@ -135,13 +136,14 @@
       color: #6b7280;
     }
 
+    /* (fallback only; output is now CodeMirror) */
     pre#output {
       margin: 0.25rem 0 0;
       border-radius: 0.75rem;
       border: 1px solid #d1d5db;
       padding: 1rem;
-      background: #0b1120;
-      color: #e5e7eb;
+      background: #ffffff;
+      color: #111827;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
         "Courier New", monospace;
       font-size: 0.85rem;
@@ -200,7 +202,43 @@
       color: #9ca3af;
       margin-top: 0.15rem;
     }
+
+    /* --- CodeMirror (syntax highlighted) editors --- */
+    .CodeMirror {
+      height: auto;
+      border: 1px solid #d1d5db;
+      border-radius: 0.75rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      background: #ffffff;
+    }
+
+    .CodeMirror.CodeMirror-focused {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+    }
+
+    .CodeMirror-scroll {
+      overflow: hidden !important; /* no scrollbars; we auto-size instead */
+    }
+
+    .CodeMirror-gutters {
+      border-right: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+
+    .cm-output {
+      font-size: 0.85rem;
+      min-height: 5rem;
+    }
+
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/lib/codemirror.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/turtle/turtle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.16/mode/sparql/sparql.min.js"></script>
 </head>
 
 <body>
@@ -252,7 +290,7 @@
 
     <section class="card">
       <h2 class="section-title">Output</h2>
-      <pre id="output">(no output yet)</pre>
+      <textarea id="output-editor" spellcheck="false" readonly>(no output yet)</textarea>
     </section>
   </div>
 
@@ -277,8 +315,8 @@
     ?S a ?B.
 }.`;
 
-      const editor = document.getElementById("n3-editor");
-      const outputEl = document.getElementById("output");
+      const inputTextArea = document.getElementById("n3-editor");
+      const outputTextArea = document.getElementById("output-editor");
       const runBtn = document.getElementById("run-btn");
       const statusEl = document.getElementById("status");
       const uriInput = document.getElementById("n3-uri");
@@ -294,9 +332,12 @@
       let eyelingVersion = "unknown";
       let versionPromise = null;
 
-      function autoResize(el) {
-        el.style.height = "auto";
-        el.style.height = el.scrollHeight + "px";
+      function autoResizeCodeMirror(cm, minHeightPx) {
+        // Ensure CodeMirror fits its content (no internal scrollbars).
+        cm.refresh();
+        const scroller = cm.getScrollerElement();
+        const height = Math.max(scroller.scrollHeight, minHeightPx);
+        cm.setSize(null, height + "px");
       }
 
       // --- INITIAL CONTENT FROM HASH OR DEFAULT ---
@@ -314,15 +355,36 @@
 
       const paramProgram = getProgramFromHash();
       const initialN3 = paramProgram !== null ? paramProgram : defaultN3;
-      editor.value = initialN3;
-      autoResize(editor);
+
+      // CodeMirror editors (syntax-highlighted)
+      const editor = CodeMirror.fromTextArea(inputTextArea, {
+        mode: { name: "sparql" },
+        lineNumbers: true,
+        lineWrapping: true,
+        viewportMargin: Infinity,
+      });
+
+      const outputEl = CodeMirror.fromTextArea(outputTextArea, {
+        mode: { name: "sparql" },
+        lineNumbers: true,
+        lineWrapping: true,
+        readOnly: true,
+        viewportMargin: Infinity,
+      });
+
+      // Slightly smaller font for output
+      outputEl.getWrapperElement().classList.add("cm-output");
+
+      editor.setValue(initialN3);
+      autoResizeCodeMirror(editor, 220);
+      autoResizeCodeMirror(outputEl, 80);
 
       // --- URL SHARING SUPPORT ---
       let shareUrlUpdateTimeout = null;
 
       function updateShareUrl() {
         try {
-          const encoded = encodeURIComponent(editor.value);
+          const encoded = encodeURIComponent(editor.getValue());
           const url = new URL(window.location.href);
           url.hash = encoded;
           window.history.replaceState(null, "", url.toString());
@@ -336,8 +398,8 @@
         shareUrlUpdateTimeout = setTimeout(updateShareUrl, 300);
       }
 
-      editor.addEventListener("input", function () {
-        autoResize(editor);
+      editor.on("change", function () {
+        autoResizeCodeMirror(editor, 220);
         scheduleUpdateShareUrl();
       });
 
@@ -465,17 +527,21 @@
       async function runReasoner() {
         runBtn.disabled = true;
         statusEl.textContent = "Running reasoning...";
-        outputEl.textContent = "";
+        outputEl.setValue("");
+        autoResizeCodeMirror(outputEl, 80);
         updateShareUrl();
 
         try {
           const runner = await getEyelingRunner();
-          const result = runner(editor.value);
-          outputEl.textContent = result || "(no output)";
+          const result = runner(editor.getValue());
+          outputEl.setValue(result || "(no output)");
+          autoResizeCodeMirror(outputEl, 80);
           statusEl.textContent = "Done.";
         } catch (e) {
-          outputEl.textContent =
-            "Failed to run Eyeling: " + (e && e.message ? e.message : String(e));
+          outputEl.setValue(
+            "Failed to run Eyeling: " + (e && e.message ? e.message : String(e))
+          );
+          autoResizeCodeMirror(outputEl, 80);
           statusEl.textContent = "Error.";
         } finally {
           runBtn.disabled = false;
@@ -494,15 +560,17 @@
             throw new Error("HTTP " + resp.status + " when fetching " + uri);
           }
           const text = await resp.text();
-          editor.value = text;
-          autoResize(editor);
+          editor.setValue(text);
+          autoResizeCodeMirror(editor, 220);
           statusEl.textContent = "Loaded N3 from URL.";
           updateShareUrl();
         } catch (e) {
           statusEl.textContent = "Failed to load URL.";
-          outputEl.textContent =
+          outputEl.setValue(
             "Error while loading N3 from URL:\n" +
-            (e && e.message ? e.message : String(e));
+            (e && e.message ? e.message : String(e))
+          );
+          autoResizeCodeMirror(outputEl, 80);
         } finally {
           loadUriBtn.disabled = false;
         }
