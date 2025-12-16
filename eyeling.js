@@ -235,6 +235,12 @@ function lex(inputText) {
         i += 2;
         continue;
       }
+      // N3 predicate inversion: "<-" (swap subject/object for this predicate)
+      if (peek(1) === "-") {
+        tokens.push(new Token("OpPredInvert"));
+        i += 2;
+        continue;
+      }
       // Otherwise IRIREF <...>
       i++; // skip '<'
       const iriChars = [];
@@ -823,9 +829,14 @@ class Parser {
     while (true) {
       // Verb (can also be 'a')
       let pred;
+      let invert = false;
       if (this.peek().typ === "Ident" && (this.peek().value || "") === "a") {
         this.next();
         pred = new Iri(RDF_NS + "type");
+      } else if (this.peek().typ === "OpPredInvert") {
+        this.next(); // consume "<-"
+        pred = this.parseTerm();
+        invert = true;
       } else {
         pred = this.parseTerm();
       }
@@ -838,7 +849,8 @@ class Parser {
       }
 
       for (const o of objs) {
-        this.pendingTriples.push(new Triple(subj, pred, o));
+        this.pendingTriples.push(invert ? new Triple(o, pred, subj)
+                                       : new Triple(subj, pred, o));
       }
 
       if (this.peek().typ === "Semicolon") {
@@ -906,14 +918,21 @@ class Parser {
     const out = [];
     while (true) {
       let verb;
+      let invert = false;
       if (this.peek().typ === "Ident" && (this.peek().value || "") === "a") {
         this.next();
         verb = new Iri(RDF_NS + "type");
+      } else if (this.peek().typ === "OpPredInvert") {
+        this.next(); // consume "<-"
+        verb = this.parseTerm(); // predicate expression
+        invert = true;
       } else {
         verb = this.parseTerm();
       }
       const objects = this.parseObjectList();
-      for (const o of objects) out.push(new Triple(subject, verb, o));
+      for (const o of objects) {
+        out.push(new Triple(invert ? o : subject, verb, invert ? subject : o));
+      }
 
       if (this.peek().typ === "Semicolon") {
         this.next();

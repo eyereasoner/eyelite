@@ -636,6 +636,20 @@ ${U('s')} ${U('p')} ${U('o')}. # another trailing comment
 world"""@en.`,
     expect: [new RegExp(`${EX}s>\\s+<${EX}q>\\s+(?:"""Hello[\\s\\S]*?world"""@en|"Hello\\\\nworld"@en)\\s*\\.`)],
   },
+
+  { name: '44 syntax: "<-" in predicate position swaps subject and object',
+    opt: { proofComments: false },
+    input: ` { ?s ${U('p')} ?o } => { ?s ${U('q')} ?o }.
+${U('a')} <-${U('p')} ${U('b')}.`,
+    expect: [new RegExp(`${EX}b>\\s+<${EX}q>\\s+<${EX}a>\\s*\\.`)],
+  },
+
+  { name: '45 syntax: "<-" works inside blank node property lists ([ ... ])',
+    opt: { proofComments: false },
+    input: ` ${U('s')} ${U('p')} [ <-${U('r')} ${U('o')} ].
+{ ${U('o')} ${U('r')} ?x } => { ?x ${U('q')} ${U('k')} }.`,
+    expect: [new RegExp(`_:b1\\s+<${EX}q>\\s+<${EX}k>\\s*\\.`)],
+  },
 ];
 
 let passed = 0;
