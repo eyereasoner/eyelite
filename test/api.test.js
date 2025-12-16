@@ -8,9 +8,15 @@ const C = TTY
   ? { g: '\x1b[32m', r: '\x1b[31m', y: '\x1b[33m', dim: '\x1b[2m', n: '\x1b[0m' }
   : { g: '', r: '', y: '', dim: '', n: '' };
 
-function ok(msg)   { console.log(`${C.g}OK${C.n}  ${msg}`); }
-function info(msg) { console.log(`${C.y}==${C.n} ${msg}`); }
-function fail(msg) { console.error(`${C.r}FAIL${C.n} ${msg}`); }
+function ok(msg) {
+  console.log(`${C.g}OK${C.n} ${msg}`);
+}
+function info(msg) {
+  console.log(`${C.y}==${C.n} ${msg}`);
+}
+function fail(msg) {
+  console.error(`${C.r}FAIL${C.n} ${msg}`);
+}
 
 function msNow() {
   return Date.now();
@@ -24,8 +30,21 @@ function mustNotMatch(output, re, label) {
   assert.ok(!re.test(output), label || `Expected output NOT to match ${re}`);
 }
 
-const EX = 'http://example.org/';
+function countMatches(output, re) {
+  // ensure global counting without mutating caller regex
+  const flags = re.flags.includes('g') ? re.flags : re.flags + 'g';
+  const rg = new RegExp(re.source, flags);
+  let c = 0;
+  while (rg.exec(output)) c++;
+  return c;
+}
 
+function mustOccurExactly(output, re, n, label) {
+  const c = countMatches(output, re);
+  assert.equal(c, n, label || `Expected ${n} matches of ${re}, got ${c}`);
+}
+
+const EX = 'http://example.org/';
 // Helper to build a URI quickly
 const U = (path) => `<${EX}${path}>`;
 
@@ -43,7 +62,6 @@ function parentChainN3(n) {
 }
 
 function subclassChainN3(n) {
-  // C0 sub C1 ... Cn sub C(n+1)
   let s = '';
   for (let i = 0; i <= n; i++) {
     s += `${U(`C${i}`)} ${U('sub')} ${U(`C${i + 1}`)}.\n`;
@@ -54,7 +72,6 @@ function subclassChainN3(n) {
 }
 
 function ruleChainN3(n) {
-  // p0 -> p1 -> ... -> pn, starting from (s p0 o)
   let s = '';
   for (let i = 0; i < n; i++) {
     s += `{ ${U('s')} ${U(`p${i}`)} ${U('o')}. } => { ${U('s')} ${U(`p${i + 1}`)} ${U('o')}. }.\n`;
@@ -64,9 +81,7 @@ function ruleChainN3(n) {
 }
 
 function binaryTreeParentN3(depth) {
-  // breadth-first numbering: node i has children 2i+1 and 2i+2
-  // depth=0 -> 1 node; depth=1 -> 3 nodes; depth=4 -> 31 nodes
-  const maxNode = (1 << (depth + 1)) - 2; // last index at given depth
+  const maxNode = (1 << (depth + 1)) - 2;
   let s = '';
 
   for (let i = 0; i <= maxNode; i++) {
@@ -90,12 +105,10 @@ function transitiveClosureN3(pred) {
 }
 
 function reachabilityGraphN3(n) {
-  // chain plus a few extra edges for branching
   let s = '';
   for (let i = 0; i < n; i++) {
     s += `${U(`g${i}`)} ${U('edge')} ${U(`g${i + 1}`)}.\n`;
   }
-  // add some shortcuts/branches
   if (n >= 6) {
     s += `${U('g0')} ${U('edge')} ${U('g3')}.\n`;
     s += `${U('g2')} ${U('edge')} ${U('g5')}.\n`;
@@ -121,7 +134,6 @@ ${U('x')} ${U('type')} ${U('A')}.
 }
 
 function join3HopN3(k) {
-  // a0 --p--> a1 --p--> a2 --p--> ... ; rule derives hop3 edges
   let s = '';
   for (let i = 0; i < k; i++) {
     s += `${U(`j${i}`)} ${U('p')} ${U(`j${i + 1}`)}.\n`;
@@ -162,7 +174,6 @@ function bigFactsN3(n) {
 }
 
 function negativeEntailmentBatchN3(n) {
-  // if any forbidden fact exists, derive false
   let s = '';
   for (let i = 0; i < n; i++) {
     s += `${U('x')} ${U('ok')} ${U(`v${i}`)}.\n`;
@@ -173,7 +184,6 @@ function negativeEntailmentBatchN3(n) {
 }
 
 function symmetricTransitiveN3() {
-  // friend is symmetric; reachFriend is transitive closure over friend edges
   return `
 ${U('a')} ${U('friend')} ${U('b')}.
 ${U('b')} ${U('friend')} ${U('c')}.
@@ -185,61 +195,6 @@ ${U('c')} ${U('friend')} ${U('d')}.
 `;
 }
 
-function mkChainRewriteCase(i, steps) {
-  const input = ruleChainN3(steps);
-  return {
-    name: `${String(i).padStart(2, '0')} chain rewrite: ${steps} steps`,
-    opt: { proofComments: false },
-    input,
-    expect: [new RegExp(`${EX}s>\\s+<${EX}p${steps}>\\s+<${EX}o>\\s*\\.`)],
-  };
-}
-
-function mkSubclassChainCase(i, steps) {
-  const input = subclassChainN3(steps);
-  return {
-    name: `${String(i).padStart(2, '0')} subclass chain: ${steps} steps`,
-    opt: { proofComments: false },
-    input,
-    expect: [new RegExp(`${EX}x>\\s+<${EX}type>\\s+<${EX}C${steps + 1}>\\s*\\.`)],
-  };
-}
-
-function mkParentChainCase(i, links) {
-  const input = parentChainN3(links);
-  return {
-    name: `${String(i).padStart(2, '0')} ancestor chain: ${links} links`,
-    opt: { proofComments: false },
-    input,
-    expect: [new RegExp(`${EX}n0>\\s+<${EX}ancestor>\\s+<${EX}n${links}>\\s*\\.`)],
-  };
-}
-
-function mkJoinCase(i, len) {
-  const input = join3HopN3(len);
-  return {
-    name: `${String(i).padStart(2, '0')} 3-hop join over chain len ${len}`,
-    opt: { proofComments: false },
-    input,
-    expect: [
-      new RegExp(`${EX}j0>\\s+<${EX}p3>\\s+<${EX}j3>\\s*\\.`),
-      new RegExp(`${EX}j2>\\s+<${EX}p3>\\s+<${EX}j5>\\s*\\.`),
-    ],
-  };
-}
-
-function mkBranchReachCase(i, n) {
-  const input = reachabilityGraphN3(n);
-  return {
-    name: `${String(i).padStart(2, '0')} reachability: n=${n}`,
-    opt: { proofComments: false },
-    input,
-    expect: [
-      new RegExp(`${EX}g0>\\s+<${EX}reach>\\s+<${EX}g${n}>\\s*\\.`),
-    ],
-  };
-}
-
 const cases = [
   {
     name: '01 forward rule: p -> q',
@@ -248,11 +203,8 @@ const cases = [
 { ${U('s')} ${U('p')} ${U('o')}. } => { ${U('s')} ${U('q')} ${U('o')}. }.
 ${U('s')} ${U('p')} ${U('o')}.
 `,
-    expect: [
-      new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`)],
   },
-
   {
     name: '02 two-step: p -> q -> r',
     opt: { proofComments: false },
@@ -261,11 +213,8 @@ ${U('s')} ${U('p')} ${U('o')}.
 { ${U('s')} ${U('q')} ${U('o')}. } => { ${U('s')} ${U('r')} ${U('o')}. }.
 ${U('s')} ${U('p')} ${U('o')}.
 `,
-    expect: [
-      new RegExp(`${EX}s>\\s+<${EX}r>\\s+<${EX}o>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}s>\\s+<${EX}r>\\s+<${EX}o>\\s*\\.`)],
   },
-
   {
     name: '03 join antecedents: (x p y & y p z) -> (x p2 z)',
     opt: { proofComments: false },
@@ -274,11 +223,8 @@ ${U('s')} ${U('p')} ${U('o')}.
 ${U('a')} ${U('p')} ${U('b')}.
 ${U('b')} ${U('p')} ${U('c')}.
 `,
-    expect: [
-      new RegExp(`${EX}a>\\s+<${EX}p2>\\s+<${EX}c>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}a>\\s+<${EX}p2>\\s+<${EX}c>\\s*\\.`)],
   },
-
   {
     name: '04 inverse relation: (x p y) -> (y invp x)',
     opt: { proofComments: false },
@@ -286,11 +232,8 @@ ${U('b')} ${U('p')} ${U('c')}.
 { ?x ${U('p')} ?y. } => { ?y ${U('invp')} ?x. }.
 ${U('alice')} ${U('p')} ${U('bob')}.
 `,
-    expect: [
-      new RegExp(`${EX}bob>\\s+<${EX}invp>\\s+<${EX}alice>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}bob>\\s+<${EX}invp>\\s+<${EX}alice>\\s*\\.`)],
   },
-
   {
     name: '05 subclass rule: type + sub -> inferred type (two-level chain)',
     opt: { proofComments: false },
@@ -306,7 +249,6 @@ ${U('Socrates')} ${U('type')} ${U('Human')}.
       new RegExp(`${EX}Socrates>\\s+<${EX}type>\\s+<${EX}Being>\\s*\\.`),
     ],
   },
-
   {
     name: '06 transitive closure: sub is transitive',
     opt: { proofComments: false },
@@ -316,11 +258,8 @@ ${U('B')} ${U('sub')} ${U('C')}.
 
 { ?a ${U('sub')} ?b. ?b ${U('sub')} ?c } => { ?a ${U('sub')} ?c }.
 `,
-    expect: [
-      new RegExp(`${EX}A>\\s+<${EX}sub>\\s+<${EX}C>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}A>\\s+<${EX}sub>\\s+<${EX}C>\\s*\\.`)],
   },
-
   {
     name: '07 symmetric: knows is symmetric',
     opt: { proofComments: false },
@@ -328,11 +267,8 @@ ${U('B')} ${U('sub')} ${U('C')}.
 { ?x ${U('knows')} ?y } => { ?y ${U('knows')} ?x }.
 ${U('a')} ${U('knows')} ${U('b')}.
 `,
-    expect: [
-      new RegExp(`${EX}b>\\s+<${EX}knows>\\s+<${EX}a>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}b>\\s+<${EX}knows>\\s+<${EX}a>\\s*\\.`)],
   },
-
   {
     name: '08 recursion: ancestor from parent (2 steps)',
     opt: { proofComments: false },
@@ -343,11 +279,8 @@ ${U('b')} ${U('parent')} ${U('c')}.
 { ?x ${U('parent')} ?y } => { ?x ${U('ancestor')} ?y }.
 { ?x ${U('parent')} ?y. ?y ${U('ancestor')} ?z } => { ?x ${U('ancestor')} ?z }.
 `,
-    expect: [
-      new RegExp(`${EX}a>\\s+<${EX}ancestor>\\s+<${EX}c>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}a>\\s+<${EX}ancestor>\\s+<${EX}c>\\s*\\.`)],
   },
-
   {
     name: '09 literals preserved: age -> hasAge',
     opt: { proofComments: false },
@@ -355,11 +288,8 @@ ${U('b')} ${U('parent')} ${U('c')}.
 { ?s ${U('age')} ?n } => { ?s ${U('hasAge')} ?n }.
 ${U('x')} ${U('age')} "42".
 `,
-    expect: [
-      new RegExp(`${EX}x>\\s+<${EX}hasAge>\\s+"42"\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}x>\\s+<${EX}hasAge>\\s+"42"\\s*\\.`)],
   },
-
   {
     name: '10 API option: opt can be an args array',
     opt: ['--no-proof-comments'],
@@ -367,14 +297,9 @@ ${U('x')} ${U('age')} "42".
 { ${U('s')} ${U('p')} ${U('o')}. } => { ${U('s')} ${U('q')} ${U('o')}. }.
 ${U('s')} ${U('p')} ${U('o')}.
 `,
-    expect: [
-      new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`),
-    ],
-    notExpect: [
-      /^#/m,
-    ],
+    expect: [new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`)],
+    notExpect: [/^#/m],
   },
-
   {
     name: '11 negative entailment: rule derives false (expect exit 2 => throws)',
     opt: { proofComments: false },
@@ -384,12 +309,11 @@ ${U('a')} ${U('p')} ${U('b')}.
 `,
     expectErrorCode: 2,
   },
-
   {
     name: '12 invalid syntax should throw (non-zero exit)',
     opt: { proofComments: false },
     input: `
-@prefix : <http://example.org/>   # missing dot on purpose
+@prefix :  # missing dot on purpose
 : s :p :o .
 `,
     expectError: true,
@@ -403,34 +327,27 @@ ${U('a')} ${U('p')} ${U('b')}.
       new RegExp(`${EX}n3>\\s+<${EX}ancestor>\\s+<${EX}n12>\\s*\\.`),
     ],
   },
-
   {
     name: '14 heavier taxonomy: 60-step subclass chain',
     opt: { proofComments: false, maxBuffer: 200 * 1024 * 1024 },
     input: subclassChainN3(60),
-    expect: [
-      new RegExp(`${EX}x>\\s+<${EX}type>\\s+<${EX}C61>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}x>\\s+<${EX}type>\\s+<${EX}C61>\\s*\\.`)],
   },
-
   {
     name: '15 heavier chaining: 40-step predicate rewrite chain',
     opt: { proofComments: false, maxBuffer: 200 * 1024 * 1024 },
     input: ruleChainN3(40),
-    expect: [
-      new RegExp(`${EX}s>\\s+<${EX}p40>\\s+<${EX}o>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}s>\\s+<${EX}p40>\\s+<${EX}o>\\s*\\.`)],
   },
   {
     name: '16 heavier recursion: binary tree ancestor closure (depth 4)',
     opt: { proofComments: false, maxBuffer: 200 * 1024 * 1024 },
-    input: binaryTreeParentN3(4), // 31 nodes
+    input: binaryTreeParentN3(4),
     expect: [
-      new RegExp(`${EX}t0>\\s+<${EX}ancestor>\\s+<${EX}t30>\\s*\\.`), // root reaches last node
+      new RegExp(`${EX}t0>\\s+<${EX}ancestor>\\s+<${EX}t30>\\s*\\.`),
       new RegExp(`${EX}t1>\\s+<${EX}ancestor>\\s+<${EX}t22>\\s*\\.`),
     ],
   },
-
   {
     name: '17 heavier reachability: branching graph reach closure',
     opt: { proofComments: false, maxBuffer: 200 * 1024 * 1024 },
@@ -440,16 +357,12 @@ ${U('a')} ${U('p')} ${U('b')}.
       new RegExp(`${EX}g2>\\s+<${EX}reach>\\s+<${EX}g10>\\s*\\.`),
     ],
   },
-
   {
     name: '18 heavier taxonomy: diamond subclass inference',
     opt: { proofComments: false },
     input: diamondSubclassN3(),
-    expect: [
-      new RegExp(`${EX}x>\\s+<${EX}type>\\s+<${EX}D>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}x>\\s+<${EX}type>\\s+<${EX}D>\\s*\\.`)],
   },
-
   {
     name: '19 heavier join: 3-hop path rule over a chain of 25 edges',
     opt: { proofComments: false, maxBuffer: 200 * 1024 * 1024 },
@@ -460,26 +373,21 @@ ${U('a')} ${U('p')} ${U('b')}.
       new RegExp(`${EX}j20>\\s+<${EX}p3>\\s+<${EX}j23>\\s*\\.`),
     ],
   },
-
   {
     name: '20 heavier branching: p produces q and r, then q+r produces qr',
     opt: { proofComments: false },
     input: ruleBranchJoinN3(),
-    expect: [
-      new RegExp(`${EX}s>\\s+<${EX}qr>\\s+<${EX}o>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}s>\\s+<${EX}qr>\\s+<${EX}o>\\s*\\.`)],
   },
-
   {
     name: '21 heavier equivalence: sameAs propagation (with symmetric sameAs)',
     opt: { proofComments: false },
     input: sameAsN3(),
     expect: [
-      new RegExp(`${EX}b>\\s+<${EX}p>\\s+<${EX}o>\\s*\\.`), // b inherits a's triple
-      new RegExp(`${EX}b>\\s+<${EX}sameAs>\\s+<${EX}a>\\s*\\.`), // symmetric sameAs inferred
+      new RegExp(`${EX}b>\\s+<${EX}p>\\s+<${EX}o>\\s*\\.`),
+      new RegExp(`${EX}b>\\s+<${EX}sameAs>\\s+<${EX}a>\\s*\\.`),
     ],
   },
-
   {
     name: '22 heavier closure: transitive property via generic rule',
     opt: { proofComments: false },
@@ -495,17 +403,15 @@ ${transitiveClosureN3('sub')}
       new RegExp(`${EX}b>\\s+<${EX}sub>\\s+<${EX}d>\\s*\\.`),
     ],
   },
-
   {
     name: '23 heavier social: symmetric + reachFriend closure',
     opt: { proofComments: false, maxBuffer: 200 * 1024 * 1024 },
     input: symmetricTransitiveN3(),
     expect: [
       new RegExp(`${EX}a>\\s+<${EX}reachFriend>\\s+<${EX}d>\\s*\\.`),
-      new RegExp(`${EX}d>\\s+<${EX}reachFriend>\\s+<${EX}a>\\s*\\.`), // due to symmetry + closure
+      new RegExp(`${EX}d>\\s+<${EX}reachFriend>\\s+<${EX}a>\\s*\\.`),
     ],
   },
-
   {
     name: '24 heavier volume: 400 facts, simple rewrite rule p -> q',
     opt: { proofComments: false, maxBuffer: 200 * 1024 * 1024 },
@@ -515,25 +421,20 @@ ${transitiveClosureN3('sub')}
       new RegExp(`${EX}x>\\s+<${EX}q>\\s+<${EX}o399>\\s*\\.`),
     ],
   },
-
   {
     name: '25 heavier negative entailment: batch + forbidden => false (expect exit 2)',
     opt: { proofComments: false, maxBuffer: 200 * 1024 * 1024 },
     input: negativeEntailmentBatchN3(200),
     expectErrorCode: 2,
   },
-
   {
     name: '26 sanity: no rules => no newly derived facts',
     opt: { proofComments: false },
     input: `
 ${U('a')} ${U('p')} ${U('b')}.
 `,
-    expect: [
-      /^\s*$/,
-    ],
+    expect: [/^\s*$/],
   },
-
   {
     name: '27 regression: backward rule (<=) can satisfy a forward rule premise',
     opt: { proofComments: false },
@@ -543,11 +444,8 @@ ${U('a')} ${U('p')} ${U('b')}.
 { ${U('a')} ${U('q')} ${U('b')}. } <= { ${U('a')} ${U('p')} ${U('b')}. }.
 { ${U('a')} ${U('q')} ${U('b')}. } => { ${U('a')} ${U('r')} ${U('b')}. }.
 `,
-    expect: [
-      new RegExp(`${EX}a>\\s+<${EX}r>\\s+<${EX}b>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}a>\\s+<${EX}r>\\s+<${EX}b>\\s*\\.`)],
   },
-
   {
     name: '28 regression: top-level log:implies behaves like a forward rule',
     opt: { proofComments: false },
@@ -557,11 +455,8 @@ ${U('a')} ${U('p')} ${U('b')}.
 { ${U('a')} ${U('p')} ${U('b')}. } log:implies { ${U('a')} ${U('q')} ${U('b')}. }.
 ${U('a')} ${U('p')} ${U('b')}.
 `,
-    expect: [
-      new RegExp(`${EX}a>\\s+<${EX}q>\\s+<${EX}b>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}a>\\s+<${EX}q>\\s+<${EX}b>\\s*\\.`)],
   },
-
   {
     name: '29 regression: derived log:implies becomes a live rule during reasoning',
     opt: { proofComments: false },
@@ -575,25 +470,17 @@ ${U('a')} ${U('p')} ${U('b')}.
 ${U('a')} ${U('trigger')} ${U('go')}.
 ${U('a')} ${U('p')} ${U('b')}.
 `,
-    expect: [
-      new RegExp(`${EX}a>\\s+<${EX}q2>\\s+<${EX}b>\\s*\\.`),
-    ],
+    expect: [new RegExp(`${EX}a>\\s+<${EX}q2>\\s+<${EX}b>\\s*\\.`)],
   },
-
   {
-    // IMPORTANT: API defaults to proofComments:false (machine-friendly), so we explicitly enable it here.
     name: '30 sanity: proofComments:true enables proof comments',
     opt: { proofComments: true },
     input: `
 { ${U('s')} ${U('p')} ${U('o')}. } => { ${U('s')} ${U('q')} ${U('o')}. }.
 ${U('s')} ${U('p')} ${U('o')}.
 `,
-    expect: [
-      /^#/m,
-      new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`),
-    ],
+    expect: [/^#/m, new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`)],
   },
-
   {
     name: '31 sanity: -n suppresses proof comments',
     opt: ['-n'],
@@ -601,12 +488,138 @@ ${U('s')} ${U('p')} ${U('o')}.
 { ${U('s')} ${U('p')} ${U('o')}. } => { ${U('s')} ${U('q')} ${U('o')}. }.
 ${U('s')} ${U('p')} ${U('o')}.
 `,
+    expect: [new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`)],
+    notExpect: [/^#/m],
+  },
+
+  // -------------------------
+  // Added sanity/regression tests
+  // -------------------------
+
+  {
+    name: '32 sanity: variable rule fires for multiple matching facts',
+    opt: { proofComments: false },
+    input: `
+${U('a')} ${U('p')} ${U('b')}.
+${U('c')} ${U('p')} ${U('d')}.
+
+{ ?s ${U('p')} ?o. } => { ?s ${U('q')} ?o. }.
+`,
+    expect: [
+      new RegExp(`${EX}a>\\s+<${EX}q>\\s+<${EX}b>\\s*\\.`),
+      new RegExp(`${EX}c>\\s+<${EX}q>\\s+<${EX}d>\\s*\\.`),
+    ],
+  },
+
+  {
+    name: '33 regression: mutual cycle does not echo already-known facts',
+    opt: { proofComments: false },
+    input: `
+${U('s')} ${U('p')} ${U('o')}.
+
+{ ?x ${U('p')} ?y. } => { ?x ${U('q')} ?y. }.
+{ ?x ${U('q')} ?y. } => { ?x ${U('p')} ?y. }.
+`,
+    expect: [new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`)],
+    notExpect: [new RegExp(`${EX}s>\\s+<${EX}p>\\s+<${EX}o>\\s*\\.`)],
+  },
+
+  {
+    name: '34 sanity: rule that reproduces same triple produces no output',
+    opt: { proofComments: false },
+    input: `
+${U('s')} ${U('p')} ${U('o')}.
+{ ${U('s')} ${U('p')} ${U('o')}. } => { ${U('s')} ${U('p')} ${U('o')}. }.
+`,
+    expect: [/^\s*$/],
+  },
+
+  {
+    name: '35 regression: fuse from derived fact',
+    opt: { proofComments: false },
+    input: `
+${U('a')} ${U('p')} ${U('b')}.
+
+{ ${U('a')} ${U('p')} ${U('b')}. } => { ${U('a')} ${U('q')} ${U('b')}. }.
+{ ${U('a')} ${U('q')} ${U('b')}. } => false.
+`,
+    expectErrorCode: 2,
+  },
+
+  {
+    name: '36 sanity: multiple consequents in one rule',
+    opt: { proofComments: false },
+    input: `
+${U('s')} ${U('p')} ${U('o')}.
+
+{ ${U('s')} ${U('p')} ${U('o')}. } => { ${U('s')} ${U('q')} ${U('o')}. ${U('s')} ${U('r')} ${U('o')}. }.
+`,
     expect: [
       new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`),
+      new RegExp(`${EX}s>\\s+<${EX}r>\\s+<${EX}o>\\s*\\.`),
     ],
-    notExpect: [
-      /^#/m,
-    ],
+  },
+
+  {
+    name: '37 regression: backward chaining can chain (<= then <= then =>)',
+    opt: { proofComments: false },
+    input: `
+${U('a')} ${U('p')} ${U('b')}.
+
+{ ${U('a')} ${U('q')} ${U('b')}. } <= { ${U('a')} ${U('p')} ${U('b')}. }.
+{ ${U('a')} ${U('r')} ${U('b')}. } <= { ${U('a')} ${U('q')} ${U('b')}. }.
+{ ${U('a')} ${U('r')} ${U('b')}. } => { ${U('a')} ${U('s')} ${U('b')}. }.
+`,
+    expect: [new RegExp(`${EX}a>\\s+<${EX}s>\\s+<${EX}b>\\s*\\.`)],
+  },
+
+  {
+    name: '38 regression: backward rule body can require multiple facts',
+    opt: { proofComments: false },
+    input: `
+${U('a')} ${U('p')} ${U('b')}.
+${U('a')} ${U('p2')} ${U('b')}.
+
+{ ${U('a')} ${U('q')} ${U('b')}. } <= { ${U('a')} ${U('p')} ${U('b')}. ${U('a')} ${U('p2')} ${U('b')}. }.
+{ ${U('a')} ${U('q')} ${U('b')}. } => { ${U('a')} ${U('r')} ${U('b')}. }.
+`,
+    expect: [new RegExp(`${EX}a>\\s+<${EX}r>\\s+<${EX}b>\\s*\\.`)],
+  },
+
+  {
+    name: '39 sanity: backward rule fails when a required fact is missing',
+    opt: { proofComments: false },
+    input: `
+${U('a')} ${U('p')} ${U('b')}.
+
+{ ${U('a')} ${U('q')} ${U('b')}. } <= { ${U('a')} ${U('p')} ${U('b')}. ${U('a')} ${U('p2')} ${U('b')}. }.
+{ ${U('a')} ${U('q')} ${U('b')}. } => { ${U('a')} ${U('r')} ${U('b')}. }.
+`,
+    expect: [/^\s*$/],
+  },
+
+  {
+    name: '40 sanity: comments and whitespace are tolerated',
+    opt: { proofComments: false },
+    input: `
+# leading comment
+{ ${U('s')} ${U('p')} ${U('o')}. } => { ${U('s')} ${U('q')} ${U('o')}. }.  # trailing comment
+
+${U('s')} ${U('p')} ${U('o')}. # another trailing comment
+`,
+    expect: [new RegExp(`${EX}s>\\s+<${EX}q>\\s+<${EX}o>\\s*\\.`)],
+  },
+
+  {
+    name: '41 stability: diamond subclass derives D only once',
+    opt: { proofComments: false },
+    input: diamondSubclassN3(),
+    expect: [new RegExp(`${EX}x>\\s+<${EX}type>\\s+<${EX}D>\\s*\\.`)],
+    // and ensure it doesn't print the same derived triple twice via the two paths
+    check(out) {
+      const reD = new RegExp(`${EX}x>\\s+<${EX}type>\\s+<${EX}D>\\s*\\.`, 'm');
+      mustOccurExactly(out, reD, 1, 'diamond subclass should not duplicate x type D');
+    },
   },
 ];
 
@@ -626,8 +639,10 @@ let failed = 0;
         throw new Error(`Expected an error, but reason() returned output:\n${out}`);
       }
 
-      for (const re of (tc.expect || [])) mustMatch(out, re, `${tc.name}: missing expected pattern ${re}`);
-      for (const re of (tc.notExpect || [])) mustNotMatch(out, re, `${tc.name}: unexpected pattern ${re}`);
+      for (const re of tc.expect || []) mustMatch(out, re, `${tc.name}: missing expected pattern ${re}`);
+      for (const re of tc.notExpect || []) mustNotMatch(out, re, `${tc.name}: unexpected pattern ${re}`);
+
+      if (typeof tc.check === 'function') tc.check(out);
 
       const dur = msNow() - start;
       ok(`${tc.name} ${C.dim}(${dur} ms)${C.n}`);
@@ -635,7 +650,6 @@ let failed = 0;
     } catch (e) {
       const dur = msNow() - start;
 
-      // Expected error handling
       if (tc.expectErrorCode != null) {
         if (e && typeof e === 'object' && 'code' in e && e.code === tc.expectErrorCode) {
           ok(`${tc.name} ${C.dim}(expected exit ${tc.expectErrorCode}, ${dur} ms)${C.n}`);
@@ -643,7 +657,11 @@ let failed = 0;
           continue;
         }
         fail(`${tc.name} ${C.dim}(${dur} ms)${C.n}`);
-        fail(`Expected exit code ${tc.expectErrorCode}, got: ${e && e.code != null ? e.code : 'unknown'}\n${e && e.stderr ? e.stderr : (e && e.stack ? e.stack : String(e))}`);
+        fail(
+          `Expected exit code ${tc.expectErrorCode}, got: ${e && e.code != null ? e.code : 'unknown'}\n${
+            e && e.stderr ? e.stderr : e && e.stack ? e.stack : String(e)
+          }`
+        );
         failed++;
         continue;
       }
