@@ -318,9 +318,47 @@ function lex(inputText) {
       continue;
     }
 
-    // Directives: @prefix, @base
+    // Directives: @prefix, @base (and language tags after string literals)
     if (c === "@") {
-      i++;
+      const prevTok = tokens.length ? tokens[tokens.length - 1] : null;
+      const prevWasQuotedLiteral =
+        prevTok &&
+        prevTok.typ === "Literal" &&
+        typeof prevTok.value === "string" &&
+        prevTok.value.startsWith('"');
+
+      i++; // consume '@'
+
+      if (prevWasQuotedLiteral) {
+        // N3 grammar production LANGTAG:
+        //   "@" [a-zA-Z]+ ("-" [a-zA-Z0-9]+)*
+        const tagChars = [];
+        let cc = peek();
+        if (cc === null || !/[A-Za-z]/.test(cc)) {
+          throw new Error("Invalid language tag (expected [A-Za-z] after '@')");
+        }
+        while ((cc = peek()) !== null && /[A-Za-z]/.test(cc)) {
+          tagChars.push(cc);
+          i++;
+        }
+        while (peek() === "-") {
+          tagChars.push("-");
+          i++; // consume '-'
+          const segChars = [];
+          while ((cc = peek()) !== null && /[A-Za-z0-9]/.test(cc)) {
+            segChars.push(cc);
+            i++;
+          }
+          if (!segChars.length) {
+            throw new Error("Invalid language tag (expected [A-Za-z0-9]+ after '-')");
+          }
+          tagChars.push(...segChars);
+        }
+        tokens.push(new Token("LangTag", tagChars.join("")));
+        continue;
+      }
+
+      // Otherwise, treat as a directive (@prefix, @base)
       const wordChars = [];
       let cc;
       while ((cc = peek()) !== null && /[A-Za-z]/.test(cc)) {
@@ -684,6 +722,23 @@ class Parser {
 
     if (typ === "Literal") {
       let s = val || "";
+
+      // Optional language tag: "..."@en, per N3 LANGTAG production.
+      if (this.peek().typ === "LangTag") {
+        // Only quoted string literals can carry a language tag.
+        if (!(s.startsWith('"') && s.endsWith('"'))) {
+          throw new Error("Language tag is only allowed on quoted string literals");
+        }
+        const langTok = this.next();
+        const lang = langTok.value || "";
+        s = `${s}@${lang}`;
+
+        // N3/Turtle: language tags and datatypes are mutually exclusive.
+        if (this.peek().typ === "HatHat") {
+          throw new Error("A literal cannot have both a language tag (@...) and a datatype (^^...)");
+        }
+      }
+
       if (this.peek().typ === "HatHat") {
         this.next();
         const dtTok = this.next();
@@ -1594,16 +1649,34 @@ function composeSubst(outer, delta) {
 // ============================================================================
 
 function literalParts(lit) {
+  // Split a literal into lexical form and datatype IRI (if any).
+  // Also strip an optional language tag from the lexical form:
+  //   "\"hello\"@en"  -> "\"hello\""
+  //   "\"hello\"@en^^<...>" is rejected earlier in the parser.
   const idx = lit.indexOf("^^");
+  let lex = lit;
+  let dt = null;
+
   if (idx >= 0) {
-    let lex = lit.slice(0, idx);
-    let dt = lit.slice(idx + 2).trim();
+    lex = lit.slice(0, idx);
+    dt = lit.slice(idx + 2).trim();
     if (dt.startsWith("<") && dt.endsWith(">")) {
       dt = dt.slice(1, -1);
     }
-    return [lex, dt];
   }
-  return [lit, null];
+
+  // Strip LANGTAG from the lexical form when present.
+  if (lex.length >= 2 && lex[0] === '"') {
+    const lastQuote = lex.lastIndexOf('"');
+    if (lastQuote > 0 && lastQuote < lex.length - 1 && lex[lastQuote + 1] === "@") {
+      const lang = lex.slice(lastQuote + 2);
+      if (/^[A-Za-z]+(?:-[A-Za-z0-9]+)*$/.test(lang)) {
+        lex = lex.slice(0, lastQuote + 1);
+      }
+    }
+  }
+
+  return [lex, dt];
 }
 
 function stripQuotes(lex) {
