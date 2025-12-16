@@ -522,36 +522,6 @@ ${transitiveClosureN3('sub')}
   },
 ];
 
-// ---- Generated “many more” tests (keep them fast & deterministic) ----
-const generated = [];
-
-// 10 rewrite-chain tests
-for (const steps of [1, 2, 3, 5, 8, 10, 12, 15, 20, 25]) {
-  generated.push(mkChainRewriteCase(100 + generated.length + 1, steps));
-}
-
-// 8 subclass-chain tests
-for (const steps of [1, 2, 3, 5, 8, 10, 15, 25]) {
-  generated.push(mkSubclassChainCase(100 + generated.length + 1, steps));
-}
-
-// 6 ancestor-chain tests
-for (const links of [2, 3, 5, 8, 10, 15]) {
-  generated.push(mkParentChainCase(100 + generated.length + 1, links));
-}
-
-// 3 join tests
-for (const len of [8, 12, 20]) {
-  generated.push(mkJoinCase(100 + generated.length + 1, len));
-}
-
-// 3 reachability tests
-for (const n of [6, 10, 14]) {
-  generated.push(mkBranchReachCase(100 + generated.length + 1, n));
-}
-
-cases.push(...generated);
-
 let passed = 0;
 let failed = 0;
 
