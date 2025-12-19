@@ -189,14 +189,14 @@
 # It holds because the following instance of the rule body is provable:
 #   :alice a :Adult .
 #   :alice :name "Alice" .
-#   ?_b1 time:localTime "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime .
+#   :run :now "2000-01-01T00:00:00+00:00"^^xsd:dateTime .
 #   (:alice) log:skolem genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 .
 #   ("Brew Club card for " "Alice") string:concatenation "Brew Club card for Alice" .
 # via the schematic forward rule:
 #   {
 #     ?p a :Adult .
 #     ?p :name ?name .
-#     ?_b1 time:localTime ?now .
+#     :run :now ?now .
 #     (?p) log:skolem ?card .
 #     ("Brew Club card for " ?name) string:concatenation ?label .
 #   } => {
@@ -209,7 +209,7 @@
 #   ?card = genid:9e06e026-ada3-9430-3e11-8dd8c37dac24
 #   ?label = "Brew Club card for Alice"
 #   ?name = "Alice"
-#   ?now = "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime
+#   ?now = "2000-01-01T00:00:00+00:00"^^xsd:dateTime
 #   ?p = :alice
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
@@ -222,14 +222,14 @@ genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 a :MembershipCard .
 # It holds because the following instance of the rule body is provable:
 #   :alice a :Adult .
 #   :alice :name "Alice" .
-#   ?_b1 time:localTime "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime .
+#   :run :now "2000-01-01T00:00:00+00:00"^^xsd:dateTime .
 #   (:alice) log:skolem genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 .
 #   ("Brew Club card for " "Alice") string:concatenation "Brew Club card for Alice" .
 # via the schematic forward rule:
 #   {
 #     ?p a :Adult .
 #     ?p :name ?name .
-#     ?_b1 time:localTime ?now .
+#     :run :now ?now .
 #     (?p) log:skolem ?card .
 #     ("Brew Club card for " ?name) string:concatenation ?label .
 #   } => {
@@ -242,7 +242,7 @@ genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 a :MembershipCard .
 #   ?card = genid:9e06e026-ada3-9430-3e11-8dd8c37dac24
 #   ?label = "Brew Club card for Alice"
 #   ?name = "Alice"
-#   ?now = "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime
+#   ?now = "2000-01-01T00:00:00+00:00"^^xsd:dateTime
 #   ?p = :alice
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
@@ -251,18 +251,18 @@ genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 :holder :alice .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 :issuedAt "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime .
+#   genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 :issuedAt "2000-01-01T00:00:00+00:00"^^xsd:dateTime .
 # It holds because the following instance of the rule body is provable:
 #   :alice a :Adult .
 #   :alice :name "Alice" .
-#   ?_b1 time:localTime "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime .
+#   :run :now "2000-01-01T00:00:00+00:00"^^xsd:dateTime .
 #   (:alice) log:skolem genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 .
 #   ("Brew Club card for " "Alice") string:concatenation "Brew Club card for Alice" .
 # via the schematic forward rule:
 #   {
 #     ?p a :Adult .
 #     ?p :name ?name .
-#     ?_b1 time:localTime ?now .
+#     :run :now ?now .
 #     (?p) log:skolem ?card .
 #     ("Brew Club card for " ?name) string:concatenation ?label .
 #   } => {
@@ -275,12 +275,12 @@ genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 :holder :alice .
 #   ?card = genid:9e06e026-ada3-9430-3e11-8dd8c37dac24
 #   ?label = "Brew Club card for Alice"
 #   ?name = "Alice"
-#   ?now = "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime
+#   ?now = "2000-01-01T00:00:00+00:00"^^xsd:dateTime
 #   ?p = :alice
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 :issuedAt "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime .
+genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 :issuedAt "2000-01-01T00:00:00+00:00"^^xsd:dateTime .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
@@ -288,14 +288,14 @@ genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 :issuedAt "2025-12-20T00:10:35.110+01
 # It holds because the following instance of the rule body is provable:
 #   :alice a :Adult .
 #   :alice :name "Alice" .
-#   ?_b1 time:localTime "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime .
+#   :run :now "2000-01-01T00:00:00+00:00"^^xsd:dateTime .
 #   (:alice) log:skolem genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 .
 #   ("Brew Club card for " "Alice") string:concatenation "Brew Club card for Alice" .
 # via the schematic forward rule:
 #   {
 #     ?p a :Adult .
 #     ?p :name ?name .
-#     ?_b1 time:localTime ?now .
+#     :run :now ?now .
 #     (?p) log:skolem ?card .
 #     ("Brew Club card for " ?name) string:concatenation ?label .
 #   } => {
@@ -308,7 +308,7 @@ genid:9e06e026-ada3-9430-3e11-8dd8c37dac24 :issuedAt "2025-12-20T00:10:35.110+01
 #   ?card = genid:9e06e026-ada3-9430-3e11-8dd8c37dac24
 #   ?label = "Brew Club card for Alice"
 #   ?name = "Alice"
-#   ?now = "2025-12-20T00:10:35.110+01:00"^^xsd:dateTime
+#   ?now = "2000-01-01T00:00:00+00:00"^^xsd:dateTime
 #   ?p = :alice
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------

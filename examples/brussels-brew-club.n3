@@ -8,14 +8,21 @@
 # - stable IDs with log:skolem
 # - timestamps with time:localTime
 
+# brussels-brew-club.n3 (deterministic version: no time:localTime)
+
 @prefix :      <http://example.org/brewclub#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 @prefix log:   <http://www.w3.org/2000/10/swap/log#> .
 @prefix math:  <http://www.w3.org/2000/10/swap/math#> .
 @prefix string:<http://www.w3.org/2000/10/swap/string#> .
-@prefix time:  <http://www.w3.org/2000/10/swap/time#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+# ---------------------------
+# Deterministic "run context"
+# ---------------------------
+
+:run :now "2000-01-01T00:00:00+00:00"^^xsd:dateTime .
 
 # -----
 # Facts
@@ -45,7 +52,7 @@
 # Rules
 # -----
 
-# 1) Extract fields from the JSON profile into normal triples
+# 1) Extract fields from JSON profile into normal triples
 {
   ?p :profileJson ?j .
   (?j "/age")  string:jsonPointer ?age .
@@ -59,27 +66,24 @@
      :city ?city .
 }.
 
-# 2) Backward rule: "Adult" is *defined* (not asserted) by age > 17
+# 2) Backward rule: Adult is defined by age > 17
 { ?p a :Adult }
 <=
 { ?p :age ?a . ?a math:greaterThan 17 }.
 
-# 3) Backward rule: "BigOrder" is defined by total > 25.00
+# 3) Backward rule: BigOrder is defined by total > 25.00
 { ?o a :BigOrder }
 <=
 { ?o :total ?t . ?t math:greaterThan "25.00"^^xsd:decimal }.
 
-# 4) Forward rule that *uses* the backward rules above:
-# If someone is Adult, mint a stable membership-card IRI + attach timestamp + label.
+# 4) Deterministic membership card rule:
+#    Uses :run :now ?now instead of time:localTime ?now
 {
   ?p a :Adult .
   ?p :name ?name .
-  [] time:localTime ?now .
+  :run :now ?now .
 
-  # stable IRI based on the person's IRI (deterministic)
   (?p) log:skolem ?card .
-
-  # human label assembled from strings
   ("Brew Club card for " ?name) string:concatenation ?label .
 }
 =>
@@ -102,7 +106,7 @@
   ?o :eligibleDiscount "true"^^xsd:boolean .
 }.
 
-# 6) Mint a stable receipt IRI from the order id
+# 6) Stable receipt IRI from the order id
 {
   ?o a :Order .
   ?o :id ?id .
