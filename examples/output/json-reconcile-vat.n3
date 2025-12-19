@@ -1,4 +1,5 @@
 @prefix ex: <http://example.org/> .
+@prefix genid: <https://eyereasoner.github.io/.well-known/genid/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 
 # ----------------------------------------------------------------------
@@ -10900,12 +10901,12 @@ ex:checks ex:tildeEscapeWorks true .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> a ex:Customer .
+#   genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c a ex:Customer .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A100> a ex:Order .
 #   <urn:example:order:A100> ex:vatIdRaw "null" .
 #   <urn:example:order:A100> ex:email "Ada@Example.ORG" .
-#   "Ada@Example.ORG" log:skolem <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> .
+#   "Ada@Example.ORG" log:skolem genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -10919,22 +10920,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c>
+#   ?Cust = genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c
 #   ?Email = "Ada@Example.ORG"
 #   ?Order = <urn:example:order:A100>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> a ex:Customer .
+genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c a ex:Customer .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> ex:vatIdRaw "null" .
+#   genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c ex:vatIdRaw "null" .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A100> a ex:Order .
 #   <urn:example:order:A100> ex:vatIdRaw "null" .
 #   <urn:example:order:A100> ex:email "Ada@Example.ORG" .
-#   "Ada@Example.ORG" log:skolem <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> .
+#   "Ada@Example.ORG" log:skolem genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -10948,22 +10949,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c>
+#   ?Cust = genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c
 #   ?Email = "Ada@Example.ORG"
 #   ?Order = <urn:example:order:A100>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> ex:vatIdRaw "null" .
+genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c ex:vatIdRaw "null" .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> ex:email "Ada@Example.ORG" .
+#   genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c ex:email "Ada@Example.ORG" .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A100> a ex:Order .
 #   <urn:example:order:A100> ex:vatIdRaw "null" .
 #   <urn:example:order:A100> ex:email "Ada@Example.ORG" .
-#   "Ada@Example.ORG" log:skolem <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> .
+#   "Ada@Example.ORG" log:skolem genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -10977,22 +10978,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c>
+#   ?Cust = genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c
 #   ?Email = "Ada@Example.ORG"
 #   ?Order = <urn:example:order:A100>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> ex:email "Ada@Example.ORG" .
+genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c ex:email "Ada@Example.ORG" .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <urn:example:order:A100> ex:customer <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> .
+#   <urn:example:order:A100> ex:customer genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A100> a ex:Order .
 #   <urn:example:order:A100> ex:vatIdRaw "null" .
 #   <urn:example:order:A100> ex:email "Ada@Example.ORG" .
-#   "Ada@Example.ORG" log:skolem <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> .
+#   "Ada@Example.ORG" log:skolem genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11006,22 +11007,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c>
+#   ?Cust = genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c
 #   ?Email = "Ada@Example.ORG"
 #   ?Order = <urn:example:order:A100>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<urn:example:order:A100> ex:customer <https://eyereasoner.github.io/.well-known/genid/bf57c048-5f73-c104-a49c-c2b8b003cd8c> .
+<urn:example:order:A100> ex:customer genid:bf57c048-5f73-c104-a49c-c2b8b003cd8c .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> a ex:Customer .
+#   genid:e8540f44-5792-3fe8-84f5-c27731a9e748 a ex:Customer .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A200> a ex:Order .
 #   <urn:example:order:A200> ex:vatIdRaw "null" .
 #   <urn:example:order:A200> ex:email "bob@example.org" .
-#   "bob@example.org" log:skolem <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> .
+#   "bob@example.org" log:skolem genid:e8540f44-5792-3fe8-84f5-c27731a9e748 .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11035,22 +11036,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748>
+#   ?Cust = genid:e8540f44-5792-3fe8-84f5-c27731a9e748
 #   ?Email = "bob@example.org"
 #   ?Order = <urn:example:order:A200>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> a ex:Customer .
+genid:e8540f44-5792-3fe8-84f5-c27731a9e748 a ex:Customer .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> ex:vatIdRaw "null" .
+#   genid:e8540f44-5792-3fe8-84f5-c27731a9e748 ex:vatIdRaw "null" .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A200> a ex:Order .
 #   <urn:example:order:A200> ex:vatIdRaw "null" .
 #   <urn:example:order:A200> ex:email "bob@example.org" .
-#   "bob@example.org" log:skolem <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> .
+#   "bob@example.org" log:skolem genid:e8540f44-5792-3fe8-84f5-c27731a9e748 .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11064,22 +11065,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748>
+#   ?Cust = genid:e8540f44-5792-3fe8-84f5-c27731a9e748
 #   ?Email = "bob@example.org"
 #   ?Order = <urn:example:order:A200>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> ex:vatIdRaw "null" .
+genid:e8540f44-5792-3fe8-84f5-c27731a9e748 ex:vatIdRaw "null" .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> ex:email "bob@example.org" .
+#   genid:e8540f44-5792-3fe8-84f5-c27731a9e748 ex:email "bob@example.org" .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A200> a ex:Order .
 #   <urn:example:order:A200> ex:vatIdRaw "null" .
 #   <urn:example:order:A200> ex:email "bob@example.org" .
-#   "bob@example.org" log:skolem <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> .
+#   "bob@example.org" log:skolem genid:e8540f44-5792-3fe8-84f5-c27731a9e748 .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11093,22 +11094,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748>
+#   ?Cust = genid:e8540f44-5792-3fe8-84f5-c27731a9e748
 #   ?Email = "bob@example.org"
 #   ?Order = <urn:example:order:A200>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> ex:email "bob@example.org" .
+genid:e8540f44-5792-3fe8-84f5-c27731a9e748 ex:email "bob@example.org" .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <urn:example:order:A200> ex:customer <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> .
+#   <urn:example:order:A200> ex:customer genid:e8540f44-5792-3fe8-84f5-c27731a9e748 .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A200> a ex:Order .
 #   <urn:example:order:A200> ex:vatIdRaw "null" .
 #   <urn:example:order:A200> ex:email "bob@example.org" .
-#   "bob@example.org" log:skolem <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> .
+#   "bob@example.org" log:skolem genid:e8540f44-5792-3fe8-84f5-c27731a9e748 .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11122,22 +11123,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748>
+#   ?Cust = genid:e8540f44-5792-3fe8-84f5-c27731a9e748
 #   ?Email = "bob@example.org"
 #   ?Order = <urn:example:order:A200>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<urn:example:order:A200> ex:customer <https://eyereasoner.github.io/.well-known/genid/e8540f44-5792-3fe8-84f5-c27731a9e748> .
+<urn:example:order:A200> ex:customer genid:e8540f44-5792-3fe8-84f5-c27731a9e748 .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> a ex:Customer .
+#   genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 a ex:Customer .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A400> a ex:Order .
 #   <urn:example:order:A400> ex:vatIdRaw "null" .
 #   <urn:example:order:A400> ex:email "ada@other.example" .
-#   "ada@other.example" log:skolem <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> .
+#   "ada@other.example" log:skolem genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11151,22 +11152,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8>
+#   ?Cust = genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8
 #   ?Email = "ada@other.example"
 #   ?Order = <urn:example:order:A400>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> a ex:Customer .
+genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 a ex:Customer .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> ex:vatIdRaw "null" .
+#   genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 ex:vatIdRaw "null" .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A400> a ex:Order .
 #   <urn:example:order:A400> ex:vatIdRaw "null" .
 #   <urn:example:order:A400> ex:email "ada@other.example" .
-#   "ada@other.example" log:skolem <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> .
+#   "ada@other.example" log:skolem genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11180,22 +11181,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8>
+#   ?Cust = genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8
 #   ?Email = "ada@other.example"
 #   ?Order = <urn:example:order:A400>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> ex:vatIdRaw "null" .
+genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 ex:vatIdRaw "null" .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> ex:email "ada@other.example" .
+#   genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 ex:email "ada@other.example" .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A400> a ex:Order .
 #   <urn:example:order:A400> ex:vatIdRaw "null" .
 #   <urn:example:order:A400> ex:email "ada@other.example" .
-#   "ada@other.example" log:skolem <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> .
+#   "ada@other.example" log:skolem genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11209,22 +11210,22 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8>
+#   ?Cust = genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8
 #   ?Email = "ada@other.example"
 #   ?Order = <urn:example:order:A400>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> ex:email "ada@other.example" .
+genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 ex:email "ada@other.example" .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:
-#   <urn:example:order:A400> ex:customer <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> .
+#   <urn:example:order:A400> ex:customer genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 .
 # It holds because the following instance of the rule body is provable:
 #   <urn:example:order:A400> a ex:Order .
 #   <urn:example:order:A400> ex:vatIdRaw "null" .
 #   <urn:example:order:A400> ex:email "ada@other.example" .
-#   "ada@other.example" log:skolem <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> .
+#   "ada@other.example" log:skolem genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 .
 # via the schematic forward rule:
 #   {
 #     ?Order a ex:Order .
@@ -11238,13 +11239,13 @@ ex:checks ex:tildeEscapeWorks true .
 #     ?Order ex:customer ?Cust .
 #   } .
 # with substitution (on rule variables):
-#   ?Cust = <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8>
+#   ?Cust = genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8
 #   ?Email = "ada@other.example"
 #   ?Order = <urn:example:order:A400>
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
-<urn:example:order:A400> ex:customer <https://eyereasoner.github.io/.well-known/genid/8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8> .
+<urn:example:order:A400> ex:customer genid:8e2eaee7-90fd-39b8-cf83-6d8c8e5816c8 .
 
 # ----------------------------------------------------------------------
 # Proof for derived triple:

@@ -106,6 +106,8 @@ function deterministicSkolemIdFromKey(key) {
   );
 }
 
+let runLocalTimeCache = null;
+
 // ============================================================================
 // AST (Abstract Syntax Tree)
 // ============================================================================
@@ -511,6 +513,7 @@ class PrefixEnv {
     m["string"] = STRING_NS;
     m["list"] = LIST_NS;
     m["time"] = TIME_NS;
+    m["genid"] = SKOLEM_NS;
     m[""] = "";
     return new PrefixEnv(m);
   }
@@ -2869,7 +2872,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // time:localTime
   // "" time:localTime ?D.  binds ?D to “now” as xsd:dateTime.
   if (g.p instanceof Iri && g.p.value === TIME_NS + "localTime") {
-    const now = localIsoDateTimeString(new Date());
+    const now = runLocalTimeCache || (runLocalTimeCache = localIsoDateTimeString(new Date()));
     if (g.o instanceof Var) {
       const s2 = { ...subst };
       s2[g.o.name] = new Literal(`"${now}"^^<${XSD_NS}dateTime>`);
@@ -4154,6 +4157,16 @@ function termToN3(t, pref) {
   }
  if (t instanceof Literal) {
    const [lex, dt] = literalParts(t.value);
+
+   // Pretty-print xsd:boolean as bare true/false
+   if (dt === XSD_NS + "boolean") {
+     const v = stripQuotes(lex);
+     if (v === "true" || v === "false") return v;
+     // optional: normalize 1/0 too
+     if (v === "1") return "true";
+     if (v === "0") return "false";
+   }
+
    if (!dt) return t.value; // keep numbers, booleans, lang-tagged strings, etc.
    const qdt = pref.shrinkIri(dt);
    if (qdt !== null) return `${lex}^^${qdt}`;   // e.g. ^^rdf:JSON

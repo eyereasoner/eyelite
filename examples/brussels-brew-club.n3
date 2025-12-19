@@ -1,0 +1,117 @@
+# ==================
+# Brussels Brew Club
+# ==================
+#
+# A tiny loyalty + compliance reasoner with:
+# - JSON profile parsing (rdf:JSON + string:jsonPointer)
+# - backward rules (<=) used during forward chaining
+# - stable IDs with log:skolem
+# - timestamps with time:localTime
+
+@prefix :      <http://example.org/brewclub#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix log:   <http://www.w3.org/2000/10/swap/log#> .
+@prefix math:  <http://www.w3.org/2000/10/swap/math#> .
+@prefix string:<http://www.w3.org/2000/10/swap/string#> .
+@prefix time:  <http://www.w3.org/2000/10/swap/time#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+# -----
+# Facts
+# -----
+
+:alice :profileJson """{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON .
+:bob   :profileJson """{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON .
+
+:order1 a :Order ;
+  :id "ORD-2025-001" ;
+  :by :alice ;
+  :total "31.50"^^xsd:decimal ;
+  :contains :Espresso, :Croissant .
+
+:order2 a :Order ;
+  :id "ORD-2025-002" ;
+  :by :bob ;
+  :total "12.00"^^xsd:decimal ;
+  :contains :HotChocolate .
+
+:Beer a :AlcoholicDrink .
+:Espresso a :Drink .
+:HotChocolate a :Drink .
+:Croissant a :Food .
+
+# -----
+# Rules
+# -----
+
+# 1) Extract fields from the JSON profile into normal triples
+{
+  ?p :profileJson ?j .
+  (?j "/age")  string:jsonPointer ?age .
+  (?j "/name") string:jsonPointer ?name .
+  (?j "/city") string:jsonPointer ?city .
+}
+=>
+{
+  ?p :age ?age ;
+     :name ?name ;
+     :city ?city .
+}.
+
+# 2) Backward rule: "Adult" is *defined* (not asserted) by age > 17
+{ ?p a :Adult }
+<=
+{ ?p :age ?a . ?a math:greaterThan 17 }.
+
+# 3) Backward rule: "BigOrder" is defined by total > 25.00
+{ ?o a :BigOrder }
+<=
+{ ?o :total ?t . ?t math:greaterThan "25.00"^^xsd:decimal }.
+
+# 4) Forward rule that *uses* the backward rules above:
+# If someone is Adult, mint a stable membership-card IRI + attach timestamp + label.
+{
+  ?p a :Adult .
+  ?p :name ?name .
+  [] time:localTime ?now .
+
+  # stable IRI based on the person's IRI (deterministic)
+  (?p) log:skolem ?card .
+
+  # human label assembled from strings
+  ("Brew Club card for " ?name) string:concatenation ?label .
+}
+=>
+{
+  ?card a :MembershipCard ;
+        :holder ?p ;
+        :issuedAt ?now ;
+        rdfs:label ?label .
+}.
+
+# 5) Discounts: BigOrder + Adult -> discount eligibility
+{
+  ?o a :Order .
+  ?o a :BigOrder .
+  ?o :by ?p .
+  ?p a :Adult .
+}
+=>
+{
+  ?o :eligibleDiscount "true"^^xsd:boolean .
+}.
+
+# 6) Mint a stable receipt IRI from the order id
+{
+  ?o a :Order .
+  ?o :id ?id .
+  (?id) log:skolem ?receipt .
+}
+=>
+{
+  ?receipt a :Receipt ;
+           :forOrder ?o ;
+           :receiptId ?id .
+}.
+
