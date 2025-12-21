@@ -1,5 +1,5 @@
 # ======================================================================================
-# EV Roadtrip Planner v1 (similar complexity to drone-corridor-planner-v2.n3)
+# EV Roadtrip Planner
 #
 # World state (toy):
 #   :car1 :at <city>.

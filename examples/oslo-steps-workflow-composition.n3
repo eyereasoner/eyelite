@@ -1,0 +1,308 @@
+# =======================================================================================
+# OSLO-STEPS workflow composition — translation pipeline style
+#
+# Goal:
+#   Compose an "address change confirmation" workflow from OSLO-STEPS-style input:
+#     - o-steps:State + o-steps:hasStateShape (SHACL constraints)
+#     - o-steps:Step  + o-steps:requiresState / o-steps:producesState + costs
+#
+# Pipeline:
+#   1) StateShape -> State constraints (targetClass, path, value)  [SHACL -> constraints]
+#   2) Step + required/produced State -> gps:description           [OSLO -> internal]
+#   3) planner composes gps:description                            [internal -> plan]
+#
+# Notes:
+#   - We use var:x (http://www.w3.org/2000/10/swap/var#x) as the placeholder "instance"
+#     inside state formulas, matching how OSLO-STEPS docs often model patterns.
+#   - Aggregation:
+#       duration + monetaryCost = sum
+#       success  * satisfaction = product
+#   - Pruning is done using math:lessThan / math:greaterThan (known to work in EYE).
+# =======================================================================================
+
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix gps:  <https://eyereasoner.github.io/eye/reasoning/gps/gps-schema#>.
+@prefix :     <https://eyereasoner.github.io/eye/reasoning#>.
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh:   <http://www.w3.org/ns/shacl#>.
+@prefix var:  <http://www.w3.org/2000/10/swap/var#>.
+
+@prefix o-steps:   <https://fast.ilabt.imec.be/ns/oslo-steps#>.
+@prefix o-persoon: <https://data.vlaanderen.be/ns/persoon#>.
+
+@prefix ex:    <https://example.org/vocab#>.
+@prefix cost:  <https://example.org/cost#>.
+@prefix state: <https://example.org/states#>.
+@prefix step:  <https://example.org/steps#>.
+@prefix shape: <https://example.org/shapes#>.
+
+# ----------------------------------------------------------------------
+# 1) OSLO-STEPS-like INPUT
+#    We model the user situation with a fixed “signature” of 5 booleans:
+#      ex:personalInfoProvided
+#      ex:movingDataProvided
+#      ex:newAddressProvided
+#      ex:addressChangeDeclared
+#      ex:confirmationOfAddressChange
+# ----------------------------------------------------------------------
+# States
+state:s0 a o-steps:State; rdfs:label "Start"@en;                 o-steps:hasStateShape shape:s0Shape.
+state:s1 a o-steps:State; rdfs:label "Personal info provided"@en;o-steps:hasStateShape shape:s1Shape.
+state:s2 a o-steps:State; rdfs:label "Moving data provided"@en;  o-steps:hasStateShape shape:s2Shape.
+state:s3 a o-steps:State; rdfs:label "New address provided"@en;  o-steps:hasStateShape shape:s3Shape.
+state:s4 a o-steps:State; rdfs:label "Declared"@en;              o-steps:hasStateShape shape:s4Shape.
+state:s5 a o-steps:State; rdfs:label "Confirmed"@en;             o-steps:hasStateShape shape:s5Shape.
+
+# StateShapes (each shape defines the full signature using 5 property shapes)
+shape:s0Shape a o-steps:StateShape; sh:targetClass o-persoon:Inwoner;
+  sh:property shape:s0PI, shape:s0MD, shape:s0NA, shape:s0DECL, shape:s0CONF.
+shape:s1Shape a o-steps:StateShape; sh:targetClass o-persoon:Inwoner;
+  sh:property shape:s1PI, shape:s1MD, shape:s1NA, shape:s1DECL, shape:s1CONF.
+shape:s2Shape a o-steps:StateShape; sh:targetClass o-persoon:Inwoner;
+  sh:property shape:s2PI, shape:s2MD, shape:s2NA, shape:s2DECL, shape:s2CONF.
+shape:s3Shape a o-steps:StateShape; sh:targetClass o-persoon:Inwoner;
+  sh:property shape:s3PI, shape:s3MD, shape:s3NA, shape:s3DECL, shape:s3CONF.
+shape:s4Shape a o-steps:StateShape; sh:targetClass o-persoon:Inwoner;
+  sh:property shape:s4PI, shape:s4MD, shape:s4NA, shape:s4DECL, shape:s4CONF.
+shape:s5Shape a o-steps:StateShape; sh:targetClass o-persoon:Inwoner;
+  sh:property shape:s5PI, shape:s5MD, shape:s5NA, shape:s5DECL, shape:s5CONF.
+
+# S0: all false
+shape:s0PI   a sh:PropertyShape; sh:path ex:personalInfoProvided;        sh:hasValue false; sh:minCount 1.
+shape:s0MD   a sh:PropertyShape; sh:path ex:movingDataProvided;          sh:hasValue false; sh:minCount 1.
+shape:s0NA   a sh:PropertyShape; sh:path ex:newAddressProvided;          sh:hasValue false; sh:minCount 1.
+shape:s0DECL a sh:PropertyShape; sh:path ex:addressChangeDeclared;       sh:hasValue false; sh:minCount 1.
+shape:s0CONF a sh:PropertyShape; sh:path ex:confirmationOfAddressChange; sh:hasValue false; sh:minCount 1.
+
+# S1: PI true
+shape:s1PI   a sh:PropertyShape; sh:path ex:personalInfoProvided;        sh:hasValue true;  sh:minCount 1.
+shape:s1MD   a sh:PropertyShape; sh:path ex:movingDataProvided;          sh:hasValue false; sh:minCount 1.
+shape:s1NA   a sh:PropertyShape; sh:path ex:newAddressProvided;          sh:hasValue false; sh:minCount 1.
+shape:s1DECL a sh:PropertyShape; sh:path ex:addressChangeDeclared;       sh:hasValue false; sh:minCount 1.
+shape:s1CONF a sh:PropertyShape; sh:path ex:confirmationOfAddressChange; sh:hasValue false; sh:minCount 1.
+
+# S2: PI true, MD true
+shape:s2PI   a sh:PropertyShape; sh:path ex:personalInfoProvided;        sh:hasValue true;  sh:minCount 1.
+shape:s2MD   a sh:PropertyShape; sh:path ex:movingDataProvided;          sh:hasValue true;  sh:minCount 1.
+shape:s2NA   a sh:PropertyShape; sh:path ex:newAddressProvided;          sh:hasValue false; sh:minCount 1.
+shape:s2DECL a sh:PropertyShape; sh:path ex:addressChangeDeclared;       sh:hasValue false; sh:minCount 1.
+shape:s2CONF a sh:PropertyShape; sh:path ex:confirmationOfAddressChange; sh:hasValue false; sh:minCount 1.
+
+# S3: PI true, MD true, NA true
+shape:s3PI   a sh:PropertyShape; sh:path ex:personalInfoProvided;        sh:hasValue true;  sh:minCount 1.
+shape:s3MD   a sh:PropertyShape; sh:path ex:movingDataProvided;          sh:hasValue true;  sh:minCount 1.
+shape:s3NA   a sh:PropertyShape; sh:path ex:newAddressProvided;          sh:hasValue true;  sh:minCount 1.
+shape:s3DECL a sh:PropertyShape; sh:path ex:addressChangeDeclared;       sh:hasValue false; sh:minCount 1.
+shape:s3CONF a sh:PropertyShape; sh:path ex:confirmationOfAddressChange; sh:hasValue false; sh:minCount 1.
+
+# S4: declared true
+shape:s4PI   a sh:PropertyShape; sh:path ex:personalInfoProvided;        sh:hasValue true;  sh:minCount 1.
+shape:s4MD   a sh:PropertyShape; sh:path ex:movingDataProvided;          sh:hasValue true;  sh:minCount 1.
+shape:s4NA   a sh:PropertyShape; sh:path ex:newAddressProvided;          sh:hasValue true;  sh:minCount 1.
+shape:s4DECL a sh:PropertyShape; sh:path ex:addressChangeDeclared;       sh:hasValue true;  sh:minCount 1.
+shape:s4CONF a sh:PropertyShape; sh:path ex:confirmationOfAddressChange; sh:hasValue false; sh:minCount 1.
+
+# S5: confirmed true
+shape:s5PI   a sh:PropertyShape; sh:path ex:personalInfoProvided;        sh:hasValue true;  sh:minCount 1.
+shape:s5MD   a sh:PropertyShape; sh:path ex:movingDataProvided;          sh:hasValue true;  sh:minCount 1.
+shape:s5NA   a sh:PropertyShape; sh:path ex:newAddressProvided;          sh:hasValue true;  sh:minCount 1.
+shape:s5DECL a sh:PropertyShape; sh:path ex:addressChangeDeclared;       sh:hasValue true;  sh:minCount 1.
+shape:s5CONF a sh:PropertyShape; sh:path ex:confirmationOfAddressChange; sh:hasValue true;  sh:minCount 1.
+
+# Steps (branching alternatives)
+step:providePersonalInfoOnline a o-steps:Step;
+  o-steps:requiresState state:s0; o-steps:producesState state:s1;
+  cost:duration 30.0;    cost:monetaryCost 0.0; cost:success 0.99;  cost:usersatifaction 0.95.
+
+step:providePersonalInfoDesk a o-steps:Step;
+  o-steps:requiresState state:s0; o-steps:producesState state:s1;
+  cost:duration 120.0;   cost:monetaryCost 0.0; cost:success 0.995; cost:usersatifaction 0.85.
+
+step:provideMovingDataOnline a o-steps:Step;
+  o-steps:requiresState state:s1; o-steps:producesState state:s2;
+  cost:duration 45.0;    cost:monetaryCost 2.0; cost:success 0.99;  cost:usersatifaction 0.92.
+
+step:provideMovingDataDesk a o-steps:Step;
+  o-steps:requiresState state:s1; o-steps:producesState state:s2;
+  cost:duration 90.0;    cost:monetaryCost 2.0; cost:success 0.995; cost:usersatifaction 0.88.
+
+step:provideNewAddress a o-steps:Step;
+  o-steps:requiresState state:s2; o-steps:producesState state:s3;
+  cost:duration 30.0;    cost:monetaryCost 0.0; cost:success 0.99;  cost:usersatifaction 0.93.
+
+step:declareAddressChangeOnline a o-steps:Step;
+  o-steps:requiresState state:s3; o-steps:producesState state:s4;
+  cost:duration 60.0;    cost:monetaryCost 0.0; cost:success 0.98;  cost:usersatifaction 0.90.
+
+step:declareAddressChangePostal a o-steps:Step;
+  o-steps:requiresState state:s3; o-steps:producesState state:s4;
+  cost:duration 90.0;    cost:monetaryCost 2.0; cost:success 0.95;  cost:usersatifaction 0.88.
+
+step:confirmAddressChangePolice a o-steps:Step;
+  o-steps:requiresState state:s4; o-steps:producesState state:s5;
+  cost:duration 20160.0; cost:monetaryCost 0.0; cost:success 0.98;  cost:usersatifaction 0.97.
+
+step:confirmAddressChangeCityHall a o-steps:Step;
+  o-steps:requiresState state:s4; o-steps:producesState state:s5;
+  cost:duration 10080.0; cost:monetaryCost 0.0; cost:success 0.90;  cost:usersatifaction 0.85.
+
+# --------------------------
+# 2) TRANSLATION (docs-like)
+# --------------------------
+# 2.1) StateShape -> State constraints: (targetClass, path, value)
+{ ?STATE :constraint (?TARGET ?PATH ?VALUE). } <=
+{
+  ?STATE o-steps:hasStateShape ?SHAPE.
+  ?SHAPE sh:targetClass ?TARGET.
+  ?SHAPE sh:property ?PS.
+  ?PS sh:path ?PATH.
+  ?PS sh:hasValue ?VALUE.
+  ?PS sh:minCount 1.
+}.
+
+# 2.2) Step -> internal gps:description transition (compiled)
+# IMPORTANT: we use var:x inside the formulas so they unify (no existential ?x).
+{
+  ex:movemap gps:description
+    (
+      { var:x a ?T.
+        var:x ex:personalInfoProvided        ?PI1.
+        var:x ex:movingDataProvided          ?MD1.
+        var:x ex:newAddressProvided          ?NA1.
+        var:x ex:addressChangeDeclared       ?DECL1.
+        var:x ex:confirmationOfAddressChange ?CONF1.
+      }
+      true
+      { var:x a ?T.
+        var:x ex:personalInfoProvided        ?PI2.
+        var:x ex:movingDataProvided          ?MD2.
+        var:x ex:newAddressProvided          ?NA2.
+        var:x ex:addressChangeDeclared       ?DECL2.
+        var:x ex:confirmationOfAddressChange ?CONF2.
+      }
+      ?STEP
+      ?DUR ?MC ?SUC ?SAT
+    ).
+} <=
+{
+  ?STEP o-steps:requiresState ?REQ.
+  ?STEP o-steps:producesState ?PROD.
+
+  ?REQ  :constraint (?T ex:personalInfoProvided        ?PI1).
+  ?REQ  :constraint (?T ex:movingDataProvided          ?MD1).
+  ?REQ  :constraint (?T ex:newAddressProvided          ?NA1).
+  ?REQ  :constraint (?T ex:addressChangeDeclared       ?DECL1).
+  ?REQ  :constraint (?T ex:confirmationOfAddressChange ?CONF1).
+
+  ?PROD :constraint (?T ex:personalInfoProvided        ?PI2).
+  ?PROD :constraint (?T ex:movingDataProvided          ?MD2).
+  ?PROD :constraint (?T ex:newAddressProvided          ?NA2).
+  ?PROD :constraint (?T ex:addressChangeDeclared       ?DECL2).
+  ?PROD :constraint (?T ex:confirmationOfAddressChange ?CONF2).
+
+  ?STEP cost:duration ?DUR.
+  ?STEP cost:monetaryCost ?MC.
+  ?STEP cost:success ?SUC.
+  ?STEP cost:usersatifaction ?SAT.
+}.
+
+# --------
+# 3) START
+# --------
+:bob :start
+{
+  var:x a o-persoon:Inwoner.
+  var:x ex:personalInfoProvided        false.
+  var:x ex:movingDataProvided          false.
+  var:x ex:newAddressProvided          false.
+  var:x ex:addressChangeDeclared       false.
+  var:x ex:confirmationOfAddressChange false.
+}.
+
+# ----------------------------------------------------------
+# 4) PLANNER
+#    Path tuple:
+#      (From To Actions Dur Cost Success Sat)
+# ----------------------------------------------------------
+# Base: one step
+{ (?From ?To (?Act) ?Dur ?Cost ?Suc ?Sat) :path true. }
+<=
+{
+  ex:movemap gps:description (?From true ?To ?Act ?Dur ?Cost ?Suc ?Sat).
+}.
+
+# Recursive: step + rest (aggregate)
+{ (?From ?To ?Acts ?Dur ?Cost ?Suc ?Sat) :path true. }
+<=
+{
+  ex:movemap gps:description (?From true ?Mid ?Act ?Dur1 ?Cost1 ?Suc1 ?Sat1).
+
+  (?Mid ?To ?Rest ?Dur2 ?Cost2 ?Suc2 ?Sat2) :path true.
+
+  ((?Act) ?Rest) list:append ?Acts.
+  (?Dur1  ?Dur2)  math:sum     ?Dur.
+  (?Cost1 ?Cost2) math:sum     ?Cost.
+  (?Suc1  ?Suc2)  math:product ?Suc.
+  (?Sat1  ?Sat2)  math:product ?Sat.
+}.
+
+# OSLO-like wrapper with pruning limits applied at query-time (simple + predictable)
+{
+  :scope gps:findpath
+    (
+      ?GOAL
+      ?PATH
+      ?DURATION
+      ?MONETARYCOST
+      ?SUCCESS
+      ?SATISFACTION
+      (?DL ?CL ?SL ?AL)
+    ).
+} <=
+{
+  :bob :start ?START.
+
+  (?START ?GOAL ?PATH ?DURATION ?MONETARYCOST ?SUCCESS ?SATISFACTION) :path true.
+
+  # pruning (strict)
+  ?DURATION     math:lessThan    ?DL.
+  ?MONETARYCOST math:lessThan    ?CL.
+  ?SUCCESS      math:greaterThan ?SL.
+  ?SATISFACTION math:greaterThan ?AL.
+}.
+
+# -----------------------------------------------------------------------
+# 5) GOAL QUERY -> OUTPUT
+#    (Fully specified goal formula, so formula-term unification is exact)
+# -----------------------------------------------------------------------
+{
+  :scope gps:findpath
+    (
+      {
+        var:x a o-persoon:Inwoner.
+        var:x ex:personalInfoProvided        true.
+        var:x ex:movingDataProvided          true.
+        var:x ex:newAddressProvided          true.
+        var:x ex:addressChangeDeclared       true.
+        var:x ex:confirmationOfAddressChange true.
+      }
+      ?PATH
+      ?DUR
+      ?COST
+      ?SUC
+      ?SAT
+      (
+        40320.0   # duration limit (4 weeks)
+        20.0      # monetary cost limit
+        0.80      # success lower bound
+        0.65      # satisfaction lower bound  (0.8 is too strict for product)
+      )
+    ).
+}
+=>
+{
+  :bob gps:path (?PATH ?DUR ?COST ?SUC ?SAT).
+}.
+
