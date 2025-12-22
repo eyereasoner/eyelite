@@ -1169,44 +1169,70 @@ function liftBlankRuleVars(premise, conclusion) {
   return [newPremise, conclusion];
 }
 
-function skolemizeTermForHeadBlanks(t, headBlankLabels, mapping, skCounter) {
+// Skolemization for blank nodes that occur explicitly in a rule head.
+//
+// IMPORTANT: we must be *stable per rule firing*, otherwise a rule whose
+// premises stay true would keep generating fresh _:sk_N blank nodes on every
+// outer fixpoint iteration (non-termination once we do strict duplicate checks).
+//
+// We achieve this by optionally keying head-blank allocations by a "firingKey"
+// (usually derived from the instantiated premises and rule index) and caching
+// them in a run-global map.
+function skolemizeTermForHeadBlanks(t, headBlankLabels, mapping, skCounter, firingKey, globalMap) {
   if (t instanceof Blank) {
     const label = t.label;
     // Only skolemize blanks that occur explicitly in the rule head
     if (!headBlankLabels || !headBlankLabels.has(label)) {
       return t; // this is a data blank (e.g. bound via ?X), keep it
     }
+
     if (!mapping.hasOwnProperty(label)) {
-      const idx = skCounter[0];
-      skCounter[0] += 1;
-      mapping[label] = `_:sk_${idx}`;
+      // If we have a global cache keyed by firingKey, use it to ensure
+      // deterministic blank IDs for the same rule+substitution instance.
+      if (globalMap && firingKey) {
+        const gk = `${firingKey}|${label}`;
+        let sk = globalMap.get(gk);
+        if (!sk) {
+          const idx = skCounter[0];
+          skCounter[0] += 1;
+          sk = `_:sk_${idx}`;
+          globalMap.set(gk, sk);
+        }
+        mapping[label] = sk;
+      } else {
+        const idx = skCounter[0];
+        skCounter[0] += 1;
+        mapping[label] = `_:sk_${idx}`;
+      }
     }
     return new Blank(mapping[label]);
   }
 
   if (t instanceof ListTerm) {
-    return new ListTerm(t.elems.map((e) => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter)));
+    return new ListTerm(t.elems.map((e) => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter, firingKey, globalMap)));
   }
 
   if (t instanceof OpenListTerm) {
     return new OpenListTerm(
-      t.prefix.map((e) => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter)),
+      t.prefix.map((e) => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter, firingKey, globalMap)),
       t.tailVar,
     );
   }
 
   if (t instanceof FormulaTerm) {
-    return new FormulaTerm(t.triples.map((tr) => skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter)));
+    return new FormulaTerm(
+      t.triples.map((tr) => skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter, firingKey, globalMap)),
+    );
   }
 
   return t;
 }
 
-function skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter) {
+function skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter, firingKey, globalMap) {
   return new Triple(
-    skolemizeTermForHeadBlanks(tr.s, headBlankLabels, mapping, skCounter),
-    skolemizeTermForHeadBlanks(tr.p, headBlankLabels, mapping, skCounter),
-    skolemizeTermForHeadBlanks(tr.o, headBlankLabels, mapping, skCounter),
+    skolemizeTermForHeadBlanks(tr.s, headBlankLabels, mapping, skCounter, firingKey, globalMap),
+    skolemizeTermForHeadBlanks(tr.p, headBlankLabels, mapping, skCounter, firingKey, globalMap),
+    skolemizeTermForHeadBlanks(tr.o, headBlankLabels, mapping, skCounter, firingKey, globalMap),
   );
 }
 
@@ -1502,15 +1528,20 @@ function hasFactIndexed(facts, tr) {
       const po = facts.__byPO.get(pk);
       if (po) {
         const pob = po.get(ok) || [];
-        return pob.some((t) => alphaEqTriple(t, tr));
+        // Facts are all in the same graph. Different blank node labels represent
+        // different existentials unless explicitly connected. Do NOT treat
+        // triples as duplicates modulo blank renaming, or you'll incorrectly
+        // drop facts like: _:sk_0 :x 8.0  (because _:b8 :x 8.0 exists).
+        return pob.some((t) => triplesEqual(t, tr));
       }
     }
 
     const pb = facts.__byPred.get(pk) || [];
-    return pb.some((t) => alphaEqTriple(t, tr));
+    return pb.some((t) => triplesEqual(t, tr));
   }
 
-  return hasAlphaEquiv(facts, tr);
+  // Non-IRI predicate: fall back to strict triple equality.
+  return facts.some((t) => triplesEqual(t, tr));
 }
 
 function pushFactIndexed(facts, tr) {
@@ -4162,6 +4193,20 @@ function forwardChain(facts, forwardRules, backRules) {
   const varGen = [0];
   const skCounter = [0];
 
+  // Cache head blank-node skolemization per (rule firing, head blank label).
+  // This prevents repeatedly generating fresh _:sk_N blanks for the *same*
+  // rule+substitution instance across outer fixpoint iterations.
+  const headSkolemCache = new Map();
+
+  function firingKey(ruleIndex, instantiatedPremises) {
+    // Deterministic key derived from the instantiated body (ground per substitution).
+    const parts = [];
+    for (const tr of instantiatedPremises) {
+      parts.push(JSON.stringify([skolemKeyFromTerm(tr.s), skolemKeyFromTerm(tr.p), skolemKeyFromTerm(tr.o)]));
+    }
+    return `R${ruleIndex}|` + parts.join('\\n');
+  }
+
   // Make rules visible to introspection builtins
   backRules.__allForwardRules = forwardRules;
   backRules.__allBackwardRules = backRules;
@@ -4187,6 +4232,7 @@ function forwardChain(facts, forwardRules, backRules) {
         // (e.g., from [ :p ... ; :q ... ]) stay connected across all head triples.
         const skMap = {};
         const instantiatedPremises = r.premise.map((b) => applySubstTriple(b, s));
+        const fireKey = firingKey(i, instantiatedPremises);
 
         for (const cpat of r.conclusion) {
           const instantiated = applySubstTriple(cpat, s);
@@ -4270,7 +4316,7 @@ function forwardChain(facts, forwardRules, backRules) {
           }
 
           // Only skolemize blank nodes that occur explicitly in the rule head
-          const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter);
+          const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter, fireKey, headSkolemCache);
 
           if (!isGroundTriple(inst)) continue;
           if (hasFactIndexed(facts, inst)) continue;

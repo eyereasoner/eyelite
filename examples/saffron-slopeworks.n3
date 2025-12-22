@@ -1,0 +1,216 @@
+# ================================================================
+# Heavy-Math N3 Demo: "Saffron Slopeworks"
+# ------------------------------------------------
+# A math-stress N3 ruleset focused on *linear regression* and
+# residual analysis, intended for testing strict W3C/N3 math
+# builtins implementations.
+#
+# What it does:
+#  1) Computes least-squares line: y = a + b x
+#     - slope b, intercept a
+#  2) Computes Pearson correlation r and r^2
+#  3) Computes SSE + RMSE
+#  4) Flags points whose |residual| > 2*RMSE (as high-residual outliers)
+#  5) Predicts y at a given x
+#
+# Notes:
+#  - Uses only: math:, list:, log:
+#  - Head blank nodes are used to create connected result structures.
+# ================================================================
+
+@prefix :     <http://example.org/saffron-slopeworks#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+############
+# DATA
+############
+
+:Reg1
+  :points (
+    [ :x 1.0 ; :y 2.1  ]
+    [ :x 2.0 ; :y 2.9  ]
+    [ :x 3.0 ; :y 3.8  ]
+    [ :x 4.0 ; :y 4.2  ]
+    [ :x 5.0 ; :y 5.1  ]
+    [ :x 6.0 ; :y 5.9  ]
+    [ :x 7.0 ; :y 7.0  ]
+    [ :x 8.0 ; :y 15.0 ]   # an obvious high-residual outlier
+  ) ;
+  :predictX 8.5 .
+
+############
+# (1) COLLECT SUMS: Σx, Σy, Σx², Σy², Σxy
+############
+
+{
+  :Reg1 :points ?pts .
+  ?pts list:length ?n .
+
+  ( ?x { ?pts list:member ?p . ?p :x ?x . } ?xs ) log:collectAllIn _:s1 .
+  ( ?y { ?pts list:member ?p . ?p :y ?y . } ?ys ) log:collectAllIn _:s1 .
+
+  ?xs math:sum ?sumX .
+  ?ys math:sum ?sumY .
+
+  ( ?x2 {
+      ?pts list:member ?p .
+      ?p :x ?x .
+      (?x 2.0) math:exponentiation ?x2 .
+    } ?x2s ) log:collectAllIn _:s1 .
+  ?x2s math:sum ?sumXX .
+
+  ( ?y2 {
+      ?pts list:member ?p .
+      ?p :y ?y .
+      (?y 2.0) math:exponentiation ?y2 .
+    } ?y2s ) log:collectAllIn _:s1 .
+  ?y2s math:sum ?sumYY .
+
+  ( ?xy {
+      ?pts list:member ?p .
+      ?p :x ?x ; :y ?y .
+      (?x ?y) math:product ?xy .
+    } ?xys ) log:collectAllIn _:s1 .
+  ?xys math:sum ?sumXY .
+}
+=>
+{
+  :Reg1 :n ?n ;
+        :sumX ?sumX ; :sumY ?sumY ;
+        :sumXX ?sumXX ; :sumYY ?sumYY ;
+        :sumXY ?sumXY .
+} .
+
+############
+# (2) REGRESSION + CORRELATION
+#
+# b = ( n*Σxy - (Σx)(Σy) ) / ( n*Σx² - (Σx)² )
+# a = ( Σy - b*Σx ) / n
+#
+# r = ( n*Σxy - (Σx)(Σy) ) / sqrt( (n*Σx²-(Σx)²)(n*Σy²-(Σy)²) )
+# r² = r^2
+############
+
+{
+  :Reg1 :n ?n ;
+        :sumX ?sx ; :sumY ?sy ;
+        :sumXX ?sxx ; :sumYY ?syy ;
+        :sumXY ?sxy .
+
+  # numerator = n*sxy - sx*sy
+  (?n ?sxy) math:product ?n_sxy .
+  (?sx ?sy) math:product ?sx_sy .
+  (?n_sxy ?sx_sy) math:difference ?num .
+
+  # denX = n*sxx - sx^2
+  (?n ?sxx) math:product ?n_sxx .
+  (?sx 2.0) math:exponentiation ?sx2 .
+  (?n_sxx ?sx2) math:difference ?denX .
+
+  # slope b
+  (?num ?denX) math:quotient ?b .
+
+  # intercept a = (sy - b*sx) / n
+  (?b ?sx) math:product ?b_sx .
+  (?sy ?b_sx) math:difference ?tmpA .
+  (?tmpA ?n) math:quotient ?a .
+
+  # denY = n*syy - sy^2
+  (?n ?syy) math:product ?n_syy .
+  (?sy 2.0) math:exponentiation ?sy2 .
+  (?n_syy ?sy2) math:difference ?denY .
+
+  # r = num / sqrt(denX*denY)
+  (?denX ?denY) math:product ?denXY .
+  (?denXY 0.5) math:exponentiation ?sqrtDen .
+  (?num ?sqrtDen) math:quotient ?r .
+  (?r 2.0) math:exponentiation ?r2 .
+}
+=>
+{
+  :Reg1 :slope ?b ;
+        :intercept ?a ;
+        :pearsonR ?r ;
+        :rSquared ?r2 .
+} .
+
+############
+# (3) SSE + RMSE (root mean squared error)
+# residual e = y - (a + b x)
+# SSE = Σ e^2
+# RMSE = sqrt(SSE / n)
+############
+
+{
+  :Reg1 :points ?pts ; :slope ?b ; :intercept ?a .
+  ?pts list:length ?n .
+
+  ( ?e2 {
+      ?pts list:member ?p .
+      ?p :x ?x ; :y ?y .
+
+      (?b ?x) math:product ?bx .
+      (?a ?bx) math:sum ?yhat .
+      (?y ?yhat) math:difference ?e .
+      (?e 2.0) math:exponentiation ?e2 .
+    } ?e2s ) log:collectAllIn _:s2 .
+
+  ?e2s math:sum ?sse .
+  (?sse ?n) math:quotient ?mse .
+  (?mse 0.5) math:exponentiation ?rmse .
+}
+=>
+{
+  :Reg1 :sse ?sse ;
+        :rmse ?rmse .
+} .
+
+############
+# (4) FLAG HIGH-RESIDUAL POINTS: |e| > 2*RMSE
+############
+
+{
+  :Reg1 :points ?pts ; :slope ?b ; :intercept ?a ; :rmse ?rmse .
+  ?pts list:member ?p .
+  ?p :x ?x ; :y ?y .
+
+  (?b ?x) math:product ?bx .
+  (?a ?bx) math:sum ?yhat .
+  (?y ?yhat) math:difference ?e .
+  ?e math:absoluteValue ?ae .
+
+  (2.0 ?rmse) math:product ?thr .
+  ?ae math:greaterThan ?thr .
+}
+=>
+{
+  :Reg1 :highResidual
+    [ :point ?p ;
+      :x ?x ; :y ?y ;
+      :yhat ?yhat ;
+      :residual ?e ] .
+} .
+
+############
+# (5) PREDICTION: y = a + b*x0
+############
+
+{
+  :Reg1 :predictX ?x0 ; :slope ?b ; :intercept ?a .
+  (?b ?x0) math:product ?bx0 .
+  (?a ?bx0) math:sum ?y0 .
+}
+=>
+{
+  :Reg1 :prediction [ :x ?x0 ; :y ?y0 ] .
+} .
+
+############
+# STRICTNESS REGRESSION HOOK (should fail in strict math)
+############
+# {
+#   "2"^^<http://example.org/not-a-number> math:product "3"^^<http://example.org/nope> .
+# } => { :bad :datatype :accepted . } .
+

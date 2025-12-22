@@ -1,0 +1,1470 @@
+@prefix : <http://example.org/saffron-slopeworks#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :n 8 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:length 8 .
+#   (?x {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#   } (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)) log:collectAllIn ?_b1 .
+#   (?y {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#   } (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)) log:collectAllIn ?_b1 .
+#   (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0) math:sum 36 .
+#   (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1) math:sum 46 .
+#   (?x2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       (?x 2.0) math:exponentiation ?x2 .
+#   } (64 49 36 25 16 9 4 1)) log:collectAllIn ?_b1 .
+#   (64 49 36 25 16 9 4 1) math:sum 204 .
+#   (?y2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#       (?y 2.0) math:exponentiation ?y2 .
+#   } (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)) log:collectAllIn ?_b1 .
+#   (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41) math:sum 379.72 .
+#   (?xy {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       ?p :y ?y .
+#       (?x ?y) math:product ?xy .
+#   } (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)) log:collectAllIn ?_b1 .
+#   (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1) math:sum 266.00000000000006 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     ?pts list:length ?n .
+#     (?x {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#     } ?xs) log:collectAllIn ?_b1 .
+#     (?y {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#     } ?ys) log:collectAllIn ?_b1 .
+#     ?xs math:sum ?sumX .
+#     ?ys math:sum ?sumY .
+#     (?x2 {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         (?x 2.0) math:exponentiation ?x2 .
+#     } ?x2s) log:collectAllIn ?_b1 .
+#     ?x2s math:sum ?sumXX .
+#     (?y2 {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#         (?y 2.0) math:exponentiation ?y2 .
+#     } ?y2s) log:collectAllIn ?_b1 .
+#     ?y2s math:sum ?sumYY .
+#     (?xy {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         ?p :y ?y .
+#         (?x ?y) math:product ?xy .
+#     } ?xys) log:collectAllIn ?_b1 .
+#     ?xys math:sum ?sumXY .
+#   } => {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sumX .
+#     :Reg1 :sumY ?sumY .
+#     :Reg1 :sumXX ?sumXX .
+#     :Reg1 :sumYY ?sumYY .
+#     :Reg1 :sumXY ?sumXY .
+#   } .
+# with substitution (on rule variables):
+#   ?n = 8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?sumX = 36
+#   ?sumXX = 204
+#   ?sumXY = 266.00000000000006
+#   ?sumY = 46
+#   ?sumYY = 379.72
+#   ?x2s = (64 49 36 25 16 9 4 1)
+#   ?xs = (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)
+#   ?xys = (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)
+#   ?y2s = (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)
+#   ?ys = (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :n 8 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :sumX 36 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:length 8 .
+#   (?x {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#   } (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)) log:collectAllIn ?_b1 .
+#   (?y {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#   } (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)) log:collectAllIn ?_b1 .
+#   (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0) math:sum 36 .
+#   (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1) math:sum 46 .
+#   (?x2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       (?x 2.0) math:exponentiation ?x2 .
+#   } (64 49 36 25 16 9 4 1)) log:collectAllIn ?_b1 .
+#   (64 49 36 25 16 9 4 1) math:sum 204 .
+#   (?y2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#       (?y 2.0) math:exponentiation ?y2 .
+#   } (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)) log:collectAllIn ?_b1 .
+#   (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41) math:sum 379.72 .
+#   (?xy {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       ?p :y ?y .
+#       (?x ?y) math:product ?xy .
+#   } (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)) log:collectAllIn ?_b1 .
+#   (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1) math:sum 266.00000000000006 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     ?pts list:length ?n .
+#     (?x {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#     } ?xs) log:collectAllIn ?_b1 .
+#     (?y {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#     } ?ys) log:collectAllIn ?_b1 .
+#     ?xs math:sum ?sumX .
+#     ?ys math:sum ?sumY .
+#     (?x2 {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         (?x 2.0) math:exponentiation ?x2 .
+#     } ?x2s) log:collectAllIn ?_b1 .
+#     ?x2s math:sum ?sumXX .
+#     (?y2 {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#         (?y 2.0) math:exponentiation ?y2 .
+#     } ?y2s) log:collectAllIn ?_b1 .
+#     ?y2s math:sum ?sumYY .
+#     (?xy {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         ?p :y ?y .
+#         (?x ?y) math:product ?xy .
+#     } ?xys) log:collectAllIn ?_b1 .
+#     ?xys math:sum ?sumXY .
+#   } => {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sumX .
+#     :Reg1 :sumY ?sumY .
+#     :Reg1 :sumXX ?sumXX .
+#     :Reg1 :sumYY ?sumYY .
+#     :Reg1 :sumXY ?sumXY .
+#   } .
+# with substitution (on rule variables):
+#   ?n = 8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?sumX = 36
+#   ?sumXX = 204
+#   ?sumXY = 266.00000000000006
+#   ?sumY = 46
+#   ?sumYY = 379.72
+#   ?x2s = (64 49 36 25 16 9 4 1)
+#   ?xs = (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)
+#   ?xys = (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)
+#   ?y2s = (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)
+#   ?ys = (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :sumX 36 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :sumY 46 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:length 8 .
+#   (?x {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#   } (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)) log:collectAllIn ?_b1 .
+#   (?y {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#   } (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)) log:collectAllIn ?_b1 .
+#   (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0) math:sum 36 .
+#   (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1) math:sum 46 .
+#   (?x2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       (?x 2.0) math:exponentiation ?x2 .
+#   } (64 49 36 25 16 9 4 1)) log:collectAllIn ?_b1 .
+#   (64 49 36 25 16 9 4 1) math:sum 204 .
+#   (?y2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#       (?y 2.0) math:exponentiation ?y2 .
+#   } (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)) log:collectAllIn ?_b1 .
+#   (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41) math:sum 379.72 .
+#   (?xy {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       ?p :y ?y .
+#       (?x ?y) math:product ?xy .
+#   } (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)) log:collectAllIn ?_b1 .
+#   (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1) math:sum 266.00000000000006 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     ?pts list:length ?n .
+#     (?x {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#     } ?xs) log:collectAllIn ?_b1 .
+#     (?y {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#     } ?ys) log:collectAllIn ?_b1 .
+#     ?xs math:sum ?sumX .
+#     ?ys math:sum ?sumY .
+#     (?x2 {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         (?x 2.0) math:exponentiation ?x2 .
+#     } ?x2s) log:collectAllIn ?_b1 .
+#     ?x2s math:sum ?sumXX .
+#     (?y2 {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#         (?y 2.0) math:exponentiation ?y2 .
+#     } ?y2s) log:collectAllIn ?_b1 .
+#     ?y2s math:sum ?sumYY .
+#     (?xy {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         ?p :y ?y .
+#         (?x ?y) math:product ?xy .
+#     } ?xys) log:collectAllIn ?_b1 .
+#     ?xys math:sum ?sumXY .
+#   } => {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sumX .
+#     :Reg1 :sumY ?sumY .
+#     :Reg1 :sumXX ?sumXX .
+#     :Reg1 :sumYY ?sumYY .
+#     :Reg1 :sumXY ?sumXY .
+#   } .
+# with substitution (on rule variables):
+#   ?n = 8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?sumX = 36
+#   ?sumXX = 204
+#   ?sumXY = 266.00000000000006
+#   ?sumY = 46
+#   ?sumYY = 379.72
+#   ?x2s = (64 49 36 25 16 9 4 1)
+#   ?xs = (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)
+#   ?xys = (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)
+#   ?y2s = (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)
+#   ?ys = (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :sumY 46 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :sumXX 204 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:length 8 .
+#   (?x {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#   } (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)) log:collectAllIn ?_b1 .
+#   (?y {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#   } (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)) log:collectAllIn ?_b1 .
+#   (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0) math:sum 36 .
+#   (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1) math:sum 46 .
+#   (?x2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       (?x 2.0) math:exponentiation ?x2 .
+#   } (64 49 36 25 16 9 4 1)) log:collectAllIn ?_b1 .
+#   (64 49 36 25 16 9 4 1) math:sum 204 .
+#   (?y2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#       (?y 2.0) math:exponentiation ?y2 .
+#   } (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)) log:collectAllIn ?_b1 .
+#   (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41) math:sum 379.72 .
+#   (?xy {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       ?p :y ?y .
+#       (?x ?y) math:product ?xy .
+#   } (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)) log:collectAllIn ?_b1 .
+#   (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1) math:sum 266.00000000000006 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     ?pts list:length ?n .
+#     (?x {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#     } ?xs) log:collectAllIn ?_b1 .
+#     (?y {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#     } ?ys) log:collectAllIn ?_b1 .
+#     ?xs math:sum ?sumX .
+#     ?ys math:sum ?sumY .
+#     (?x2 {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         (?x 2.0) math:exponentiation ?x2 .
+#     } ?x2s) log:collectAllIn ?_b1 .
+#     ?x2s math:sum ?sumXX .
+#     (?y2 {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#         (?y 2.0) math:exponentiation ?y2 .
+#     } ?y2s) log:collectAllIn ?_b1 .
+#     ?y2s math:sum ?sumYY .
+#     (?xy {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         ?p :y ?y .
+#         (?x ?y) math:product ?xy .
+#     } ?xys) log:collectAllIn ?_b1 .
+#     ?xys math:sum ?sumXY .
+#   } => {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sumX .
+#     :Reg1 :sumY ?sumY .
+#     :Reg1 :sumXX ?sumXX .
+#     :Reg1 :sumYY ?sumYY .
+#     :Reg1 :sumXY ?sumXY .
+#   } .
+# with substitution (on rule variables):
+#   ?n = 8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?sumX = 36
+#   ?sumXX = 204
+#   ?sumXY = 266.00000000000006
+#   ?sumY = 46
+#   ?sumYY = 379.72
+#   ?x2s = (64 49 36 25 16 9 4 1)
+#   ?xs = (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)
+#   ?xys = (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)
+#   ?y2s = (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)
+#   ?ys = (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :sumXX 204 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :sumYY 379.72 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:length 8 .
+#   (?x {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#   } (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)) log:collectAllIn ?_b1 .
+#   (?y {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#   } (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)) log:collectAllIn ?_b1 .
+#   (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0) math:sum 36 .
+#   (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1) math:sum 46 .
+#   (?x2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       (?x 2.0) math:exponentiation ?x2 .
+#   } (64 49 36 25 16 9 4 1)) log:collectAllIn ?_b1 .
+#   (64 49 36 25 16 9 4 1) math:sum 204 .
+#   (?y2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#       (?y 2.0) math:exponentiation ?y2 .
+#   } (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)) log:collectAllIn ?_b1 .
+#   (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41) math:sum 379.72 .
+#   (?xy {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       ?p :y ?y .
+#       (?x ?y) math:product ?xy .
+#   } (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)) log:collectAllIn ?_b1 .
+#   (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1) math:sum 266.00000000000006 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     ?pts list:length ?n .
+#     (?x {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#     } ?xs) log:collectAllIn ?_b1 .
+#     (?y {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#     } ?ys) log:collectAllIn ?_b1 .
+#     ?xs math:sum ?sumX .
+#     ?ys math:sum ?sumY .
+#     (?x2 {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         (?x 2.0) math:exponentiation ?x2 .
+#     } ?x2s) log:collectAllIn ?_b1 .
+#     ?x2s math:sum ?sumXX .
+#     (?y2 {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#         (?y 2.0) math:exponentiation ?y2 .
+#     } ?y2s) log:collectAllIn ?_b1 .
+#     ?y2s math:sum ?sumYY .
+#     (?xy {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         ?p :y ?y .
+#         (?x ?y) math:product ?xy .
+#     } ?xys) log:collectAllIn ?_b1 .
+#     ?xys math:sum ?sumXY .
+#   } => {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sumX .
+#     :Reg1 :sumY ?sumY .
+#     :Reg1 :sumXX ?sumXX .
+#     :Reg1 :sumYY ?sumYY .
+#     :Reg1 :sumXY ?sumXY .
+#   } .
+# with substitution (on rule variables):
+#   ?n = 8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?sumX = 36
+#   ?sumXX = 204
+#   ?sumXY = 266.00000000000006
+#   ?sumY = 46
+#   ?sumYY = 379.72
+#   ?x2s = (64 49 36 25 16 9 4 1)
+#   ?xs = (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)
+#   ?xys = (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)
+#   ?y2s = (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)
+#   ?ys = (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :sumYY 379.72 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :sumXY 266.00000000000006 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:length 8 .
+#   (?x {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#   } (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)) log:collectAllIn ?_b1 .
+#   (?y {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#   } (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)) log:collectAllIn ?_b1 .
+#   (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0) math:sum 36 .
+#   (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1) math:sum 46 .
+#   (?x2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       (?x 2.0) math:exponentiation ?x2 .
+#   } (64 49 36 25 16 9 4 1)) log:collectAllIn ?_b1 .
+#   (64 49 36 25 16 9 4 1) math:sum 204 .
+#   (?y2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :y ?y .
+#       (?y 2.0) math:exponentiation ?y2 .
+#   } (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)) log:collectAllIn ?_b1 .
+#   (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41) math:sum 379.72 .
+#   (?xy {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       ?p :y ?y .
+#       (?x ?y) math:product ?xy .
+#   } (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)) log:collectAllIn ?_b1 .
+#   (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1) math:sum 266.00000000000006 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     ?pts list:length ?n .
+#     (?x {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#     } ?xs) log:collectAllIn ?_b1 .
+#     (?y {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#     } ?ys) log:collectAllIn ?_b1 .
+#     ?xs math:sum ?sumX .
+#     ?ys math:sum ?sumY .
+#     (?x2 {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         (?x 2.0) math:exponentiation ?x2 .
+#     } ?x2s) log:collectAllIn ?_b1 .
+#     ?x2s math:sum ?sumXX .
+#     (?y2 {
+#         ?pts list:member ?p .
+#         ?p :y ?y .
+#         (?y 2.0) math:exponentiation ?y2 .
+#     } ?y2s) log:collectAllIn ?_b1 .
+#     ?y2s math:sum ?sumYY .
+#     (?xy {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         ?p :y ?y .
+#         (?x ?y) math:product ?xy .
+#     } ?xys) log:collectAllIn ?_b1 .
+#     ?xys math:sum ?sumXY .
+#   } => {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sumX .
+#     :Reg1 :sumY ?sumY .
+#     :Reg1 :sumXX ?sumXX .
+#     :Reg1 :sumYY ?sumYY .
+#     :Reg1 :sumXY ?sumXY .
+#   } .
+# with substitution (on rule variables):
+#   ?n = 8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?sumX = 36
+#   ?sumXX = 204
+#   ?sumXY = 266.00000000000006
+#   ?sumY = 46
+#   ?sumYY = 379.72
+#   ?x2s = (64 49 36 25 16 9 4 1)
+#   ?xs = (8.0 7.0 6.0 5.0 4.0 3.0 2.0 1.0)
+#   ?xys = (120 49 35.400000000000006 25.5 16.8 11.399999999999999 5.8 2.1)
+#   ?y2s = (225 49 34.81 26.009999999999998 17.64 14.44 8.41 4.41)
+#   ?ys = (15.0 7.0 5.9 5.1 4.2 3.8 2.9 2.1)
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :sumXY 266.00000000000006 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :slope 1.4047619047619062 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :n 8 .
+#   :Reg1 :sumX 36 .
+#   :Reg1 :sumY 46 .
+#   :Reg1 :sumXX 204 .
+#   :Reg1 :sumYY 379.72 .
+#   :Reg1 :sumXY 266.00000000000006 .
+#   (8 266.00000000000006) math:product 2128.0000000000005 .
+#   (36 46) math:product 1656 .
+#   (2128.0000000000005 1656) math:difference 472.00000000000045 .
+#   (8 204) math:product 1632 .
+#   (36 2.0) math:exponentiation 1296 .
+#   (1632 1296) math:difference 336 .
+#   (472.00000000000045 336) math:quotient 1.4047619047619062 .
+#   (1.4047619047619062 36) math:product 50.571428571428626 .
+#   (46 50.571428571428626) math:difference -4.571428571428626 .
+#   (-4.571428571428626 8) math:quotient -0.5714285714285783 .
+#   (8 379.72) math:product 3037.76 .
+#   (46 2.0) math:exponentiation 2116 .
+#   (3037.76 2116) math:difference 921.7600000000002 .
+#   (336 921.7600000000002) math:product 309711.3600000001 .
+#   (309711.3600000001 0.5) math:exponentiation 556.5171695464571 .
+#   (472.00000000000045 556.5171695464571) math:quotient 0.8481319639871393 .
+#   (0.8481319639871393 2.0) math:exponentiation 0.7193278283366822 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sx .
+#     :Reg1 :sumY ?sy .
+#     :Reg1 :sumXX ?sxx .
+#     :Reg1 :sumYY ?syy .
+#     :Reg1 :sumXY ?sxy .
+#     (?n ?sxy) math:product ?n_sxy .
+#     (?sx ?sy) math:product ?sx_sy .
+#     (?n_sxy ?sx_sy) math:difference ?num .
+#     (?n ?sxx) math:product ?n_sxx .
+#     (?sx 2.0) math:exponentiation ?sx2 .
+#     (?n_sxx ?sx2) math:difference ?denX .
+#     (?num ?denX) math:quotient ?b .
+#     (?b ?sx) math:product ?b_sx .
+#     (?sy ?b_sx) math:difference ?tmpA .
+#     (?tmpA ?n) math:quotient ?a .
+#     (?n ?syy) math:product ?n_syy .
+#     (?sy 2.0) math:exponentiation ?sy2 .
+#     (?n_syy ?sy2) math:difference ?denY .
+#     (?denX ?denY) math:product ?denXY .
+#     (?denXY 0.5) math:exponentiation ?sqrtDen .
+#     (?num ?sqrtDen) math:quotient ?r .
+#     (?r 2.0) math:exponentiation ?r2 .
+#   } => {
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :pearsonR ?r .
+#     :Reg1 :rSquared ?r2 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?b_sx = 50.571428571428626
+#   ?denX = 336
+#   ?denXY = 309711.3600000001
+#   ?denY = 921.7600000000002
+#   ?n = 8
+#   ?n_sxx = 1632
+#   ?n_sxy = 2128.0000000000005
+#   ?n_syy = 3037.76
+#   ?num = 472.00000000000045
+#   ?r = 0.8481319639871393
+#   ?r2 = 0.7193278283366822
+#   ?sqrtDen = 556.5171695464571
+#   ?sx = 36
+#   ?sx2 = 1296
+#   ?sx_sy = 1656
+#   ?sxx = 204
+#   ?sxy = 266.00000000000006
+#   ?sy = 46
+#   ?sy2 = 2116
+#   ?syy = 379.72
+#   ?tmpA = -4.571428571428626
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :slope 1.4047619047619062 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :intercept -0.5714285714285783 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :n 8 .
+#   :Reg1 :sumX 36 .
+#   :Reg1 :sumY 46 .
+#   :Reg1 :sumXX 204 .
+#   :Reg1 :sumYY 379.72 .
+#   :Reg1 :sumXY 266.00000000000006 .
+#   (8 266.00000000000006) math:product 2128.0000000000005 .
+#   (36 46) math:product 1656 .
+#   (2128.0000000000005 1656) math:difference 472.00000000000045 .
+#   (8 204) math:product 1632 .
+#   (36 2.0) math:exponentiation 1296 .
+#   (1632 1296) math:difference 336 .
+#   (472.00000000000045 336) math:quotient 1.4047619047619062 .
+#   (1.4047619047619062 36) math:product 50.571428571428626 .
+#   (46 50.571428571428626) math:difference -4.571428571428626 .
+#   (-4.571428571428626 8) math:quotient -0.5714285714285783 .
+#   (8 379.72) math:product 3037.76 .
+#   (46 2.0) math:exponentiation 2116 .
+#   (3037.76 2116) math:difference 921.7600000000002 .
+#   (336 921.7600000000002) math:product 309711.3600000001 .
+#   (309711.3600000001 0.5) math:exponentiation 556.5171695464571 .
+#   (472.00000000000045 556.5171695464571) math:quotient 0.8481319639871393 .
+#   (0.8481319639871393 2.0) math:exponentiation 0.7193278283366822 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sx .
+#     :Reg1 :sumY ?sy .
+#     :Reg1 :sumXX ?sxx .
+#     :Reg1 :sumYY ?syy .
+#     :Reg1 :sumXY ?sxy .
+#     (?n ?sxy) math:product ?n_sxy .
+#     (?sx ?sy) math:product ?sx_sy .
+#     (?n_sxy ?sx_sy) math:difference ?num .
+#     (?n ?sxx) math:product ?n_sxx .
+#     (?sx 2.0) math:exponentiation ?sx2 .
+#     (?n_sxx ?sx2) math:difference ?denX .
+#     (?num ?denX) math:quotient ?b .
+#     (?b ?sx) math:product ?b_sx .
+#     (?sy ?b_sx) math:difference ?tmpA .
+#     (?tmpA ?n) math:quotient ?a .
+#     (?n ?syy) math:product ?n_syy .
+#     (?sy 2.0) math:exponentiation ?sy2 .
+#     (?n_syy ?sy2) math:difference ?denY .
+#     (?denX ?denY) math:product ?denXY .
+#     (?denXY 0.5) math:exponentiation ?sqrtDen .
+#     (?num ?sqrtDen) math:quotient ?r .
+#     (?r 2.0) math:exponentiation ?r2 .
+#   } => {
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :pearsonR ?r .
+#     :Reg1 :rSquared ?r2 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?b_sx = 50.571428571428626
+#   ?denX = 336
+#   ?denXY = 309711.3600000001
+#   ?denY = 921.7600000000002
+#   ?n = 8
+#   ?n_sxx = 1632
+#   ?n_sxy = 2128.0000000000005
+#   ?n_syy = 3037.76
+#   ?num = 472.00000000000045
+#   ?r = 0.8481319639871393
+#   ?r2 = 0.7193278283366822
+#   ?sqrtDen = 556.5171695464571
+#   ?sx = 36
+#   ?sx2 = 1296
+#   ?sx_sy = 1656
+#   ?sxx = 204
+#   ?sxy = 266.00000000000006
+#   ?sy = 46
+#   ?sy2 = 2116
+#   ?syy = 379.72
+#   ?tmpA = -4.571428571428626
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :intercept -0.5714285714285783 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :pearsonR 0.8481319639871393 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :n 8 .
+#   :Reg1 :sumX 36 .
+#   :Reg1 :sumY 46 .
+#   :Reg1 :sumXX 204 .
+#   :Reg1 :sumYY 379.72 .
+#   :Reg1 :sumXY 266.00000000000006 .
+#   (8 266.00000000000006) math:product 2128.0000000000005 .
+#   (36 46) math:product 1656 .
+#   (2128.0000000000005 1656) math:difference 472.00000000000045 .
+#   (8 204) math:product 1632 .
+#   (36 2.0) math:exponentiation 1296 .
+#   (1632 1296) math:difference 336 .
+#   (472.00000000000045 336) math:quotient 1.4047619047619062 .
+#   (1.4047619047619062 36) math:product 50.571428571428626 .
+#   (46 50.571428571428626) math:difference -4.571428571428626 .
+#   (-4.571428571428626 8) math:quotient -0.5714285714285783 .
+#   (8 379.72) math:product 3037.76 .
+#   (46 2.0) math:exponentiation 2116 .
+#   (3037.76 2116) math:difference 921.7600000000002 .
+#   (336 921.7600000000002) math:product 309711.3600000001 .
+#   (309711.3600000001 0.5) math:exponentiation 556.5171695464571 .
+#   (472.00000000000045 556.5171695464571) math:quotient 0.8481319639871393 .
+#   (0.8481319639871393 2.0) math:exponentiation 0.7193278283366822 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sx .
+#     :Reg1 :sumY ?sy .
+#     :Reg1 :sumXX ?sxx .
+#     :Reg1 :sumYY ?syy .
+#     :Reg1 :sumXY ?sxy .
+#     (?n ?sxy) math:product ?n_sxy .
+#     (?sx ?sy) math:product ?sx_sy .
+#     (?n_sxy ?sx_sy) math:difference ?num .
+#     (?n ?sxx) math:product ?n_sxx .
+#     (?sx 2.0) math:exponentiation ?sx2 .
+#     (?n_sxx ?sx2) math:difference ?denX .
+#     (?num ?denX) math:quotient ?b .
+#     (?b ?sx) math:product ?b_sx .
+#     (?sy ?b_sx) math:difference ?tmpA .
+#     (?tmpA ?n) math:quotient ?a .
+#     (?n ?syy) math:product ?n_syy .
+#     (?sy 2.0) math:exponentiation ?sy2 .
+#     (?n_syy ?sy2) math:difference ?denY .
+#     (?denX ?denY) math:product ?denXY .
+#     (?denXY 0.5) math:exponentiation ?sqrtDen .
+#     (?num ?sqrtDen) math:quotient ?r .
+#     (?r 2.0) math:exponentiation ?r2 .
+#   } => {
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :pearsonR ?r .
+#     :Reg1 :rSquared ?r2 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?b_sx = 50.571428571428626
+#   ?denX = 336
+#   ?denXY = 309711.3600000001
+#   ?denY = 921.7600000000002
+#   ?n = 8
+#   ?n_sxx = 1632
+#   ?n_sxy = 2128.0000000000005
+#   ?n_syy = 3037.76
+#   ?num = 472.00000000000045
+#   ?r = 0.8481319639871393
+#   ?r2 = 0.7193278283366822
+#   ?sqrtDen = 556.5171695464571
+#   ?sx = 36
+#   ?sx2 = 1296
+#   ?sx_sy = 1656
+#   ?sxx = 204
+#   ?sxy = 266.00000000000006
+#   ?sy = 46
+#   ?sy2 = 2116
+#   ?syy = 379.72
+#   ?tmpA = -4.571428571428626
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :pearsonR 0.8481319639871393 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :rSquared 0.7193278283366822 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :n 8 .
+#   :Reg1 :sumX 36 .
+#   :Reg1 :sumY 46 .
+#   :Reg1 :sumXX 204 .
+#   :Reg1 :sumYY 379.72 .
+#   :Reg1 :sumXY 266.00000000000006 .
+#   (8 266.00000000000006) math:product 2128.0000000000005 .
+#   (36 46) math:product 1656 .
+#   (2128.0000000000005 1656) math:difference 472.00000000000045 .
+#   (8 204) math:product 1632 .
+#   (36 2.0) math:exponentiation 1296 .
+#   (1632 1296) math:difference 336 .
+#   (472.00000000000045 336) math:quotient 1.4047619047619062 .
+#   (1.4047619047619062 36) math:product 50.571428571428626 .
+#   (46 50.571428571428626) math:difference -4.571428571428626 .
+#   (-4.571428571428626 8) math:quotient -0.5714285714285783 .
+#   (8 379.72) math:product 3037.76 .
+#   (46 2.0) math:exponentiation 2116 .
+#   (3037.76 2116) math:difference 921.7600000000002 .
+#   (336 921.7600000000002) math:product 309711.3600000001 .
+#   (309711.3600000001 0.5) math:exponentiation 556.5171695464571 .
+#   (472.00000000000045 556.5171695464571) math:quotient 0.8481319639871393 .
+#   (0.8481319639871393 2.0) math:exponentiation 0.7193278283366822 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :n ?n .
+#     :Reg1 :sumX ?sx .
+#     :Reg1 :sumY ?sy .
+#     :Reg1 :sumXX ?sxx .
+#     :Reg1 :sumYY ?syy .
+#     :Reg1 :sumXY ?sxy .
+#     (?n ?sxy) math:product ?n_sxy .
+#     (?sx ?sy) math:product ?sx_sy .
+#     (?n_sxy ?sx_sy) math:difference ?num .
+#     (?n ?sxx) math:product ?n_sxx .
+#     (?sx 2.0) math:exponentiation ?sx2 .
+#     (?n_sxx ?sx2) math:difference ?denX .
+#     (?num ?denX) math:quotient ?b .
+#     (?b ?sx) math:product ?b_sx .
+#     (?sy ?b_sx) math:difference ?tmpA .
+#     (?tmpA ?n) math:quotient ?a .
+#     (?n ?syy) math:product ?n_syy .
+#     (?sy 2.0) math:exponentiation ?sy2 .
+#     (?n_syy ?sy2) math:difference ?denY .
+#     (?denX ?denY) math:product ?denXY .
+#     (?denXY 0.5) math:exponentiation ?sqrtDen .
+#     (?num ?sqrtDen) math:quotient ?r .
+#     (?r 2.0) math:exponentiation ?r2 .
+#   } => {
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :pearsonR ?r .
+#     :Reg1 :rSquared ?r2 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?b_sx = 50.571428571428626
+#   ?denX = 336
+#   ?denXY = 309711.3600000001
+#   ?denY = 921.7600000000002
+#   ?n = 8
+#   ?n_sxx = 1632
+#   ?n_sxy = 2128.0000000000005
+#   ?n_syy = 3037.76
+#   ?num = 472.00000000000045
+#   ?r = 0.8481319639871393
+#   ?r2 = 0.7193278283366822
+#   ?sqrtDen = 556.5171695464571
+#   ?sx = 36
+#   ?sx2 = 1296
+#   ?sx_sy = 1656
+#   ?sxx = 204
+#   ?sxy = 266.00000000000006
+#   ?sy = 46
+#   ?sy2 = 2116
+#   ?syy = 379.72
+#   ?tmpA = -4.571428571428626
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :rSquared 0.7193278283366822 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :sse 32.33904761904761 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:length 8 .
+#   (?e2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       ?p :y ?y .
+#       (1.4047619047619062 ?x) math:product ?bx .
+#       (-0.5714285714285783 ?bx) math:sum ?yhat .
+#       (?y ?yhat) math:difference ?e .
+#       (?e 2.0) math:exponentiation ?e2 .
+#   } (18.777777777777736 5.116213151927449 3.8304081632653135 1.8289342403628133 0.7184580498866192 0.02469387755102107 0.43811791383220466 1.6044444444444583)) log:collectAllIn ?_b1 .
+#   (18.777777777777736 5.116213151927449 3.8304081632653135 1.8289342403628133 0.7184580498866192 0.02469387755102107 0.43811791383220466 1.6044444444444583) math:sum 32.33904761904761 .
+#   (32.33904761904761 8) math:quotient 4.0423809523809515 .
+#   (4.0423809523809515 0.5) math:exponentiation 2.010567321026817 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     ?pts list:length ?n .
+#     (?e2 {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         ?p :y ?y .
+#         (?b ?x) math:product ?bx .
+#         (?a ?bx) math:sum ?yhat .
+#         (?y ?yhat) math:difference ?e .
+#         (?e 2.0) math:exponentiation ?e2 .
+#     } ?e2s) log:collectAllIn ?_b1 .
+#     ?e2s math:sum ?sse .
+#     (?sse ?n) math:quotient ?mse .
+#     (?mse 0.5) math:exponentiation ?rmse .
+#   } => {
+#     :Reg1 :sse ?sse .
+#     :Reg1 :rmse ?rmse .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?e2s = (18.777777777777736 5.116213151927449 3.8304081632653135 1.8289342403628133 0.7184580498866192 0.02469387755102107 0.43811791383220466 1.6044444444444583)
+#   ?mse = 4.0423809523809515
+#   ?n = 8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?rmse = 2.010567321026817
+#   ?sse = 32.33904761904761
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :sse 32.33904761904761 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :rmse 2.010567321026817 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:length 8 .
+#   (?e2 {
+#       (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member ?p .
+#       ?p :x ?x .
+#       ?p :y ?y .
+#       (1.4047619047619062 ?x) math:product ?bx .
+#       (-0.5714285714285783 ?bx) math:sum ?yhat .
+#       (?y ?yhat) math:difference ?e .
+#       (?e 2.0) math:exponentiation ?e2 .
+#   } (18.777777777777736 5.116213151927449 3.8304081632653135 1.8289342403628133 0.7184580498866192 0.02469387755102107 0.43811791383220466 1.6044444444444583)) log:collectAllIn ?_b1 .
+#   (18.777777777777736 5.116213151927449 3.8304081632653135 1.8289342403628133 0.7184580498866192 0.02469387755102107 0.43811791383220466 1.6044444444444583) math:sum 32.33904761904761 .
+#   (32.33904761904761 8) math:quotient 4.0423809523809515 .
+#   (4.0423809523809515 0.5) math:exponentiation 2.010567321026817 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     ?pts list:length ?n .
+#     (?e2 {
+#         ?pts list:member ?p .
+#         ?p :x ?x .
+#         ?p :y ?y .
+#         (?b ?x) math:product ?bx .
+#         (?a ?bx) math:sum ?yhat .
+#         (?y ?yhat) math:difference ?e .
+#         (?e 2.0) math:exponentiation ?e2 .
+#     } ?e2s) log:collectAllIn ?_b1 .
+#     ?e2s math:sum ?sse .
+#     (?sse ?n) math:quotient ?mse .
+#     (?mse 0.5) math:exponentiation ?rmse .
+#   } => {
+#     :Reg1 :sse ?sse .
+#     :Reg1 :rmse ?rmse .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?e2s = (18.777777777777736 5.116213151927449 3.8304081632653135 1.8289342403628133 0.7184580498866192 0.02469387755102107 0.43811791383220466 1.6044444444444583)
+#   ?mse = 4.0423809523809515
+#   ?n = 8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?rmse = 2.010567321026817
+#   ?sse = 32.33904761904761
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :rmse 2.010567321026817 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   _:sk_0 :point _:b8 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   :Reg1 :rmse 2.010567321026817 .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member _:b8 .
+#   _:b8 :x 8.0 .
+#   _:b8 :y 15.0 .
+#   (1.4047619047619062 8.0) math:product 11.23809523809525 .
+#   (-0.5714285714285783 11.23809523809525) math:sum 10.666666666666671 .
+#   (15.0 10.666666666666671) math:difference 4.333333333333329 .
+#   4.333333333333329 math:absoluteValue 4.333333333333329 .
+#   (2.0 2.010567321026817) math:product 4.021134642053634 .
+#   4.333333333333329 math:greaterThan 4.021134642053634 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :rmse ?rmse .
+#     ?pts list:member ?p .
+#     ?p :x ?x .
+#     ?p :y ?y .
+#     (?b ?x) math:product ?bx .
+#     (?a ?bx) math:sum ?yhat .
+#     (?y ?yhat) math:difference ?e .
+#     ?e math:absoluteValue ?ae .
+#     (2.0 ?rmse) math:product ?thr .
+#     ?ae math:greaterThan ?thr .
+#   } => {
+#     _:b9 :point ?p .
+#     _:b9 :x ?x .
+#     _:b9 :y ?y .
+#     _:b9 :yhat ?yhat .
+#     _:b9 :residual ?e .
+#     :Reg1 :highResidual _:b9 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?ae = 4.333333333333329
+#   ?b = 1.4047619047619062
+#   ?bx = 11.23809523809525
+#   ?e = 4.333333333333329
+#   ?p = _:b8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?rmse = 2.010567321026817
+#   ?thr = 4.021134642053634
+#   ?x = 8.0
+#   ?y = 15.0
+#   ?yhat = 10.666666666666671
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+_:sk_0 :point _:b8 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   _:sk_0 :x 8.0 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   :Reg1 :rmse 2.010567321026817 .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member _:b8 .
+#   _:b8 :x 8.0 .
+#   _:b8 :y 15.0 .
+#   (1.4047619047619062 8.0) math:product 11.23809523809525 .
+#   (-0.5714285714285783 11.23809523809525) math:sum 10.666666666666671 .
+#   (15.0 10.666666666666671) math:difference 4.333333333333329 .
+#   4.333333333333329 math:absoluteValue 4.333333333333329 .
+#   (2.0 2.010567321026817) math:product 4.021134642053634 .
+#   4.333333333333329 math:greaterThan 4.021134642053634 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :rmse ?rmse .
+#     ?pts list:member ?p .
+#     ?p :x ?x .
+#     ?p :y ?y .
+#     (?b ?x) math:product ?bx .
+#     (?a ?bx) math:sum ?yhat .
+#     (?y ?yhat) math:difference ?e .
+#     ?e math:absoluteValue ?ae .
+#     (2.0 ?rmse) math:product ?thr .
+#     ?ae math:greaterThan ?thr .
+#   } => {
+#     _:b9 :point ?p .
+#     _:b9 :x ?x .
+#     _:b9 :y ?y .
+#     _:b9 :yhat ?yhat .
+#     _:b9 :residual ?e .
+#     :Reg1 :highResidual _:b9 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?ae = 4.333333333333329
+#   ?b = 1.4047619047619062
+#   ?bx = 11.23809523809525
+#   ?e = 4.333333333333329
+#   ?p = _:b8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?rmse = 2.010567321026817
+#   ?thr = 4.021134642053634
+#   ?x = 8.0
+#   ?y = 15.0
+#   ?yhat = 10.666666666666671
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+_:sk_0 :x 8.0 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   _:sk_0 :y 15.0 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   :Reg1 :rmse 2.010567321026817 .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member _:b8 .
+#   _:b8 :x 8.0 .
+#   _:b8 :y 15.0 .
+#   (1.4047619047619062 8.0) math:product 11.23809523809525 .
+#   (-0.5714285714285783 11.23809523809525) math:sum 10.666666666666671 .
+#   (15.0 10.666666666666671) math:difference 4.333333333333329 .
+#   4.333333333333329 math:absoluteValue 4.333333333333329 .
+#   (2.0 2.010567321026817) math:product 4.021134642053634 .
+#   4.333333333333329 math:greaterThan 4.021134642053634 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :rmse ?rmse .
+#     ?pts list:member ?p .
+#     ?p :x ?x .
+#     ?p :y ?y .
+#     (?b ?x) math:product ?bx .
+#     (?a ?bx) math:sum ?yhat .
+#     (?y ?yhat) math:difference ?e .
+#     ?e math:absoluteValue ?ae .
+#     (2.0 ?rmse) math:product ?thr .
+#     ?ae math:greaterThan ?thr .
+#   } => {
+#     _:b9 :point ?p .
+#     _:b9 :x ?x .
+#     _:b9 :y ?y .
+#     _:b9 :yhat ?yhat .
+#     _:b9 :residual ?e .
+#     :Reg1 :highResidual _:b9 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?ae = 4.333333333333329
+#   ?b = 1.4047619047619062
+#   ?bx = 11.23809523809525
+#   ?e = 4.333333333333329
+#   ?p = _:b8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?rmse = 2.010567321026817
+#   ?thr = 4.021134642053634
+#   ?x = 8.0
+#   ?y = 15.0
+#   ?yhat = 10.666666666666671
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+_:sk_0 :y 15.0 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   _:sk_0 :yhat 10.666666666666671 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   :Reg1 :rmse 2.010567321026817 .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member _:b8 .
+#   _:b8 :x 8.0 .
+#   _:b8 :y 15.0 .
+#   (1.4047619047619062 8.0) math:product 11.23809523809525 .
+#   (-0.5714285714285783 11.23809523809525) math:sum 10.666666666666671 .
+#   (15.0 10.666666666666671) math:difference 4.333333333333329 .
+#   4.333333333333329 math:absoluteValue 4.333333333333329 .
+#   (2.0 2.010567321026817) math:product 4.021134642053634 .
+#   4.333333333333329 math:greaterThan 4.021134642053634 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :rmse ?rmse .
+#     ?pts list:member ?p .
+#     ?p :x ?x .
+#     ?p :y ?y .
+#     (?b ?x) math:product ?bx .
+#     (?a ?bx) math:sum ?yhat .
+#     (?y ?yhat) math:difference ?e .
+#     ?e math:absoluteValue ?ae .
+#     (2.0 ?rmse) math:product ?thr .
+#     ?ae math:greaterThan ?thr .
+#   } => {
+#     _:b9 :point ?p .
+#     _:b9 :x ?x .
+#     _:b9 :y ?y .
+#     _:b9 :yhat ?yhat .
+#     _:b9 :residual ?e .
+#     :Reg1 :highResidual _:b9 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?ae = 4.333333333333329
+#   ?b = 1.4047619047619062
+#   ?bx = 11.23809523809525
+#   ?e = 4.333333333333329
+#   ?p = _:b8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?rmse = 2.010567321026817
+#   ?thr = 4.021134642053634
+#   ?x = 8.0
+#   ?y = 15.0
+#   ?yhat = 10.666666666666671
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+_:sk_0 :yhat 10.666666666666671 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   _:sk_0 :residual 4.333333333333329 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   :Reg1 :rmse 2.010567321026817 .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member _:b8 .
+#   _:b8 :x 8.0 .
+#   _:b8 :y 15.0 .
+#   (1.4047619047619062 8.0) math:product 11.23809523809525 .
+#   (-0.5714285714285783 11.23809523809525) math:sum 10.666666666666671 .
+#   (15.0 10.666666666666671) math:difference 4.333333333333329 .
+#   4.333333333333329 math:absoluteValue 4.333333333333329 .
+#   (2.0 2.010567321026817) math:product 4.021134642053634 .
+#   4.333333333333329 math:greaterThan 4.021134642053634 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :rmse ?rmse .
+#     ?pts list:member ?p .
+#     ?p :x ?x .
+#     ?p :y ?y .
+#     (?b ?x) math:product ?bx .
+#     (?a ?bx) math:sum ?yhat .
+#     (?y ?yhat) math:difference ?e .
+#     ?e math:absoluteValue ?ae .
+#     (2.0 ?rmse) math:product ?thr .
+#     ?ae math:greaterThan ?thr .
+#   } => {
+#     _:b9 :point ?p .
+#     _:b9 :x ?x .
+#     _:b9 :y ?y .
+#     _:b9 :yhat ?yhat .
+#     _:b9 :residual ?e .
+#     :Reg1 :highResidual _:b9 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?ae = 4.333333333333329
+#   ?b = 1.4047619047619062
+#   ?bx = 11.23809523809525
+#   ?e = 4.333333333333329
+#   ?p = _:b8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?rmse = 2.010567321026817
+#   ?thr = 4.021134642053634
+#   ?x = 8.0
+#   ?y = 15.0
+#   ?yhat = 10.666666666666671
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+_:sk_0 :residual 4.333333333333329 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :highResidual _:sk_0 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :points (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   :Reg1 :rmse 2.010567321026817 .
+#   (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8) list:member _:b8 .
+#   _:b8 :x 8.0 .
+#   _:b8 :y 15.0 .
+#   (1.4047619047619062 8.0) math:product 11.23809523809525 .
+#   (-0.5714285714285783 11.23809523809525) math:sum 10.666666666666671 .
+#   (15.0 10.666666666666671) math:difference 4.333333333333329 .
+#   4.333333333333329 math:absoluteValue 4.333333333333329 .
+#   (2.0 2.010567321026817) math:product 4.021134642053634 .
+#   4.333333333333329 math:greaterThan 4.021134642053634 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :points ?pts .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     :Reg1 :rmse ?rmse .
+#     ?pts list:member ?p .
+#     ?p :x ?x .
+#     ?p :y ?y .
+#     (?b ?x) math:product ?bx .
+#     (?a ?bx) math:sum ?yhat .
+#     (?y ?yhat) math:difference ?e .
+#     ?e math:absoluteValue ?ae .
+#     (2.0 ?rmse) math:product ?thr .
+#     ?ae math:greaterThan ?thr .
+#   } => {
+#     _:b9 :point ?p .
+#     _:b9 :x ?x .
+#     _:b9 :y ?y .
+#     _:b9 :yhat ?yhat .
+#     _:b9 :residual ?e .
+#     :Reg1 :highResidual _:b9 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?ae = 4.333333333333329
+#   ?b = 1.4047619047619062
+#   ?bx = 11.23809523809525
+#   ?e = 4.333333333333329
+#   ?p = _:b8
+#   ?pts = (_:b1 _:b2 _:b3 _:b4 _:b5 _:b6 _:b7 _:b8)
+#   ?rmse = 2.010567321026817
+#   ?thr = 4.021134642053634
+#   ?x = 8.0
+#   ?y = 15.0
+#   ?yhat = 10.666666666666671
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :highResidual _:sk_0 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   _:sk_1 :x 8.5 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :predictX 8.5 .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   (1.4047619047619062 8.5) math:product 11.940476190476202 .
+#   (-0.5714285714285783 11.940476190476202) math:sum 11.369047619047624 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :predictX ?x0 .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     (?b ?x0) math:product ?bx0 .
+#     (?a ?bx0) math:sum ?y0 .
+#   } => {
+#     _:b10 :x ?x0 .
+#     _:b10 :y ?y0 .
+#     :Reg1 :prediction _:b10 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?bx0 = 11.940476190476202
+#   ?x0 = 8.5
+#   ?y0 = 11.369047619047624
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+_:sk_1 :x 8.5 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   _:sk_1 :y 11.369047619047624 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :predictX 8.5 .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   (1.4047619047619062 8.5) math:product 11.940476190476202 .
+#   (-0.5714285714285783 11.940476190476202) math:sum 11.369047619047624 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :predictX ?x0 .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     (?b ?x0) math:product ?bx0 .
+#     (?a ?bx0) math:sum ?y0 .
+#   } => {
+#     _:b10 :x ?x0 .
+#     _:b10 :y ?y0 .
+#     :Reg1 :prediction _:b10 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?bx0 = 11.940476190476202
+#   ?x0 = 8.5
+#   ?y0 = 11.369047619047624
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+_:sk_1 :y 11.369047619047624 .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :Reg1 :prediction _:sk_1 .
+# It holds because the following instance of the rule body is provable:
+#   :Reg1 :predictX 8.5 .
+#   :Reg1 :slope 1.4047619047619062 .
+#   :Reg1 :intercept -0.5714285714285783 .
+#   (1.4047619047619062 8.5) math:product 11.940476190476202 .
+#   (-0.5714285714285783 11.940476190476202) math:sum 11.369047619047624 .
+# via the schematic forward rule:
+#   {
+#     :Reg1 :predictX ?x0 .
+#     :Reg1 :slope ?b .
+#     :Reg1 :intercept ?a .
+#     (?b ?x0) math:product ?bx0 .
+#     (?a ?bx0) math:sum ?y0 .
+#   } => {
+#     _:b10 :x ?x0 .
+#     _:b10 :y ?y0 .
+#     :Reg1 :prediction _:b10 .
+#   } .
+# with substitution (on rule variables):
+#   ?a = -0.5714285714285783
+#   ?b = 1.4047619047619062
+#   ?bx0 = 11.940476190476202
+#   ?x0 = 8.5
+#   ?y0 = 11.369047619047624
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:Reg1 :prediction _:sk_1 .
+

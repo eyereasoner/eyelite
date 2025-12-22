@@ -34,7 +34,7 @@
     "test:examples": "node test/examples.test.js",
     "test:package": "node test/package.test.js",
     "test": "npm run test:packlist && npm run test:api && npm run test:examples",
-    "preversion": "prettier -w eyeling.js && npm test",
+    "preversion": "npm test",
     "postversion": "git push origin HEAD --follow-tags"
   }
 }
