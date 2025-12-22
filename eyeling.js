@@ -16,7 +16,7 @@
  *  5) Print only newly derived forward facts with explanations.
  */
 
-const { version } = require('./package.json');
+const { version } = require("./package.json");
 const nodeCrypto = require("crypto");
 
 // ============================================================================
@@ -52,9 +52,9 @@ function termToJsonText(t) {
 function makeRdfJsonLiteral(jsonText) {
   // Prefer a readable long literal when safe; fall back to short if needed.
   if (!jsonText.includes('"""')) {
-    return new Literal('"""' + jsonText + '"""^^<' + RDF_JSON_DT + '>');
+    return new Literal('"""' + jsonText + '"""^^<' + RDF_JSON_DT + ">");
   }
-  return new Literal(JSON.stringify(jsonText) + '^^<' + RDF_JSON_DT + '>');
+  return new Literal(JSON.stringify(jsonText) + "^^<" + RDF_JSON_DT + ">");
 }
 
 // For a single reasoning run, this maps a canonical representation
@@ -90,7 +90,9 @@ function normalizeDateTimeLex(s) {
 function utcIsoDateTimeStringFromEpochSeconds(sec) {
   const ms = sec * 1000;
   const d = new Date(ms);
-  function pad(n, w = 2) { return String(n).padStart(w, "0"); }
+  function pad(n, w = 2) {
+    return String(n).padStart(w, "0");
+  }
   const year = d.getUTCFullYear();
   const month = d.getUTCMonth() + 1;
   const day = d.getUTCDate();
@@ -100,8 +102,18 @@ function utcIsoDateTimeStringFromEpochSeconds(sec) {
   const ms2 = d.getUTCMilliseconds();
   const msPart = ms2 ? "." + String(ms2).padStart(3, "0") : "";
   return (
-    pad(year, 4) + "-" + pad(month) + "-" + pad(day) + "T" +
-    pad(hour) + ":" + pad(min) + ":" + pad(s2) + msPart +
+    pad(year, 4) +
+    "-" +
+    pad(month) +
+    "-" +
+    pad(day) +
+    "T" +
+    pad(hour) +
+    ":" +
+    pad(min) +
+    ":" +
+    pad(s2) +
+    msPart +
     "+00:00"
   );
 }
@@ -139,15 +151,19 @@ function deterministicSkolemIdFromKey(key) {
   }
 
   const hex = [h1, h2, h3, h4]
-    .map(h => h.toString(16).padStart(8, "0"))
+    .map((h) => h.toString(16).padStart(8, "0"))
     .join(""); // 32 hex chars
 
   // Format like a UUID: 8-4-4-4-12
   return (
-    hex.slice(0, 8) + "-" +
-    hex.slice(8, 12) + "-" +
-    hex.slice(12, 16) + "-" +
-    hex.slice(16, 20) + "-" +
+    hex.slice(0, 8) +
+    "-" +
+    hex.slice(8, 12) +
+    "-" +
+    hex.slice(12, 16) +
+    "-" +
+    hex.slice(16, 20) +
+    "-" +
     hex.slice(20)
   );
 }
@@ -220,10 +236,10 @@ class Triple {
 
 class Rule {
   constructor(premise, conclusion, isForward, isFuse, headBlankLabels) {
-    this.premise = premise;       // Triple[]
+    this.premise = premise; // Triple[]
     this.conclusion = conclusion; // Triple[]
-    this.isForward = isForward;   // boolean
-    this.isFuse = isFuse;         // boolean
+    this.isForward = isForward; // boolean
+    this.isFuse = isFuse; // boolean
     // Set<string> of blank-node labels that occur explicitly in the rule head
     this.headBlankLabels = headBlankLabels || new Set();
   }
@@ -231,10 +247,10 @@ class Rule {
 
 class DerivedFact {
   constructor(fact, rule, premises, subst) {
-    this.fact = fact;           // Triple
-    this.rule = rule;           // Rule
-    this.premises = premises;   // Triple[]
-    this.subst = subst;         // { varName: Term }
+    this.fact = fact; // Triple
+    this.rule = rule; // Rule
+    this.premises = premises; // Triple[]
+    this.subst = subst; // { varName: Term }
   }
 }
 
@@ -393,7 +409,8 @@ function lex(inputText) {
           }
           sChars.push(cc);
         }
-        if (!closed) throw new Error('Unterminated long string literal """..."""');
+        if (!closed)
+          throw new Error('Unterminated long string literal """..."""');
         const s = '"""' + sChars.join("") + '"""';
         tokens.push(new Token("Literal", s));
         continue;
@@ -468,7 +485,9 @@ function lex(inputText) {
             i++;
           }
           if (!segChars.length) {
-            throw new Error("Invalid language tag (expected [A-Za-z0-9]+ after '-')");
+            throw new Error(
+              "Invalid language tag (expected [A-Za-z0-9]+ after '-')",
+            );
           }
           tagChars.push(...segChars);
         }
@@ -491,7 +510,10 @@ function lex(inputText) {
     }
 
     // 6) Numeric literal (integer or float)
-    if (/[0-9]/.test(c) || (c === "-" && peek(1) !== null && /[0-9]/.test(peek(1)))) {
+    if (
+      /[0-9]/.test(c) ||
+      (c === "-" && peek(1) !== null && /[0-9]/.test(peek(1)))
+    ) {
       const numChars = [c];
       i++;
       while (i < n) {
@@ -529,7 +551,7 @@ function lex(inputText) {
     const word = wordChars.join("");
     if (word === "true" || word === "false") {
       tokens.push(new Token("Literal", word));
-    } else if ([...word].every(ch => /[0-9.\-]/.test(ch))) {
+    } else if ([...word].every((ch) => /[0-9.\-]/.test(ch))) {
       tokens.push(new Token("Literal", word));
     } else {
       tokens.push(new Token("Ident", word));
@@ -758,12 +780,18 @@ class Parser {
           if (this.peek().typ === "Dot") {
             // Allow a bare blank-node property list statement, e.g. `[ a :Statement ].`
             const lastTok = this.toks[this.pos - 1];
-            if (this.pendingTriples.length > 0 && lastTok && lastTok.typ === "RBracket") {
+            if (
+              this.pendingTriples.length > 0 &&
+              lastTok &&
+              lastTok.typ === "RBracket"
+            ) {
               more = this.pendingTriples;
               this.pendingTriples = [];
               this.next(); // consume '.'
             } else {
-              throw new Error(`Unexpected '.' after term; missing predicate/object list`);
+              throw new Error(
+                `Unexpected '.' after term; missing predicate/object list`,
+              );
             }
           } else {
             more = this.parsePredicateObjectList(first);
@@ -772,9 +800,17 @@ class Parser {
 
           // normalize explicit log:implies / log:impliedBy at top-level
           for (const tr of more) {
-            if (isLogImplies(tr.p) && tr.s instanceof FormulaTerm && tr.o instanceof FormulaTerm) {
+            if (
+              isLogImplies(tr.p) &&
+              tr.s instanceof FormulaTerm &&
+              tr.o instanceof FormulaTerm
+            ) {
               forwardRules.push(this.makeRule(tr.s, tr.o, true));
-            } else if (isLogImpliedBy(tr.p) && tr.s instanceof FormulaTerm && tr.o instanceof FormulaTerm) {
+            } else if (
+              isLogImpliedBy(tr.p) &&
+              tr.s instanceof FormulaTerm &&
+              tr.o instanceof FormulaTerm
+            ) {
               backwardRules.push(this.makeRule(tr.s, tr.o, false));
             } else {
               triples.push(tr);
@@ -834,16 +870,14 @@ class Parser {
     let t = this.parsePathItem();
 
     while (this.peek().typ === "OpPathFwd" || this.peek().typ === "OpPathRev") {
-      const dir = this.next().typ;      // OpPathFwd | OpPathRev
+      const dir = this.next().typ; // OpPathFwd | OpPathRev
       const pred = this.parsePathItem();
 
       this.blankCounter += 1;
       const bn = new Blank(`_:b${this.blankCounter}`);
 
       this.pendingTriples.push(
-        dir === "OpPathFwd"
-          ? new Triple(t, pred, bn)
-          : new Triple(bn, pred, t)
+        dir === "OpPathFwd" ? new Triple(t, pred, bn) : new Triple(bn, pred, t),
       );
 
       t = bn;
@@ -885,7 +919,9 @@ class Parser {
       if (this.peek().typ === "LangTag") {
         // Only quoted string literals can carry a language tag.
         if (!(s.startsWith('"') && s.endsWith('"'))) {
-          throw new Error("Language tag is only allowed on quoted string literals");
+          throw new Error(
+            "Language tag is only allowed on quoted string literals",
+          );
         }
         const langTok = this.next();
         const lang = langTok.value || "";
@@ -893,7 +929,9 @@ class Parser {
 
         // N3/Turtle: language tags and datatypes are mutually exclusive.
         if (this.peek().typ === "HatHat") {
-          throw new Error("A literal cannot have both a language tag (@...) and a datatype (^^...)");
+          throw new Error(
+            "A literal cannot have both a language tag (@...) and a datatype (^^...)",
+          );
         }
       }
 
@@ -908,7 +946,9 @@ class Parser {
           if (qn.includes(":")) dtIri = this.prefixes.expandQName(qn);
           else dtIri = qn;
         } else {
-          throw new Error(`Expected datatype after ^^, got ${dtTok.toString()}`);
+          throw new Error(
+            `Expected datatype after ^^, got ${dtTok.toString()}`,
+          );
         }
         s = `${s}^^<${dtIri}>`;
       }
@@ -968,8 +1008,9 @@ class Parser {
       }
 
       for (const o of objs) {
-        this.pendingTriples.push(invert ? new Triple(o, pred, subj)
-                                       : new Triple(subj, pred, o));
+        this.pendingTriples.push(
+          invert ? new Triple(o, pred, subj) : new Triple(subj, pred, o),
+        );
       }
 
       if (this.peek().typ === "Semicolon") {
@@ -985,8 +1026,8 @@ class Parser {
     } else {
       throw new Error(
         `Expected ']' at end of blank node property list, got ${JSON.stringify(
-          this.peek()
-        )}`
+          this.peek(),
+        )}`,
       );
     }
 
@@ -1023,7 +1064,11 @@ class Parser {
         // Allow a bare blank-node property list statement inside a formula, e.g. `{ [ a :X ]. }`
         if (this.peek().typ === "Dot" || this.peek().typ === "RBrace") {
           const lastTok = this.toks[this.pos - 1];
-          if (this.pendingTriples.length > 0 && lastTok && lastTok.typ === "RBracket") {
+          if (
+            this.pendingTriples.length > 0 &&
+            lastTok &&
+            lastTok.typ === "RBracket"
+          ) {
             triples.push(...this.pendingTriples);
             this.pendingTriples = [];
             if (this.peek().typ === "Dot") this.next();
@@ -1143,7 +1188,9 @@ class Parser {
     const [premise0, conclusion] = liftBlankRuleVars(rawPremise, rawConclusion);
 
     // Reorder constraints for *forward* rules.
-    const premise = isForward ? reorderPremiseForConstraints(premise0) : premise0;
+    const premise = isForward
+      ? reorderPremiseForConstraints(premise0)
+      : premise0;
 
     return new Rule(premise, conclusion, isForward, isFuse, headBlankLabels);
   }
@@ -1164,21 +1211,22 @@ function liftBlankRuleVars(premise, conclusion) {
       return new Var(mapping[label]);
     }
     if (t instanceof ListTerm) {
-      return new ListTerm(t.elems.map(e => convertTerm(e, mapping, counter)));
+      return new ListTerm(t.elems.map((e) => convertTerm(e, mapping, counter)));
     }
     if (t instanceof OpenListTerm) {
       return new OpenListTerm(
-        t.prefix.map(e => convertTerm(e, mapping, counter)),
-        t.tailVar
+        t.prefix.map((e) => convertTerm(e, mapping, counter)),
+        t.tailVar,
       );
     }
     if (t instanceof FormulaTerm) {
-      const triples = t.triples.map(tr =>
-        new Triple(
-          convertTerm(tr.s, mapping, counter),
-          convertTerm(tr.p, mapping, counter),
-          convertTerm(tr.o, mapping, counter)
-        )
+      const triples = t.triples.map(
+        (tr) =>
+          new Triple(
+            convertTerm(tr.s, mapping, counter),
+            convertTerm(tr.p, mapping, counter),
+            convertTerm(tr.o, mapping, counter),
+          ),
       );
       return new FormulaTerm(triples);
     }
@@ -1189,13 +1237,13 @@ function liftBlankRuleVars(premise, conclusion) {
     return new Triple(
       convertTerm(tr.s, mapping, counter),
       convertTerm(tr.p, mapping, counter),
-      convertTerm(tr.o, mapping, counter)
+      convertTerm(tr.o, mapping, counter),
     );
   }
 
   const mapping = {};
   const counter = [0];
-  const newPremise = premise.map(tr => convertTriple(tr, mapping, counter));
+  const newPremise = premise.map((tr) => convertTriple(tr, mapping, counter));
   return [newPremise, conclusion];
 }
 
@@ -1216,22 +1264,26 @@ function skolemizeTermForHeadBlanks(t, headBlankLabels, mapping, skCounter) {
 
   if (t instanceof ListTerm) {
     return new ListTerm(
-      t.elems.map(e => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter))
+      t.elems.map((e) =>
+        skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter),
+      ),
     );
   }
 
   if (t instanceof OpenListTerm) {
     return new OpenListTerm(
-      t.prefix.map(e => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter)),
-      t.tailVar
+      t.prefix.map((e) =>
+        skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter),
+      ),
+      t.tailVar,
     );
   }
 
   if (t instanceof FormulaTerm) {
     return new FormulaTerm(
-      t.triples.map(tr =>
-        skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter)
-      )
+      t.triples.map((tr) =>
+        skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter),
+      ),
     );
   }
 
@@ -1242,7 +1294,7 @@ function skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter) {
   return new Triple(
     skolemizeTermForHeadBlanks(tr.s, headBlankLabels, mapping, skCounter),
     skolemizeTermForHeadBlanks(tr.p, headBlankLabels, mapping, skCounter),
-    skolemizeTermForHeadBlanks(tr.o, headBlankLabels, mapping, skCounter)
+    skolemizeTermForHeadBlanks(tr.o, headBlankLabels, mapping, skCounter),
   );
 }
 
@@ -1280,9 +1332,7 @@ function termsEqual(a, b) {
 }
 
 function triplesEqual(a, b) {
-  return (
-    termsEqual(a.s, b.s) && termsEqual(a.p, b.p) && termsEqual(a.o, b.o)
-  );
+  return termsEqual(a.s, b.s) && termsEqual(a.p, b.p) && termsEqual(a.o, b.o);
 }
 
 function triplesListEqual(xs, ys) {
@@ -1322,7 +1372,8 @@ function alphaEqTermInFormula(a, b, vmap, bmap) {
   if (a instanceof ListTerm && b instanceof ListTerm) {
     if (a.elems.length !== b.elems.length) return false;
     for (let i = 0; i < a.elems.length; i++) {
-      if (!alphaEqTermInFormula(a.elems[i], b.elems[i], vmap, bmap)) return false;
+      if (!alphaEqTermInFormula(a.elems[i], b.elems[i], vmap, bmap))
+        return false;
     }
     return true;
   }
@@ -1330,7 +1381,8 @@ function alphaEqTermInFormula(a, b, vmap, bmap) {
   if (a instanceof OpenListTerm && b instanceof OpenListTerm) {
     if (a.prefix.length !== b.prefix.length) return false;
     for (let i = 0; i < a.prefix.length; i++) {
-      if (!alphaEqTermInFormula(a.prefix[i], b.prefix[i], vmap, bmap)) return false;
+      if (!alphaEqTermInFormula(a.prefix[i], b.prefix[i], vmap, bmap))
+        return false;
     }
     // tailVar is a var-name string, so treat it as renamable too
     return alphaEqVarName(a.tailVar, b.tailVar, vmap);
@@ -1367,7 +1419,8 @@ function alphaEqFormulaTriples(xs, ys) {
       if (used[j]) continue;
       const y = ys[j];
       // Cheap pruning when both predicates are IRIs.
-      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value) continue;
+      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value)
+        continue;
 
       const v2 = { ...vmap };
       const b2 = { ...bmap };
@@ -1429,7 +1482,7 @@ function alphaEqTriple(a, b) {
 }
 
 function hasAlphaEquiv(triples, tr) {
-  return triples.some(t => alphaEqTriple(t, tr));
+  return triples.some((t) => alphaEqTriple(t, tr));
 }
 
 // ============================================================================
@@ -1462,9 +1515,21 @@ function tripleFastKey(tr) {
 function ensureFactIndexes(facts) {
   if (facts.__byPred && facts.__byPO && facts.__keySet) return;
 
-  Object.defineProperty(facts, "__byPred", { value: new Map(), enumerable: false, writable: true });
-  Object.defineProperty(facts, "__byPO",   { value: new Map(), enumerable: false, writable: true });
-  Object.defineProperty(facts, "__keySet", { value: new Set(), enumerable: false, writable: true });
+  Object.defineProperty(facts, "__byPred", {
+    value: new Map(),
+    enumerable: false,
+    writable: true,
+  });
+  Object.defineProperty(facts, "__byPO", {
+    value: new Map(),
+    enumerable: false,
+    writable: true,
+  });
+  Object.defineProperty(facts, "__keySet", {
+    value: new Set(),
+    enumerable: false,
+    writable: true,
+  });
 
   for (const f of facts) indexFact(facts, f);
 }
@@ -1474,15 +1539,24 @@ function indexFact(facts, tr) {
     const pk = tr.p.value;
 
     let pb = facts.__byPred.get(pk);
-    if (!pb) { pb = []; facts.__byPred.set(pk, pb); }
+    if (!pb) {
+      pb = [];
+      facts.__byPred.set(pk, pb);
+    }
     pb.push(tr);
 
     const ok = termFastKey(tr.o);
     if (ok !== null) {
       let po = facts.__byPO.get(pk);
-      if (!po) { po = new Map(); facts.__byPO.set(pk, po); }
+      if (!po) {
+        po = new Map();
+        facts.__byPO.set(pk, po);
+      }
       let pob = po.get(ok);
-      if (!pob) { pob = []; po.set(ok, pob); }
+      if (!pob) {
+        pob = [];
+        po.set(ok, pob);
+      }
       pob.push(tr);
     }
   }
@@ -1526,12 +1600,12 @@ function hasFactIndexed(facts, tr) {
       const po = facts.__byPO.get(pk);
       if (po) {
         const pob = po.get(ok) || [];
-        return pob.some(t => alphaEqTriple(t, tr));
+        return pob.some((t) => alphaEqTriple(t, tr));
       }
     }
 
     const pb = facts.__byPred.get(pk) || [];
-    return pb.some(t => alphaEqTriple(t, tr));
+    return pb.some((t) => alphaEqTriple(t, tr));
   }
 
   return hasAlphaEquiv(facts, tr);
@@ -1546,8 +1620,16 @@ function pushFactIndexed(facts, tr) {
 function ensureBackRuleIndexes(backRules) {
   if (backRules.__byHeadPred && backRules.__wildHeadPred) return;
 
-  Object.defineProperty(backRules, "__byHeadPred",   { value: new Map(), enumerable: false, writable: true });
-  Object.defineProperty(backRules, "__wildHeadPred", { value: [], enumerable: false, writable: true });
+  Object.defineProperty(backRules, "__byHeadPred", {
+    value: new Map(),
+    enumerable: false,
+    writable: true,
+  });
+  Object.defineProperty(backRules, "__wildHeadPred", {
+    value: [],
+    enumerable: false,
+    writable: true,
+  });
 
   for (const r of backRules) indexBackRule(backRules, r);
 }
@@ -1558,7 +1640,10 @@ function indexBackRule(backRules, r) {
   if (head && head.p instanceof Iri) {
     const k = head.p.value;
     let bucket = backRules.__byHeadPred.get(k);
-    if (!bucket) { bucket = []; backRules.__byHeadPred.set(k, bucket); }
+    if (!bucket) {
+      bucket = [];
+      backRules.__byHeadPred.set(k, bucket);
+    }
     bucket.push(r);
   } else {
     backRules.__wildHeadPred.push(r);
@@ -1574,7 +1659,7 @@ function isRdfTypePred(p) {
 }
 
 function isOwlSameAsPred(t) {
-  return t instanceof Iri && t.value === (OWL_NS + "sameAs");
+  return t instanceof Iri && t.value === OWL_NS + "sameAs";
 }
 
 function isLogImplies(p) {
@@ -1595,11 +1680,11 @@ function isConstraintBuiltin(tr) {
 
   // math: numeric comparisons (no new bindings, just tests)
   if (
-    v === MATH_NS + "equalTo"         ||
-    v === MATH_NS + "greaterThan"     ||
-    v === MATH_NS + "lessThan"        ||
-    v === MATH_NS + "notEqualTo"      ||
-    v === MATH_NS + "notGreaterThan"  ||
+    v === MATH_NS + "equalTo" ||
+    v === MATH_NS + "greaterThan" ||
+    v === MATH_NS + "lessThan" ||
+    v === MATH_NS + "notEqualTo" ||
+    v === MATH_NS + "notGreaterThan" ||
     v === MATH_NS + "notLessThan"
   ) {
     return true;
@@ -1612,8 +1697,8 @@ function isConstraintBuiltin(tr) {
 
   // log: tests that are purely constraints (no new bindings)
   if (
-    v === LOG_NS + "forAllIn"     ||
-    v === LOG_NS + "notEqualTo"   ||
+    v === LOG_NS + "forAllIn" ||
+    v === LOG_NS + "notEqualTo" ||
     v === LOG_NS + "notIncludes"
   ) {
     return true;
@@ -1621,17 +1706,17 @@ function isConstraintBuiltin(tr) {
 
   // string: relational / membership style tests (no bindings)
   if (
-    v === STRING_NS + "contains"             ||
+    v === STRING_NS + "contains" ||
     v === STRING_NS + "containsIgnoringCase" ||
-    v === STRING_NS + "endsWith"             ||
-    v === STRING_NS + "equalIgnoringCase"    ||
-    v === STRING_NS + "greaterThan"          ||
-    v === STRING_NS + "lessThan"             ||
-    v === STRING_NS + "matches"              ||
+    v === STRING_NS + "endsWith" ||
+    v === STRING_NS + "equalIgnoringCase" ||
+    v === STRING_NS + "greaterThan" ||
+    v === STRING_NS + "lessThan" ||
+    v === STRING_NS + "matches" ||
     v === STRING_NS + "notEqualIgnoringCase" ||
-    v === STRING_NS + "notGreaterThan"       ||
-    v === STRING_NS + "notLessThan"          ||
-    v === STRING_NS + "notMatches"           ||
+    v === STRING_NS + "notGreaterThan" ||
+    v === STRING_NS + "notLessThan" ||
+    v === STRING_NS + "notMatches" ||
     v === STRING_NS + "startsWith"
   ) {
     return true;
@@ -1665,17 +1750,15 @@ function reorderPremiseForConstraints(premise) {
 
 function containsVarTerm(t, v) {
   if (t instanceof Var) return t.name === v;
-  if (t instanceof ListTerm) return t.elems.some(e => containsVarTerm(e, v));
+  if (t instanceof ListTerm) return t.elems.some((e) => containsVarTerm(e, v));
   if (t instanceof OpenListTerm)
-    return (
-      t.prefix.some(e => containsVarTerm(e, v)) || t.tailVar === v
-    );
+    return t.prefix.some((e) => containsVarTerm(e, v)) || t.tailVar === v;
   if (t instanceof FormulaTerm)
     return t.triples.some(
-      tr =>
+      (tr) =>
         containsVarTerm(tr.s, v) ||
         containsVarTerm(tr.p, v) ||
-        containsVarTerm(tr.o, v)
+        containsVarTerm(tr.o, v),
     );
   return false;
 }
@@ -1684,8 +1767,10 @@ function isGroundTermInFormula(t) {
   // EYE-style: variables inside formula terms are treated as local placeholders,
   // so they don't make the *surrounding triple* non-ground.
   if (t instanceof OpenListTerm) return false;
-  if (t instanceof ListTerm) return t.elems.every(e => isGroundTermInFormula(e));
-  if (t instanceof FormulaTerm) return t.triples.every(tr => isGroundTripleInFormula(tr));
+  if (t instanceof ListTerm)
+    return t.elems.every((e) => isGroundTermInFormula(e));
+  if (t instanceof FormulaTerm)
+    return t.triples.every((tr) => isGroundTripleInFormula(tr));
   // Iri/Literal/Blank/Var are all OK inside formulas
   return true;
 }
@@ -1700,9 +1785,10 @@ function isGroundTripleInFormula(tr) {
 
 function isGroundTerm(t) {
   if (t instanceof Var) return false;
-  if (t instanceof ListTerm) return t.elems.every(e => isGroundTerm(e));
+  if (t instanceof ListTerm) return t.elems.every((e) => isGroundTerm(e));
   if (t instanceof OpenListTerm) return false;
-  if (t instanceof FormulaTerm) return t.triples.every(tr => isGroundTripleInFormula(tr));
+  if (t instanceof FormulaTerm)
+    return t.triples.every((tr) => isGroundTripleInFormula(tr));
   return true;
 }
 
@@ -1715,21 +1801,17 @@ function isGroundTriple(tr) {
 // robust to seeing vars/open lists anyway.
 function skolemKeyFromTerm(t) {
   function enc(u) {
-    if (u instanceof Iri)      return ["I", u.value];
-    if (u instanceof Literal)  return ["L", u.value];
-    if (u instanceof Blank)    return ["B", u.label];
-    if (u instanceof Var)      return ["V", u.name];
+    if (u instanceof Iri) return ["I", u.value];
+    if (u instanceof Literal) return ["L", u.value];
+    if (u instanceof Blank) return ["B", u.label];
+    if (u instanceof Var) return ["V", u.name];
     if (u instanceof ListTerm) return ["List", u.elems.map(enc)];
     if (u instanceof OpenListTerm)
       return ["OpenList", u.prefix.map(enc), u.tailVar];
     if (u instanceof FormulaTerm)
       return [
         "Formula",
-        u.triples.map(tr => [
-          enc(tr.s),
-          enc(tr.p),
-          enc(tr.o)
-        ])
+        u.triples.map((tr) => [enc(tr.s), enc(tr.p), enc(tr.o)]),
       ];
     return ["Other", String(u)];
   }
@@ -1768,11 +1850,11 @@ function applySubstTerm(t, s) {
 
   // Non-variable terms
   if (t instanceof ListTerm) {
-    return new ListTerm(t.elems.map(e => applySubstTerm(e, s)));
+    return new ListTerm(t.elems.map((e) => applySubstTerm(e, s)));
   }
 
   if (t instanceof OpenListTerm) {
-    const newPrefix = t.prefix.map(e => applySubstTerm(e, s));
+    const newPrefix = t.prefix.map((e) => applySubstTerm(e, s));
     const tailTerm = s[t.tailVar];
     if (tailTerm !== undefined) {
       const tailApplied = applySubstTerm(tailTerm, s);
@@ -1781,7 +1863,7 @@ function applySubstTerm(t, s) {
       } else if (tailApplied instanceof OpenListTerm) {
         return new OpenListTerm(
           newPrefix.concat(tailApplied.prefix),
-          tailApplied.tailVar
+          tailApplied.tailVar,
         );
       } else {
         return new OpenListTerm(newPrefix, t.tailVar);
@@ -1792,7 +1874,7 @@ function applySubstTerm(t, s) {
   }
 
   if (t instanceof FormulaTerm) {
-    return new FormulaTerm(t.triples.map(tr => applySubstTriple(tr, s)));
+    return new FormulaTerm(t.triples.map((tr) => applySubstTriple(tr, s)));
   }
 
   return t;
@@ -1802,7 +1884,7 @@ function applySubstTriple(tr, s) {
   return new Triple(
     applySubstTerm(tr.s, s),
     applySubstTerm(tr.p, s),
-    applySubstTerm(tr.o, s)
+    applySubstTerm(tr.o, s),
   );
 }
 
@@ -1837,9 +1919,10 @@ function unifyFormulaTriples(xs, ys, subst) {
       const y = ys[j];
 
       // Cheap pruning when both predicates are IRIs.
-      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value) continue;
+      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value)
+        continue;
 
-      const s2 = unifyTriple(x, y, s);   // IMPORTANT: use `s`, not {}
+      const s2 = unifyTriple(x, y, s); // IMPORTANT: use `s`, not {}
       if (s2 === null) continue;
 
       used[j] = true;
@@ -1972,7 +2055,11 @@ function literalParts(lit) {
   // Strip LANGTAG from the lexical form when present.
   if (lex.length >= 2 && lex[0] === '"') {
     const lastQuote = lex.lastIndexOf('"');
-    if (lastQuote > 0 && lastQuote < lex.length - 1 && lex[lastQuote + 1] === "@") {
+    if (
+      lastQuote > 0 &&
+      lastQuote < lex.length - 1 &&
+      lex[lastQuote + 1] === "@"
+    ) {
       const lang = lex.slice(lastQuote + 2);
       if (/^[A-Za-z]+(?:-[A-Za-z0-9]+)*$/.test(lang)) {
         lex = lex.slice(0, lastQuote + 1);
@@ -2019,7 +2106,11 @@ function termToJsStringDecoded(t) {
 
   // Short strings: try to decode escapes (this makes "{\"a\":1}" usable too).
   if (lex.length >= 2 && lex[0] === '"' && lex[lex.length - 1] === '"') {
-    try { return JSON.parse(lex); } catch (e) { /* fall through */ }
+    try {
+      return JSON.parse(lex);
+    } catch (e) {
+      /* fall through */
+    }
     return stripQuotes(lex);
   }
 
@@ -2031,7 +2122,10 @@ function jsonPointerUnescape(seg) {
   let out = "";
   for (let i = 0; i < seg.length; i++) {
     const c = seg[i];
-    if (c !== "~") { out += c; continue; }
+    if (c !== "~") {
+      out += c;
+      continue;
+    }
     if (i + 1 >= seg.length) return null;
     const n = seg[i + 1];
     if (n === "0") out += "~";
@@ -2060,13 +2154,21 @@ function jsonPointerLookup(jsonText, pointer) {
 
   // Support URI fragment form "#/a/b"
   if (ptr.startsWith("#")) {
-    try { ptr = decodeURIComponent(ptr.slice(1)); } catch { return null; }
+    try {
+      ptr = decodeURIComponent(ptr.slice(1));
+    } catch {
+      return null;
+    }
   }
 
   let entry = jsonPointerCache.get(jsonText);
   if (!entry) {
     let parsed = null;
-    try { parsed = JSON.parse(jsonText); } catch { parsed = null; }
+    try {
+      parsed = JSON.parse(jsonText);
+    } catch {
+      parsed = null;
+    }
     entry = { parsed, ptrCache: new Map() };
     jsonPointerCache.set(jsonText, entry);
   }
@@ -2081,20 +2183,35 @@ function jsonPointerLookup(jsonText, pointer) {
     entry.ptrCache.set(ptr, t);
     return t;
   }
-  if (!ptr.startsWith("/")) { entry.ptrCache.set(ptr, null); return null; }
+  if (!ptr.startsWith("/")) {
+    entry.ptrCache.set(ptr, null);
+    return null;
+  }
 
   const parts = ptr.split("/").slice(1);
   for (const raw of parts) {
     const seg = jsonPointerUnescape(raw);
-    if (seg === null) { entry.ptrCache.set(ptr, null); return null; }
+    if (seg === null) {
+      entry.ptrCache.set(ptr, null);
+      return null;
+    }
 
     if (Array.isArray(cur)) {
-      if (!/^(0|[1-9]\d*)$/.test(seg)) { entry.ptrCache.set(ptr, null); return null; }
+      if (!/^(0|[1-9]\d*)$/.test(seg)) {
+        entry.ptrCache.set(ptr, null);
+        return null;
+      }
       const idx = Number(seg);
-      if (idx < 0 || idx >= cur.length) { entry.ptrCache.set(ptr, null); return null; }
+      if (idx < 0 || idx >= cur.length) {
+        entry.ptrCache.set(ptr, null);
+        return null;
+      }
       cur = cur[idx];
     } else if (cur !== null && typeof cur === "object") {
-      if (!Object.prototype.hasOwnProperty.call(cur, seg)) { entry.ptrCache.set(ptr, null); return null; }
+      if (!Object.prototype.hasOwnProperty.call(cur, seg)) {
+        entry.ptrCache.set(ptr, null);
+        return null;
+      }
       cur = cur[seg];
     } else {
       entry.ptrCache.set(ptr, null);
@@ -2140,33 +2257,124 @@ function simpleStringFormat(fmt, args) {
   return out;
 }
 
+// -----------------------------------------------------------------------------
+// Strict numeric literal parsing for math: builtins
+// -----------------------------------------------------------------------------
+const XSD_DECIMAL_DT = XSD_NS + "decimal";
+const XSD_DOUBLE_DT = XSD_NS + "double";
+const XSD_FLOAT_DT = XSD_NS + "float";
+const XSD_INTEGER_DT = XSD_NS + "integer";
+
+// Integer-derived datatypes from XML Schema Part 2 (and commonly used ones).
+const XSD_INTEGER_DERIVED_DTS = new Set([
+  XSD_INTEGER_DT,
+  XSD_NS + "nonPositiveInteger",
+  XSD_NS + "negativeInteger",
+  XSD_NS + "long",
+  XSD_NS + "int",
+  XSD_NS + "short",
+  XSD_NS + "byte",
+  XSD_NS + "nonNegativeInteger",
+  XSD_NS + "unsignedLong",
+  XSD_NS + "unsignedInt",
+  XSD_NS + "unsignedShort",
+  XSD_NS + "unsignedByte",
+  XSD_NS + "positiveInteger",
+]);
+
+function isQuotedLexical(lex) {
+  // Note: the lexer stores long strings with literal delimiters: """..."""
+  return (
+    (lex.length >= 2 && lex[0] === '"' && lex[lex.length - 1] === '"') ||
+    (lex.length >= 6 && lex.startsWith('"""') && lex.endsWith('"""'))
+  );
+}
+
+function isXsdNumericDatatype(dt) {
+  if (dt === null) return false;
+  return (
+    dt === XSD_DECIMAL_DT ||
+    dt === XSD_DOUBLE_DT ||
+    dt === XSD_FLOAT_DT ||
+    XSD_INTEGER_DERIVED_DTS.has(dt)
+  );
+}
+
+function isXsdIntegerDatatype(dt) {
+  if (dt === null) return false;
+  return XSD_INTEGER_DERIVED_DTS.has(dt);
+}
+
+function looksLikeUntypedNumericTokenLex(lex) {
+  // We only treat *unquoted* tokens as "untyped numeric" (Turtle/N3 numeric literal).
+  // Quoted literals without datatype are strings, never numbers.
+  if (isQuotedLexical(lex)) return false;
+
+  // integer
+  if (/^[+-]?\d+$/.test(lex)) return true;
+
+  // decimal (no exponent)
+  if (/^[+-]?(?:\d+\.\d*|\.\d+)$/.test(lex)) return true;
+
+  // double (with exponent)
+  if (/^[+-]?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][+-]?\d+)$/.test(lex)) return true;
+
+  return false;
+}
+
 function parseNum(t) {
-  // Parse as JS Number (for floats, dates-as-seconds, etc.)
+  // Parse as JS Number, but ONLY for xsd numeric datatypes or untyped numeric tokens.
+  // Rejects values such as "1"^^<...non-numeric...> or "1" (a string literal).
   if (!(t instanceof Literal)) return null;
-  let s = t.value;
-  let [lex, _dt] = literalParts(s);
-  const val = stripQuotes(lex);
-  const n = Number(val);
-  if (!Number.isNaN(n)) return n;
-  return null;
+
+  const [lex, dt] = literalParts(t.value);
+
+  // Typed literals: must be xsd numeric.
+  if (dt !== null) {
+    if (!isXsdNumericDatatype(dt)) return null;
+    const val = stripQuotes(lex);
+    const n = Number(val);
+    if (!Number.isFinite(n)) return null;
+    return n;
+  }
+
+  // Untyped literals: accept only unquoted numeric tokens.
+  if (!looksLikeUntypedNumericTokenLex(lex)) return null;
+  const n = Number(lex);
+  if (!Number.isFinite(n)) return null;
+  return n;
 }
 
 function parseIntLiteral(t) {
-  // Parse as BigInt if the lexical form is an integer
+  // Parse as BigInt if (and only if) it is an integer literal in an integer datatype,
+  // or an untyped integer token.
   if (!(t instanceof Literal)) return null;
-  let s = t.value;
-  let [lex, _dt] = literalParts(s);
-  const val = stripQuotes(lex);
-  if (!/^[+-]?\d+$/.test(val)) return null;
+
+  const [lex, dt] = literalParts(t.value);
+
+  if (dt !== null) {
+    if (!isXsdIntegerDatatype(dt)) return null;
+    const val = stripQuotes(lex);
+    if (!/^[+-]?\d+$/.test(val)) return null;
+    try {
+      return BigInt(val);
+    } catch {
+      return null;
+    }
+  }
+
+  // Untyped: only accept unquoted integer tokens.
+  if (isQuotedLexical(lex)) return null;
+  if (!/^[+-]?\d+$/.test(lex)) return null;
   try {
-    return BigInt(val);
-  } catch (e) {
+    return BigInt(lex);
+  } catch {
     return null;
   }
 }
 
 function parseNumberLiteral(t) {
-  // Prefer BigInt for integers, fall back to Number for non-integers
+  // Prefer BigInt for integers, fall back to Number for other numeric literals.
   const bi = parseIntLiteral(t);
   if (bi !== null) return bi;
   const n = parseNum(t);
@@ -2180,28 +2388,22 @@ function formatNum(n) {
 
 function parseXsdDateTerm(t) {
   if (!(t instanceof Literal)) return null;
-  const s = t.value;
-  let [lex, dt] = literalParts(s);
+  const [lex, dt] = literalParts(t.value);
+  if (dt !== XSD_NS + "date") return null;
   const val = stripQuotes(lex);
-  if (dt === XSD_NS + "date" || val.length === 10) {
-    const d = new Date(val + "T00:00:00Z");
-    if (Number.isNaN(d.getTime())) return null;
-    return d;
-  }
-  return null;
+  const d = new Date(val + "T00:00:00Z");
+  if (Number.isNaN(d.getTime())) return null;
+  return d;
 }
 
 function parseXsdDatetimeTerm(t) {
   if (!(t instanceof Literal)) return null;
-  const s = t.value;
-  let [lex, dt] = literalParts(s);
+  const [lex, dt] = literalParts(t.value);
+  if (dt !== XSD_NS + "dateTime") return null;
   const val = stripQuotes(lex);
-  if (dt === XSD_NS + "dateTime" || val.includes("T")) {
-    const d = new Date(val);
-    if (Number.isNaN(d.getTime())) return null;
-    return d; // Date in local/UTC, we only use timestamp
-  }
-  return null;
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return null;
+  return d; // Date in local/UTC, we only use timestamp
 }
 
 function parseDatetimeLike(t) {
@@ -2260,24 +2462,13 @@ function parseIso8601DurationToSeconds(s) {
 }
 
 function parseNumericForCompareTerm(t) {
-  // Try integer BigInt first
-  if (t instanceof Literal) {
-    let [lex, dt] = literalParts(t.value);
-    const val = stripQuotes(lex);
-    if (/^[+-]?\d+$/.test(val)) {
-      try {
-        return { kind: "bigint", value: BigInt(val) };
-      } catch (e) {
-        // fall through
-      }
-    }
-    // durations / dateTimes / floats -> Number (seconds or numeric)
-    const nDur = parseNumOrDuration(t);
-    if (nDur !== null) return { kind: "number", value: nDur };
-    return null;
-  }
-  const n = parseNumOrDuration(t);
-  if (n !== null) return { kind: "number", value: n };
+  // Strict: only accept xsd numeric literals, xsd:duration, xsd:date, xsd:dateTime
+  // (or untyped numeric tokens).
+  const bi = parseIntLiteral(t);
+  if (bi !== null) return { kind: "bigint", value: bi };
+
+  const nDur = parseNumOrDuration(t);
+  if (nDur !== null) return { kind: "number", value: nDur };
   return null;
 }
 
@@ -2286,8 +2477,8 @@ function cmpNumericInfo(aInfo, bInfo, op) {
   if (!aInfo || !bInfo) return false;
 
   if (aInfo.kind === "bigint" && bInfo.kind === "bigint") {
-    if (op === ">")  return aInfo.value >  bInfo.value;
-    if (op === "<")  return aInfo.value <  bInfo.value;
+    if (op === ">") return aInfo.value > bInfo.value;
+    if (op === "<") return aInfo.value < bInfo.value;
     if (op === ">=") return aInfo.value >= bInfo.value;
     if (op === "<=") return aInfo.value <= bInfo.value;
     if (op === "==") return aInfo.value == bInfo.value;
@@ -2298,8 +2489,8 @@ function cmpNumericInfo(aInfo, bInfo, op) {
   const a = typeof aInfo.value === "bigint" ? Number(aInfo.value) : aInfo.value;
   const b = typeof bInfo.value === "bigint" ? Number(bInfo.value) : bInfo.value;
 
-  if (op === ">")  return a >  b;
-  if (op === "<")  return a <  b;
+  if (op === ">") return a > b;
+  if (op === "<") return a < b;
   if (op === ">=") return a >= b;
   if (op === "<=") return a <= b;
   if (op === "==") return a == b;
@@ -2310,22 +2501,22 @@ function cmpNumericInfo(aInfo, bInfo, op) {
 function parseNumOrDuration(t) {
   const n = parseNum(t);
   if (n !== null) return n;
+
+  // xsd:duration
   if (t instanceof Literal) {
-    let s = t.value;
-    let [lex, dt] = literalParts(s);
-    const val = stripQuotes(lex);
-    if (
-      dt === XSD_NS + "duration" ||
-      val.startsWith("P") ||
-      val.startsWith("-P")
-    ) {
+    const [lex, dt] = literalParts(t.value);
+    if (dt === XSD_NS + "duration") {
+      const val = stripQuotes(lex);
       const negative = val.startsWith("-");
       const core = negative ? val.slice(1) : val;
+      if (!core.startsWith("P")) return null;
       const secs = parseIso8601DurationToSeconds(core);
       if (secs === null) return null;
       return negative ? -secs : secs;
     }
   }
+
+  // xsd:date / xsd:dateTime
   const dtval = parseDatetimeLike(t);
   if (dtval !== null) {
     return dtval.getTime() / 1000.0;
@@ -2453,7 +2644,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === MATH_NS + "greaterThan") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, ">")) return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, ">"))
+      return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
@@ -2467,7 +2659,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === MATH_NS + "lessThan") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "<")) return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "<"))
+      return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
@@ -2481,7 +2674,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === MATH_NS + "notLessThan") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, ">=")) return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, ">="))
+      return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
@@ -2495,7 +2689,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === MATH_NS + "notGreaterThan") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "<=")) return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "<="))
+      return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
@@ -2509,7 +2704,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === MATH_NS + "equalTo") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "==")) return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "=="))
+      return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
@@ -2523,7 +2719,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === MATH_NS + "notEqualTo") {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "!=")) return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "!="))
+      return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
@@ -2545,7 +2742,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       }
 
       let lit;
-      const allBig = values.every(v => typeof v === "bigint");
+      const allBig = values.every((v) => typeof v === "bigint");
       if (allBig) {
         let total = 0n;
         for (const v of values) total += v;
@@ -2581,7 +2778,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       }
 
       let lit;
-      const allBig = values.every(v => typeof v === "bigint");
+      const allBig = values.every((v) => typeof v === "bigint");
       if (allBig) {
         let prod = 1n;
         for (const v of values) prod *= v;
@@ -3321,7 +3518,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     else if (g.o instanceof ListTerm) inputList = g.o.elems;
     else return [];
 
-    if (!inputList.every(e => isGroundTerm(e))) return [];
+    if (!inputList.every((e) => isGroundTerm(e))) return [];
 
     const sortedList = [...inputList].sort(cmpTermForSort);
     const sortedTerm = new ListTerm(sortedList);
@@ -3345,13 +3542,20 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     if (!(predTerm instanceof Iri)) return [];
     const pred = new Iri(predTerm.value);
     if (!isBuiltinPred(pred)) return [];
-    if (!inputList.every(e => isGroundTerm(e))) return [];
+    if (!inputList.every((e) => isGroundTerm(e))) return [];
 
     const results = [];
     for (const el of inputList) {
       const yvar = new Var("_mapY");
       const goal2 = new Triple(el, pred, yvar);
-      const sols = evalBuiltin(goal2, subst, facts, backRules, depth + 1, varGen);
+      const sols = evalBuiltin(
+        goal2,
+        subst,
+        facts,
+        backRules,
+        depth + 1,
+        varGen,
+      );
       if (!sols.length) return [];
       const yval = applySubstTerm(yvar, sols[0]);
       if (yval instanceof Var) return [];
@@ -3484,7 +3688,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       backRules,
       depth + 1,
       visited2,
-      varGen
+      varGen,
     );
     if (!sols.length) return [{ ...subst }];
     return [];
@@ -3504,7 +3708,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       backRules,
       depth + 1,
       visited2,
-      varGen
+      varGen,
     );
 
     // Collect one value per *solution*, duplicates allowed
@@ -3536,7 +3740,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       backRules,
       depth + 1,
       visited1,
-      varGen
+      varGen,
     );
 
     // 2. For every such substitution, check that the second clause holds too.
@@ -3550,7 +3754,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
         backRules,
         depth + 1,
         visited2,
-        varGen
+        varGen,
       );
       // Found a counterexample: whereClause holds but thenClause does not
       if (!sols2.length) return [];
@@ -3581,7 +3785,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === LOG_NS + "uri") {
     // Direction 1: subject is an IRI -> object is its string representation
     if (g.s instanceof Iri) {
-      const uriStr = g.s.value;           // raw IRI string, e.g. "https://www.w3.org"
+      const uriStr = g.s.value; // raw IRI string, e.g. "https://www.w3.org"
       const lit = makeStringLiteral(uriStr); // "https://www.w3.org"
       const s2 = unifyTerm(goal.o, lit, subst);
       return s2 !== null ? [s2] : [];
@@ -3656,9 +3860,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
-    return sStr.toLowerCase() === oStr.toLowerCase()
-      ? [{ ...subst }]
-      : [];
+    return sStr.toLowerCase() === oStr.toLowerCase() ? [{ ...subst }] : [];
   }
 
   // string:format
@@ -3693,8 +3895,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   if (g.p instanceof Iri && g.p.value === STRING_NS + "jsonPointer") {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
 
-    const jsonText = termToJsonText(g.s.elems[0]);     // <-- changed
-    const ptr      = termToJsStringDecoded(g.s.elems[1]);
+    const jsonText = termToJsonText(g.s.elems[0]); // <-- changed
+    const ptr = termToJsStringDecoded(g.s.elems[1]);
     if (jsonText === null || ptr === null) return [];
 
     const valTerm = jsonPointerLookup(jsonText, ptr);
@@ -3740,9 +3942,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
-    return sStr.toLowerCase() !== oStr.toLowerCase()
-      ? [{ ...subst }]
-      : [];
+    return sStr.toLowerCase() !== oStr.toLowerCase() ? [{ ...subst }] : [];
   }
 
   // string:notGreaterThan  (≤ in Unicode code order)
@@ -3778,9 +3978,9 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // string:replace
   if (g.p instanceof Iri && g.p.value === STRING_NS + "replace") {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 3) return [];
-    const dataStr   = termToJsString(g.s.elems[0]);
+    const dataStr = termToJsString(g.s.elems[0]);
     const searchStr = termToJsString(g.s.elems[1]);
-    const replStr   = termToJsString(g.s.elems[2]);
+    const replStr = termToJsString(g.s.elems[2]);
     if (dataStr === null || searchStr === null || replStr === null) return [];
 
     let re;
@@ -3855,10 +4055,10 @@ function isBuiltinPred(p) {
 
   return (
     v.startsWith(CRYPTO_NS) ||
-    v.startsWith(MATH_NS)   ||
-    v.startsWith(LOG_NS)    ||
+    v.startsWith(MATH_NS) ||
+    v.startsWith(LOG_NS) ||
     v.startsWith(STRING_NS) ||
-    v.startsWith(TIME_NS)   ||
+    v.startsWith(TIME_NS) ||
     v.startsWith(LIST_NS)
   );
 }
@@ -3878,10 +4078,10 @@ function standardizeRule(rule, gen) {
       return new Var(vmap[t.name]);
     }
     if (t instanceof ListTerm) {
-      return new ListTerm(t.elems.map(e => renameTerm(e, vmap, genArr)));
+      return new ListTerm(t.elems.map((e) => renameTerm(e, vmap, genArr)));
     }
     if (t instanceof OpenListTerm) {
-      const newXs = t.prefix.map(e => renameTerm(e, vmap, genArr));
+      const newXs = t.prefix.map((e) => renameTerm(e, vmap, genArr));
       if (!vmap.hasOwnProperty(t.tailVar)) {
         const name = `${t.tailVar}__${genArr[0]}`;
         genArr[0] += 1;
@@ -3892,13 +4092,14 @@ function standardizeRule(rule, gen) {
     }
     if (t instanceof FormulaTerm) {
       return new FormulaTerm(
-        t.triples.map(tr =>
-          new Triple(
-            renameTerm(tr.s, vmap, genArr),
-            renameTerm(tr.p, vmap, genArr),
-            renameTerm(tr.o, vmap, genArr)
-          )
-        )
+        t.triples.map(
+          (tr) =>
+            new Triple(
+              renameTerm(tr.s, vmap, genArr),
+              renameTerm(tr.p, vmap, genArr),
+              renameTerm(tr.o, vmap, genArr),
+            ),
+        ),
       );
     }
     return t;
@@ -3906,32 +4107,32 @@ function standardizeRule(rule, gen) {
 
   const vmap2 = {};
   const premise = rule.premise.map(
-    tr =>
+    (tr) =>
       new Triple(
         renameTerm(tr.s, vmap2, gen),
         renameTerm(tr.p, vmap2, gen),
-        renameTerm(tr.o, vmap2, gen)
-      )
+        renameTerm(tr.o, vmap2, gen),
+      ),
   );
   const conclusion = rule.conclusion.map(
-    tr =>
+    (tr) =>
       new Triple(
         renameTerm(tr.s, vmap2, gen),
         renameTerm(tr.p, vmap2, gen),
-        renameTerm(tr.o, vmap2, gen)
-      )
+        renameTerm(tr.o, vmap2, gen),
+      ),
   );
   return new Rule(
     premise,
     conclusion,
     rule.isForward,
     rule.isFuse,
-    rule.headBlankLabels
+    rule.headBlankLabels,
   );
 }
 
 function listHasTriple(list, tr) {
-  return list.some(t => triplesEqual(t, tr));
+  return list.some((t) => triplesEqual(t, tr));
 }
 
 // ============================================================================
@@ -3951,14 +4152,23 @@ function listHasTriple(list, tr) {
 // This is semantics-preserving for the ongoing proof state.
 
 function gcCollectVarsInTerm(t, out) {
-  if (t instanceof Var) { out.add(t.name); return; }
-  if (t instanceof ListTerm) { for (const e of t.elems) gcCollectVarsInTerm(e, out); return; }
+  if (t instanceof Var) {
+    out.add(t.name);
+    return;
+  }
+  if (t instanceof ListTerm) {
+    for (const e of t.elems) gcCollectVarsInTerm(e, out);
+    return;
+  }
   if (t instanceof OpenListTerm) {
     for (const e of t.prefix) gcCollectVarsInTerm(e, out);
     out.add(t.tailVar);
     return;
   }
-  if (t instanceof FormulaTerm) { for (const tr of t.triples) gcCollectVarsInTriple(tr, out); return; }
+  if (t instanceof FormulaTerm) {
+    for (const tr of t.triples) gcCollectVarsInTriple(tr, out);
+    return;
+  }
 }
 
 function gcCollectVarsInTriple(tr, out) {
@@ -4018,8 +4228,7 @@ function maybeCompactSubst(subst, goals, answerVars, depth) {
   return gcCompactForGoals(subst, goals, answerVars);
 }
 
-
-function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
+function proveGoals(goals, subst, facts, backRules, depth, visited, varGen) {
   // Iterative DFS over proof states using an explicit stack.
   // Each state carries its own substitution and remaining goals.
   const results = [];
@@ -4027,7 +4236,6 @@ function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
   const initialGoals = Array.isArray(goals) ? goals.slice() : [];
   const initialSubst = subst ? { ...subst } : {};
   const initialVisited = visited ? visited.slice() : [];
-
 
   // Variables from the original goal list (needed by the caller to instantiate conclusions)
   const answerVars = new Set();
@@ -4038,7 +4246,12 @@ function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
   }
 
   const stack = [
-    { goals: initialGoals, subst: initialSubst, depth: depth || 0, visited: initialVisited }
+    {
+      goals: initialGoals,
+      subst: initialSubst,
+      depth: depth || 0,
+      visited: initialVisited,
+    },
   ];
 
   while (stack.length) {
@@ -4055,7 +4268,14 @@ function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
 
     // 1) Builtins
     if (isBuiltinPred(goal0.p)) {
-      const deltas = evalBuiltin(goal0, {}, facts, backRules, state.depth, varGen);
+      const deltas = evalBuiltin(
+        goal0,
+        {},
+        facts,
+        backRules,
+        state.depth,
+        varGen,
+      );
       for (const delta of deltas) {
         const composed = composeSubst(state.subst, delta);
         if (composed === null) continue;
@@ -4063,12 +4283,17 @@ function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
         if (!restGoals.length) {
           results.push(gcCompactForGoals(composed, [], answerVars));
         } else {
-          const nextSubst = maybeCompactSubst(composed, restGoals, answerVars, state.depth + 1);
+          const nextSubst = maybeCompactSubst(
+            composed,
+            restGoals,
+            answerVars,
+            state.depth + 1,
+          );
           stack.push({
             goals: restGoals,
             subst: nextSubst,
             depth: state.depth + 1,
-            visited: state.visited
+            visited: state.visited,
           });
         }
       }
@@ -4092,12 +4317,17 @@ function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
         if (!restGoals.length) {
           results.push(gcCompactForGoals(composed, [], answerVars));
         } else {
-          const nextSubst = maybeCompactSubst(composed, restGoals, answerVars, state.depth + 1);
+          const nextSubst = maybeCompactSubst(
+            composed,
+            restGoals,
+            answerVars,
+            state.depth + 1,
+          );
           stack.push({
             goals: restGoals,
             subst: nextSubst,
             depth: state.depth + 1,
-            visited: state.visited
+            visited: state.visited,
           });
         }
       }
@@ -4113,12 +4343,17 @@ function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
         if (!restGoals.length) {
           results.push(gcCompactForGoals(composed, [], answerVars));
         } else {
-          const nextSubst = maybeCompactSubst(composed, restGoals, answerVars, state.depth + 1);
+          const nextSubst = maybeCompactSubst(
+            composed,
+            restGoals,
+            answerVars,
+            state.depth + 1,
+          );
           stack.push({
             goals: restGoals,
             subst: nextSubst,
             depth: state.depth + 1,
-            visited: state.visited
+            visited: state.visited,
           });
         }
       }
@@ -4127,31 +4362,38 @@ function proveGoals( goals, subst, facts, backRules, depth, visited, varGen ) {
     // 4) Backward rules (indexed by head predicate)
     if (goal0.p instanceof Iri) {
       ensureBackRuleIndexes(backRules);
-      const candRules =
-        (backRules.__byHeadPred.get(goal0.p.value) || []).concat(backRules.__wildHeadPred);
+      const candRules = (
+        backRules.__byHeadPred.get(goal0.p.value) || []
+      ).concat(backRules.__wildHeadPred);
 
       for (const r of candRules) {
         if (r.conclusion.length !== 1) continue;
 
         const rawHead = r.conclusion[0];
-        if (rawHead.p instanceof Iri && rawHead.p.value !== goal0.p.value) continue;
+        if (rawHead.p instanceof Iri && rawHead.p.value !== goal0.p.value)
+          continue;
 
         const rStd = standardizeRule(r, varGen);
         const head = rStd.conclusion[0];
         const deltaHead = unifyTriple(head, goal0, {});
         if (deltaHead === null) continue;
 
-        const body = rStd.premise.map(b => applySubstTriple(b, deltaHead));
+        const body = rStd.premise.map((b) => applySubstTriple(b, deltaHead));
         const composed = composeSubst(state.subst, deltaHead);
         if (composed === null) continue;
 
         const newGoals = body.concat(restGoals);
-        const nextSubst = maybeCompactSubst(composed, newGoals, answerVars, state.depth + 1);
+        const nextSubst = maybeCompactSubst(
+          composed,
+          newGoals,
+          answerVars,
+          state.depth + 1,
+        );
         stack.push({
           goals: newGoals,
           subst: nextSubst,
           depth: state.depth + 1,
-          visited: visitedForRules
+          visited: visitedForRules,
         });
       }
     }
@@ -4185,54 +4427,82 @@ function forwardChain(facts, forwardRules, backRules) {
       const empty = {};
       const visited = [];
 
-      const sols = proveGoals(r.premise.slice(), empty, facts, backRules, 0, visited, varGen);
+      const sols = proveGoals(
+        r.premise.slice(),
+        empty,
+        facts,
+        backRules,
+        0,
+        visited,
+        varGen,
+      );
 
       // Inference fuse
       if (r.isFuse && sols.length) {
-        console.log("# Inference fuse triggered: a { ... } => false. rule fired.");
+        console.log(
+          "# Inference fuse triggered: a { ... } => false. rule fired.",
+        );
         process.exit(2);
       }
 
       for (const s of sols) {
-        const instantiatedPremises = r.premise.map(b => applySubstTriple(b, s));
+        const instantiatedPremises = r.premise.map((b) =>
+          applySubstTriple(b, s),
+        );
 
         for (const cpat of r.conclusion) {
           const instantiated = applySubstTriple(cpat, s);
 
           const isFwRuleTriple =
             isLogImplies(instantiated.p) &&
-            (
-              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
-              (instantiated.s instanceof Literal && instantiated.s.value === "true" && instantiated.o instanceof FormulaTerm) ||
-              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === "true")
-            );
+            ((instantiated.s instanceof FormulaTerm &&
+              instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof Literal &&
+                instantiated.s.value === "true" &&
+                instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof FormulaTerm &&
+                instantiated.o instanceof Literal &&
+                instantiated.o.value === "true"));
 
           const isBwRuleTriple =
             isLogImpliedBy(instantiated.p) &&
-            (
-              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
-              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === "true") ||
-              (instantiated.s instanceof Literal && instantiated.s.value === "true" && instantiated.o instanceof FormulaTerm)
-            );
+            ((instantiated.s instanceof FormulaTerm &&
+              instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof FormulaTerm &&
+                instantiated.o instanceof Literal &&
+                instantiated.o.value === "true") ||
+              (instantiated.s instanceof Literal &&
+                instantiated.s.value === "true" &&
+                instantiated.o instanceof FormulaTerm));
 
           if (isFwRuleTriple || isBwRuleTriple) {
             if (!hasFactIndexed(facts, instantiated)) {
               factList.push(instantiated);
               pushFactIndexed(facts, instantiated);
-              derivedForward.push(new DerivedFact(instantiated, r, instantiatedPremises.slice(), { ...s }));
+              derivedForward.push(
+                new DerivedFact(instantiated, r, instantiatedPremises.slice(), {
+                  ...s,
+                }),
+              );
               changed = true;
             }
 
             // Promote rule-producing triples to live rules, treating literal true as {}.
             const left =
-              instantiated.s instanceof FormulaTerm ? instantiated.s.triples :
-              (instantiated.s instanceof Literal && instantiated.s.value === "true") ? [] :
-              null;
+              instantiated.s instanceof FormulaTerm
+                ? instantiated.s.triples
+                : instantiated.s instanceof Literal &&
+                    instantiated.s.value === "true"
+                  ? []
+                  : null;
 
             const right =
-              instantiated.o instanceof FormulaTerm ? instantiated.o.triples :
-              (instantiated.o instanceof Literal && instantiated.o.value === "true") ? [] :
-              null;
+              instantiated.o instanceof FormulaTerm
+                ? instantiated.o.triples
+                : instantiated.o instanceof Literal &&
+                    instantiated.o.value === "true"
+                  ? []
+                  : null;
 
             if (left !== null && right !== null) {
               if (isFwRuleTriple) {
@@ -4240,28 +4510,40 @@ function forwardChain(facts, forwardRules, backRules) {
                 const premise = reorderPremiseForConstraints(premise0);
 
                 const headBlankLabels = collectBlankLabelsInTriples(conclusion);
-                const newRule = new Rule(premise, conclusion, true, false, headBlankLabels);
+                const newRule = new Rule(
+                  premise,
+                  conclusion,
+                  true,
+                  false,
+                  headBlankLabels,
+                );
 
                 const already = forwardRules.some(
-                  rr =>
+                  (rr) =>
                     rr.isForward === newRule.isForward &&
                     rr.isFuse === newRule.isFuse &&
                     triplesListEqual(rr.premise, newRule.premise) &&
-                    triplesListEqual(rr.conclusion, newRule.conclusion)
+                    triplesListEqual(rr.conclusion, newRule.conclusion),
                 );
                 if (!already) forwardRules.push(newRule);
               } else if (isBwRuleTriple) {
                 const [premise, conclusion] = liftBlankRuleVars(right, left);
 
                 const headBlankLabels = collectBlankLabelsInTriples(conclusion);
-                const newRule = new Rule(premise, conclusion, false, false, headBlankLabels);
+                const newRule = new Rule(
+                  premise,
+                  conclusion,
+                  false,
+                  false,
+                  headBlankLabels,
+                );
 
                 const already = backRules.some(
-                  rr =>
+                  (rr) =>
                     rr.isForward === newRule.isForward &&
                     rr.isFuse === newRule.isFuse &&
                     triplesListEqual(rr.premise, newRule.premise) &&
-                    triplesListEqual(rr.conclusion, newRule.conclusion)
+                    triplesListEqual(rr.conclusion, newRule.conclusion),
                 );
                 if (!already) {
                   backRules.push(newRule);
@@ -4275,7 +4557,12 @@ function forwardChain(facts, forwardRules, backRules) {
 
           // Only skolemize blank nodes that occur explicitly in the rule head
           const skMap = {};
-          const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter);
+          const inst = skolemizeTripleForHeadBlanks(
+            instantiated,
+            r.headBlankLabels,
+            skMap,
+            skCounter,
+          );
 
           if (!isGroundTriple(inst)) continue;
           if (hasFactIndexed(facts, inst)) continue;
@@ -4283,7 +4570,9 @@ function forwardChain(facts, forwardRules, backRules) {
           factList.push(inst);
           pushFactIndexed(facts, inst);
 
-          derivedForward.push(new DerivedFact(inst, r, instantiatedPremises.slice(), { ...s }));
+          derivedForward.push(
+            new DerivedFact(inst, r, instantiatedPremises.slice(), { ...s }),
+          );
           changed = true;
         }
       }
@@ -4307,31 +4596,31 @@ function termToN3(t, pref) {
     if (i.startsWith("_:")) return i;
     return `<${i}>`;
   }
- if (t instanceof Literal) {
-   const [lex, dt] = literalParts(t.value);
+  if (t instanceof Literal) {
+    const [lex, dt] = literalParts(t.value);
 
-   // Pretty-print xsd:boolean as bare true/false
-   if (dt === XSD_NS + "boolean") {
-     const v = stripQuotes(lex);
-     if (v === "true" || v === "false") return v;
-     // optional: normalize 1/0 too
-     if (v === "1") return "true";
-     if (v === "0") return "false";
-   }
+    // Pretty-print xsd:boolean as bare true/false
+    if (dt === XSD_NS + "boolean") {
+      const v = stripQuotes(lex);
+      if (v === "true" || v === "false") return v;
+      // optional: normalize 1/0 too
+      if (v === "1") return "true";
+      if (v === "0") return "false";
+    }
 
-   if (!dt) return t.value; // keep numbers, booleans, lang-tagged strings, etc.
-   const qdt = pref.shrinkIri(dt);
-   if (qdt !== null) return `${lex}^^${qdt}`;   // e.g. ^^rdf:JSON
-   return `${lex}^^<${dt}>`;                   // fallback
- }
+    if (!dt) return t.value; // keep numbers, booleans, lang-tagged strings, etc.
+    const qdt = pref.shrinkIri(dt);
+    if (qdt !== null) return `${lex}^^${qdt}`; // e.g. ^^rdf:JSON
+    return `${lex}^^<${dt}>`; // fallback
+  }
   if (t instanceof Var) return `?${t.name}`;
   if (t instanceof Blank) return t.label;
   if (t instanceof ListTerm) {
-    const inside = t.elems.map(e => termToN3(e, pref));
+    const inside = t.elems.map((e) => termToN3(e, pref));
     return "(" + inside.join(" ") + ")";
   }
   if (t instanceof OpenListTerm) {
-    const inside = t.prefix.map(e => termToN3(e, pref));
+    const inside = t.prefix.map((e) => termToN3(e, pref));
     inside.push("?" + t.tailVar);
     return "(" + inside.join(" ") + ")";
   }
@@ -4362,10 +4651,11 @@ function tripleToN3(tr, prefixes) {
   }
 
   const s = termToN3(tr.s, prefixes);
-  const p =
-    isRdfTypePred(tr.p) ? "a"
-    : isOwlSameAsPred(tr.p) ? "="
-    : termToN3(tr.p, prefixes);
+  const p = isRdfTypePred(tr.p)
+    ? "a"
+    : isOwlSameAsPred(tr.p)
+      ? "="
+      : termToN3(tr.p, prefixes);
   const o = termToN3(tr.o, prefixes);
 
   return `${s} ${p} ${o} .`;
@@ -4373,7 +4663,7 @@ function tripleToN3(tr, prefixes) {
 
 function printExplanation(df, prefixes) {
   console.log(
-    "# ----------------------------------------------------------------------"
+    "# ----------------------------------------------------------------------",
   );
   console.log("# Proof for derived triple:");
 
@@ -4387,14 +4677,14 @@ function printExplanation(df, prefixes) {
 
   if (!df.premises.length) {
     console.log(
-      "# This triple is the head of a forward rule with an empty premise,"
+      "# This triple is the head of a forward rule with an empty premise,",
     );
     console.log(
-      "# so it holds unconditionally whenever the program is loaded."
+      "# so it holds unconditionally whenever the program is loaded.",
     );
   } else {
     console.log(
-      "# It holds because the following instance of the rule body is provable:"
+      "# It holds because the following instance of the rule body is provable:",
     );
 
     // Premises, also indented 2 spaces after '# '
@@ -4434,7 +4724,7 @@ function printExplanation(df, prefixes) {
   // Substitution block
   const ruleVars = varsInRule(df.rule);
   const visibleNames = Object.keys(df.subst)
-    .filter(name => ruleVars.has(name))
+    .filter((name) => ruleVars.has(name))
     .sort();
 
   if (visibleNames.length) {
@@ -4472,10 +4762,10 @@ function printExplanation(df, prefixes) {
   }
 
   console.log(
-    "# Therefore the derived triple above is entailed by the rules and facts."
+    "# Therefore the derived triple above is entailed by the rules and facts.",
   );
   console.log(
-    "# ----------------------------------------------------------------------\n"
+    "# ----------------------------------------------------------------------\n",
   );
 }
 
@@ -4487,8 +4777,8 @@ function printExplanation(df, prefixes) {
 // This mutates triples/rules in-place so list:* builtins work on RDF-serialized lists too.
 function materializeRdfLists(triples, forwardRules, backwardRules) {
   const RDF_FIRST = RDF_NS + "first";
-  const RDF_REST  = RDF_NS + "rest";
-  const RDF_NIL   = RDF_NS + "nil";
+  const RDF_REST = RDF_NS + "rest";
+  const RDF_NIL = RDF_NS + "nil";
 
   function nodeKey(t) {
     if (t instanceof Blank) return "B:" + t.label;
@@ -4498,7 +4788,7 @@ function materializeRdfLists(triples, forwardRules, backwardRules) {
 
   // Collect first/rest arcs from *input triples*
   const firstMap = new Map(); // key(subject) -> Term (object)
-  const restMap  = new Map(); // key(subject) -> Term (object)
+  const restMap = new Map(); // key(subject) -> Term (object)
   for (const tr of triples) {
     if (!(tr.p instanceof Iri)) continue;
     const k = nodeKey(tr.s);
@@ -4508,8 +4798,8 @@ function materializeRdfLists(triples, forwardRules, backwardRules) {
   }
   if (!firstMap.size && !restMap.size) return;
 
-  const cache = new Map();     // key(node) -> ListTerm
-  const visiting = new Set();  // cycle guard
+  const cache = new Map(); // key(node) -> ListTerm
+  const visiting = new Set(); // cycle guard
 
   function buildListForKey(k) {
     if (cache.has(k)) return cache.get(k);
@@ -4568,7 +4858,7 @@ function materializeRdfLists(triples, forwardRules, backwardRules) {
     }
     if (t instanceof ListTerm) {
       let changed = false;
-      const elems = t.elems.map(e => {
+      const elems = t.elems.map((e) => {
         const r = rewriteTerm(e);
         if (r !== e) changed = true;
         return r;
@@ -4577,7 +4867,7 @@ function materializeRdfLists(triples, forwardRules, backwardRules) {
     }
     if (t instanceof OpenListTerm) {
       let changed = false;
-      const prefix = t.prefix.map(e => {
+      const prefix = t.prefix.map((e) => {
         const r = rewriteTerm(e);
         if (r !== e) changed = true;
         return r;
@@ -4675,11 +4965,11 @@ function main() {
   // --------------------------------------------------------------------------
   // Positional args (the N3 file)
   // --------------------------------------------------------------------------
-  const positional = argv.filter(a => !a.startsWith("-"));
+  const positional = argv.filter((a) => !a.startsWith("-"));
 
   if (positional.length !== 1) {
     console.error(
-      "Usage: eyeling.js [--version|-v] [--no-proof-comments|-n] <file.n3>"
+      "Usage: eyeling.js [--version|-v] [--no-proof-comments|-n] <file.n3>",
     );
     process.exit(1);
   }
@@ -4702,10 +4992,10 @@ function main() {
   // Build internal ListTerm values from rdf:first/rdf:rest (+ rdf:nil) input triples
   materializeRdfLists(triples, frules, brules);
 
-  const facts = triples.filter(tr => isGroundTriple(tr));
+  const facts = triples.filter((tr) => isGroundTriple(tr));
   const derived = forwardChain(facts, frules, brules);
 
-  const derivedTriples = derived.map(df => df.fact);
+  const derivedTriples = derived.map((df) => df.fact);
   const usedPrefixes = prefixes.prefixesUsedForOutput(derivedTriples);
 
   for (const [pfx, base] of usedPrefixes) {
@@ -4728,4 +5018,3 @@ function main() {
 if (require.main === module) {
   main();
 }
-
