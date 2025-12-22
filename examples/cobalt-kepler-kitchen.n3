@@ -1,0 +1,220 @@
+# ================================================================
+# Heavy-Math N3 Demo: "Cobalt Kepler Kitchen"
+# ------------------------------------------------
+# A math-stress N3 ruleset for orbital mechanics (Kepler-ish) plus
+# a Hohmann transfer, intended to exercise strict W3C/N3 math builtins.
+#
+# What it does:
+#  1) For each orbit (a,e,M):
+#     - periapsis/apopsis
+#     - period (Kepler's 3rd law)
+#     - specific orbital energy
+#     - specific angular momentum
+#     - approximate E (eccentric anomaly) from M using a series
+#     - true anomaly nu via tan-half-angle
+#     - radius r and (x,y) in orbital plane
+#  2) Computes average period across the orbit list
+#  3) Hohmann transfer between two circular radii: dv1, dv2, total dv, time
+#
+# Notes:
+#  - Uses only: math:, list:, log:
+#  - Numbers are written as numeric literals (strict typing friendly).
+# ================================================================
+
+@prefix :     <http://example.org/cobalt-kepler#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+############
+# DATA (units: km, s; mu in km^3/s^2)
+############
+
+:Earth :mu 398600.4418 .
+
+:OrbitSet :orbits (
+  [ :name "LEO" ; :a 7000.0  ; :e 0.001  ; :M 1.0 ]
+  [ :name "MEO" ; :a 26560.0 ; :e 0.01   ; :M 0.3 ]
+  [ :name "GEO" ; :a 42164.0 ; :e 0.0001 ; :M 2.0 ]
+) .
+
+:Transfer1 :centralBody :Earth ;
+           :r1 7000.0 ;
+           :r2 42164.0 .
+
+############
+# (1) ORBIT METRICS + STATE AT MEAN ANOMALY
+############
+
+{
+  :Earth :mu ?mu .
+  :OrbitSet :orbits ?os .
+  ?os list:member ?orb .
+  ?orb :a ?a ; :e ?e ; :M ?M .
+
+  # periapsis/apopsis: rp=a(1-e), ra=a(1+e)
+  (1.0 ?e) math:difference ?oneMinusE .
+  (1.0 ?e) math:sum ?onePlusE .
+  (?a ?oneMinusE) math:product ?rp .
+  (?a ?onePlusE)  math:product ?ra .
+
+  # period T = 2*pi*sqrt(a^3/mu)
+  (?a 3.0) math:exponentiation ?a3 .
+  (?a3 ?mu) math:quotient ?a3OverMu .
+  (?a3OverMu 0.5) math:exponentiation ?sqrtTerm .
+  (2.0 3.141592653589793) math:product ?twoPi .
+  (?twoPi ?sqrtTerm) math:product ?T .
+
+  # specific orbital energy: eps = -mu/(2a)
+  (2.0 ?a) math:product ?twoA .
+  (?mu ?twoA) math:quotient ?muOver2a .
+  (0.0 ?muOver2a) math:difference ?eps .
+
+  # specific angular momentum: h = sqrt(mu*a*(1-e^2))
+  (?e 2.0) math:exponentiation ?e2 .
+  (1.0 ?e2) math:difference ?oneMinusE2 .
+  (?mu ?a) math:product ?muA .
+  (?muA ?oneMinusE2) math:product ?muAterm .
+  (?muAterm 0.5) math:exponentiation ?h .
+
+  # Approx eccentric anomaly from mean anomaly (series):
+  # E ≈ M + e*sin(M) + 0.5*e^2*sin(2M)
+  ?M math:sin ?sinM .
+  (?e ?sinM) math:product ?eSinM .
+  (2.0 ?M) math:product ?twoM .
+  ?twoM math:sin ?sin2M .
+  (?e2 ?sin2M) math:product ?e2Sin2M .
+  (0.5 ?e2Sin2M) math:product ?halfE2Sin2M .
+  (?M ?eSinM) math:sum ?Mplus .
+  (?Mplus ?halfE2Sin2M) math:sum ?E .
+
+  # True anomaly via tan-half-angle:
+  # tan(nu/2) = sqrt((1+e)/(1-e)) * tan(E/2)
+  (1.0 ?e) math:sum ?onePlusE2a .
+  (1.0 ?e) math:difference ?oneMinusE2a .
+  (?onePlusE2a ?oneMinusE2a) math:quotient ?ratio .
+  (?ratio 0.5) math:exponentiation ?factor .
+
+  (2.0 ?E) math:quotient ?Ehalf .
+  ?Ehalf math:tan ?tanEhalf .
+  (?factor ?tanEhalf) math:product ?tanNuHalf .
+  ?tanNuHalf math:atan ?nuHalf .
+  (2.0 ?nuHalf) math:product ?nu .
+
+  # r = a(1 - e*cos(E))
+  ?E math:cos ?cosE .
+  (?e ?cosE) math:product ?eCosE .
+  (1.0 ?eCosE) math:difference ?oneMinusECosE .
+  (?a ?oneMinusECosE) math:product ?r .
+
+  # position in orbital plane: x=r*cos(nu), y=r*sin(nu)
+  ?nu math:cos ?cosNu .
+  ?nu math:sin ?sinNu .
+  (?r ?cosNu) math:product ?x .
+  (?r ?sinNu) math:product ?y .
+}
+=>
+{
+  ?orb :periapsis ?rp ;
+       :apoapsis ?ra ;
+       :period ?T ;
+       :specificEnergy ?eps ;
+       :angularMomentum ?h ;
+       :stateAtM [
+         :M ?M ;
+         :E ?E ;
+         :nu ?nu ;
+         :r ?r ;
+         :x ?x ;
+         :y ?y
+       ] .
+} .
+
+############
+# (2) AVERAGE PERIOD ACROSS ORBITS
+############
+
+{
+  :OrbitSet :orbits ?os .
+
+  ( ?T { ?os list:member ?orb . ?orb :period ?T . } ?Ts ) log:collectAllIn _:avgScope .
+  ?Ts list:length ?n .
+  ?Ts math:sum ?sumT .
+  (?sumT ?n) math:quotient ?avgT .
+}
+=>
+{
+  :OrbitSet :avgPeriod ?avgT .
+} .
+
+############
+# (3) HOHMANN TRANSFER (circular r1 -> r2)
+#
+# aT = (r1+r2)/2
+# v1 = sqrt(mu/r1), v2 = sqrt(mu/r2)
+# vT1 = sqrt(mu*(2/r1 - 1/aT))
+# vT2 = sqrt(mu*(2/r2 - 1/aT))
+# dv1 = vT1 - v1
+# dv2 = v2 - vT2
+# dvTotal = |dv1| + |dv2|
+# tTransfer = pi * sqrt(aT^3/mu)
+############
+
+{
+  :Transfer1 :centralBody :Earth ; :r1 ?r1 ; :r2 ?r2 .
+  :Earth :mu ?mu .
+
+  (?r1 ?r2) math:sum ?r1r2 .
+  (?r1r2 2.0) math:quotient ?aT .
+
+  # v1, v2
+  (?mu ?r1) math:quotient ?muOverR1 .
+  (?muOverR1 0.5) math:exponentiation ?v1 .
+  (?mu ?r2) math:quotient ?muOverR2 .
+  (?muOverR2 0.5) math:exponentiation ?v2 .
+
+  # vT at r1: sqrt(mu*(2/r1 - 1/aT))
+  (2.0 ?r1) math:quotient ?twoOverR1 .
+  (1.0 ?aT) math:quotient ?oneOverAT .
+  (?twoOverR1 ?oneOverAT) math:difference ?term1 .
+  (?mu ?term1) math:product ?muTerm1 .
+  (?muTerm1 0.5) math:exponentiation ?vT1 .
+
+  # vT at r2
+  (2.0 ?r2) math:quotient ?twoOverR2 .
+  (?twoOverR2 ?oneOverAT) math:difference ?term2 .
+  (?mu ?term2) math:product ?muTerm2 .
+  (?muTerm2 0.5) math:exponentiation ?vT2 .
+
+  # deltas
+  (?vT1 ?v1) math:difference ?dv1 .
+  (?v2 ?vT2) math:difference ?dv2 .
+  ?dv1 math:absoluteValue ?adv1 .
+  ?dv2 math:absoluteValue ?adv2 .
+  (?adv1 ?adv2) math:sum ?dvTotal .
+
+  # transfer time: pi*sqrt(aT^3/mu)
+  (?aT 3.0) math:exponentiation ?aT3 .
+  (?aT3 ?mu) math:quotient ?aT3OverMu .
+  (?aT3OverMu 0.5) math:exponentiation ?sqrtTT .
+  (3.141592653589793 ?sqrtTT) math:product ?tTransfer .
+}
+=>
+{
+  :Transfer1 :transferSemiMajorAxis ?aT ;
+             :v1 ?v1 ; :v2 ?v2 ;
+             :vTransferAtR1 ?vT1 ;
+             :vTransferAtR2 ?vT2 ;
+             :deltaV1 ?dv1 ;
+             :deltaV2 ?dv2 ;
+             :deltaVTotal ?dvTotal ;
+             :timeOfFlight ?tTransfer .
+} .
+
+############
+# STRICTNESS REGRESSION HOOK (should fail in strict math)
+############
+# {
+#   "7000"^^<http://example.org/not-a-number> math:quotient 2.0 .
+# } => { :bad :datatype :accepted . } .
+
