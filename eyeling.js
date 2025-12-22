@@ -4183,6 +4183,9 @@ function forwardChain(facts, forwardRules, backRules) {
       }
 
       for (const s of sols) {
+        // IMPORTANT: one skolem map per *rule firing* so head blank nodes
+        // (e.g., from [ :p ... ; :q ... ]) stay connected across all head triples.
+        const skMap = {};
         const instantiatedPremises = r.premise.map((b) => applySubstTriple(b, s));
 
         for (const cpat of r.conclusion) {
@@ -4267,7 +4270,6 @@ function forwardChain(facts, forwardRules, backRules) {
           }
 
           // Only skolemize blank nodes that occur explicitly in the rule head
-          const skMap = {};
           const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter);
 
           if (!isGroundTriple(inst)) continue;

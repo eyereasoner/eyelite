@@ -1,0 +1,167 @@
+# ================================================================
+# Heavy-Math N3 Demo: "Cranberry Calculus"
+# ------------------------------------------------
+# A showcase ruleset for N3 reasoners implementing the W3C/N3 math
+# builtins strictly.
+#
+# What it does:
+#  1) Statistics on a dataset: mean, variance, stddev + z-score outliers
+#  2) Vector math: dot product, norms, angle between vectors (rad/deg)
+#  3) Projectile motion: vx/vy, flight time, range, max height, sample pos
+#
+# Notes:
+#  - Uses only standard builtins: math:, list:, log:
+#  - Intended as a regression test for datatype strictness in math builtins.
+# ================================================================
+
+@prefix :    <http://example.org/cranberry-calculus#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+############
+# DATA
+############
+
+:DataSet1 :values (1.2 1.3 1.4 1.25 1.35 2.0 10.0) ;
+          :zThreshold 2.0 .
+
+:VecA :x 3.0 ; :y 4.0 .
+:VecB :x 4.0 ; :y 0.0 .
+
+:Shot1 :speed 30.0 ;
+       :angleRad 0.7853981633974483 ;  # 45° in radians
+       :g 9.81 ;
+       :tSample 2.5 .
+
+############
+# (1) STATS: mean, variance, stddev
+############
+
+{
+  :DataSet1 :values ?xs ; :zThreshold ?thr .
+
+  ?xs list:length ?n .
+  ?xs math:sum ?sum .
+  (?sum ?n) math:quotient ?mean .
+
+  # Collect squared deviations: (x - mean)^2 for each x in the list
+  ( ?sq
+    {
+      ?xs list:member ?x .
+      (?x ?mean) math:difference ?d .
+      (?d 2.0) math:exponentiation ?sq .
+    }
+    ?sqList
+  ) log:collectAllIn _:statsScope .
+
+  ?sqList math:sum ?sse .
+  (?sse ?n) math:quotient ?var .
+  (?var 0.5) math:exponentiation ?std .   # sqrt(var)
+}
+=>
+{
+  :DataSet1 :mean ?mean ;
+            :variance ?var ;
+            :stddev ?std .
+} .
+
+# Outliers: |z| > threshold, where z = (x - mean) / stddev
+{
+  :DataSet1 :values ?xs ; :mean ?mean ; :stddev ?std ; :zThreshold ?thr .
+  ?xs list:member ?x .
+
+  (?x ?mean) math:difference ?d .
+  (?d ?std) math:quotient ?z .
+  ?z math:absoluteValue ?absz .
+  ?absz math:greaterThan ?thr .
+}
+=>
+{
+  :DataSet1 :outlier [ :value ?x ; :zScore ?z ] .
+} .
+
+############
+# (2) VECTORS: dot product, norms, angle between vectors
+############
+
+{
+  :VecA :x ?ax ; :y ?ay .
+  :VecB :x ?bx ; :y ?by .
+
+  # dot = ax*bx + ay*by
+  (?ax ?bx) math:product ?axbx .
+  (?ay ?by) math:product ?ayby .
+  (?axbx ?ayby) math:sum ?dot .
+
+  # |a| = sqrt(ax^2 + ay^2)
+  (?ax 2.0) math:exponentiation ?ax2 .
+  (?ay 2.0) math:exponentiation ?ay2 .
+  (?ax2 ?ay2) math:sum ?a2 .
+  (?a2 0.5) math:exponentiation ?aNorm .
+
+  # |b| = sqrt(bx^2 + by^2)
+  (?bx 2.0) math:exponentiation ?bx2 .
+  (?by 2.0) math:exponentiation ?by2 .
+  (?bx2 ?by2) math:sum ?b2 .
+  (?b2 0.5) math:exponentiation ?bNorm .
+
+  # cos(theta) = dot / (|a||b|)
+  (?aNorm ?bNorm) math:product ?den .
+  (?dot ?den) math:quotient ?cosTheta .
+
+  ?cosTheta math:acos ?thetaRad .
+  ?thetaRad math:degrees ?thetaDeg .
+}
+=>
+{
+  :VecA :dotWithVecB ?dot ;
+        :angleToVecB [ :radians ?thetaRad ; :degrees ?thetaDeg ] .
+} .
+
+############
+# (3) PROJECTILE (no air resistance)
+############
+
+{
+  :Shot1 :speed ?v ; :angleRad ?theta ; :g ?g ; :tSample ?t .
+
+  ?theta math:sin ?sinT .
+  ?theta math:cos ?cosT .
+
+  (?v ?cosT) math:product ?vx .
+  (?v ?sinT) math:product ?vy .
+
+  (2.0 ?vy) math:product ?twoVy .
+  (?twoVy ?g) math:quotient ?tFlight .
+
+  (?vx ?tFlight) math:product ?range .
+
+  (?vy 2.0) math:exponentiation ?vy2 .
+  (2.0 ?g) math:product ?twoG .
+  (?vy2 ?twoG) math:quotient ?hMax .
+
+  (?vx ?t) math:product ?xAtT .
+  (?vy ?t) math:product ?vy_t .
+  (?t 2.0) math:exponentiation ?t2 .
+  (?g ?t2) math:product ?g_t2 .
+  (0.5 ?g_t2) math:product ?half_g_t2 .
+  (?vy_t ?half_g_t2) math:difference ?yAtT .
+}
+=>
+{
+  :Shot1 :vx ?vx ;
+         :vy ?vy ;
+         :timeOfFlight ?tFlight ;
+         :range ?range ;
+         :maxHeight ?hMax ;
+         :positionAtSample [ :t ?t ; :x ?xAtT ; :y ?yAtT ] .
+} .
+
+############
+# STRICTNESS REGRESSION HOOK (should fail in a strict implementation)
+############
+# {
+#   "-1"^^<http://example.org/gooblygook> math:absoluteValue "1"^^<http://example.org/foobar> .
+# } => { :bad :datatype :accepted . } .
+
