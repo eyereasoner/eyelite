@@ -1,0 +1,1012 @@
+@prefix : <https://eyereasoner.github.io/eye/reasoning#> .
+@prefix gps: <https://eyereasoner.github.io/eye/reasoning/gps/gps-schema#> .
+@prefix step: <https://example.org/steps#> .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 43 0.5 0.9082968740999999 0.63532485) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 43 0.5 0.9082968740999999 0.63532485 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 43
+#   ?PATH = (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription)
+#   ?SAT = 0.63532485
+#   ?SUC = 0.9082968740999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 43 0.5 0.9082968740999999 0.63532485) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 42 0 0.8614774475999999 0.6556011749999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 42 0 0.8614774475999999 0.6556011749999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 42
+#   ?PATH = (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess)
+#   ?SAT = 0.6556011749999999
+#   ?SUC = 0.8614774475999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 42 0 0.8614774475999999 0.6556011749999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 42 0.5 0.8989329887999999 0.6284934) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 42 0.5 0.8989329887999999 0.6284934 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 42
+#   ?PATH = (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription)
+#   ?SAT = 0.6284934
+#   ?SUC = 0.8989329887999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 42 0.5 0.8989329887999999 0.6284934) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 41 0 0.8525962367999999 0.6485517) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 41 0 0.8525962367999999 0.6485517 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 41
+#   ?PATH = (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess)
+#   ?SAT = 0.6485517
+#   ?SUC = 0.8525962367999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 41 0 0.8525962367999999 0.6485517) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 33 0.5 0.8899474422999999 0.66356151) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 33 0.5 0.8899474422999999 0.66356151 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 33
+#   ?PATH = (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription)
+#   ?SAT = 0.66356151
+#   ?SUC = 0.8899474422999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 33 0.5 0.8899474422999999 0.66356151) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 32 0 0.8440738628 0.684739005) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 32 0 0.8440738628 0.684739005 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 32
+#   ?PATH = (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess)
+#   ?SAT = 0.684739005
+#   ?SUC = 0.8440738628
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 32 0 0.8440738628 0.684739005) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 32 0.5 0.8807727263999999 0.6564264399999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 32 0.5 0.8807727263999999 0.6564264399999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 32
+#   ?PATH = (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription)
+#   ?SAT = 0.6564264399999999
+#   ?SUC = 0.8807727263999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 32 0.5 0.8807727263999999 0.6564264399999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 31 0 0.8353720703999998 0.6773762199999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 31 0 0.8353720703999998 0.6773762199999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 31
+#   ?PATH = (step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess)
+#   ?SAT = 0.6773762199999999
+#   ?SUC = 0.8353720703999998
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentityDesk step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 31 0 0.8353720703999998 0.6773762199999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 262 0.5 0.8990285386499999 0.6105412800000001) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 262 0.5 0.8990285386499999 0.6105412800000001 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 262
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription)
+#   ?SAT = 0.6105412800000001
+#   ?SUC = 0.8990285386499999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 262 0.5 0.8990285386499999 0.6105412800000001) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 261 0 0.8526868613999998 0.6300266400000001) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 261 0 0.8526868613999998 0.6300266400000001 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 261
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess)
+#   ?SAT = 0.6300266400000001
+#   ?SUC = 0.8526868613999998
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 261 0 0.8526868613999998 0.6300266400000001) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 261 0.5 0.8897602031999999 0.6039763200000001) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 261 0.5 0.8897602031999999 0.6039763200000001 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 261
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription)
+#   ?SAT = 0.6039763200000001
+#   ?SUC = 0.8897602031999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 261 0.5 0.8897602031999999 0.6039763200000001) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 260 0 0.8438962751999999 0.6232521599999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 260 0 0.8438962751999999 0.6232521599999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 260
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess)
+#   ?SAT = 0.6232521599999999
+#   ?SUC = 0.8438962751999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 260 0 0.8438962751999999 0.6232521599999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 252 0.5 0.8808663459499999 0.6376764479999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 252 0.5 0.8808663459499999 0.6376764479999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 252
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription)
+#   ?SAT = 0.6376764479999999
+#   ?SUC = 0.8808663459499999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 252 0.5 0.8808663459499999 0.6376764479999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 251 0 0.8354608641999999 0.658027824) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 251 0 0.8354608641999999 0.658027824 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 251
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess)
+#   ?SAT = 0.658027824
+#   ?SUC = 0.8354608641999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 251 0 0.8354608641999999 0.658027824) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 251 0.5 0.8717852495999998 0.6308197120000001) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 251 0.5 0.8717852495999998 0.6308197120000001 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 251
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription)
+#   ?SAT = 0.6308197120000001
+#   ?SUC = 0.8717852495999998
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 251 0.5 0.8717852495999998 0.6308197120000001) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 250 0 0.8268478655999999 0.6509522560000001) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 250 0 0.8268478655999999 0.6509522560000001 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 250
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess)
+#   ?SAT = 0.6509522560000001
+#   ?SUC = 0.8268478655999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationManual step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 250 0 0.8268478655999999 0.6509522560000001) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessInterlibraryLoan) 2903 5 0.8991682622999999 0.6170364) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessInterlibraryLoan) 2903 5 0.8991682622999999 0.6170364 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 5
+#   ?DUR = 2903
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessInterlibraryLoan)
+#   ?SAT = 0.6170364
+#   ?SUC = 0.8991682622999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessInterlibraryLoan) 2903 5 0.8991682622999999 0.6170364) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 25 0.5 0.8854753445999999 0.72501777) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 25 0.5 0.8854753445999999 0.72501777 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 25
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription)
+#   ?SAT = 0.72501777
+#   ?SUC = 0.8854753445999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessSubscription) 25 0.5 0.8854753445999999 0.72501777) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 24 0 0.8398322855999999 0.7481566349999998) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 24 0 0.8398322855999999 0.7481566349999998 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 24
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess)
+#   ?SAT = 0.7481566349999998
+#   ?SUC = 0.8398322855999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaDiscovery step:grantAccessOpenAccess) 24 0 0.8398322855999999 0.7481566349999998) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessInterlibraryLoan) 2902 5 0.8898984863999999 0.6104016) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessInterlibraryLoan) 2902 5 0.8898984863999999 0.6104016 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 5
+#   ?DUR = 2902
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessInterlibraryLoan)
+#   ?SAT = 0.6104016
+#   ?SUC = 0.8898984863999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessInterlibraryLoan) 2902 5 0.8898984863999999 0.6104016) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 24 0.5 0.8763467328 0.71722188) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 24 0.5 0.8763467328 0.71722188 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 24
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription)
+#   ?SAT = 0.71722188
+#   ?SUC = 0.8763467328
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessSubscription) 24 0.5 0.8763467328 0.71722188) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 23 0 0.8311742207999998 0.7401119399999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 23 0 0.8311742207999998 0.7401119399999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 23
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess)
+#   ?SAT = 0.7401119399999999
+#   ?SUC = 0.8311742207999998
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestLibrarian step:locateViaCatalogue step:grantAccessOpenAccess) 23 0 0.8311742207999998 0.7401119399999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessInterlibraryLoan) 2893 5 0.8810032468999999 0.6444602400000001) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessInterlibraryLoan) 2893 5 0.8810032468999999 0.6444602400000001 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 5
+#   ?DUR = 2893
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessInterlibraryLoan)
+#   ?SAT = 0.6444602400000001
+#   ?SUC = 0.8810032468999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessInterlibraryLoan) 2893 5 0.8810032468999999 0.6444602400000001) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 15 0.5 0.8675869537999998 0.7572407819999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 15 0.5 0.8675869537999998 0.7572407819999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 15
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription)
+#   ?SAT = 0.7572407819999999
+#   ?SUC = 0.8675869537999998
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessSubscription) 15 0.5 0.8675869537999998 0.7572407819999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 14 0 0.8228659768 0.7814080409999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 14 0 0.8228659768 0.7814080409999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 14
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess)
+#   ?SAT = 0.7814080409999999
+#   ?SUC = 0.8228659768
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaDiscovery step:grantAccessOpenAccess) 14 0 0.8228659768 0.7814080409999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessInterlibraryLoan) 2892 5 0.8719207391999999 0.63753056) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessInterlibraryLoan) 2892 5 0.8719207391999999 0.63753056 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 5
+#   ?DUR = 2892
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessInterlibraryLoan)
+#   ?SAT = 0.63753056
+#   ?SUC = 0.8719207391999999
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessInterlibraryLoan) 2892 5 0.8719207391999999 0.63753056) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 14 0.5 0.8586427583999998 0.7490984079999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 14 0.5 0.8586427583999998 0.7490984079999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0.5
+#   ?DUR = 14
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription)
+#   ?SAT = 0.7490984079999999
+#   ?SUC = 0.8586427583999998
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessSubscription) 14 0.5 0.8586427583999998 0.7490984079999999) .
+
+# ----------------------------------------------------------------------
+# Proof for derived triple:
+#   :alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 13 0 0.8143828223999998 0.7730058039999999) .
+# It holds because the following instance of the rule body is provable:
+#   :scope gps:findpath ({
+#       ?x a foaf:Person .
+#       ?x ex:identityVerified true .
+#       ?x ex:affiliationVerified true .
+#       ?x ex:requestSubmitted true .
+#       ?x ex:itemLocated true .
+#       ?x ex:accessGranted true .
+#   } (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 13 0 0.8143828223999998 0.7730058039999999 (5000.0 10.0 0.75 0.60)) .
+# via the schematic forward rule:
+#   {
+#     :scope gps:findpath ({
+#         ?x a foaf:Person .
+#         ?x ex:identityVerified true .
+#         ?x ex:affiliationVerified true .
+#         ?x ex:requestSubmitted true .
+#         ?x ex:itemLocated true .
+#         ?x ex:accessGranted true .
+#     } ?PATH ?DUR ?COST ?SUC ?SAT (5000.0 10.0 0.75 0.60)) .
+#   } => {
+#     :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
+#   } .
+# with substitution (on rule variables):
+#   ?COST = 0
+#   ?DUR = 13
+#   ?PATH = (step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess)
+#   ?SAT = 0.7730058039999999
+#   ?SUC = 0.8143828223999998
+# Therefore the derived triple above is entailed by the rules and facts.
+# ----------------------------------------------------------------------
+
+:alice gps:path ((step:verifyIdentitySSO step:verifyAffiliationAuto step:submitRequestSelfService step:locateViaCatalogue step:grantAccessOpenAccess) 13 0 0.8143828223999998 0.7730058039999999) .
+

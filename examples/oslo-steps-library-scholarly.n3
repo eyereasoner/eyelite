@@ -1,0 +1,327 @@
+# =====================================================================================
+# OSLO-STEPS workflow composition — “Library / Scholarly access” (translation pipeline)
+#
+# Story (toy):
+#   A scholar wants to obtain access to a scholarly article (PDF).
+#
+# Pipeline style (like OSLO-STEPS docs):
+#   1) Define o-steps:State + SHACL StateShapes (each state is a full signature)
+#   2) Define o-steps:Step with requiresState / producesState + costs
+#   3) Translate:
+#        - StateShape -> State constraints (targetClass, path, value)
+#        - Step + (required/produced) States -> gps:description transitions
+#   4) Compose transitions into a plan — terminates because the state graph is a DAG
+#
+# Run:
+#   npx eyeling examples/oslo-steps-library-scholarly.n3
+#
+# Output:
+#   :alice gps:path ( (step:... step:... ...) duration cost success satisfaction ).
+# =====================================================================================
+
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix gps:  <https://eyereasoner.github.io/eye/reasoning/gps/gps-schema#>.
+@prefix :     <https://eyereasoner.github.io/eye/reasoning#>.
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh:   <http://www.w3.org/ns/shacl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+@prefix o-steps: <https://fast.ilabt.imec.be/ns/oslo-steps#>.
+
+@prefix ex:    <https://example.org/vocab#>.
+@prefix cost:  <https://example.org/cost#>.
+@prefix state: <https://example.org/states#>.
+@prefix step:  <https://example.org/steps#>.
+@prefix shape: <https://example.org/shapes#>.
+
+# ---------------------------------------------------------------------
+# 1) OSLO-STEPS-like INPUT
+#
+# State signature booleans (5):
+#   ex:identityVerified        (can the scholar authenticate?)
+#   ex:affiliationVerified     (is membership/affiliation confirmed?)
+#   ex:requestSubmitted        (has the access request been submitted?)
+#   ex:itemLocated             (did we locate a route to the item?)
+#   ex:accessGranted           (final: scholar can access/download)
+# ---------------------------------------------------------------------
+# States (each has a StateShape with a full 5-boolean signature)
+state:s0 a o-steps:State; rdfs:label "Start"@en;                    o-steps:hasStateShape shape:s0Shape.
+state:s1 a o-steps:State; rdfs:label "Identity verified"@en;        o-steps:hasStateShape shape:s1Shape.
+state:s2 a o-steps:State; rdfs:label "Affiliation verified"@en;     o-steps:hasStateShape shape:s2Shape.
+state:s3 a o-steps:State; rdfs:label "Request submitted"@en;        o-steps:hasStateShape shape:s3Shape.
+state:s4 a o-steps:State; rdfs:label "Item located"@en;             o-steps:hasStateShape shape:s4Shape.
+state:s5 a o-steps:State; rdfs:label "Access granted"@en;           o-steps:hasStateShape shape:s5Shape.
+
+# StateShapes
+shape:s0Shape a o-steps:StateShape; sh:targetClass foaf:Person;
+  sh:property shape:s0ID, shape:s0AFF, shape:s0REQ, shape:s0LOC, shape:s0ACC.
+shape:s1Shape a o-steps:StateShape; sh:targetClass foaf:Person;
+  sh:property shape:s1ID, shape:s1AFF, shape:s1REQ, shape:s1LOC, shape:s1ACC.
+shape:s2Shape a o-steps:StateShape; sh:targetClass foaf:Person;
+  sh:property shape:s2ID, shape:s2AFF, shape:s2REQ, shape:s2LOC, shape:s2ACC.
+shape:s3Shape a o-steps:StateShape; sh:targetClass foaf:Person;
+  sh:property shape:s3ID, shape:s3AFF, shape:s3REQ, shape:s3LOC, shape:s3ACC.
+shape:s4Shape a o-steps:StateShape; sh:targetClass foaf:Person;
+  sh:property shape:s4ID, shape:s4AFF, shape:s4REQ, shape:s4LOC, shape:s4ACC.
+shape:s5Shape a o-steps:StateShape; sh:targetClass foaf:Person;
+  sh:property shape:s5ID, shape:s5AFF, shape:s5REQ, shape:s5LOC, shape:s5ACC.
+
+# s0: all false
+shape:s0ID  a sh:PropertyShape; sh:path ex:identityVerified;    sh:hasValue false; sh:minCount 1.
+shape:s0AFF a sh:PropertyShape; sh:path ex:affiliationVerified; sh:hasValue false; sh:minCount 1.
+shape:s0REQ a sh:PropertyShape; sh:path ex:requestSubmitted;    sh:hasValue false; sh:minCount 1.
+shape:s0LOC a sh:PropertyShape; sh:path ex:itemLocated;         sh:hasValue false; sh:minCount 1.
+shape:s0ACC a sh:PropertyShape; sh:path ex:accessGranted;       sh:hasValue false; sh:minCount 1.
+
+# s1: identity true
+shape:s1ID  a sh:PropertyShape; sh:path ex:identityVerified;    sh:hasValue true;  sh:minCount 1.
+shape:s1AFF a sh:PropertyShape; sh:path ex:affiliationVerified; sh:hasValue false; sh:minCount 1.
+shape:s1REQ a sh:PropertyShape; sh:path ex:requestSubmitted;    sh:hasValue false; sh:minCount 1.
+shape:s1LOC a sh:PropertyShape; sh:path ex:itemLocated;         sh:hasValue false; sh:minCount 1.
+shape:s1ACC a sh:PropertyShape; sh:path ex:accessGranted;       sh:hasValue false; sh:minCount 1.
+
+# s2: identity true, affiliation true
+shape:s2ID  a sh:PropertyShape; sh:path ex:identityVerified;    sh:hasValue true;  sh:minCount 1.
+shape:s2AFF a sh:PropertyShape; sh:path ex:affiliationVerified; sh:hasValue true;  sh:minCount 1.
+shape:s2REQ a sh:PropertyShape; sh:path ex:requestSubmitted;    sh:hasValue false; sh:minCount 1.
+shape:s2LOC a sh:PropertyShape; sh:path ex:itemLocated;         sh:hasValue false; sh:minCount 1.
+shape:s2ACC a sh:PropertyShape; sh:path ex:accessGranted;       sh:hasValue false; sh:minCount 1.
+
+# s3: request submitted
+shape:s3ID  a sh:PropertyShape; sh:path ex:identityVerified;    sh:hasValue true;  sh:minCount 1.
+shape:s3AFF a sh:PropertyShape; sh:path ex:affiliationVerified; sh:hasValue true;  sh:minCount 1.
+shape:s3REQ a sh:PropertyShape; sh:path ex:requestSubmitted;    sh:hasValue true;  sh:minCount 1.
+shape:s3LOC a sh:PropertyShape; sh:path ex:itemLocated;         sh:hasValue false; sh:minCount 1.
+shape:s3ACC a sh:PropertyShape; sh:path ex:accessGranted;       sh:hasValue false; sh:minCount 1.
+
+# s4: item located
+shape:s4ID  a sh:PropertyShape; sh:path ex:identityVerified;    sh:hasValue true;  sh:minCount 1.
+shape:s4AFF a sh:PropertyShape; sh:path ex:affiliationVerified; sh:hasValue true;  sh:minCount 1.
+shape:s4REQ a sh:PropertyShape; sh:path ex:requestSubmitted;    sh:hasValue true;  sh:minCount 1.
+shape:s4LOC a sh:PropertyShape; sh:path ex:itemLocated;         sh:hasValue true;  sh:minCount 1.
+shape:s4ACC a sh:PropertyShape; sh:path ex:accessGranted;       sh:hasValue false; sh:minCount 1.
+
+# s5: access granted
+shape:s5ID  a sh:PropertyShape; sh:path ex:identityVerified;    sh:hasValue true;  sh:minCount 1.
+shape:s5AFF a sh:PropertyShape; sh:path ex:affiliationVerified; sh:hasValue true;  sh:minCount 1.
+shape:s5REQ a sh:PropertyShape; sh:path ex:requestSubmitted;    sh:hasValue true;  sh:minCount 1.
+shape:s5LOC a sh:PropertyShape; sh:path ex:itemLocated;         sh:hasValue true;  sh:minCount 1.
+shape:s5ACC a sh:PropertyShape; sh:path ex:accessGranted;       sh:hasValue true;  sh:minCount 1.
+
+# Steps + costs (branching, but still a DAG)
+# Costs:
+#   cost:duration        (minutes)
+#   cost:monetaryCost    (arbitrary units)
+#   cost:success         (0..1)
+#   cost:usersatifaction (0..1)  # keep the same spelling you used elsewhere
+
+# s0 -> s1 (identity verification)
+step:verifyIdentitySSO a o-steps:Step;
+  rdfs:label "Verify identity (SSO)"@en;
+  o-steps:requiresState state:s0; o-steps:producesState state:s1;
+  cost:duration 2.0;   cost:monetaryCost 0.0; cost:success 0.97;  cost:usersatifaction 0.97.
+
+step:verifyIdentityDesk a o-steps:Step;
+  rdfs:label "Verify identity (library desk)"@en;
+  o-steps:requiresState state:s0; o-steps:producesState state:s1;
+  cost:duration 20.0;  cost:monetaryCost 0.0; cost:success 0.995; cost:usersatifaction 0.85.
+
+# s1 -> s2 (affiliation / membership)
+step:verifyAffiliationAuto a o-steps:Step;
+  rdfs:label "Verify affiliation (automatic)"@en;
+  o-steps:requiresState state:s1; o-steps:producesState state:s2;
+  cost:duration 3.0;   cost:monetaryCost 0.0; cost:success 0.98;  cost:usersatifaction 0.95.
+
+step:verifyAffiliationManual a o-steps:Step;
+  rdfs:label "Verify affiliation (manual approval)"@en;
+  o-steps:requiresState state:s1; o-steps:producesState state:s2;
+  cost:duration 240.0; cost:monetaryCost 0.0; cost:success 0.995; cost:usersatifaction 0.80.
+
+# s2 -> s3 (submit request)
+step:submitRequestSelfService a o-steps:Step;
+  rdfs:label "Submit request (self-service form)"@en;
+  o-steps:requiresState state:s2; o-steps:producesState state:s3;
+  cost:duration 5.0;   cost:monetaryCost 0.0; cost:success 0.97;  cost:usersatifaction 0.94.
+
+step:submitRequestLibrarian a o-steps:Step;
+  rdfs:label "Submit request (with librarian)"@en;
+  o-steps:requiresState state:s2; o-steps:producesState state:s3;
+  cost:duration 15.0;  cost:monetaryCost 0.0; cost:success 0.99;  cost:usersatifaction 0.90.
+
+# s3 -> s4 (locate item / route)
+step:locateViaCatalogue a o-steps:Step;
+  rdfs:label "Locate item (catalogue + resolver)"@en;
+  o-steps:requiresState state:s3; o-steps:producesState state:s4;
+  cost:duration 2.0;   cost:monetaryCost 0.0; cost:success 0.96;  cost:usersatifaction 0.92.
+
+step:locateViaDiscovery a o-steps:Step;
+  rdfs:label "Locate item (discovery index)"@en;
+  o-steps:requiresState state:s3; o-steps:producesState state:s4;
+  cost:duration 3.0;   cost:monetaryCost 0.0; cost:success 0.97;  cost:usersatifaction 0.93.
+
+# s4 -> s5 (grant access)
+step:grantAccessOpenAccess a o-steps:Step;
+  rdfs:label "Grant access (open access)"@en;
+  o-steps:requiresState state:s4; o-steps:producesState state:s5;
+  cost:duration 1.0;   cost:monetaryCost 0.0;  cost:success 0.92; cost:usersatifaction 0.97.
+
+step:grantAccessSubscription a o-steps:Step;
+  rdfs:label "Grant access (subscription)"@en;
+  o-steps:requiresState state:s4; o-steps:producesState state:s5;
+  cost:duration 2.0;   cost:monetaryCost 0.5;  cost:success 0.97; cost:usersatifaction 0.94.
+
+step:grantAccessInterlibraryLoan a o-steps:Step;
+  rdfs:label "Grant access (interlibrary loan)"@en;
+  o-steps:requiresState state:s4; o-steps:producesState state:s5;
+  cost:duration 2880.0; cost:monetaryCost 5.0; cost:success 0.985; cost:usersatifaction 0.80.
+
+# -----------------------
+# 2) TRANSLATION PIPELINE
+# -----------------------
+# 2.1) StateShape -> State constraints (targetClass, path, value)
+{ ?STATE :constraint (?TARGET ?PATH ?VALUE). } <=
+{
+  ?STATE o-steps:hasStateShape ?SHAPE.
+  ?SHAPE sh:targetClass ?TARGET.
+  ?SHAPE sh:property ?PS.
+  ?PS sh:path ?PATH.
+  ?PS sh:hasValue ?VALUE.
+  ?PS sh:minCount 1.
+}.
+
+# 2.2) Step -> internal gps:description transition (compiled)
+# We compile FROM/TO formulas from required/produced state constraints.
+{
+  ex:libmap gps:description
+    (
+      { ?x a ?T.
+        ?x ex:identityVerified    ?ID1.
+        ?x ex:affiliationVerified ?AFF1.
+        ?x ex:requestSubmitted    ?REQ1.
+        ?x ex:itemLocated         ?LOC1.
+        ?x ex:accessGranted       ?ACC1.
+      }
+      true
+      { ?x a ?T.
+        ?x ex:identityVerified    ?ID2.
+        ?x ex:affiliationVerified ?AFF2.
+        ?x ex:requestSubmitted    ?REQ2.
+        ?x ex:itemLocated         ?LOC2.
+        ?x ex:accessGranted       ?ACC2.
+      }
+      ?STEP
+      ?DUR ?MC ?SUC ?SAT
+    ).
+} <=
+{
+  ?STEP o-steps:requiresState ?REQSTATE.
+  ?STEP o-steps:producesState ?PRODSTATE.
+
+  ?REQSTATE  :constraint (?T ex:identityVerified    ?ID1).
+  ?REQSTATE  :constraint (?T ex:affiliationVerified ?AFF1).
+  ?REQSTATE  :constraint (?T ex:requestSubmitted    ?REQ1).
+  ?REQSTATE  :constraint (?T ex:itemLocated         ?LOC1).
+  ?REQSTATE  :constraint (?T ex:accessGranted       ?ACC1).
+
+  ?PRODSTATE :constraint (?T ex:identityVerified    ?ID2).
+  ?PRODSTATE :constraint (?T ex:affiliationVerified ?AFF2).
+  ?PRODSTATE :constraint (?T ex:requestSubmitted    ?REQ2).
+  ?PRODSTATE :constraint (?T ex:itemLocated         ?LOC2).
+  ?PRODSTATE :constraint (?T ex:accessGranted       ?ACC2).
+
+  ?STEP cost:duration ?DUR.
+  ?STEP cost:monetaryCost ?MC.
+  ?STEP cost:success ?SUC.
+  ?STEP cost:usersatifaction ?SAT.
+}.
+
+# --------------
+# 3) START STATE
+# --------------
+:alice :start
+{
+  ?x a foaf:Person.
+  ?x ex:identityVerified    false.
+  ?x ex:affiliationVerified false.
+  ?x ex:requestSubmitted    false.
+  ?x ex:itemLocated         false.
+  ?x ex:accessGranted       false.
+}.
+
+# ----------
+# 4) PLANNER 
+# ----------
+# Base: one step is a path
+{ (?From ?To (?Act) ?Dur ?Cost ?Suc ?Sat) :path true. }
+<=
+{
+  ex:libmap gps:description (?From true ?To ?Act ?Dur ?Cost ?Suc ?Sat).
+}.
+
+# Recursive: step + rest, aggregate
+{ (?From ?To ?Acts ?Dur ?Cost ?Suc ?Sat) :path true. }
+<=
+{
+  ex:libmap gps:description (?From true ?Mid ?Act ?Dur1 ?Cost1 ?Suc1 ?Sat1).
+  (?Mid ?To ?Rest ?Dur2 ?Cost2 ?Suc2 ?Sat2) :path true.
+
+  ((?Act) ?Rest) list:append ?Acts.
+  (?Dur1  ?Dur2)  math:sum     ?Dur.
+  (?Cost1 ?Cost2) math:sum     ?Cost.
+  (?Suc1  ?Suc2)  math:product ?Suc.
+  (?Sat1  ?Sat2)  math:product ?Sat.
+}.
+
+# Wrapper: OSLO-like findpath with bounds
+{
+  :scope gps:findpath
+    (
+      ?GOAL
+      ?PATH
+      ?DURATION
+      ?MONETARYCOST
+      ?SUCCESS
+      ?SATISFACTION
+      (?DL ?CL ?SL ?AL)
+    ).
+} <=
+{
+  :alice :start ?START.
+  (?START ?GOAL ?PATH ?DURATION ?MONETARYCOST ?SUCCESS ?SATISFACTION) :path true.
+
+  ?DURATION     math:lessThan    ?DL.
+  ?MONETARYCOST math:lessThan    ?CL.
+  ?SUCCESS      math:greaterThan ?SL.
+  ?SATISFACTION math:greaterThan ?AL.
+}.
+
+# -----------------------
+# 5) GOAL QUERY -> OUTPUT
+# -----------------------
+{
+  :scope gps:findpath
+    (
+      {
+        ?x a foaf:Person.
+        ?x ex:identityVerified    true.
+        ?x ex:affiliationVerified true.
+        ?x ex:requestSubmitted    true.
+        ?x ex:itemLocated         true.
+        ?x ex:accessGranted       true.
+      }
+      ?PATH ?DUR ?COST ?SUC ?SAT
+      (
+        5000.0   # duration limit (minutes)
+        10.0     # monetary cost limit
+        0.75     # success lower bound
+        0.60     # satisfaction lower bound (product shrinks fast)
+      )
+    ).
+}
+=>
+{
+  :alice gps:path (?PATH ?DUR ?COST ?SUC ?SAT).
+}.
+
