@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+'use strict';
 
 /*
  * eyeling.js — a minimal Notation3 (N3) reasoner in JavaScript
@@ -16,29 +16,29 @@
  *  5) Print only newly derived forward facts with explanations.
  */
 
-const { version } = require("./package.json");
-const nodeCrypto = require("crypto");
+const { version } = require('./package.json');
+const nodeCrypto = require('crypto');
 
 // ============================================================================
 // Namespace constants
 // ============================================================================
 
-const RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-const RDFS_NS = "http://www.w3.org/2000/01/rdf-schema#";
-const OWL_NS = "http://www.w3.org/2002/07/owl#";
-const XSD_NS = "http://www.w3.org/2001/XMLSchema#";
-const CRYPTO_NS = "http://www.w3.org/2000/10/swap/crypto#";
-const MATH_NS = "http://www.w3.org/2000/10/swap/math#";
-const TIME_NS = "http://www.w3.org/2000/10/swap/time#";
-const LIST_NS = "http://www.w3.org/2000/10/swap/list#";
-const LOG_NS = "http://www.w3.org/2000/10/swap/log#";
-const STRING_NS = "http://www.w3.org/2000/10/swap/string#";
-const SKOLEM_NS = "https://eyereasoner.github.io/.well-known/genid/";
-const RDF_JSON_DT = RDF_NS + "JSON";
+const RDF_NS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+const RDFS_NS = 'http://www.w3.org/2000/01/rdf-schema#';
+const OWL_NS = 'http://www.w3.org/2002/07/owl#';
+const XSD_NS = 'http://www.w3.org/2001/XMLSchema#';
+const CRYPTO_NS = 'http://www.w3.org/2000/10/swap/crypto#';
+const MATH_NS = 'http://www.w3.org/2000/10/swap/math#';
+const TIME_NS = 'http://www.w3.org/2000/10/swap/time#';
+const LIST_NS = 'http://www.w3.org/2000/10/swap/list#';
+const LOG_NS = 'http://www.w3.org/2000/10/swap/log#';
+const STRING_NS = 'http://www.w3.org/2000/10/swap/string#';
+const SKOLEM_NS = 'https://eyereasoner.github.io/.well-known/genid/';
+const RDF_JSON_DT = RDF_NS + 'JSON';
 
 function isRdfJsonDatatype(dt) {
   // dt comes from literalParts() and may be expanded or prefixed depending on parsing/printing.
-  return dt === null || dt === RDF_JSON_DT || dt === "rdf:JSON";
+  return dt === null || dt === RDF_JSON_DT || dt === 'rdf:JSON';
 }
 
 function termToJsonText(t) {
@@ -52,9 +52,9 @@ function termToJsonText(t) {
 function makeRdfJsonLiteral(jsonText) {
   // Prefer a readable long literal when safe; fall back to short if needed.
   if (!jsonText.includes('"""')) {
-    return new Literal('"""' + jsonText + '"""^^<' + RDF_JSON_DT + ">");
+    return new Literal('"""' + jsonText + '"""^^<' + RDF_JSON_DT + '>');
   }
-  return new Literal(JSON.stringify(jsonText) + "^^<" + RDF_JSON_DT + ">");
+  return new Literal(JSON.stringify(jsonText) + '^^<' + RDF_JSON_DT + '>');
 }
 
 // For a single reasoning run, this maps a canonical representation
@@ -81,7 +81,7 @@ function normalizeDateTimeLex(s) {
   // Accept: 2025-... , "2025-..." , "2025-..."^^xsd:dateTime , "..."^^<...>
   if (s == null) return null;
   let t = String(s).trim();
-  const caret = t.indexOf("^^");
+  const caret = t.indexOf('^^');
   if (caret >= 0) t = t.slice(0, caret).trim();
   if (t.startsWith('"') && t.endsWith('"') && t.length >= 2) t = t.slice(1, -1);
   return t.trim();
@@ -91,7 +91,7 @@ function utcIsoDateTimeStringFromEpochSeconds(sec) {
   const ms = sec * 1000;
   const d = new Date(ms);
   function pad(n, w = 2) {
-    return String(n).padStart(w, "0");
+    return String(n).padStart(w, '0');
   }
   const year = d.getUTCFullYear();
   const month = d.getUTCMonth() + 1;
@@ -100,22 +100,8 @@ function utcIsoDateTimeStringFromEpochSeconds(sec) {
   const min = d.getUTCMinutes();
   const s2 = d.getUTCSeconds();
   const ms2 = d.getUTCMilliseconds();
-  const msPart = ms2 ? "." + String(ms2).padStart(3, "0") : "";
-  return (
-    pad(year, 4) +
-    "-" +
-    pad(month) +
-    "-" +
-    pad(day) +
-    "T" +
-    pad(hour) +
-    ":" +
-    pad(min) +
-    ":" +
-    pad(s2) +
-    msPart +
-    "+00:00"
-  );
+  const msPart = ms2 ? '.' + String(ms2).padStart(3, '0') : '';
+  return pad(year, 4) + '-' + pad(month) + '-' + pad(day) + 'T' + pad(hour) + ':' + pad(min) + ':' + pad(s2) + msPart + '+00:00';
 }
 
 function getNowLex() {
@@ -150,22 +136,10 @@ function deterministicSkolemIdFromKey(key) {
     h4 = (h4 * 0x01000193) >>> 0;
   }
 
-  const hex = [h1, h2, h3, h4]
-    .map((h) => h.toString(16).padStart(8, "0"))
-    .join(""); // 32 hex chars
+  const hex = [h1, h2, h3, h4].map((h) => h.toString(16).padStart(8, '0')).join(''); // 32 hex chars
 
   // Format like a UUID: 8-4-4-4-12
-  return (
-    hex.slice(0, 8) +
-    "-" +
-    hex.slice(8, 12) +
-    "-" +
-    hex.slice(12, 16) +
-    "-" +
-    hex.slice(16, 20) +
-    "-" +
-    hex.slice(20)
-  );
+  return hex.slice(0, 8) + '-' + hex.slice(8, 12) + '-' + hex.slice(12, 16) + '-' + hex.slice(16, 20) + '-' + hex.slice(20);
 }
 
 let runLocalTimeCache = null;
@@ -299,82 +273,82 @@ function lex(inputText) {
     }
 
     // 2) Comments starting with '#'
-    if (c === "#") {
-      while (i < n && chars[i] !== "\n" && chars[i] !== "\r") i++;
+    if (c === '#') {
+      while (i < n && chars[i] !== '\n' && chars[i] !== '\r') i++;
       continue;
     }
 
     // 3) Two-character operators: => and <=
-    if (c === "=") {
-      if (peek(1) === ">") {
-        tokens.push(new Token("OpImplies"));
+    if (c === '=') {
+      if (peek(1) === '>') {
+        tokens.push(new Token('OpImplies'));
         i += 2;
         continue;
       } else {
         // N3 syntactic sugar: '=' means owl:sameAs
-        tokens.push(new Token("Equals"));
+        tokens.push(new Token('Equals'));
         i += 1;
         continue;
       }
     }
 
-    if (c === "<") {
-      if (peek(1) === "=") {
-        tokens.push(new Token("OpImpliedBy"));
+    if (c === '<') {
+      if (peek(1) === '=') {
+        tokens.push(new Token('OpImpliedBy'));
         i += 2;
         continue;
       }
       // N3 predicate inversion: "<-" (swap subject/object for this predicate)
-      if (peek(1) === "-") {
-        tokens.push(new Token("OpPredInvert"));
+      if (peek(1) === '-') {
+        tokens.push(new Token('OpPredInvert'));
         i += 2;
         continue;
       }
       // Otherwise IRIREF <...>
       i++; // skip '<'
       const iriChars = [];
-      while (i < n && chars[i] !== ">") {
+      while (i < n && chars[i] !== '>') {
         iriChars.push(chars[i]);
         i++;
       }
-      if (i >= n || chars[i] !== ">") {
-        throw new Error("Unterminated IRI <...>");
+      if (i >= n || chars[i] !== '>') {
+        throw new Error('Unterminated IRI <...>');
       }
       i++; // skip '>'
-      const iri = iriChars.join("");
-      tokens.push(new Token("IriRef", iri));
+      const iri = iriChars.join('');
+      tokens.push(new Token('IriRef', iri));
       continue;
     }
 
     // 4) Path + datatype operators: !, ^, ^^
-    if (c === "!") {
-      tokens.push(new Token("OpPathFwd"));
+    if (c === '!') {
+      tokens.push(new Token('OpPathFwd'));
       i += 1;
       continue;
     }
-    if (c === "^") {
-      if (peek(1) === "^") {
-        tokens.push(new Token("HatHat"));
+    if (c === '^') {
+      if (peek(1) === '^') {
+        tokens.push(new Token('HatHat'));
         i += 2;
         continue;
       }
-      tokens.push(new Token("OpPathRev"));
+      tokens.push(new Token('OpPathRev'));
       i += 1;
       continue;
     }
 
     // 5) Single-character punctuation
-    if ("{}()[];,.".includes(c)) {
+    if ('{}()[];,.'.includes(c)) {
       const mapping = {
-        "{": "LBrace",
-        "}": "RBrace",
-        "(": "LParen",
-        ")": "RParen",
-        "[": "LBracket",
-        "]": "RBracket",
-        ";": "Semicolon",
-        ",": "Comma",
-        ".": "Dot",
+        '{': 'LBrace',
+        '}': 'RBrace',
+        '(': 'LParen',
+        ')': 'RParen',
+        '[': 'LBracket',
+        ']': 'RBracket',
+        ';': 'Semicolon',
+        ',': 'Comma',
+        '.': 'Dot',
       };
       tokens.push(new Token(mapping[c]));
       i++;
@@ -397,22 +371,21 @@ function lex(inputText) {
           }
           let cc = chars[i];
           i++;
-          if (cc === "\\") {
+          if (cc === '\\') {
             // Preserve escapes verbatim (same behavior as short strings)
             if (i < n) {
               const esc = chars[i];
               i++;
-              sChars.push("\\");
+              sChars.push('\\');
               sChars.push(esc);
             }
             continue;
           }
           sChars.push(cc);
         }
-        if (!closed)
-          throw new Error('Unterminated long string literal """..."""');
-        const s = '"""' + sChars.join("") + '"""';
-        tokens.push(new Token("Literal", s));
+        if (!closed) throw new Error('Unterminated long string literal """..."""');
+        const s = '"""' + sChars.join('') + '"""';
+        tokens.push(new Token('Literal', s));
         continue;
       }
 
@@ -422,11 +395,11 @@ function lex(inputText) {
       while (i < n) {
         let cc = chars[i];
         i++;
-        if (cc === "\\") {
+        if (cc === '\\') {
           if (i < n) {
             const esc = chars[i];
             i++;
-            sChars.push("\\");
+            sChars.push('\\');
             sChars.push(esc);
           }
           continue;
@@ -434,13 +407,13 @@ function lex(inputText) {
         if (cc === '"') break;
         sChars.push(cc);
       }
-      const s = '"' + sChars.join("") + '"';
-      tokens.push(new Token("Literal", s));
+      const s = '"' + sChars.join('') + '"';
+      tokens.push(new Token('Literal', s));
       continue;
     }
 
     // Variable ?name
-    if (c === "?") {
+    if (c === '?') {
       i++;
       const nameChars = [];
       let cc;
@@ -448,19 +421,16 @@ function lex(inputText) {
         nameChars.push(cc);
         i++;
       }
-      const name = nameChars.join("");
-      tokens.push(new Token("Var", name));
+      const name = nameChars.join('');
+      tokens.push(new Token('Var', name));
       continue;
     }
 
     // Directives: @prefix, @base (and language tags after string literals)
-    if (c === "@") {
+    if (c === '@') {
       const prevTok = tokens.length ? tokens[tokens.length - 1] : null;
       const prevWasQuotedLiteral =
-        prevTok &&
-        prevTok.typ === "Literal" &&
-        typeof prevTok.value === "string" &&
-        prevTok.value.startsWith('"');
+        prevTok && prevTok.typ === 'Literal' && typeof prevTok.value === 'string' && prevTok.value.startsWith('"');
 
       i++; // consume '@'
 
@@ -476,8 +446,8 @@ function lex(inputText) {
           tagChars.push(cc);
           i++;
         }
-        while (peek() === "-") {
-          tagChars.push("-");
+        while (peek() === '-') {
+          tagChars.push('-');
           i++; // consume '-'
           const segChars = [];
           while ((cc = peek()) !== null && /[A-Za-z0-9]/.test(cc)) {
@@ -485,13 +455,11 @@ function lex(inputText) {
             i++;
           }
           if (!segChars.length) {
-            throw new Error(
-              "Invalid language tag (expected [A-Za-z0-9]+ after '-')",
-            );
+            throw new Error("Invalid language tag (expected [A-Za-z0-9]+ after '-')");
           }
           tagChars.push(...segChars);
         }
-        tokens.push(new Token("LangTag", tagChars.join("")));
+        tokens.push(new Token('LangTag', tagChars.join('')));
         continue;
       }
 
@@ -502,18 +470,15 @@ function lex(inputText) {
         wordChars.push(cc);
         i++;
       }
-      const word = wordChars.join("");
-      if (word === "prefix") tokens.push(new Token("AtPrefix"));
-      else if (word === "base") tokens.push(new Token("AtBase"));
+      const word = wordChars.join('');
+      if (word === 'prefix') tokens.push(new Token('AtPrefix'));
+      else if (word === 'base') tokens.push(new Token('AtBase'));
       else throw new Error(`Unknown directive @${word}`);
       continue;
     }
 
     // 6) Numeric literal (integer or float)
-    if (
-      /[0-9]/.test(c) ||
-      (c === "-" && peek(1) !== null && /[0-9]/.test(peek(1)))
-    ) {
+    if (/[0-9]/.test(c) || (c === '-' && peek(1) !== null && /[0-9]/.test(peek(1)))) {
       const numChars = [c];
       i++;
       while (i < n) {
@@ -523,9 +488,9 @@ function lex(inputText) {
           i++;
           continue;
         }
-        if (cc === ".") {
+        if (cc === '.') {
           if (i + 1 < n && /[0-9]/.test(chars[i + 1])) {
-            numChars.push(".");
+            numChars.push('.');
             i++;
             continue;
           } else {
@@ -534,7 +499,7 @@ function lex(inputText) {
         }
         break;
       }
-      tokens.push(new Token("Literal", numChars.join("")));
+      tokens.push(new Token('Literal', numChars.join('')));
       continue;
     }
 
@@ -548,17 +513,17 @@ function lex(inputText) {
     if (!wordChars.length) {
       throw new Error(`Unexpected char: ${JSON.stringify(c)}`);
     }
-    const word = wordChars.join("");
-    if (word === "true" || word === "false") {
-      tokens.push(new Token("Literal", word));
+    const word = wordChars.join('');
+    if (word === 'true' || word === 'false') {
+      tokens.push(new Token('Literal', word));
     } else if ([...word].every((ch) => /[0-9.\-]/.test(ch))) {
-      tokens.push(new Token("Literal", word));
+      tokens.push(new Token('Literal', word));
     } else {
-      tokens.push(new Token("Ident", word));
+      tokens.push(new Token('Ident', word));
     }
   }
 
-  tokens.push(new Token("EOF"));
+  tokens.push(new Token('EOF'));
   return tokens;
 }
 
@@ -573,16 +538,16 @@ class PrefixEnv {
 
   static newDefault() {
     const m = {};
-    m["rdf"] = RDF_NS;
-    m["rdfs"] = RDFS_NS;
-    m["xsd"] = XSD_NS;
-    m["log"] = LOG_NS;
-    m["math"] = MATH_NS;
-    m["string"] = STRING_NS;
-    m["list"] = LIST_NS;
-    m["time"] = TIME_NS;
-    m["genid"] = SKOLEM_NS;
-    m[""] = "";
+    m['rdf'] = RDF_NS;
+    m['rdfs'] = RDFS_NS;
+    m['xsd'] = XSD_NS;
+    m['log'] = LOG_NS;
+    m['math'] = MATH_NS;
+    m['string'] = STRING_NS;
+    m['list'] = LIST_NS;
+    m['time'] = TIME_NS;
+    m['genid'] = SKOLEM_NS;
+    m[''] = '';
     return new PrefixEnv(m);
   }
 
@@ -591,9 +556,9 @@ class PrefixEnv {
   }
 
   expandQName(q) {
-    if (q.includes(":")) {
-      const [p, local] = q.split(":", 2);
-      const base = this.map[p] || "";
+    if (q.includes(':')) {
+      const [p, local] = q.split(':', 2);
+      const base = this.map[p] || '';
       if (base) return base + local;
       return q;
     }
@@ -613,7 +578,7 @@ class PrefixEnv {
     }
     if (best === null) return null;
     const [p, local] = best;
-    if (p === "") return `:${local}`;
+    if (p === '') return `:${local}`;
     return `${p}:${local}`;
   }
 
@@ -745,7 +710,7 @@ class Parser {
 
   expectDot() {
     const tok = this.next();
-    if (tok.typ !== "Dot") {
+    if (tok.typ !== 'Dot') {
       throw new Error(`Expected '.', got ${tok.toString()}`);
     }
   }
@@ -755,21 +720,21 @@ class Parser {
     const forwardRules = [];
     const backwardRules = [];
 
-    while (this.peek().typ !== "EOF") {
-      if (this.peek().typ === "AtPrefix") {
+    while (this.peek().typ !== 'EOF') {
+      if (this.peek().typ === 'AtPrefix') {
         this.next();
         this.parsePrefixDirective();
-      } else if (this.peek().typ === "AtBase") {
+      } else if (this.peek().typ === 'AtBase') {
         this.next();
         this.parseBaseDirective();
       } else {
         const first = this.parseTerm();
-        if (this.peek().typ === "OpImplies") {
+        if (this.peek().typ === 'OpImplies') {
           this.next();
           const second = this.parseTerm();
           this.expectDot();
           forwardRules.push(this.makeRule(first, second, true));
-        } else if (this.peek().typ === "OpImpliedBy") {
+        } else if (this.peek().typ === 'OpImpliedBy') {
           this.next();
           const second = this.parseTerm();
           this.expectDot();
@@ -777,21 +742,15 @@ class Parser {
         } else {
           let more;
 
-          if (this.peek().typ === "Dot") {
+          if (this.peek().typ === 'Dot') {
             // Allow a bare blank-node property list statement, e.g. `[ a :Statement ].`
             const lastTok = this.toks[this.pos - 1];
-            if (
-              this.pendingTriples.length > 0 &&
-              lastTok &&
-              lastTok.typ === "RBracket"
-            ) {
+            if (this.pendingTriples.length > 0 && lastTok && lastTok.typ === 'RBracket') {
               more = this.pendingTriples;
               this.pendingTriples = [];
               this.next(); // consume '.'
             } else {
-              throw new Error(
-                `Unexpected '.' after term; missing predicate/object list`,
-              );
+              throw new Error(`Unexpected '.' after term; missing predicate/object list`);
             }
           } else {
             more = this.parsePredicateObjectList(first);
@@ -800,17 +759,9 @@ class Parser {
 
           // normalize explicit log:implies / log:impliedBy at top-level
           for (const tr of more) {
-            if (
-              isLogImplies(tr.p) &&
-              tr.s instanceof FormulaTerm &&
-              tr.o instanceof FormulaTerm
-            ) {
+            if (isLogImplies(tr.p) && tr.s instanceof FormulaTerm && tr.o instanceof FormulaTerm) {
               forwardRules.push(this.makeRule(tr.s, tr.o, true));
-            } else if (
-              isLogImpliedBy(tr.p) &&
-              tr.s instanceof FormulaTerm &&
-              tr.o instanceof FormulaTerm
-            ) {
+            } else if (isLogImpliedBy(tr.p) && tr.s instanceof FormulaTerm && tr.o instanceof FormulaTerm) {
               backwardRules.push(this.makeRule(tr.s, tr.o, false));
             } else {
               triples.push(tr);
@@ -825,26 +776,26 @@ class Parser {
 
   parsePrefixDirective() {
     const tok = this.next();
-    if (tok.typ !== "Ident") {
+    if (tok.typ !== 'Ident') {
       throw new Error(`Expected prefix name, got ${tok.toString()}`);
     }
-    const pref = tok.value || "";
-    const prefName = pref.endsWith(":") ? pref.slice(0, -1) : pref;
+    const pref = tok.value || '';
+    const prefName = pref.endsWith(':') ? pref.slice(0, -1) : pref;
 
-    if (this.peek().typ === "Dot") {
+    if (this.peek().typ === 'Dot') {
       this.next();
       if (!this.prefixes.map.hasOwnProperty(prefName)) {
-        this.prefixes.set(prefName, "");
+        this.prefixes.set(prefName, '');
       }
       return;
     }
 
     const tok2 = this.next();
     let iri;
-    if (tok2.typ === "IriRef") {
-      iri = tok2.value || "";
-    } else if (tok2.typ === "Ident") {
-      iri = this.prefixes.expandQName(tok2.value || "");
+    if (tok2.typ === 'IriRef') {
+      iri = tok2.value || '';
+    } else if (tok2.typ === 'Ident') {
+      iri = this.prefixes.expandQName(tok2.value || '');
     } else {
       throw new Error(`Expected IRI after @prefix, got ${tok2.toString()}`);
     }
@@ -855,30 +806,28 @@ class Parser {
   parseBaseDirective() {
     const tok = this.next();
     let iri;
-    if (tok.typ === "IriRef") {
-      iri = tok.value || "";
-    } else if (tok.typ === "Ident") {
-      iri = tok.value || "";
+    if (tok.typ === 'IriRef') {
+      iri = tok.value || '';
+    } else if (tok.typ === 'Ident') {
+      iri = tok.value || '';
     } else {
       throw new Error(`Expected IRI after @base, got ${tok.toString()}`);
     }
     this.expectDot();
-    this.prefixes.set("", iri);
+    this.prefixes.set('', iri);
   }
 
   parseTerm() {
     let t = this.parsePathItem();
 
-    while (this.peek().typ === "OpPathFwd" || this.peek().typ === "OpPathRev") {
+    while (this.peek().typ === 'OpPathFwd' || this.peek().typ === 'OpPathRev') {
       const dir = this.next().typ; // OpPathFwd | OpPathRev
       const pred = this.parsePathItem();
 
       this.blankCounter += 1;
       const bn = new Blank(`_:b${this.blankCounter}`);
 
-      this.pendingTriples.push(
-        dir === "OpPathFwd" ? new Triple(t, pred, bn) : new Triple(bn, pred, t),
-      );
+      this.pendingTriples.push(dir === 'OpPathFwd' ? new Triple(t, pred, bn) : new Triple(bn, pred, t));
 
       t = bn;
     }
@@ -891,81 +840,75 @@ class Parser {
     const typ = tok.typ;
     const val = tok.value;
 
-    if (typ === "Equals") {
-      return new Iri(OWL_NS + "sameAs");
+    if (typ === 'Equals') {
+      return new Iri(OWL_NS + 'sameAs');
     }
 
-    if (typ === "IriRef") {
-      return new Iri(val || "");
+    if (typ === 'IriRef') {
+      return new Iri(val || '');
     }
 
-    if (typ === "Ident") {
-      const name = val || "";
-      if (name === "a") {
-        return new Iri(RDF_NS + "type");
-      } else if (name.startsWith("_:")) {
+    if (typ === 'Ident') {
+      const name = val || '';
+      if (name === 'a') {
+        return new Iri(RDF_NS + 'type');
+      } else if (name.startsWith('_:')) {
         return new Blank(name);
-      } else if (name.includes(":")) {
+      } else if (name.includes(':')) {
         return new Iri(this.prefixes.expandQName(name));
       } else {
         return new Iri(name);
       }
     }
 
-    if (typ === "Literal") {
-      let s = val || "";
+    if (typ === 'Literal') {
+      let s = val || '';
 
       // Optional language tag: "..."@en, per N3 LANGTAG production.
-      if (this.peek().typ === "LangTag") {
+      if (this.peek().typ === 'LangTag') {
         // Only quoted string literals can carry a language tag.
         if (!(s.startsWith('"') && s.endsWith('"'))) {
-          throw new Error(
-            "Language tag is only allowed on quoted string literals",
-          );
+          throw new Error('Language tag is only allowed on quoted string literals');
         }
         const langTok = this.next();
-        const lang = langTok.value || "";
+        const lang = langTok.value || '';
         s = `${s}@${lang}`;
 
         // N3/Turtle: language tags and datatypes are mutually exclusive.
-        if (this.peek().typ === "HatHat") {
-          throw new Error(
-            "A literal cannot have both a language tag (@...) and a datatype (^^...)",
-          );
+        if (this.peek().typ === 'HatHat') {
+          throw new Error('A literal cannot have both a language tag (@...) and a datatype (^^...)');
         }
       }
 
-      if (this.peek().typ === "HatHat") {
+      if (this.peek().typ === 'HatHat') {
         this.next();
         const dtTok = this.next();
         let dtIri;
-        if (dtTok.typ === "IriRef") {
-          dtIri = dtTok.value || "";
-        } else if (dtTok.typ === "Ident") {
-          const qn = dtTok.value || "";
-          if (qn.includes(":")) dtIri = this.prefixes.expandQName(qn);
+        if (dtTok.typ === 'IriRef') {
+          dtIri = dtTok.value || '';
+        } else if (dtTok.typ === 'Ident') {
+          const qn = dtTok.value || '';
+          if (qn.includes(':')) dtIri = this.prefixes.expandQName(qn);
           else dtIri = qn;
         } else {
-          throw new Error(
-            `Expected datatype after ^^, got ${dtTok.toString()}`,
-          );
+          throw new Error(`Expected datatype after ^^, got ${dtTok.toString()}`);
         }
         s = `${s}^^<${dtIri}>`;
       }
       return new Literal(s);
     }
 
-    if (typ === "Var") return new Var(val || "");
-    if (typ === "LParen") return this.parseList();
-    if (typ === "LBracket") return this.parseBlank();
-    if (typ === "LBrace") return this.parseFormula();
+    if (typ === 'Var') return new Var(val || '');
+    if (typ === 'LParen') return this.parseList();
+    if (typ === 'LBracket') return this.parseBlank();
+    if (typ === 'LBrace') return this.parseFormula();
 
     throw new Error(`Unexpected term token: ${tok.toString()}`);
   }
 
   parseList() {
     const elems = [];
-    while (this.peek().typ !== "RParen") {
+    while (this.peek().typ !== 'RParen') {
       elems.push(this.parseTerm());
     }
     this.next(); // consume ')'
@@ -974,7 +917,7 @@ class Parser {
 
   parseBlank() {
     // [] or [ ... ] property list
-    if (this.peek().typ === "RBracket") {
+    if (this.peek().typ === 'RBracket') {
       this.next();
       this.blankCounter += 1;
       return new Blank(`_:b${this.blankCounter}`);
@@ -989,10 +932,10 @@ class Parser {
       // Verb (can also be 'a')
       let pred;
       let invert = false;
-      if (this.peek().typ === "Ident" && (this.peek().value || "") === "a") {
+      if (this.peek().typ === 'Ident' && (this.peek().value || '') === 'a') {
         this.next();
-        pred = new Iri(RDF_NS + "type");
-      } else if (this.peek().typ === "OpPredInvert") {
+        pred = new Iri(RDF_NS + 'type');
+      } else if (this.peek().typ === 'OpPredInvert') {
         this.next(); // consume "<-"
         pred = this.parseTerm();
         invert = true;
@@ -1002,33 +945,27 @@ class Parser {
 
       // Object list: o1, o2, ...
       const objs = [this.parseTerm()];
-      while (this.peek().typ === "Comma") {
+      while (this.peek().typ === 'Comma') {
         this.next();
         objs.push(this.parseTerm());
       }
 
       for (const o of objs) {
-        this.pendingTriples.push(
-          invert ? new Triple(o, pred, subj) : new Triple(subj, pred, o),
-        );
+        this.pendingTriples.push(invert ? new Triple(o, pred, subj) : new Triple(subj, pred, o));
       }
 
-      if (this.peek().typ === "Semicolon") {
+      if (this.peek().typ === 'Semicolon') {
         this.next();
-        if (this.peek().typ === "RBracket") break;
+        if (this.peek().typ === 'RBracket') break;
         continue;
       }
       break;
     }
 
-    if (this.peek().typ === "RBracket") {
+    if (this.peek().typ === 'RBracket') {
       this.next();
     } else {
-      throw new Error(
-        `Expected ']' at end of blank node property list, got ${JSON.stringify(
-          this.peek(),
-        )}`,
-      );
+      throw new Error(`Expected ']' at end of blank node property list, got ${JSON.stringify(this.peek())}`);
     }
 
     return new Blank(id);
@@ -1036,49 +973,45 @@ class Parser {
 
   parseFormula() {
     const triples = [];
-    while (this.peek().typ !== "RBrace") {
+    while (this.peek().typ !== 'RBrace') {
       const left = this.parseTerm();
-      if (this.peek().typ === "OpImplies") {
+      if (this.peek().typ === 'OpImplies') {
         this.next();
         const right = this.parseTerm();
-        const pred = new Iri(LOG_NS + "implies");
+        const pred = new Iri(LOG_NS + 'implies');
         triples.push(new Triple(left, pred, right));
-        if (this.peek().typ === "Dot") this.next();
-        else if (this.peek().typ === "RBrace") {
+        if (this.peek().typ === 'Dot') this.next();
+        else if (this.peek().typ === 'RBrace') {
           // ok
         } else {
           throw new Error(`Expected '.' or '}', got ${this.peek().toString()}`);
         }
-      } else if (this.peek().typ === "OpImpliedBy") {
+      } else if (this.peek().typ === 'OpImpliedBy') {
         this.next();
         const right = this.parseTerm();
-        const pred = new Iri(LOG_NS + "impliedBy");
+        const pred = new Iri(LOG_NS + 'impliedBy');
         triples.push(new Triple(left, pred, right));
-        if (this.peek().typ === "Dot") this.next();
-        else if (this.peek().typ === "RBrace") {
+        if (this.peek().typ === 'Dot') this.next();
+        else if (this.peek().typ === 'RBrace') {
           // ok
         } else {
           throw new Error(`Expected '.' or '}', got ${this.peek().toString()}`);
         }
       } else {
         // Allow a bare blank-node property list statement inside a formula, e.g. `{ [ a :X ]. }`
-        if (this.peek().typ === "Dot" || this.peek().typ === "RBrace") {
+        if (this.peek().typ === 'Dot' || this.peek().typ === 'RBrace') {
           const lastTok = this.toks[this.pos - 1];
-          if (
-            this.pendingTriples.length > 0 &&
-            lastTok &&
-            lastTok.typ === "RBracket"
-          ) {
+          if (this.pendingTriples.length > 0 && lastTok && lastTok.typ === 'RBracket') {
             triples.push(...this.pendingTriples);
             this.pendingTriples = [];
-            if (this.peek().typ === "Dot") this.next();
+            if (this.peek().typ === 'Dot') this.next();
             continue;
           }
         }
 
         triples.push(...this.parsePredicateObjectList(left));
-        if (this.peek().typ === "Dot") this.next();
-        else if (this.peek().typ === "RBrace") {
+        if (this.peek().typ === 'Dot') this.next();
+        else if (this.peek().typ === 'RBrace') {
           // ok
         } else {
           throw new Error(`Expected '.' or '}', got ${this.peek().toString()}`);
@@ -1102,10 +1035,10 @@ class Parser {
       let verb;
       let invert = false;
 
-      if (this.peek().typ === "Ident" && (this.peek().value || "") === "a") {
+      if (this.peek().typ === 'Ident' && (this.peek().value || '') === 'a') {
         this.next();
-        verb = new Iri(RDF_NS + "type");
-      } else if (this.peek().typ === "OpPredInvert") {
+        verb = new Iri(RDF_NS + 'type');
+      } else if (this.peek().typ === 'OpPredInvert') {
         this.next(); // "<-"
         verb = this.parseTerm();
         invert = true;
@@ -1126,9 +1059,9 @@ class Parser {
         out.push(new Triple(invert ? o : subject, verb, invert ? subject : o));
       }
 
-      if (this.peek().typ === "Semicolon") {
+      if (this.peek().typ === 'Semicolon') {
         this.next();
-        if (this.peek().typ === "Dot") break;
+        if (this.peek().typ === 'Dot') break;
         continue;
       }
       break;
@@ -1139,7 +1072,7 @@ class Parser {
 
   parseObjectList() {
     const objs = [this.parseTerm()];
-    while (this.peek().typ === "Comma") {
+    while (this.peek().typ === 'Comma') {
       this.next();
       objs.push(this.parseTerm());
     }
@@ -1159,7 +1092,7 @@ class Parser {
 
     let isFuse = false;
     if (isForward) {
-      if (conclTerm instanceof Literal && conclTerm.value === "false") {
+      if (conclTerm instanceof Literal && conclTerm.value === 'false') {
         isFuse = true;
       }
     }
@@ -1167,7 +1100,7 @@ class Parser {
     let rawPremise;
     if (premiseTerm instanceof FormulaTerm) {
       rawPremise = premiseTerm.triples;
-    } else if (premiseTerm instanceof Literal && premiseTerm.value === "true") {
+    } else if (premiseTerm instanceof Literal && premiseTerm.value === 'true') {
       rawPremise = [];
     } else {
       rawPremise = [];
@@ -1176,7 +1109,7 @@ class Parser {
     let rawConclusion;
     if (conclTerm instanceof FormulaTerm) {
       rawConclusion = conclTerm.triples;
-    } else if (conclTerm instanceof Literal && conclTerm.value === "false") {
+    } else if (conclTerm instanceof Literal && conclTerm.value === 'false') {
       rawConclusion = [];
     } else {
       rawConclusion = [];
@@ -1188,9 +1121,7 @@ class Parser {
     const [premise0, conclusion] = liftBlankRuleVars(rawPremise, rawConclusion);
 
     // Reorder constraints for *forward* rules.
-    const premise = isForward
-      ? reorderPremiseForConstraints(premise0)
-      : premise0;
+    const premise = isForward ? reorderPremiseForConstraints(premise0) : premise0;
 
     return new Rule(premise, conclusion, isForward, isFuse, headBlankLabels);
   }
@@ -1221,12 +1152,7 @@ function liftBlankRuleVars(premise, conclusion) {
     }
     if (t instanceof FormulaTerm) {
       const triples = t.triples.map(
-        (tr) =>
-          new Triple(
-            convertTerm(tr.s, mapping, counter),
-            convertTerm(tr.p, mapping, counter),
-            convertTerm(tr.o, mapping, counter),
-          ),
+        (tr) => new Triple(convertTerm(tr.s, mapping, counter), convertTerm(tr.p, mapping, counter), convertTerm(tr.o, mapping, counter)),
       );
       return new FormulaTerm(triples);
     }
@@ -1234,11 +1160,7 @@ function liftBlankRuleVars(premise, conclusion) {
   }
 
   function convertTriple(tr, mapping, counter) {
-    return new Triple(
-      convertTerm(tr.s, mapping, counter),
-      convertTerm(tr.p, mapping, counter),
-      convertTerm(tr.o, mapping, counter),
-    );
+    return new Triple(convertTerm(tr.s, mapping, counter), convertTerm(tr.p, mapping, counter), convertTerm(tr.o, mapping, counter));
   }
 
   const mapping = {};
@@ -1263,28 +1185,18 @@ function skolemizeTermForHeadBlanks(t, headBlankLabels, mapping, skCounter) {
   }
 
   if (t instanceof ListTerm) {
-    return new ListTerm(
-      t.elems.map((e) =>
-        skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter),
-      ),
-    );
+    return new ListTerm(t.elems.map((e) => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter)));
   }
 
   if (t instanceof OpenListTerm) {
     return new OpenListTerm(
-      t.prefix.map((e) =>
-        skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter),
-      ),
+      t.prefix.map((e) => skolemizeTermForHeadBlanks(e, headBlankLabels, mapping, skCounter)),
       t.tailVar,
     );
   }
 
   if (t instanceof FormulaTerm) {
-    return new FormulaTerm(
-      t.triples.map((tr) =>
-        skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter),
-      ),
-    );
+    return new FormulaTerm(t.triples.map((tr) => skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter)));
   }
 
   return t;
@@ -1372,8 +1284,7 @@ function alphaEqTermInFormula(a, b, vmap, bmap) {
   if (a instanceof ListTerm && b instanceof ListTerm) {
     if (a.elems.length !== b.elems.length) return false;
     for (let i = 0; i < a.elems.length; i++) {
-      if (!alphaEqTermInFormula(a.elems[i], b.elems[i], vmap, bmap))
-        return false;
+      if (!alphaEqTermInFormula(a.elems[i], b.elems[i], vmap, bmap)) return false;
     }
     return true;
   }
@@ -1381,8 +1292,7 @@ function alphaEqTermInFormula(a, b, vmap, bmap) {
   if (a instanceof OpenListTerm && b instanceof OpenListTerm) {
     if (a.prefix.length !== b.prefix.length) return false;
     for (let i = 0; i < a.prefix.length; i++) {
-      if (!alphaEqTermInFormula(a.prefix[i], b.prefix[i], vmap, bmap))
-        return false;
+      if (!alphaEqTermInFormula(a.prefix[i], b.prefix[i], vmap, bmap)) return false;
     }
     // tailVar is a var-name string, so treat it as renamable too
     return alphaEqVarName(a.tailVar, b.tailVar, vmap);
@@ -1398,9 +1308,7 @@ function alphaEqTermInFormula(a, b, vmap, bmap) {
 
 function alphaEqTripleInFormula(a, b, vmap, bmap) {
   return (
-    alphaEqTermInFormula(a.s, b.s, vmap, bmap) &&
-    alphaEqTermInFormula(a.p, b.p, vmap, bmap) &&
-    alphaEqTermInFormula(a.o, b.o, vmap, bmap)
+    alphaEqTermInFormula(a.s, b.s, vmap, bmap) && alphaEqTermInFormula(a.p, b.p, vmap, bmap) && alphaEqTermInFormula(a.o, b.o, vmap, bmap)
   );
 }
 
@@ -1419,8 +1327,7 @@ function alphaEqFormulaTriples(xs, ys) {
       if (used[j]) continue;
       const y = ys[j];
       // Cheap pruning when both predicates are IRIs.
-      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value)
-        continue;
+      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value) continue;
 
       const v2 = { ...vmap };
       const b2 = { ...bmap };
@@ -1458,8 +1365,7 @@ function alphaEqTerm(a, b, bmap) {
     return true;
   }
   if (a instanceof OpenListTerm && b instanceof OpenListTerm) {
-    if (a.tailVar !== b.tailVar || a.prefix.length !== b.prefix.length)
-      return false;
+    if (a.tailVar !== b.tailVar || a.prefix.length !== b.prefix.length) return false;
     for (let i = 0; i < a.prefix.length; i++) {
       if (!alphaEqTerm(a.prefix[i], b.prefix[i], bmap)) return false;
     }
@@ -1474,11 +1380,7 @@ function alphaEqTerm(a, b, bmap) {
 
 function alphaEqTriple(a, b) {
   const bmap = {};
-  return (
-    alphaEqTerm(a.s, b.s, bmap) &&
-    alphaEqTerm(a.p, b.p, bmap) &&
-    alphaEqTerm(a.o, b.o, bmap)
-  );
+  return alphaEqTerm(a.s, b.s, bmap) && alphaEqTerm(a.p, b.p, bmap) && alphaEqTerm(a.o, b.o, bmap);
 }
 
 function hasAlphaEquiv(triples, tr) {
@@ -1499,8 +1401,8 @@ function hasAlphaEquiv(triples, tr) {
 //   - __wildHeadPred: Rule[] (non-IRI head predicate)
 
 function termFastKey(t) {
-  if (t instanceof Iri) return "I:" + t.value;
-  if (t instanceof Literal) return "L:" + t.value;
+  if (t instanceof Iri) return 'I:' + t.value;
+  if (t instanceof Literal) return 'L:' + t.value;
   return null;
 }
 
@@ -1509,23 +1411,23 @@ function tripleFastKey(tr) {
   const kp = termFastKey(tr.p);
   const ko = termFastKey(tr.o);
   if (ks === null || kp === null || ko === null) return null;
-  return ks + "\t" + kp + "\t" + ko;
+  return ks + '\t' + kp + '\t' + ko;
 }
 
 function ensureFactIndexes(facts) {
   if (facts.__byPred && facts.__byPO && facts.__keySet) return;
 
-  Object.defineProperty(facts, "__byPred", {
+  Object.defineProperty(facts, '__byPred', {
     value: new Map(),
     enumerable: false,
     writable: true,
   });
-  Object.defineProperty(facts, "__byPO", {
+  Object.defineProperty(facts, '__byPO', {
     value: new Map(),
     enumerable: false,
     writable: true,
   });
-  Object.defineProperty(facts, "__keySet", {
+  Object.defineProperty(facts, '__keySet', {
     value: new Set(),
     enumerable: false,
     writable: true,
@@ -1620,12 +1522,12 @@ function pushFactIndexed(facts, tr) {
 function ensureBackRuleIndexes(backRules) {
   if (backRules.__byHeadPred && backRules.__wildHeadPred) return;
 
-  Object.defineProperty(backRules, "__byHeadPred", {
+  Object.defineProperty(backRules, '__byHeadPred', {
     value: new Map(),
     enumerable: false,
     writable: true,
   });
-  Object.defineProperty(backRules, "__wildHeadPred", {
+  Object.defineProperty(backRules, '__wildHeadPred', {
     value: [],
     enumerable: false,
     writable: true,
@@ -1655,19 +1557,19 @@ function indexBackRule(backRules, r) {
 // ============================================================================
 
 function isRdfTypePred(p) {
-  return p instanceof Iri && p.value === RDF_NS + "type";
+  return p instanceof Iri && p.value === RDF_NS + 'type';
 }
 
 function isOwlSameAsPred(t) {
-  return t instanceof Iri && t.value === OWL_NS + "sameAs";
+  return t instanceof Iri && t.value === OWL_NS + 'sameAs';
 }
 
 function isLogImplies(p) {
-  return p instanceof Iri && p.value === LOG_NS + "implies";
+  return p instanceof Iri && p.value === LOG_NS + 'implies';
 }
 
 function isLogImpliedBy(p) {
-  return p instanceof Iri && p.value === LOG_NS + "impliedBy";
+  return p instanceof Iri && p.value === LOG_NS + 'impliedBy';
 }
 
 // ============================================================================
@@ -1680,44 +1582,40 @@ function isConstraintBuiltin(tr) {
 
   // math: numeric comparisons (no new bindings, just tests)
   if (
-    v === MATH_NS + "equalTo" ||
-    v === MATH_NS + "greaterThan" ||
-    v === MATH_NS + "lessThan" ||
-    v === MATH_NS + "notEqualTo" ||
-    v === MATH_NS + "notGreaterThan" ||
-    v === MATH_NS + "notLessThan"
+    v === MATH_NS + 'equalTo' ||
+    v === MATH_NS + 'greaterThan' ||
+    v === MATH_NS + 'lessThan' ||
+    v === MATH_NS + 'notEqualTo' ||
+    v === MATH_NS + 'notGreaterThan' ||
+    v === MATH_NS + 'notLessThan'
   ) {
     return true;
   }
 
   // list: membership test with no bindings
-  if (v === LIST_NS + "notMember") {
+  if (v === LIST_NS + 'notMember') {
     return true;
   }
 
   // log: tests that are purely constraints (no new bindings)
-  if (
-    v === LOG_NS + "forAllIn" ||
-    v === LOG_NS + "notEqualTo" ||
-    v === LOG_NS + "notIncludes"
-  ) {
+  if (v === LOG_NS + 'forAllIn' || v === LOG_NS + 'notEqualTo' || v === LOG_NS + 'notIncludes') {
     return true;
   }
 
   // string: relational / membership style tests (no bindings)
   if (
-    v === STRING_NS + "contains" ||
-    v === STRING_NS + "containsIgnoringCase" ||
-    v === STRING_NS + "endsWith" ||
-    v === STRING_NS + "equalIgnoringCase" ||
-    v === STRING_NS + "greaterThan" ||
-    v === STRING_NS + "lessThan" ||
-    v === STRING_NS + "matches" ||
-    v === STRING_NS + "notEqualIgnoringCase" ||
-    v === STRING_NS + "notGreaterThan" ||
-    v === STRING_NS + "notLessThan" ||
-    v === STRING_NS + "notMatches" ||
-    v === STRING_NS + "startsWith"
+    v === STRING_NS + 'contains' ||
+    v === STRING_NS + 'containsIgnoringCase' ||
+    v === STRING_NS + 'endsWith' ||
+    v === STRING_NS + 'equalIgnoringCase' ||
+    v === STRING_NS + 'greaterThan' ||
+    v === STRING_NS + 'lessThan' ||
+    v === STRING_NS + 'matches' ||
+    v === STRING_NS + 'notEqualIgnoringCase' ||
+    v === STRING_NS + 'notGreaterThan' ||
+    v === STRING_NS + 'notLessThan' ||
+    v === STRING_NS + 'notMatches' ||
+    v === STRING_NS + 'startsWith'
   ) {
     return true;
   }
@@ -1751,15 +1649,9 @@ function reorderPremiseForConstraints(premise) {
 function containsVarTerm(t, v) {
   if (t instanceof Var) return t.name === v;
   if (t instanceof ListTerm) return t.elems.some((e) => containsVarTerm(e, v));
-  if (t instanceof OpenListTerm)
-    return t.prefix.some((e) => containsVarTerm(e, v)) || t.tailVar === v;
+  if (t instanceof OpenListTerm) return t.prefix.some((e) => containsVarTerm(e, v)) || t.tailVar === v;
   if (t instanceof FormulaTerm)
-    return t.triples.some(
-      (tr) =>
-        containsVarTerm(tr.s, v) ||
-        containsVarTerm(tr.p, v) ||
-        containsVarTerm(tr.o, v),
-    );
+    return t.triples.some((tr) => containsVarTerm(tr.s, v) || containsVarTerm(tr.p, v) || containsVarTerm(tr.o, v));
   return false;
 }
 
@@ -1767,28 +1659,21 @@ function isGroundTermInFormula(t) {
   // EYE-style: variables inside formula terms are treated as local placeholders,
   // so they don't make the *surrounding triple* non-ground.
   if (t instanceof OpenListTerm) return false;
-  if (t instanceof ListTerm)
-    return t.elems.every((e) => isGroundTermInFormula(e));
-  if (t instanceof FormulaTerm)
-    return t.triples.every((tr) => isGroundTripleInFormula(tr));
+  if (t instanceof ListTerm) return t.elems.every((e) => isGroundTermInFormula(e));
+  if (t instanceof FormulaTerm) return t.triples.every((tr) => isGroundTripleInFormula(tr));
   // Iri/Literal/Blank/Var are all OK inside formulas
   return true;
 }
 
 function isGroundTripleInFormula(tr) {
-  return (
-    isGroundTermInFormula(tr.s) &&
-    isGroundTermInFormula(tr.p) &&
-    isGroundTermInFormula(tr.o)
-  );
+  return isGroundTermInFormula(tr.s) && isGroundTermInFormula(tr.p) && isGroundTermInFormula(tr.o);
 }
 
 function isGroundTerm(t) {
   if (t instanceof Var) return false;
   if (t instanceof ListTerm) return t.elems.every((e) => isGroundTerm(e));
   if (t instanceof OpenListTerm) return false;
-  if (t instanceof FormulaTerm)
-    return t.triples.every((tr) => isGroundTripleInFormula(tr));
+  if (t instanceof FormulaTerm) return t.triples.every((tr) => isGroundTripleInFormula(tr));
   return true;
 }
 
@@ -1801,19 +1686,14 @@ function isGroundTriple(tr) {
 // robust to seeing vars/open lists anyway.
 function skolemKeyFromTerm(t) {
   function enc(u) {
-    if (u instanceof Iri) return ["I", u.value];
-    if (u instanceof Literal) return ["L", u.value];
-    if (u instanceof Blank) return ["B", u.label];
-    if (u instanceof Var) return ["V", u.name];
-    if (u instanceof ListTerm) return ["List", u.elems.map(enc)];
-    if (u instanceof OpenListTerm)
-      return ["OpenList", u.prefix.map(enc), u.tailVar];
-    if (u instanceof FormulaTerm)
-      return [
-        "Formula",
-        u.triples.map((tr) => [enc(tr.s), enc(tr.p), enc(tr.o)]),
-      ];
-    return ["Other", String(u)];
+    if (u instanceof Iri) return ['I', u.value];
+    if (u instanceof Literal) return ['L', u.value];
+    if (u instanceof Blank) return ['B', u.label];
+    if (u instanceof Var) return ['V', u.name];
+    if (u instanceof ListTerm) return ['List', u.elems.map(enc)];
+    if (u instanceof OpenListTerm) return ['OpenList', u.prefix.map(enc), u.tailVar];
+    if (u instanceof FormulaTerm) return ['Formula', u.triples.map((tr) => [enc(tr.s), enc(tr.p), enc(tr.o)])];
+    return ['Other', String(u)];
   }
   return JSON.stringify(enc(t));
 }
@@ -1861,10 +1741,7 @@ function applySubstTerm(t, s) {
       if (tailApplied instanceof ListTerm) {
         return new ListTerm(newPrefix.concat(tailApplied.elems));
       } else if (tailApplied instanceof OpenListTerm) {
-        return new OpenListTerm(
-          newPrefix.concat(tailApplied.prefix),
-          tailApplied.tailVar,
-        );
+        return new OpenListTerm(newPrefix.concat(tailApplied.prefix), tailApplied.tailVar);
       } else {
         return new OpenListTerm(newPrefix, t.tailVar);
       }
@@ -1881,11 +1758,7 @@ function applySubstTerm(t, s) {
 }
 
 function applySubstTriple(tr, s) {
-  return new Triple(
-    applySubstTerm(tr.s, s),
-    applySubstTerm(tr.p, s),
-    applySubstTerm(tr.o, s),
-  );
+  return new Triple(applySubstTerm(tr.s, s), applySubstTerm(tr.p, s), applySubstTerm(tr.o, s));
 }
 
 function unifyOpenWithList(prefix, tailv, ys, subst) {
@@ -1919,8 +1792,7 @@ function unifyFormulaTriples(xs, ys, subst) {
       const y = ys[j];
 
       // Cheap pruning when both predicates are IRIs.
-      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value)
-        continue;
+      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value) continue;
 
       const s2 = unifyTriple(x, y, s); // IMPORTANT: use `s`, not {}
       if (s2 === null) continue;
@@ -1956,12 +1828,9 @@ function unifyTerm(a, b, subst) {
   }
 
   // Exact matches
-  if (a instanceof Iri && b instanceof Iri && a.value === b.value)
-    return { ...subst };
-  if (a instanceof Literal && b instanceof Literal && a.value === b.value)
-    return { ...subst };
-  if (a instanceof Blank && b instanceof Blank && a.label === b.label)
-    return { ...subst };
+  if (a instanceof Iri && b instanceof Iri && a.value === b.value) return { ...subst };
+  if (a instanceof Literal && b instanceof Literal && a.value === b.value) return { ...subst };
+  if (a instanceof Blank && b instanceof Blank && a.label === b.label) return { ...subst };
 
   // Open list vs concrete list
   if (a instanceof OpenListTerm && b instanceof ListTerm) {
@@ -1973,8 +1842,7 @@ function unifyTerm(a, b, subst) {
 
   // Open list vs open list (same tail var)
   if (a instanceof OpenListTerm && b instanceof OpenListTerm) {
-    if (a.tailVar !== b.tailVar || a.prefix.length !== b.prefix.length)
-      return null;
+    if (a.tailVar !== b.tailVar || a.prefix.length !== b.prefix.length) return null;
     let s2 = { ...subst };
     for (let i = 0; i < a.prefix.length; i++) {
       s2 = unifyTerm(a.prefix[i], b.prefix[i], s2);
@@ -2040,14 +1908,14 @@ function literalParts(lit) {
   // Also strip an optional language tag from the lexical form:
   //   "\"hello\"@en"  -> "\"hello\""
   //   "\"hello\"@en^^<...>" is rejected earlier in the parser.
-  const idx = lit.indexOf("^^");
+  const idx = lit.indexOf('^^');
   let lex = lit;
   let dt = null;
 
   if (idx >= 0) {
     lex = lit.slice(0, idx);
     dt = lit.slice(idx + 2).trim();
-    if (dt.startsWith("<") && dt.endsWith(">")) {
+    if (dt.startsWith('<') && dt.endsWith('>')) {
       dt = dt.slice(1, -1);
     }
   }
@@ -2055,11 +1923,7 @@ function literalParts(lit) {
   // Strip LANGTAG from the lexical form when present.
   if (lex.length >= 2 && lex[0] === '"') {
     const lastQuote = lex.lastIndexOf('"');
-    if (
-      lastQuote > 0 &&
-      lastQuote < lex.length - 1 &&
-      lex[lastQuote + 1] === "@"
-    ) {
+    if (lastQuote > 0 && lastQuote < lex.length - 1 && lex[lastQuote + 1] === '@') {
       const lang = lex.slice(lastQuote + 2);
       if (/^[A-Za-z]+(?:-[A-Za-z0-9]+)*$/.test(lang)) {
         lex = lex.slice(0, lastQuote + 1);
@@ -2119,17 +1983,17 @@ function termToJsStringDecoded(t) {
 
 function jsonPointerUnescape(seg) {
   // RFC6901: ~1 -> '/', ~0 -> '~'
-  let out = "";
+  let out = '';
   for (let i = 0; i < seg.length; i++) {
     const c = seg[i];
-    if (c !== "~") {
+    if (c !== '~') {
       out += c;
       continue;
     }
     if (i + 1 >= seg.length) return null;
     const n = seg[i + 1];
-    if (n === "0") out += "~";
-    else if (n === "1") out += "/";
+    if (n === '0') out += '~';
+    else if (n === '1') out += '/';
     else return null;
     i++;
   }
@@ -2137,13 +2001,13 @@ function jsonPointerUnescape(seg) {
 }
 
 function jsonToTerm(v) {
-  if (v === null) return makeStringLiteral("null");
-  if (typeof v === "string") return makeStringLiteral(v);
-  if (typeof v === "number") return new Literal(String(v));
-  if (typeof v === "boolean") return new Literal(v ? "true" : "false");
+  if (v === null) return makeStringLiteral('null');
+  if (typeof v === 'string') return makeStringLiteral(v);
+  if (typeof v === 'number') return new Literal(String(v));
+  if (typeof v === 'boolean') return new Literal(v ? 'true' : 'false');
   if (Array.isArray(v)) return new ListTerm(v.map(jsonToTerm));
 
-  if (v && typeof v === "object") {
+  if (v && typeof v === 'object') {
     return makeRdfJsonLiteral(JSON.stringify(v));
   }
   return null;
@@ -2153,7 +2017,7 @@ function jsonPointerLookup(jsonText, pointer) {
   let ptr = pointer;
 
   // Support URI fragment form "#/a/b"
-  if (ptr.startsWith("#")) {
+  if (ptr.startsWith('#')) {
     try {
       ptr = decodeURIComponent(ptr.slice(1));
     } catch {
@@ -2178,17 +2042,17 @@ function jsonPointerLookup(jsonText, pointer) {
 
   let cur = entry.parsed;
 
-  if (ptr === "") {
+  if (ptr === '') {
     const t = jsonToTerm(cur);
     entry.ptrCache.set(ptr, t);
     return t;
   }
-  if (!ptr.startsWith("/")) {
+  if (!ptr.startsWith('/')) {
     entry.ptrCache.set(ptr, null);
     return null;
   }
 
-  const parts = ptr.split("/").slice(1);
+  const parts = ptr.split('/').slice(1);
   for (const raw of parts) {
     const seg = jsonPointerUnescape(raw);
     if (seg === null) {
@@ -2207,7 +2071,7 @@ function jsonPointerLookup(jsonText, pointer) {
         return null;
       }
       cur = cur[idx];
-    } else if (cur !== null && typeof cur === "object") {
+    } else if (cur !== null && typeof cur === 'object') {
       if (!Object.prototype.hasOwnProperty.call(cur, seg)) {
         entry.ptrCache.set(ptr, null);
         return null;
@@ -2227,23 +2091,23 @@ function jsonPointerLookup(jsonText, pointer) {
 // Tiny subset of sprintf: supports only %s and %%.
 // Good enough for most N3 string:format use cases that just splice strings.
 function simpleStringFormat(fmt, args) {
-  let out = "";
+  let out = '';
   let argIndex = 0;
 
   for (let i = 0; i < fmt.length; i++) {
     const ch = fmt[i];
-    if (ch === "%" && i + 1 < fmt.length) {
+    if (ch === '%' && i + 1 < fmt.length) {
       const spec = fmt[i + 1];
 
-      if (spec === "s") {
-        const arg = argIndex < args.length ? args[argIndex++] : "";
+      if (spec === 's') {
+        const arg = argIndex < args.length ? args[argIndex++] : '';
         out += arg;
         i++;
         continue;
       }
 
-      if (spec === "%") {
-        out += "%";
+      if (spec === '%') {
+        out += '%';
         i++;
         continue;
       }
@@ -2260,44 +2124,38 @@ function simpleStringFormat(fmt, args) {
 // -----------------------------------------------------------------------------
 // Strict numeric literal parsing for math: builtins
 // -----------------------------------------------------------------------------
-const XSD_DECIMAL_DT = XSD_NS + "decimal";
-const XSD_DOUBLE_DT = XSD_NS + "double";
-const XSD_FLOAT_DT = XSD_NS + "float";
-const XSD_INTEGER_DT = XSD_NS + "integer";
+const XSD_DECIMAL_DT = XSD_NS + 'decimal';
+const XSD_DOUBLE_DT = XSD_NS + 'double';
+const XSD_FLOAT_DT = XSD_NS + 'float';
+const XSD_INTEGER_DT = XSD_NS + 'integer';
 
 // Integer-derived datatypes from XML Schema Part 2 (and commonly used ones).
 const XSD_INTEGER_DERIVED_DTS = new Set([
   XSD_INTEGER_DT,
-  XSD_NS + "nonPositiveInteger",
-  XSD_NS + "negativeInteger",
-  XSD_NS + "long",
-  XSD_NS + "int",
-  XSD_NS + "short",
-  XSD_NS + "byte",
-  XSD_NS + "nonNegativeInteger",
-  XSD_NS + "unsignedLong",
-  XSD_NS + "unsignedInt",
-  XSD_NS + "unsignedShort",
-  XSD_NS + "unsignedByte",
-  XSD_NS + "positiveInteger",
+  XSD_NS + 'nonPositiveInteger',
+  XSD_NS + 'negativeInteger',
+  XSD_NS + 'long',
+  XSD_NS + 'int',
+  XSD_NS + 'short',
+  XSD_NS + 'byte',
+  XSD_NS + 'nonNegativeInteger',
+  XSD_NS + 'unsignedLong',
+  XSD_NS + 'unsignedInt',
+  XSD_NS + 'unsignedShort',
+  XSD_NS + 'unsignedByte',
+  XSD_NS + 'positiveInteger',
 ]);
 
 function isQuotedLexical(lex) {
   // Note: the lexer stores long strings with literal delimiters: """..."""
   return (
-    (lex.length >= 2 && lex[0] === '"' && lex[lex.length - 1] === '"') ||
-    (lex.length >= 6 && lex.startsWith('"""') && lex.endsWith('"""'))
+    (lex.length >= 2 && lex[0] === '"' && lex[lex.length - 1] === '"') || (lex.length >= 6 && lex.startsWith('"""') && lex.endsWith('"""'))
   );
 }
 
 function isXsdNumericDatatype(dt) {
   if (dt === null) return false;
-  return (
-    dt === XSD_DECIMAL_DT ||
-    dt === XSD_DOUBLE_DT ||
-    dt === XSD_FLOAT_DT ||
-    XSD_INTEGER_DERIVED_DTS.has(dt)
-  );
+  return dt === XSD_DECIMAL_DT || dt === XSD_DOUBLE_DT || dt === XSD_FLOAT_DT || XSD_INTEGER_DERIVED_DTS.has(dt);
 }
 
 function isXsdIntegerDatatype(dt) {
@@ -2389,9 +2247,9 @@ function formatNum(n) {
 function parseXsdDateTerm(t) {
   if (!(t instanceof Literal)) return null;
   const [lex, dt] = literalParts(t.value);
-  if (dt !== XSD_NS + "date") return null;
+  if (dt !== XSD_NS + 'date') return null;
   const val = stripQuotes(lex);
-  const d = new Date(val + "T00:00:00Z");
+  const d = new Date(val + 'T00:00:00Z');
   if (Number.isNaN(d.getTime())) return null;
   return d;
 }
@@ -2399,7 +2257,7 @@ function parseXsdDateTerm(t) {
 function parseXsdDatetimeTerm(t) {
   if (!(t instanceof Literal)) return null;
   const [lex, dt] = literalParts(t.value);
-  if (dt !== XSD_NS + "dateTime") return null;
+  if (dt !== XSD_NS + 'dateTime') return null;
   const val = stripQuotes(lex);
   const d = new Date(val);
   if (Number.isNaN(d.getTime())) return null;
@@ -2414,9 +2272,9 @@ function parseDatetimeLike(t) {
 
 function parseIso8601DurationToSeconds(s) {
   if (!s) return null;
-  if (s[0] !== "P") return null;
+  if (s[0] !== 'P') return null;
   const it = s.slice(1);
-  let num = "";
+  let num = '';
   let inTime = false;
   let years = 0,
     months = 0,
@@ -2427,7 +2285,7 @@ function parseIso8601DurationToSeconds(s) {
     seconds = 0;
 
   for (const c of it) {
-    if (c === "T") {
+    if (c === 'T') {
       inTime = true;
       continue;
     }
@@ -2438,25 +2296,19 @@ function parseIso8601DurationToSeconds(s) {
     if (!num) return null;
     const val = Number(num);
     if (Number.isNaN(val)) return null;
-    num = "";
-    if (!inTime && c === "Y") years += val;
-    else if (!inTime && c === "M") months += val;
-    else if (!inTime && c === "W") weeks += val;
-    else if (!inTime && c === "D") days += val;
-    else if (inTime && c === "H") hours += val;
-    else if (inTime && c === "M") minutes += val;
-    else if (inTime && c === "S") seconds += val;
+    num = '';
+    if (!inTime && c === 'Y') years += val;
+    else if (!inTime && c === 'M') months += val;
+    else if (!inTime && c === 'W') weeks += val;
+    else if (!inTime && c === 'D') days += val;
+    else if (inTime && c === 'H') hours += val;
+    else if (inTime && c === 'M') minutes += val;
+    else if (inTime && c === 'S') seconds += val;
     else return null;
   }
 
   const totalDays =
-    years * 365.2425 +
-    months * 30.436875 +
-    weeks * 7.0 +
-    days +
-    hours / 24.0 +
-    minutes / (24.0 * 60.0) +
-    seconds / (24.0 * 3600.0);
+    years * 365.2425 + months * 30.436875 + weeks * 7.0 + days + hours / 24.0 + minutes / (24.0 * 60.0) + seconds / (24.0 * 3600.0);
 
   return totalDays * 86400.0;
 }
@@ -2465,10 +2317,10 @@ function parseNumericForCompareTerm(t) {
   // Strict: only accept xsd numeric literals, xsd:duration, xsd:date, xsd:dateTime
   // (or untyped numeric tokens).
   const bi = parseIntLiteral(t);
-  if (bi !== null) return { kind: "bigint", value: bi };
+  if (bi !== null) return { kind: 'bigint', value: bi };
 
   const nDur = parseNumOrDuration(t);
-  if (nDur !== null) return { kind: "number", value: nDur };
+  if (nDur !== null) return { kind: 'number', value: nDur };
   return null;
 }
 
@@ -2476,25 +2328,25 @@ function cmpNumericInfo(aInfo, bInfo, op) {
   // op is one of ">", "<", ">=", "<="
   if (!aInfo || !bInfo) return false;
 
-  if (aInfo.kind === "bigint" && bInfo.kind === "bigint") {
-    if (op === ">") return aInfo.value > bInfo.value;
-    if (op === "<") return aInfo.value < bInfo.value;
-    if (op === ">=") return aInfo.value >= bInfo.value;
-    if (op === "<=") return aInfo.value <= bInfo.value;
-    if (op === "==") return aInfo.value == bInfo.value;
-    if (op === "!=") return aInfo.value != bInfo.value;
+  if (aInfo.kind === 'bigint' && bInfo.kind === 'bigint') {
+    if (op === '>') return aInfo.value > bInfo.value;
+    if (op === '<') return aInfo.value < bInfo.value;
+    if (op === '>=') return aInfo.value >= bInfo.value;
+    if (op === '<=') return aInfo.value <= bInfo.value;
+    if (op === '==') return aInfo.value == bInfo.value;
+    if (op === '!=') return aInfo.value != bInfo.value;
     return false;
   }
 
-  const a = typeof aInfo.value === "bigint" ? Number(aInfo.value) : aInfo.value;
-  const b = typeof bInfo.value === "bigint" ? Number(bInfo.value) : bInfo.value;
+  const a = typeof aInfo.value === 'bigint' ? Number(aInfo.value) : aInfo.value;
+  const b = typeof bInfo.value === 'bigint' ? Number(bInfo.value) : bInfo.value;
 
-  if (op === ">") return a > b;
-  if (op === "<") return a < b;
-  if (op === ">=") return a >= b;
-  if (op === "<=") return a <= b;
-  if (op === "==") return a == b;
-  if (op === "!=") return a != b;
+  if (op === '>') return a > b;
+  if (op === '<') return a < b;
+  if (op === '>=') return a >= b;
+  if (op === '<=') return a <= b;
+  if (op === '==') return a == b;
+  if (op === '!=') return a != b;
   return false;
 }
 
@@ -2505,11 +2357,11 @@ function parseNumOrDuration(t) {
   // xsd:duration
   if (t instanceof Literal) {
     const [lex, dt] = literalParts(t.value);
-    if (dt === XSD_NS + "duration") {
+    if (dt === XSD_NS + 'duration') {
       const val = stripQuotes(lex);
-      const negative = val.startsWith("-");
+      const negative = val.startsWith('-');
       const core = negative ? val.slice(1) : val;
-      if (!core.startsWith("P")) return null;
+      if (!core.startsWith('P')) return null;
       const secs = parseIso8601DurationToSeconds(core);
       if (secs === null) return null;
       return negative ? -secs : secs;
@@ -2568,10 +2420,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     const [lex, _dt] = literalParts(t.value);
     const input = stripQuotes(lex);
     try {
-      const digest = nodeCrypto
-        .createHash(algo)
-        .update(input, "utf8")
-        .digest("hex");
+      const digest = nodeCrypto.createHash(algo).update(input, 'utf8').digest('hex');
       // plain string literal with the hex digest
       return new Literal(JSON.stringify(digest));
     } catch (e) {
@@ -2585,8 +2434,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
   // crypto:sha
   // true iff ?o is the SHA-1 hash of the subject string.
-  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha") {
-    const lit = hashLiteral(g.s, "sha1");
+  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + 'sha') {
+    const lit = hashLiteral(g.s, 'sha1');
     if (!lit) return [];
     if (g.o instanceof Var) {
       const s2 = { ...subst };
@@ -2598,8 +2447,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // crypto:md5
-  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "md5") {
-    const lit = hashLiteral(g.s, "md5");
+  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + 'md5') {
+    const lit = hashLiteral(g.s, 'md5');
     if (!lit) return [];
     if (g.o instanceof Var) {
       const s2 = { ...subst };
@@ -2611,8 +2460,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // crypto:sha256
-  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha256") {
-    const lit = hashLiteral(g.s, "sha256");
+  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + 'sha256') {
+    const lit = hashLiteral(g.s, 'sha256');
     if (!lit) return [];
     if (g.o instanceof Var) {
       const s2 = { ...subst };
@@ -2624,8 +2473,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // crypto:sha512
-  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + "sha512") {
-    const lit = hashLiteral(g.s, "sha512");
+  if (g.p instanceof Iri && g.p.value === CRYPTO_NS + 'sha512') {
+    const lit = hashLiteral(g.s, 'sha512');
     if (!lit) return [];
     if (g.o instanceof Var) {
       const s2 = { ...subst };
@@ -2641,97 +2490,91 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // -----------------------------------------------------------------
 
   // math:greaterThan
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "greaterThan") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'greaterThan') {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, ">"))
-      return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, '>')) return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
       const b2 = parseNumericForCompareTerm(g.s.elems[1]);
-      if (a2 && b2 && cmpNumericInfo(a2, b2, ">")) return [{ ...subst }];
+      if (a2 && b2 && cmpNumericInfo(a2, b2, '>')) return [{ ...subst }];
     }
     return [];
   }
 
   // math:lessThan
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "lessThan") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'lessThan') {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "<"))
-      return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, '<')) return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
       const b2 = parseNumericForCompareTerm(g.s.elems[1]);
-      if (a2 && b2 && cmpNumericInfo(a2, b2, "<")) return [{ ...subst }];
+      if (a2 && b2 && cmpNumericInfo(a2, b2, '<')) return [{ ...subst }];
     }
     return [];
   }
 
   // math:notLessThan
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "notLessThan") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'notLessThan') {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, ">="))
-      return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, '>=')) return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
       const b2 = parseNumericForCompareTerm(g.s.elems[1]);
-      if (a2 && b2 && cmpNumericInfo(a2, b2, ">=")) return [{ ...subst }];
+      if (a2 && b2 && cmpNumericInfo(a2, b2, '>=')) return [{ ...subst }];
     }
     return [];
   }
 
   // math:notGreaterThan
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "notGreaterThan") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'notGreaterThan') {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "<="))
-      return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, '<=')) return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
       const b2 = parseNumericForCompareTerm(g.s.elems[1]);
-      if (a2 && b2 && cmpNumericInfo(a2, b2, "<=")) return [{ ...subst }];
+      if (a2 && b2 && cmpNumericInfo(a2, b2, '<=')) return [{ ...subst }];
     }
     return [];
   }
 
   // math:equalTo
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "equalTo") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'equalTo') {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "=="))
-      return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, '==')) return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
       const b2 = parseNumericForCompareTerm(g.s.elems[1]);
-      if (a2 && b2 && cmpNumericInfo(a2, b2, "==")) return [{ ...subst }];
+      if (a2 && b2 && cmpNumericInfo(a2, b2, '==')) return [{ ...subst }];
     }
     return [];
   }
 
   // math:notEqualTo
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "notEqualTo") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'notEqualTo') {
     const aInfo = parseNumericForCompareTerm(g.s);
     const bInfo = parseNumericForCompareTerm(g.o);
-    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, "!="))
-      return [{ ...subst }];
+    if (aInfo && bInfo && cmpNumericInfo(aInfo, bInfo, '!=')) return [{ ...subst }];
 
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a2 = parseNumericForCompareTerm(g.s.elems[0]);
       const b2 = parseNumericForCompareTerm(g.s.elems[1]);
-      if (a2 && b2 && cmpNumericInfo(a2, b2, "!=")) return [{ ...subst }];
+      if (a2 && b2 && cmpNumericInfo(a2, b2, '!=')) return [{ ...subst }];
     }
     return [];
   }
 
   // math:sum
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "sum") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'sum') {
     if (g.s instanceof ListTerm && g.s.elems.length >= 2) {
       const xs = g.s.elems;
       const values = [];
@@ -2742,7 +2585,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       }
 
       let lit;
-      const allBig = values.every((v) => typeof v === "bigint");
+      const allBig = values.every((v) => typeof v === 'bigint');
       if (allBig) {
         let total = 0n;
         for (const v of values) total += v;
@@ -2750,7 +2593,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       } else {
         let total = 0.0;
         for (const v of values) {
-          total += typeof v === "bigint" ? Number(v) : v;
+          total += typeof v === 'bigint' ? Number(v) : v;
         }
         lit = new Literal(formatNum(total));
       }
@@ -2767,7 +2610,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:product
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "product") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'product') {
     if (g.s instanceof ListTerm && g.s.elems.length >= 2) {
       const xs = g.s.elems;
       const values = [];
@@ -2778,7 +2621,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       }
 
       let lit;
-      const allBig = values.every((v) => typeof v === "bigint");
+      const allBig = values.every((v) => typeof v === 'bigint');
       if (allBig) {
         let prod = 1n;
         for (const v of values) prod *= v;
@@ -2786,7 +2629,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       } else {
         let prod = 1.0;
         for (const v of values) {
-          prod *= typeof v === "bigint" ? Number(v) : v;
+          prod *= typeof v === 'bigint' ? Number(v) : v;
         }
         lit = new Literal(formatNum(prod));
       }
@@ -2804,7 +2647,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:difference
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "difference") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'difference') {
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const [a0, b0] = g.s.elems;
 
@@ -2859,7 +2702,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:quotient
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "quotient") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'quotient') {
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a = parseNum(g.s.elems[0]);
       const b = parseNum(g.s.elems[1]);
@@ -2881,7 +2724,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // math:integerQuotient
   // Schema: ( $a $b ) math:integerQuotient $q
   // Cwm: divide first integer by second integer, ignoring remainder. :contentReference[oaicite:1]{index=1}
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "integerQuotient") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'integerQuotient') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const [a0, b0] = g.s.elems;
 
@@ -2920,7 +2763,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:exponentiation
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "exponentiation") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'exponentiation') {
     if (g.s instanceof ListTerm && g.s.elems.length === 2) {
       const a = parseNum(g.s.elems[0]);
       const b0 = g.s.elems[1];
@@ -2954,7 +2797,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:negation
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "negation") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'negation') {
     const a = parseNum(g.s);
     if (a !== null && g.o instanceof Var) {
       const s2 = { ...subst };
@@ -2976,7 +2819,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:absoluteValue
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "absoluteValue") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'absoluteValue') {
     const a = parseNum(g.s);
     if (a !== null && g.o instanceof Var) {
       const s2 = { ...subst };
@@ -2991,7 +2834,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:cos
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "cos") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'cos') {
     const a = parseNum(g.s);
     if (a !== null) {
       const cVal = Math.cos(a);
@@ -3008,7 +2851,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:sin
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "sin") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'sin') {
     const a = parseNum(g.s);
     if (a !== null) {
       const cVal = Math.sin(a);
@@ -3025,7 +2868,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:acos
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "acos") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'acos') {
     const a = parseNum(g.s);
     if (a !== null) {
       const cVal = Math.acos(a);
@@ -3044,7 +2887,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:asin
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "asin") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'asin') {
     const a = parseNum(g.s);
     if (a !== null) {
       const cVal = Math.asin(a);
@@ -3063,7 +2906,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:atan
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "atan") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'atan') {
     const a = parseNum(g.s);
     if (a !== null) {
       const cVal = Math.atan(a);
@@ -3083,9 +2926,9 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
   // math:cosh
   // Hyperbolic cosine
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "cosh") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'cosh') {
     const a = parseNum(g.s);
-    if (a !== null && typeof Math.cosh === "function") {
+    if (a !== null && typeof Math.cosh === 'function') {
       const cVal = Math.cosh(a);
       if (Number.isFinite(cVal)) {
         if (g.o instanceof Var) {
@@ -3103,7 +2946,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
   // math:degrees
   // Convert radians -> degrees
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "degrees") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'degrees') {
     const a = parseNum(g.s);
     if (a !== null) {
       const cVal = (a * 180.0) / Math.PI;
@@ -3124,7 +2967,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // math:remainder
   // Subject is a list (dividend divisor); object is the remainder.
   // Schema: ( $a $b ) math:remainder $r
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "remainder") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'remainder') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const a = parseNum(g.s.elems[0]);
     const b = parseNum(g.s.elems[1]);
@@ -3146,7 +2989,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // Round to nearest integer.
   // If there are two such numbers, then the one closest to positive infinity is returned.
   // Schema: $s math:rounded $o
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "rounded") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'rounded') {
     const a = parseNum(g.s);
     if (a === null) return [];
     const rVal = Math.round(a);
@@ -3162,9 +3005,9 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:sinh
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "sinh") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'sinh') {
     const a = parseNum(g.s);
-    if (a !== null && typeof Math.sinh === "function") {
+    if (a !== null && typeof Math.sinh === 'function') {
       const cVal = Math.sinh(a);
       if (Number.isFinite(cVal)) {
         if (g.o instanceof Var) {
@@ -3181,7 +3024,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:tan
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "tan") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'tan') {
     const a = parseNum(g.s);
     if (a !== null) {
       const cVal = Math.tan(a);
@@ -3200,9 +3043,9 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // math:tanh
-  if (g.p instanceof Iri && g.p.value === MATH_NS + "tanh") {
+  if (g.p instanceof Iri && g.p.value === MATH_NS + 'tanh') {
     const a = parseNum(g.s);
-    if (a !== null && typeof Math.tanh === "function") {
+    if (a !== null && typeof Math.tanh === 'function') {
       const cVal = Math.tanh(a);
       if (Number.isFinite(cVal)) {
         if (g.o instanceof Var) {
@@ -3224,7 +3067,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
   // time:localTime
   // "" time:localTime ?D.  binds ?D to “now” as xsd:dateTime.
-  if (g.p instanceof Iri && g.p.value === TIME_NS + "localTime") {
+  if (g.p instanceof Iri && g.p.value === TIME_NS + 'localTime') {
     const now = getNowLex();
 
     if (g.o instanceof Var) {
@@ -3246,7 +3089,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // list:append
   // true if and only if $o is the concatenation of all lists $s.i.
   // Schema: ( $s.i?[*] )+ list:append $o?
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "append") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'append') {
     if (!(g.s instanceof ListTerm)) return [];
     const parts = g.s.elems;
     if (g.o instanceof ListTerm) {
@@ -3270,7 +3113,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // list:first
   // true iff $s is a list and $o is the first member of that list.
   // Schema: $s+ list:first $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "first") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'first') {
     if (!(g.s instanceof ListTerm)) return [];
     if (!g.s.elems.length) return [];
     const first = g.s.elems[0];
@@ -3281,7 +3124,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // list:rest
   // true iff $s is a (non-empty) list and $o is the rest (tail) of that list.
   // Schema: $s+ list:rest $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "rest") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'rest') {
     // Closed list: (a b c) -> (b c)
     if (g.s instanceof ListTerm) {
       if (!g.s.elems.length) return [];
@@ -3310,7 +3153,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
   // rdf:first (alias of list:first)
   // Schema: $s+ rdf:first $o-
-  if (g.p instanceof Iri && g.p.value === RDF_NS + "first") {
+  if (g.p instanceof Iri && g.p.value === RDF_NS + 'first') {
     if (!(g.s instanceof ListTerm)) return [];
     if (!g.s.elems.length) return [];
     const first = g.s.elems[0];
@@ -3320,7 +3163,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
   // rdf:rest (alias of list:rest)
   // Schema: $s+ rdf:rest $o-
-  if (g.p instanceof Iri && g.p.value === RDF_NS + "rest") {
+  if (g.p instanceof Iri && g.p.value === RDF_NS + 'rest') {
     // Closed list: (a b c) -> (b c)
     if (g.s instanceof ListTerm) {
       if (!g.s.elems.length) return [];
@@ -3346,7 +3189,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // Multi-solution builtin:
   // For a list subject $s, generate solutions by unifying $o with (index value).
   // This allows $o to be a variable (e.g., ?Y) or a pattern (e.g., (?i "Dewey")).
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "iterate") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'iterate') {
     if (!(g.s instanceof ListTerm)) return [];
     const xs = g.s.elems;
     const outs = [];
@@ -3362,7 +3205,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // list:last
   // true iff $s is a list and $o is the last member of that list.
   // Schema: $s+ list:last $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "last") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'last') {
     if (!(g.s instanceof ListTerm)) return [];
     const xs = g.s.elems;
     if (!xs.length) return [];
@@ -3374,7 +3217,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // list:memberAt
   // true iff $s.1 is a list, $s.2 is a valid index, and $o is the member at that index.
   // Schema: ( $s.1+ $s.2?[*] )+ list:memberAt $o?[*]
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "memberAt") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'memberAt') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const [listTerm, indexTerm] = g.s.elems;
     if (!(listTerm instanceof ListTerm)) return [];
@@ -3395,7 +3238,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // list:remove
   // true iff $s.1 is a list and $o is that list with all occurrences of $s.2 removed.
   // Schema: ( $s.1+ $s.2+ )+ list:remove $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "remove") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'remove') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const [listTerm, itemTerm] = g.s.elems;
     if (!(listTerm instanceof ListTerm)) return [];
@@ -3410,7 +3253,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // list:member
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "member") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'member') {
     if (!(g.s instanceof ListTerm)) return [];
     const outs = [];
     for (const x of g.s.elems) {
@@ -3421,7 +3264,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // list:in
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "in") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'in') {
     if (!(g.o instanceof ListTerm)) return [];
     const outs = [];
     for (const x of g.o.elems) {
@@ -3432,7 +3275,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // list:length
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "length") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'length') {
     if (!(g.s instanceof ListTerm)) return [];
     const nTerm = new Literal(String(g.s.elems.length));
     const s2 = unifyTerm(g.o, nTerm, subst);
@@ -3440,7 +3283,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // list:notMember
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "notMember") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'notMember') {
     if (!(g.s instanceof ListTerm)) return [];
     for (const el of g.s.elems) {
       if (unifyTerm(g.o, el, subst) !== null) return [];
@@ -3449,7 +3292,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // list:reverse
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "reverse") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'reverse') {
     if (g.s instanceof ListTerm) {
       const rev = [...g.s.elems].reverse();
       const rterm = new ListTerm(rev);
@@ -3466,7 +3309,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // list:sort
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "sort") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'sort') {
     function cmpTermForSort(a, b) {
       if (a instanceof Literal && b instanceof Literal) {
         const [lexA] = literalParts(a.value);
@@ -3534,7 +3377,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // list:map
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "map") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'map') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const [inputTerm, predTerm] = g.s.elems;
     if (!(inputTerm instanceof ListTerm)) return [];
@@ -3546,16 +3389,9 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
     const results = [];
     for (const el of inputList) {
-      const yvar = new Var("_mapY");
+      const yvar = new Var('_mapY');
       const goal2 = new Triple(el, pred, yvar);
-      const sols = evalBuiltin(
-        goal2,
-        subst,
-        facts,
-        backRules,
-        depth + 1,
-        varGen,
-      );
+      const sols = evalBuiltin(goal2, subst, facts, backRules, depth + 1, varGen);
       if (!sols.length) return [];
       const yval = applySubstTerm(yvar, sols[0]);
       if (yval instanceof Var) return [];
@@ -3567,7 +3403,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // list:firstRest
-  if (g.p instanceof Iri && g.p.value === LIST_NS + "firstRest") {
+  if (g.p instanceof Iri && g.p.value === LIST_NS + 'firstRest') {
     if (g.s instanceof ListTerm) {
       if (!g.s.elems.length) return [];
       const first = g.s.elems[0];
@@ -3605,20 +3441,20 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // -----------------------------------------------------------------
 
   // log:equalTo
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "equalTo") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'equalTo') {
     const s2 = unifyTerm(goal.s, goal.o, subst);
     return s2 !== null ? [s2] : [];
   }
 
   // log:notEqualTo
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "notEqualTo") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'notEqualTo') {
     const s2 = unifyTerm(goal.s, goal.o, subst);
     if (s2 !== null) return [];
     return [{ ...subst }];
   }
 
   // log:implies — expose internal forward rules as data
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "implies") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'implies') {
     const allFw = backRules.__allForwardRules || [];
     const results = [];
 
@@ -3629,9 +3465,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       const r = standardizeRule(r0, varGen);
 
       const premF = new FormulaTerm(r.premise);
-      const concTerm = r0.isFuse
-        ? new Literal("false")
-        : new FormulaTerm(r.conclusion);
+      const concTerm = r0.isFuse ? new Literal('false') : new FormulaTerm(r.conclusion);
 
       // unify subject with the premise formula
       let s2 = unifyTerm(goal.s, premF, subst);
@@ -3648,7 +3482,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // log:impliedBy — expose internal backward rules as data
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "impliedBy") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'impliedBy') {
     const allBw = backRules.__allBackwardRules || backRules;
     const results = [];
 
@@ -3677,39 +3511,23 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // log:notIncludes
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "notIncludes") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'notIncludes') {
     if (!(g.o instanceof FormulaTerm)) return [];
     const body = g.o.triples;
     const visited2 = [];
-    const sols = proveGoals(
-      Array.from(body),
-      {},
-      facts,
-      backRules,
-      depth + 1,
-      visited2,
-      varGen,
-    );
+    const sols = proveGoals(Array.from(body), {}, facts, backRules, depth + 1, visited2, varGen);
     if (!sols.length) return [{ ...subst }];
     return [];
   }
 
   // log:collectAllIn
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "collectAllIn") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'collectAllIn') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 3) return [];
     const [valueTempl, clauseTerm, listTerm] = g.s.elems;
     if (!(clauseTerm instanceof FormulaTerm)) return [];
     const body = clauseTerm.triples;
     const visited2 = [];
-    const sols = proveGoals(
-      Array.from(body),
-      {},
-      facts,
-      backRules,
-      depth + 1,
-      visited2,
-      varGen,
-    );
+    const sols = proveGoals(Array.from(body), {}, facts, backRules, depth + 1, visited2, varGen);
 
     // Collect one value per *solution*, duplicates allowed
     const collected = [];
@@ -3724,7 +3542,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // log:forAllIn
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "forAllIn") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'forAllIn') {
     // Subject: list with two clauses (where-clause, then-clause)
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const [whereClause, thenClause] = g.s.elems;
@@ -3733,29 +3551,13 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
     // 1. Find all substitutions that make the first clause true
     const visited1 = [];
-    const sols1 = proveGoals(
-      Array.from(whereClause.triples),
-      {},
-      facts,
-      backRules,
-      depth + 1,
-      visited1,
-      varGen,
-    );
+    const sols1 = proveGoals(Array.from(whereClause.triples), {}, facts, backRules, depth + 1, visited1, varGen);
 
     // 2. For every such substitution, check that the second clause holds too.
     //    If there are no matches for the first clause, this is vacuously true.
     for (const s1 of sols1) {
       const visited2 = [];
-      const sols2 = proveGoals(
-        Array.from(thenClause.triples),
-        s1,
-        facts,
-        backRules,
-        depth + 1,
-        visited2,
-        varGen,
-      );
+      const sols2 = proveGoals(Array.from(thenClause.triples), s1, facts, backRules, depth + 1, visited2, varGen);
       // Found a counterexample: whereClause holds but thenClause does not
       if (!sols2.length) return [];
     }
@@ -3765,7 +3567,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // log:skolem
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "skolem") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'skolem') {
     // Subject must be ground; commonly a list, but we allow any ground term.
     if (!isGroundTerm(g.s)) return [];
 
@@ -3782,7 +3584,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // log:uri
-  if (g.p instanceof Iri && g.p.value === LOG_NS + "uri") {
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'uri') {
     // Direction 1: subject is an IRI -> object is its string representation
     if (g.s instanceof Iri) {
       const uriStr = g.s.value; // raw IRI string, e.g. "https://www.w3.org"
@@ -3810,7 +3612,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // -----------------------------------------------------------------
 
   // string:concatenation
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "concatenation") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'concatenation') {
     if (!(g.s instanceof ListTerm)) return [];
     const parts = [];
     for (const t of g.s.elems) {
@@ -3818,7 +3620,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       if (sStr === null) return [];
       parts.push(sStr);
     }
-    const lit = makeStringLiteral(parts.join(""));
+    const lit = makeStringLiteral(parts.join(''));
 
     if (g.o instanceof Var) {
       const s2 = { ...subst };
@@ -3830,7 +3632,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:contains
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "contains") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'contains') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -3838,17 +3640,15 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:containsIgnoringCase
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "containsIgnoringCase") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'containsIgnoringCase') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
-    return sStr.toLowerCase().includes(oStr.toLowerCase())
-      ? [{ ...subst }]
-      : [];
+    return sStr.toLowerCase().includes(oStr.toLowerCase()) ? [{ ...subst }] : [];
   }
 
   // string:endsWith
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "endsWith") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'endsWith') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -3856,7 +3656,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:equalIgnoringCase
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "equalIgnoringCase") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'equalIgnoringCase') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -3865,7 +3665,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
   // string:format
   // (limited: only %s and %% are supported, anything else ⇒ builtin fails)
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "format") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'format') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length < 1) return [];
     const fmtStr = termToJsString(g.s.elems[0]);
     if (fmtStr === null) return [];
@@ -3892,7 +3692,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
 
   // string:jsonPointer
   // Schema: ( $jsonText $pointer ) string:jsonPointer $value
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "jsonPointer") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'jsonPointer') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
 
     const jsonText = termToJsonText(g.s.elems[0]); // <-- changed
@@ -3907,7 +3707,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:greaterThan
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "greaterThan") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'greaterThan') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -3915,7 +3715,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:lessThan
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "lessThan") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'lessThan') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -3923,7 +3723,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:matches
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "matches") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'matches') {
     const sStr = termToJsString(g.s);
     const pattern = termToJsString(g.o);
     if (sStr === null || pattern === null) return [];
@@ -3938,7 +3738,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:notEqualIgnoringCase
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "notEqualIgnoringCase") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'notEqualIgnoringCase') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -3946,7 +3746,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:notGreaterThan  (≤ in Unicode code order)
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "notGreaterThan") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'notGreaterThan') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -3954,7 +3754,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:notLessThan  (≥ in Unicode code order)
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "notLessThan") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'notLessThan') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -3962,7 +3762,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:notMatches
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "notMatches") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'notMatches') {
     const sStr = termToJsString(g.s);
     const pattern = termToJsString(g.o);
     if (sStr === null || pattern === null) return [];
@@ -3976,7 +3776,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:replace
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "replace") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'replace') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 3) return [];
     const dataStr = termToJsString(g.s.elems[0]);
     const searchStr = termToJsString(g.s.elems[1]);
@@ -3986,7 +3786,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     let re;
     try {
       // Global replacement
-      re = new RegExp(searchStr, "g");
+      re = new RegExp(searchStr, 'g');
     } catch (e) {
       return [];
     }
@@ -4004,7 +3804,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:scrape
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "scrape") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'scrape') {
     if (!(g.s instanceof ListTerm) || g.s.elems.length !== 2) return [];
     const dataStr = termToJsString(g.s.elems[0]);
     const pattern = termToJsString(g.s.elems[1]);
@@ -4033,7 +3833,7 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   }
 
   // string:startsWith
-  if (g.p instanceof Iri && g.p.value === STRING_NS + "startsWith") {
+  if (g.p instanceof Iri && g.p.value === STRING_NS + 'startsWith') {
     const sStr = termToJsString(g.s);
     const oStr = termToJsString(g.o);
     if (sStr === null || oStr === null) return [];
@@ -4049,7 +3849,7 @@ function isBuiltinPred(p) {
   const v = p.value;
 
   // Treat RDF Collections as list-term builtins too.
-  if (v === RDF_NS + "first" || v === RDF_NS + "rest") {
+  if (v === RDF_NS + 'first' || v === RDF_NS + 'rest') {
     return true;
   }
 
@@ -4092,14 +3892,7 @@ function standardizeRule(rule, gen) {
     }
     if (t instanceof FormulaTerm) {
       return new FormulaTerm(
-        t.triples.map(
-          (tr) =>
-            new Triple(
-              renameTerm(tr.s, vmap, genArr),
-              renameTerm(tr.p, vmap, genArr),
-              renameTerm(tr.o, vmap, genArr),
-            ),
-        ),
+        t.triples.map((tr) => new Triple(renameTerm(tr.s, vmap, genArr), renameTerm(tr.p, vmap, genArr), renameTerm(tr.o, vmap, genArr))),
       );
     }
     return t;
@@ -4107,28 +3900,12 @@ function standardizeRule(rule, gen) {
 
   const vmap2 = {};
   const premise = rule.premise.map(
-    (tr) =>
-      new Triple(
-        renameTerm(tr.s, vmap2, gen),
-        renameTerm(tr.p, vmap2, gen),
-        renameTerm(tr.o, vmap2, gen),
-      ),
+    (tr) => new Triple(renameTerm(tr.s, vmap2, gen), renameTerm(tr.p, vmap2, gen), renameTerm(tr.o, vmap2, gen)),
   );
   const conclusion = rule.conclusion.map(
-    (tr) =>
-      new Triple(
-        renameTerm(tr.s, vmap2, gen),
-        renameTerm(tr.p, vmap2, gen),
-        renameTerm(tr.o, vmap2, gen),
-      ),
+    (tr) => new Triple(renameTerm(tr.s, vmap2, gen), renameTerm(tr.p, vmap2, gen), renameTerm(tr.o, vmap2, gen)),
   );
-  return new Rule(
-    premise,
-    conclusion,
-    rule.isForward,
-    rule.isFuse,
-    rule.headBlankLabels,
-  );
+  return new Rule(premise, conclusion, rule.isForward, rule.isFuse, rule.headBlankLabels);
 }
 
 function listHasTriple(list, tr) {
@@ -4268,14 +4045,7 @@ function proveGoals(goals, subst, facts, backRules, depth, visited, varGen) {
 
     // 1) Builtins
     if (isBuiltinPred(goal0.p)) {
-      const deltas = evalBuiltin(
-        goal0,
-        {},
-        facts,
-        backRules,
-        state.depth,
-        varGen,
-      );
+      const deltas = evalBuiltin(goal0, {}, facts, backRules, state.depth, varGen);
       for (const delta of deltas) {
         const composed = composeSubst(state.subst, delta);
         if (composed === null) continue;
@@ -4283,12 +4053,7 @@ function proveGoals(goals, subst, facts, backRules, depth, visited, varGen) {
         if (!restGoals.length) {
           results.push(gcCompactForGoals(composed, [], answerVars));
         } else {
-          const nextSubst = maybeCompactSubst(
-            composed,
-            restGoals,
-            answerVars,
-            state.depth + 1,
-          );
+          const nextSubst = maybeCompactSubst(composed, restGoals, answerVars, state.depth + 1);
           stack.push({
             goals: restGoals,
             subst: nextSubst,
@@ -4317,12 +4082,7 @@ function proveGoals(goals, subst, facts, backRules, depth, visited, varGen) {
         if (!restGoals.length) {
           results.push(gcCompactForGoals(composed, [], answerVars));
         } else {
-          const nextSubst = maybeCompactSubst(
-            composed,
-            restGoals,
-            answerVars,
-            state.depth + 1,
-          );
+          const nextSubst = maybeCompactSubst(composed, restGoals, answerVars, state.depth + 1);
           stack.push({
             goals: restGoals,
             subst: nextSubst,
@@ -4343,12 +4103,7 @@ function proveGoals(goals, subst, facts, backRules, depth, visited, varGen) {
         if (!restGoals.length) {
           results.push(gcCompactForGoals(composed, [], answerVars));
         } else {
-          const nextSubst = maybeCompactSubst(
-            composed,
-            restGoals,
-            answerVars,
-            state.depth + 1,
-          );
+          const nextSubst = maybeCompactSubst(composed, restGoals, answerVars, state.depth + 1);
           stack.push({
             goals: restGoals,
             subst: nextSubst,
@@ -4362,16 +4117,13 @@ function proveGoals(goals, subst, facts, backRules, depth, visited, varGen) {
     // 4) Backward rules (indexed by head predicate)
     if (goal0.p instanceof Iri) {
       ensureBackRuleIndexes(backRules);
-      const candRules = (
-        backRules.__byHeadPred.get(goal0.p.value) || []
-      ).concat(backRules.__wildHeadPred);
+      const candRules = (backRules.__byHeadPred.get(goal0.p.value) || []).concat(backRules.__wildHeadPred);
 
       for (const r of candRules) {
         if (r.conclusion.length !== 1) continue;
 
         const rawHead = r.conclusion[0];
-        if (rawHead.p instanceof Iri && rawHead.p.value !== goal0.p.value)
-          continue;
+        if (rawHead.p instanceof Iri && rawHead.p.value !== goal0.p.value) continue;
 
         const rStd = standardizeRule(r, varGen);
         const head = rStd.conclusion[0];
@@ -4383,12 +4135,7 @@ function proveGoals(goals, subst, facts, backRules, depth, visited, varGen) {
         if (composed === null) continue;
 
         const newGoals = body.concat(restGoals);
-        const nextSubst = maybeCompactSubst(
-          composed,
-          newGoals,
-          answerVars,
-          state.depth + 1,
-        );
+        const nextSubst = maybeCompactSubst(composed, newGoals, answerVars, state.depth + 1);
         stack.push({
           goals: newGoals,
           subst: nextSubst,
@@ -4427,53 +4174,31 @@ function forwardChain(facts, forwardRules, backRules) {
       const empty = {};
       const visited = [];
 
-      const sols = proveGoals(
-        r.premise.slice(),
-        empty,
-        facts,
-        backRules,
-        0,
-        visited,
-        varGen,
-      );
+      const sols = proveGoals(r.premise.slice(), empty, facts, backRules, 0, visited, varGen);
 
       // Inference fuse
       if (r.isFuse && sols.length) {
-        console.log(
-          "# Inference fuse triggered: a { ... } => false. rule fired.",
-        );
+        console.log('# Inference fuse triggered: a { ... } => false. rule fired.');
         process.exit(2);
       }
 
       for (const s of sols) {
-        const instantiatedPremises = r.premise.map((b) =>
-          applySubstTriple(b, s),
-        );
+        const instantiatedPremises = r.premise.map((b) => applySubstTriple(b, s));
 
         for (const cpat of r.conclusion) {
           const instantiated = applySubstTriple(cpat, s);
 
           const isFwRuleTriple =
             isLogImplies(instantiated.p) &&
-            ((instantiated.s instanceof FormulaTerm &&
-              instantiated.o instanceof FormulaTerm) ||
-              (instantiated.s instanceof Literal &&
-                instantiated.s.value === "true" &&
-                instantiated.o instanceof FormulaTerm) ||
-              (instantiated.s instanceof FormulaTerm &&
-                instantiated.o instanceof Literal &&
-                instantiated.o.value === "true"));
+            ((instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof Literal && instantiated.s.value === 'true' && instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === 'true'));
 
           const isBwRuleTriple =
             isLogImpliedBy(instantiated.p) &&
-            ((instantiated.s instanceof FormulaTerm &&
-              instantiated.o instanceof FormulaTerm) ||
-              (instantiated.s instanceof FormulaTerm &&
-                instantiated.o instanceof Literal &&
-                instantiated.o.value === "true") ||
-              (instantiated.s instanceof Literal &&
-                instantiated.s.value === "true" &&
-                instantiated.o instanceof FormulaTerm));
+            ((instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
+              (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === 'true') ||
+              (instantiated.s instanceof Literal && instantiated.s.value === 'true' && instantiated.o instanceof FormulaTerm));
 
           if (isFwRuleTriple || isBwRuleTriple) {
             if (!hasFactIndexed(facts, instantiated)) {
@@ -4491,16 +4216,14 @@ function forwardChain(facts, forwardRules, backRules) {
             const left =
               instantiated.s instanceof FormulaTerm
                 ? instantiated.s.triples
-                : instantiated.s instanceof Literal &&
-                    instantiated.s.value === "true"
+                : instantiated.s instanceof Literal && instantiated.s.value === 'true'
                   ? []
                   : null;
 
             const right =
               instantiated.o instanceof FormulaTerm
                 ? instantiated.o.triples
-                : instantiated.o instanceof Literal &&
-                    instantiated.o.value === "true"
+                : instantiated.o instanceof Literal && instantiated.o.value === 'true'
                   ? []
                   : null;
 
@@ -4510,13 +4233,7 @@ function forwardChain(facts, forwardRules, backRules) {
                 const premise = reorderPremiseForConstraints(premise0);
 
                 const headBlankLabels = collectBlankLabelsInTriples(conclusion);
-                const newRule = new Rule(
-                  premise,
-                  conclusion,
-                  true,
-                  false,
-                  headBlankLabels,
-                );
+                const newRule = new Rule(premise, conclusion, true, false, headBlankLabels);
 
                 const already = forwardRules.some(
                   (rr) =>
@@ -4530,13 +4247,7 @@ function forwardChain(facts, forwardRules, backRules) {
                 const [premise, conclusion] = liftBlankRuleVars(right, left);
 
                 const headBlankLabels = collectBlankLabelsInTriples(conclusion);
-                const newRule = new Rule(
-                  premise,
-                  conclusion,
-                  false,
-                  false,
-                  headBlankLabels,
-                );
+                const newRule = new Rule(premise, conclusion, false, false, headBlankLabels);
 
                 const already = backRules.some(
                   (rr) =>
@@ -4557,12 +4268,7 @@ function forwardChain(facts, forwardRules, backRules) {
 
           // Only skolemize blank nodes that occur explicitly in the rule head
           const skMap = {};
-          const inst = skolemizeTripleForHeadBlanks(
-            instantiated,
-            r.headBlankLabels,
-            skMap,
-            skCounter,
-          );
+          const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter);
 
           if (!isGroundTriple(inst)) continue;
           if (hasFactIndexed(facts, inst)) continue;
@@ -4570,9 +4276,7 @@ function forwardChain(facts, forwardRules, backRules) {
           factList.push(inst);
           pushFactIndexed(facts, inst);
 
-          derivedForward.push(
-            new DerivedFact(inst, r, instantiatedPremises.slice(), { ...s }),
-          );
+          derivedForward.push(new DerivedFact(inst, r, instantiatedPremises.slice(), { ...s }));
           changed = true;
         }
       }
@@ -4593,19 +4297,19 @@ function termToN3(t, pref) {
     const i = t.value;
     const q = pref.shrinkIri(i);
     if (q !== null) return q;
-    if (i.startsWith("_:")) return i;
+    if (i.startsWith('_:')) return i;
     return `<${i}>`;
   }
   if (t instanceof Literal) {
     const [lex, dt] = literalParts(t.value);
 
     // Pretty-print xsd:boolean as bare true/false
-    if (dt === XSD_NS + "boolean") {
+    if (dt === XSD_NS + 'boolean') {
       const v = stripQuotes(lex);
-      if (v === "true" || v === "false") return v;
+      if (v === 'true' || v === 'false') return v;
       // optional: normalize 1/0 too
-      if (v === "1") return "true";
-      if (v === "0") return "false";
+      if (v === '1') return 'true';
+      if (v === '0') return 'false';
     }
 
     if (!dt) return t.value; // keep numbers, booleans, lang-tagged strings, etc.
@@ -4617,20 +4321,20 @@ function termToN3(t, pref) {
   if (t instanceof Blank) return t.label;
   if (t instanceof ListTerm) {
     const inside = t.elems.map((e) => termToN3(e, pref));
-    return "(" + inside.join(" ") + ")";
+    return '(' + inside.join(' ') + ')';
   }
   if (t instanceof OpenListTerm) {
     const inside = t.prefix.map((e) => termToN3(e, pref));
-    inside.push("?" + t.tailVar);
-    return "(" + inside.join(" ") + ")";
+    inside.push('?' + t.tailVar);
+    return '(' + inside.join(' ') + ')';
   }
   if (t instanceof FormulaTerm) {
-    let s = "{\n";
+    let s = '{\n';
     for (const tr of t.triples) {
       let line = tripleToN3(tr, pref).trimEnd();
-      if (line) s += "    " + line + "\n";
+      if (line) s += '    ' + line + '\n';
     }
-    s += "}";
+    s += '}';
     return s;
   }
   return JSON.stringify(t);
@@ -4651,74 +4355,62 @@ function tripleToN3(tr, prefixes) {
   }
 
   const s = termToN3(tr.s, prefixes);
-  const p = isRdfTypePred(tr.p)
-    ? "a"
-    : isOwlSameAsPred(tr.p)
-      ? "="
-      : termToN3(tr.p, prefixes);
+  const p = isRdfTypePred(tr.p) ? 'a' : isOwlSameAsPred(tr.p) ? '=' : termToN3(tr.p, prefixes);
   const o = termToN3(tr.o, prefixes);
 
   return `${s} ${p} ${o} .`;
 }
 
 function printExplanation(df, prefixes) {
-  console.log(
-    "# ----------------------------------------------------------------------",
-  );
-  console.log("# Proof for derived triple:");
+  console.log('# ----------------------------------------------------------------------');
+  console.log('# Proof for derived triple:');
 
   // Fact line(s), indented 2 spaces after '# '
   for (const line of tripleToN3(df.fact, prefixes).split(/\r?\n/)) {
-    const stripped = line.replace(/\s+$/, "");
+    const stripped = line.replace(/\s+$/, '');
     if (stripped) {
-      console.log("#   " + stripped);
+      console.log('#   ' + stripped);
     }
   }
 
   if (!df.premises.length) {
-    console.log(
-      "# This triple is the head of a forward rule with an empty premise,",
-    );
-    console.log(
-      "# so it holds unconditionally whenever the program is loaded.",
-    );
+    console.log('# This triple is the head of a forward rule with an empty premise,');
+    console.log('# so it holds unconditionally whenever the program is loaded.');
   } else {
-    console.log(
-      "# It holds because the following instance of the rule body is provable:",
-    );
+    console.log('# It holds because the following instance of the rule body is provable:');
 
     // Premises, also indented 2 spaces after '# '
     for (const prem of df.premises) {
       for (const line of tripleToN3(prem, prefixes).split(/\r?\n/)) {
-        const stripped = line.replace(/\s+$/, "");
+        const stripped = line.replace(/\s+$/, '');
         if (stripped) {
-          console.log("#   " + stripped);
+          console.log('#   ' + stripped);
         }
       }
     }
 
-    console.log("# via the schematic forward rule:");
+    console.log('# via the schematic forward rule:');
 
     // Rule pretty-printed
-    console.log("#   {");
+    console.log('#   {');
     for (const tr of df.rule.premise) {
       for (const line of tripleToN3(tr, prefixes).split(/\r?\n/)) {
-        const stripped = line.replace(/\s+$/, "");
+        const stripped = line.replace(/\s+$/, '');
         if (stripped) {
-          console.log("#     " + stripped);
+          console.log('#     ' + stripped);
         }
       }
     }
-    console.log("#   } => {");
+    console.log('#   } => {');
     for (const tr of df.rule.conclusion) {
       for (const line of tripleToN3(tr, prefixes).split(/\r?\n/)) {
-        const stripped = line.replace(/\s+$/, "");
+        const stripped = line.replace(/\s+$/, '');
         if (stripped) {
-          console.log("#     " + stripped);
+          console.log('#     ' + stripped);
         }
       }
     }
-    console.log("#   } .");
+    console.log('#   } .');
   }
 
   // Substitution block
@@ -4728,7 +4420,7 @@ function printExplanation(df, prefixes) {
     .sort();
 
   if (visibleNames.length) {
-    console.log("# with substitution (on rule variables):");
+    console.log('# with substitution (on rule variables):');
     for (const v of visibleNames) {
       const fullTerm = applySubstTerm(new Var(v), df.subst);
       const rendered = termToN3(fullTerm, prefixes);
@@ -4736,37 +4428,33 @@ function printExplanation(df, prefixes) {
 
       if (lines.length === 1) {
         // single-line term
-        const stripped = lines[0].replace(/\s+$/, "");
+        const stripped = lines[0].replace(/\s+$/, '');
         if (stripped) {
-          console.log("#   ?" + v + " = " + stripped);
+          console.log('#   ?' + v + ' = ' + stripped);
         }
       } else {
         // multi-line term (e.g. a formula)
         const first = lines[0].trimEnd(); // usually "{"
         if (first) {
-          console.log("#   ?" + v + " = " + first);
+          console.log('#   ?' + v + ' = ' + first);
         }
         for (let i = 1; i < lines.length; i++) {
           const stripped = lines[i].trim();
           if (!stripped) continue;
           if (i === lines.length - 1) {
             // closing brace
-            console.log("#   " + stripped);
+            console.log('#   ' + stripped);
           } else {
             // inner triple lines
-            console.log("#     " + stripped);
+            console.log('#     ' + stripped);
           }
         }
       }
     }
   }
 
-  console.log(
-    "# Therefore the derived triple above is entailed by the rules and facts.",
-  );
-  console.log(
-    "# ----------------------------------------------------------------------\n",
-  );
+  console.log('# Therefore the derived triple above is entailed by the rules and facts.');
+  console.log('# ----------------------------------------------------------------------\n');
 }
 
 // ============================================================================
@@ -4776,13 +4464,13 @@ function printExplanation(df, prefixes) {
 // Turn RDF Collections described with rdf:first/rdf:rest (+ rdf:nil) into ListTerm terms.
 // This mutates triples/rules in-place so list:* builtins work on RDF-serialized lists too.
 function materializeRdfLists(triples, forwardRules, backwardRules) {
-  const RDF_FIRST = RDF_NS + "first";
-  const RDF_REST = RDF_NS + "rest";
-  const RDF_NIL = RDF_NS + "nil";
+  const RDF_FIRST = RDF_NS + 'first';
+  const RDF_REST = RDF_NS + 'rest';
+  const RDF_NIL = RDF_NS + 'nil';
 
   function nodeKey(t) {
-    if (t instanceof Blank) return "B:" + t.label;
-    if (t instanceof Iri) return "I:" + t.value;
+    if (t instanceof Blank) return 'B:' + t.label;
+    if (t instanceof Iri) return 'I:' + t.value;
     return null;
   }
 
@@ -4807,7 +4495,7 @@ function materializeRdfLists(triples, forwardRules, backwardRules) {
     visiting.add(k);
 
     // rdf:nil => ()
-    if (k === "I:" + RDF_NIL) {
+    if (k === 'I:' + RDF_NIL) {
       const empty = new ListTerm([]);
       cache.set(k, empty);
       visiting.delete(k);
@@ -4904,7 +4592,7 @@ function materializeRdfLists(triples, forwardRules, backwardRules) {
 
 function localIsoDateTimeString(d) {
   function pad(n, width = 2) {
-    return String(n).padStart(width, "0");
+    return String(n).padStart(width, '0');
   }
   const year = d.getFullYear();
   const month = d.getMonth() + 1;
@@ -4914,27 +4602,27 @@ function localIsoDateTimeString(d) {
   const sec = d.getSeconds();
   const ms = d.getMilliseconds();
   const offsetMin = -d.getTimezoneOffset(); // minutes east of UTC
-  const sign = offsetMin >= 0 ? "+" : "-";
+  const sign = offsetMin >= 0 ? '+' : '-';
   const abs = Math.abs(offsetMin);
   const oh = Math.floor(abs / 60);
   const om = abs % 60;
-  const msPart = ms ? "." + String(ms).padStart(3, "0") : "";
+  const msPart = ms ? '.' + String(ms).padStart(3, '0') : '';
   return (
     pad(year, 4) +
-    "-" +
+    '-' +
     pad(month) +
-    "-" +
+    '-' +
     pad(day) +
-    "T" +
+    'T' +
     pad(hour) +
-    ":" +
+    ':' +
     pad(min) +
-    ":" +
+    ':' +
     pad(sec) +
     msPart +
     sign +
     pad(oh) +
-    ":" +
+    ':' +
     pad(om)
   );
 }
@@ -4952,33 +4640,31 @@ function main() {
   // --------------------------------------------------------------------------
 
   // --version / -v: print version and exit
-  if (argv.includes("--version") || argv.includes("-v")) {
+  if (argv.includes('--version') || argv.includes('-v')) {
     console.log(`eyeling v${version}`);
     process.exit(0);
   }
 
   // --no-proof-comments / -n: disable proof explanations
-  if (argv.includes("--no-proof-comments") || argv.includes("-n")) {
+  if (argv.includes('--no-proof-comments') || argv.includes('-n')) {
     proofCommentsEnabled = false;
   }
 
   // --------------------------------------------------------------------------
   // Positional args (the N3 file)
   // --------------------------------------------------------------------------
-  const positional = argv.filter((a) => !a.startsWith("-"));
+  const positional = argv.filter((a) => !a.startsWith('-'));
 
   if (positional.length !== 1) {
-    console.error(
-      "Usage: eyeling.js [--version|-v] [--no-proof-comments|-n] <file.n3>",
-    );
+    console.error('Usage: eyeling.js [--version|-v] [--no-proof-comments|-n] <file.n3>');
     process.exit(1);
   }
 
   const path = positional[0];
   let text;
   try {
-    const fs = require("fs");
-    text = fs.readFileSync(path, { encoding: "utf8" });
+    const fs = require('fs');
+    text = fs.readFileSync(path, { encoding: 'utf8' });
   } catch (e) {
     console.error(`Error reading file ${JSON.stringify(path)}: ${e.message}`);
     process.exit(1);
@@ -4999,7 +4685,7 @@ function main() {
   const usedPrefixes = prefixes.prefixesUsedForOutput(derivedTriples);
 
   for (const [pfx, base] of usedPrefixes) {
-    if (pfx === "") console.log(`@prefix : <${base}> .`);
+    if (pfx === '') console.log(`@prefix : <${base}> .`);
     else console.log(`@prefix ${pfx}: <${base}> .`);
   }
   if (derived.length && usedPrefixes.length) console.log();
