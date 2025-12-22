@@ -12,8 +12,6 @@
 #   3) planner composes gps:description                            [internal -> plan]
 #
 # Notes:
-#   - We use var:x (http://www.w3.org/2000/10/swap/var#x) as the placeholder "instance"
-#     inside state formulas, matching how OSLO-STEPS docs often model patterns.
 #   - Aggregation:
 #       duration + monetaryCost = sum
 #       success  * satisfaction = product
@@ -27,7 +25,6 @@
 
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix sh:   <http://www.w3.org/ns/shacl#>.
-@prefix var:  <http://www.w3.org/2000/10/swap/var#>.
 
 @prefix o-steps:   <https://fast.ilabt.imec.be/ns/oslo-steps#>.
 @prefix o-persoon: <https://data.vlaanderen.be/ns/persoon#>.
@@ -163,24 +160,24 @@ step:confirmAddressChangeCityHall a o-steps:Step;
 }.
 
 # 2.2) Step -> internal gps:description transition (compiled)
-# IMPORTANT: we use var:x inside the formulas so they unify (no existential ?x).
+# IMPORTANT: we use ?x inside the formulas so they unify (no existential ?x).
 {
   ex:movemap gps:description
     (
-      { var:x a ?T.
-        var:x ex:personalInfoProvided        ?PI1.
-        var:x ex:movingDataProvided          ?MD1.
-        var:x ex:newAddressProvided          ?NA1.
-        var:x ex:addressChangeDeclared       ?DECL1.
-        var:x ex:confirmationOfAddressChange ?CONF1.
+      { ?x a ?T.
+        ?x ex:personalInfoProvided        ?PI1.
+        ?x ex:movingDataProvided          ?MD1.
+        ?x ex:newAddressProvided          ?NA1.
+        ?x ex:addressChangeDeclared       ?DECL1.
+        ?x ex:confirmationOfAddressChange ?CONF1.
       }
       true
-      { var:x a ?T.
-        var:x ex:personalInfoProvided        ?PI2.
-        var:x ex:movingDataProvided          ?MD2.
-        var:x ex:newAddressProvided          ?NA2.
-        var:x ex:addressChangeDeclared       ?DECL2.
-        var:x ex:confirmationOfAddressChange ?CONF2.
+      { ?x a ?T.
+        ?x ex:personalInfoProvided        ?PI2.
+        ?x ex:movingDataProvided          ?MD2.
+        ?x ex:newAddressProvided          ?NA2.
+        ?x ex:addressChangeDeclared       ?DECL2.
+        ?x ex:confirmationOfAddressChange ?CONF2.
       }
       ?STEP
       ?DUR ?MC ?SUC ?SAT
@@ -213,12 +210,12 @@ step:confirmAddressChangeCityHall a o-steps:Step;
 # --------
 :bob :start
 {
-  var:x a o-persoon:Inwoner.
-  var:x ex:personalInfoProvided        false.
-  var:x ex:movingDataProvided          false.
-  var:x ex:newAddressProvided          false.
-  var:x ex:addressChangeDeclared       false.
-  var:x ex:confirmationOfAddressChange false.
+  ?x a o-persoon:Inwoner.
+  ?x ex:personalInfoProvided        false.
+  ?x ex:movingDataProvided          false.
+  ?x ex:newAddressProvided          false.
+  ?x ex:addressChangeDeclared       false.
+  ?x ex:confirmationOfAddressChange false.
 }.
 
 # ----------------------------------------------------------
@@ -281,12 +278,12 @@ step:confirmAddressChangeCityHall a o-steps:Step;
   :scope gps:findpath
     (
       {
-        var:x a o-persoon:Inwoner.
-        var:x ex:personalInfoProvided        true.
-        var:x ex:movingDataProvided          true.
-        var:x ex:newAddressProvided          true.
-        var:x ex:addressChangeDeclared       true.
-        var:x ex:confirmationOfAddressChange true.
+        ?x a o-persoon:Inwoner.
+        ?x ex:personalInfoProvided        true.
+        ?x ex:movingDataProvided          true.
+        ?x ex:newAddressProvided          true.
+        ?x ex:addressChangeDeclared       true.
+        ?x ex:confirmationOfAddressChange true.
       }
       ?PATH
       ?DUR

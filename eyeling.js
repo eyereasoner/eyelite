@@ -1274,7 +1274,7 @@ function termsEqual(a, b) {
     return true;
   }
   if (a instanceof FormulaTerm) {
-    return triplesListEqual(a.triples, b.triples);
+    return alphaEqFormulaTriples(a.triples, b.triples);
   }
   return false;
 }
@@ -1291,6 +1291,96 @@ function triplesListEqual(xs, ys) {
     if (!triplesEqual(xs[i], ys[i])) return false;
   }
   return true;
+}
+
+// Alpha-equivalence for quoted formulas, up to *variable* and blank-node renaming.
+// Treats a formula as an unordered set of triples (order-insensitive match).
+function alphaEqVarName(x, y, vmap) {
+  if (vmap.hasOwnProperty(x)) return vmap[x] === y;
+  vmap[x] = y;
+  return true;
+}
+
+function alphaEqTermInFormula(a, b, vmap, bmap) {
+  // Blank nodes: renamable
+  if (a instanceof Blank && b instanceof Blank) {
+    const x = a.label;
+    const y = b.label;
+    if (bmap.hasOwnProperty(x)) return bmap[x] === y;
+    bmap[x] = y;
+    return true;
+  }
+
+  // Variables: renamable (ONLY inside quoted formulas)
+  if (a instanceof Var && b instanceof Var) {
+    return alphaEqVarName(a.name, b.name, vmap);
+  }
+
+  if (a instanceof Iri && b instanceof Iri) return a.value === b.value;
+  if (a instanceof Literal && b instanceof Literal) return a.value === b.value;
+
+  if (a instanceof ListTerm && b instanceof ListTerm) {
+    if (a.elems.length !== b.elems.length) return false;
+    for (let i = 0; i < a.elems.length; i++) {
+      if (!alphaEqTermInFormula(a.elems[i], b.elems[i], vmap, bmap)) return false;
+    }
+    return true;
+  }
+
+  if (a instanceof OpenListTerm && b instanceof OpenListTerm) {
+    if (a.prefix.length !== b.prefix.length) return false;
+    for (let i = 0; i < a.prefix.length; i++) {
+      if (!alphaEqTermInFormula(a.prefix[i], b.prefix[i], vmap, bmap)) return false;
+    }
+    // tailVar is a var-name string, so treat it as renamable too
+    return alphaEqVarName(a.tailVar, b.tailVar, vmap);
+  }
+
+  // Nested formulas: compare with fresh maps (separate scope)
+  if (a instanceof FormulaTerm && b instanceof FormulaTerm) {
+    return alphaEqFormulaTriples(a.triples, b.triples);
+  }
+
+  return false;
+}
+
+function alphaEqTripleInFormula(a, b, vmap, bmap) {
+  return (
+    alphaEqTermInFormula(a.s, b.s, vmap, bmap) &&
+    alphaEqTermInFormula(a.p, b.p, vmap, bmap) &&
+    alphaEqTermInFormula(a.o, b.o, vmap, bmap)
+  );
+}
+
+function alphaEqFormulaTriples(xs, ys) {
+  if (xs.length !== ys.length) return false;
+  // Fast path: exact same sequence.
+  if (triplesListEqual(xs, ys)) return true;
+
+  // Order-insensitive backtracking match, threading var/blank mappings.
+  const used = new Array(ys.length).fill(false);
+
+  function step(i, vmap, bmap) {
+    if (i >= xs.length) return true;
+    const x = xs[i];
+    for (let j = 0; j < ys.length; j++) {
+      if (used[j]) continue;
+      const y = ys[j];
+      // Cheap pruning when both predicates are IRIs.
+      if (x.p instanceof Iri && y.p instanceof Iri && x.p.value !== y.p.value) continue;
+
+      const v2 = { ...vmap };
+      const b2 = { ...bmap };
+      if (!alphaEqTripleInFormula(x, y, v2, b2)) continue;
+
+      used[j] = true;
+      if (step(i + 1, v2, b2)) return true;
+      used[j] = false;
+    }
+    return false;
+  }
+
+  return step(0, {}, {});
 }
 
 function alphaEqTerm(a, b, bmap) {
@@ -1323,8 +1413,8 @@ function alphaEqTerm(a, b, bmap) {
     return true;
   }
   if (a instanceof FormulaTerm && b instanceof FormulaTerm) {
-    // formulas are treated as opaque here: exact equality
-    return triplesListEqual(a.triples, b.triples);
+    // formulas are alpha-equivalent up to var/blank renaming
+    return alphaEqFormulaTriples(a.triples, b.triples);
   }
   return false;
 }
@@ -1590,12 +1680,29 @@ function containsVarTerm(t, v) {
   return false;
 }
 
+function isGroundTermInFormula(t) {
+  // EYE-style: variables inside formula terms are treated as local placeholders,
+  // so they don't make the *surrounding triple* non-ground.
+  if (t instanceof OpenListTerm) return false;
+  if (t instanceof ListTerm) return t.elems.every(e => isGroundTermInFormula(e));
+  if (t instanceof FormulaTerm) return t.triples.every(tr => isGroundTripleInFormula(tr));
+  // Iri/Literal/Blank/Var are all OK inside formulas
+  return true;
+}
+
+function isGroundTripleInFormula(tr) {
+  return (
+    isGroundTermInFormula(tr.s) &&
+    isGroundTermInFormula(tr.p) &&
+    isGroundTermInFormula(tr.o)
+  );
+}
+
 function isGroundTerm(t) {
   if (t instanceof Var) return false;
   if (t instanceof ListTerm) return t.elems.every(e => isGroundTerm(e));
   if (t instanceof OpenListTerm) return false;
-  if (t instanceof FormulaTerm)
-    return t.triples.every(tr => isGroundTriple(tr));
+  if (t instanceof FormulaTerm) return t.triples.every(tr => isGroundTripleInFormula(tr));
   return true;
 }
 
@@ -1804,8 +1911,11 @@ function unifyTerm(a, b, subst) {
     return s2;
   }
 
-  // Formulas: unify their internal triple sets (order-insensitive)
+  // Formulas:
+  // 1) If they are alpha-equivalent, succeed without leaking internal bindings.
+  // 2) Otherwise fall back to full unification (may bind vars).
   if (a instanceof FormulaTerm && b instanceof FormulaTerm) {
+    if (alphaEqFormulaTriples(a.triples, b.triples)) return { ...subst };
     return unifyFormulaTriples(a.triples, b.triples, subst);
   }
   return null;
