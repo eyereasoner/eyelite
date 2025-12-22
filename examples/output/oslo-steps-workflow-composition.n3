@@ -6,30 +6,40 @@
 # Proof for derived triple:
 #   :bob gps:path ((step:providePersonalInfoOnline step:provideMovingDataDesk step:provideNewAddress step:declareAddressChangePostal step:confirmAddressChangePolice) 20400 4 0.9079107344999999 0.6636569280000001) .
 # It holds because the following instance of the rule body is provable:
+#   state:s5 :formula {
+#       var:x a o-persoon:Inwoner .
+#       var:x ex:personalInfoProvided true .
+#       var:x ex:movingDataProvided true .
+#       var:x ex:newAddressProvided true .
+#       var:x ex:addressChangeDeclared true .
+#       var:x ex:confirmationOfAddressChange true .
+#   } .
 #   :scope gps:findpath ({
-#       ?x a o-persoon:Inwoner .
-#       ?x ex:personalInfoProvided true .
-#       ?x ex:movingDataProvided true .
-#       ?x ex:newAddressProvided true .
-#       ?x ex:addressChangeDeclared true .
-#       ?x ex:confirmationOfAddressChange true .
+#       var:x a o-persoon:Inwoner .
+#       var:x ex:personalInfoProvided true .
+#       var:x ex:movingDataProvided true .
+#       var:x ex:newAddressProvided true .
+#       var:x ex:addressChangeDeclared true .
+#       var:x ex:confirmationOfAddressChange true .
 #   } (step:providePersonalInfoOnline step:provideMovingDataDesk step:provideNewAddress step:declareAddressChangePostal step:confirmAddressChangePolice) 20400 4 0.9079107344999999 0.6636569280000001 (40320.0 20.0 0.80 0.65)) .
 # via the schematic forward rule:
 #   {
-#     :scope gps:findpath ({
-#         ?x a o-persoon:Inwoner .
-#         ?x ex:personalInfoProvided true .
-#         ?x ex:movingDataProvided true .
-#         ?x ex:newAddressProvided true .
-#         ?x ex:addressChangeDeclared true .
-#         ?x ex:confirmationOfAddressChange true .
-#     } ?PATH ?DUR ?COST ?SUC ?SAT (40320.0 20.0 0.80 0.65)) .
+#     state:s5 :formula ?GOAL .
+#     :scope gps:findpath (?GOAL ?PATH ?DUR ?COST ?SUC ?SAT (40320.0 20.0 0.80 0.65)) .
 #   } => {
 #     :bob gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
 #   } .
 # with substitution (on rule variables):
 #   ?COST = 4
 #   ?DUR = 20400
+#   ?GOAL = {
+#     var:x a o-persoon:Inwoner .
+#     var:x ex:personalInfoProvided true .
+#     var:x ex:movingDataProvided true .
+#     var:x ex:newAddressProvided true .
+#     var:x ex:addressChangeDeclared true .
+#     var:x ex:confirmationOfAddressChange true .
+#   }
 #   ?PATH = (step:providePersonalInfoOnline step:provideMovingDataDesk step:provideNewAddress step:declareAddressChangePostal step:confirmAddressChangePolice)
 #   ?SAT = 0.6636569280000001
 #   ?SUC = 0.9079107344999999
@@ -42,30 +52,40 @@
 # Proof for derived triple:
 #   :bob gps:path ((step:providePersonalInfoOnline step:provideMovingDataDesk step:provideNewAddress step:declareAddressChangeOnline step:confirmAddressChangePolice) 20370 2 0.9365815997999998 0.67874004) .
 # It holds because the following instance of the rule body is provable:
+#   state:s5 :formula {
+#       var:x a o-persoon:Inwoner .
+#       var:x ex:personalInfoProvided true .
+#       var:x ex:movingDataProvided true .
+#       var:x ex:newAddressProvided true .
+#       var:x ex:addressChangeDeclared true .
+#       var:x ex:confirmationOfAddressChange true .
+#   } .
 #   :scope gps:findpath ({
-#       ?x a o-persoon:Inwoner .
-#       ?x ex:personalInfoProvided true .
-#       ?x ex:movingDataProvided true .
-#       ?x ex:newAddressProvided true .
-#       ?x ex:addressChangeDeclared true .
-#       ?x ex:confirmationOfAddressChange true .
+#       var:x a o-persoon:Inwoner .
+#       var:x ex:personalInfoProvided true .
+#       var:x ex:movingDataProvided true .
+#       var:x ex:newAddressProvided true .
+#       var:x ex:addressChangeDeclared true .
+#       var:x ex:confirmationOfAddressChange true .
 #   } (step:providePersonalInfoOnline step:provideMovingDataDesk step:provideNewAddress step:declareAddressChangeOnline step:confirmAddressChangePolice) 20370 2 0.9365815997999998 0.67874004 (40320.0 20.0 0.80 0.65)) .
 # via the schematic forward rule:
 #   {
-#     :scope gps:findpath ({
-#         ?x a o-persoon:Inwoner .
-#         ?x ex:personalInfoProvided true .
-#         ?x ex:movingDataProvided true .
-#         ?x ex:newAddressProvided true .
-#         ?x ex:addressChangeDeclared true .
-#         ?x ex:confirmationOfAddressChange true .
-#     } ?PATH ?DUR ?COST ?SUC ?SAT (40320.0 20.0 0.80 0.65)) .
+#     state:s5 :formula ?GOAL .
+#     :scope gps:findpath (?GOAL ?PATH ?DUR ?COST ?SUC ?SAT (40320.0 20.0 0.80 0.65)) .
 #   } => {
 #     :bob gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
 #   } .
 # with substitution (on rule variables):
 #   ?COST = 2
 #   ?DUR = 20370
+#   ?GOAL = {
+#     var:x a o-persoon:Inwoner .
+#     var:x ex:personalInfoProvided true .
+#     var:x ex:movingDataProvided true .
+#     var:x ex:newAddressProvided true .
+#     var:x ex:addressChangeDeclared true .
+#     var:x ex:confirmationOfAddressChange true .
+#   }
 #   ?PATH = (step:providePersonalInfoOnline step:provideMovingDataDesk step:provideNewAddress step:declareAddressChangeOnline step:confirmAddressChangePolice)
 #   ?SAT = 0.67874004
 #   ?SUC = 0.9365815997999998
@@ -78,30 +98,40 @@
 # Proof for derived triple:
 #   :bob gps:path ((step:providePersonalInfoOnline step:provideMovingDataOnline step:provideNewAddress step:declareAddressChangePostal step:confirmAddressChangePolice) 20355 4 0.9033483689999999 0.6938231520000001) .
 # It holds because the following instance of the rule body is provable:
+#   state:s5 :formula {
+#       var:x a o-persoon:Inwoner .
+#       var:x ex:personalInfoProvided true .
+#       var:x ex:movingDataProvided true .
+#       var:x ex:newAddressProvided true .
+#       var:x ex:addressChangeDeclared true .
+#       var:x ex:confirmationOfAddressChange true .
+#   } .
 #   :scope gps:findpath ({
-#       ?x a o-persoon:Inwoner .
-#       ?x ex:personalInfoProvided true .
-#       ?x ex:movingDataProvided true .
-#       ?x ex:newAddressProvided true .
-#       ?x ex:addressChangeDeclared true .
-#       ?x ex:confirmationOfAddressChange true .
+#       var:x a o-persoon:Inwoner .
+#       var:x ex:personalInfoProvided true .
+#       var:x ex:movingDataProvided true .
+#       var:x ex:newAddressProvided true .
+#       var:x ex:addressChangeDeclared true .
+#       var:x ex:confirmationOfAddressChange true .
 #   } (step:providePersonalInfoOnline step:provideMovingDataOnline step:provideNewAddress step:declareAddressChangePostal step:confirmAddressChangePolice) 20355 4 0.9033483689999999 0.6938231520000001 (40320.0 20.0 0.80 0.65)) .
 # via the schematic forward rule:
 #   {
-#     :scope gps:findpath ({
-#         ?x a o-persoon:Inwoner .
-#         ?x ex:personalInfoProvided true .
-#         ?x ex:movingDataProvided true .
-#         ?x ex:newAddressProvided true .
-#         ?x ex:addressChangeDeclared true .
-#         ?x ex:confirmationOfAddressChange true .
-#     } ?PATH ?DUR ?COST ?SUC ?SAT (40320.0 20.0 0.80 0.65)) .
+#     state:s5 :formula ?GOAL .
+#     :scope gps:findpath (?GOAL ?PATH ?DUR ?COST ?SUC ?SAT (40320.0 20.0 0.80 0.65)) .
 #   } => {
 #     :bob gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
 #   } .
 # with substitution (on rule variables):
 #   ?COST = 4
 #   ?DUR = 20355
+#   ?GOAL = {
+#     var:x a o-persoon:Inwoner .
+#     var:x ex:personalInfoProvided true .
+#     var:x ex:movingDataProvided true .
+#     var:x ex:newAddressProvided true .
+#     var:x ex:addressChangeDeclared true .
+#     var:x ex:confirmationOfAddressChange true .
+#   }
 #   ?PATH = (step:providePersonalInfoOnline step:provideMovingDataOnline step:provideNewAddress step:declareAddressChangePostal step:confirmAddressChangePolice)
 #   ?SAT = 0.6938231520000001
 #   ?SUC = 0.9033483689999999
@@ -114,30 +144,40 @@
 # Proof for derived triple:
 #   :bob gps:path ((step:providePersonalInfoOnline step:provideMovingDataOnline step:provideNewAddress step:declareAddressChangeOnline step:confirmAddressChangePolice) 20325 2 0.9318751595999999 0.70959186) .
 # It holds because the following instance of the rule body is provable:
+#   state:s5 :formula {
+#       var:x a o-persoon:Inwoner .
+#       var:x ex:personalInfoProvided true .
+#       var:x ex:movingDataProvided true .
+#       var:x ex:newAddressProvided true .
+#       var:x ex:addressChangeDeclared true .
+#       var:x ex:confirmationOfAddressChange true .
+#   } .
 #   :scope gps:findpath ({
-#       ?x a o-persoon:Inwoner .
-#       ?x ex:personalInfoProvided true .
-#       ?x ex:movingDataProvided true .
-#       ?x ex:newAddressProvided true .
-#       ?x ex:addressChangeDeclared true .
-#       ?x ex:confirmationOfAddressChange true .
+#       var:x a o-persoon:Inwoner .
+#       var:x ex:personalInfoProvided true .
+#       var:x ex:movingDataProvided true .
+#       var:x ex:newAddressProvided true .
+#       var:x ex:addressChangeDeclared true .
+#       var:x ex:confirmationOfAddressChange true .
 #   } (step:providePersonalInfoOnline step:provideMovingDataOnline step:provideNewAddress step:declareAddressChangeOnline step:confirmAddressChangePolice) 20325 2 0.9318751595999999 0.70959186 (40320.0 20.0 0.80 0.65)) .
 # via the schematic forward rule:
 #   {
-#     :scope gps:findpath ({
-#         ?x a o-persoon:Inwoner .
-#         ?x ex:personalInfoProvided true .
-#         ?x ex:movingDataProvided true .
-#         ?x ex:newAddressProvided true .
-#         ?x ex:addressChangeDeclared true .
-#         ?x ex:confirmationOfAddressChange true .
-#     } ?PATH ?DUR ?COST ?SUC ?SAT (40320.0 20.0 0.80 0.65)) .
+#     state:s5 :formula ?GOAL .
+#     :scope gps:findpath (?GOAL ?PATH ?DUR ?COST ?SUC ?SAT (40320.0 20.0 0.80 0.65)) .
 #   } => {
 #     :bob gps:path (?PATH ?DUR ?COST ?SUC ?SAT) .
 #   } .
 # with substitution (on rule variables):
 #   ?COST = 2
 #   ?DUR = 20325
+#   ?GOAL = {
+#     var:x a o-persoon:Inwoner .
+#     var:x ex:personalInfoProvided true .
+#     var:x ex:movingDataProvided true .
+#     var:x ex:newAddressProvided true .
+#     var:x ex:addressChangeDeclared true .
+#     var:x ex:confirmationOfAddressChange true .
+#   }
 #   ?PATH = (step:providePersonalInfoOnline step:provideMovingDataOnline step:provideNewAddress step:declareAddressChangeOnline step:confirmAddressChangePolice)
 #   ?SAT = 0.70959186
 #   ?SUC = 0.9318751595999999
