@@ -1,0 +1,319 @@
+# Self-contained N3 demo for Eyeling:
+# - 3 SKOS taxonomies (reference, Telraam, ANPR)
+# - SKOS entailment rules (broader/narrower + transitive closure + mapping props)
+# - Generic aggregation rule:
+#     for a requested concept, sum all SOSA observations
+#     whose observedProperty is SKOS-narrower (or equal) than the requested concept.
+#
+# Run:
+#   eyeling traffic-skos-aggregate.n3
+# or:
+#   node eyeling.js traffic-skos-aggregate.n3
+
+@prefix ex:   <http://example.org/> .
+@prefix ref:  <http://example.org/taxonomy/ref/> .
+@prefix tel:  <http://example.org/taxonomy/telraam/> .
+@prefix anpr: <http://example.org/taxonomy/anpr/> .
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+
+######################################################################
+# 1) Example SKOS taxonomies
+######################################################################
+
+############################
+# Reference concept scheme
+############################
+
+ref:scheme a skos:ConceptScheme .
+ref:scheme skos:prefLabel "Reference traffic counting taxonomy"@en .
+
+ref:RoadUser a skos:Concept ;
+  skos:inScheme ref:scheme ;
+  skos:prefLabel "Road user"@en .
+
+ref:Pedestrian a skos:Concept ;
+  skos:inScheme ref:scheme ;
+  skos:prefLabel "Pedestrian"@en ;
+  skos:broader ref:RoadUser .
+
+ref:TwoWheeler a skos:Concept ;
+  skos:inScheme ref:scheme ;
+  skos:prefLabel "Two-wheeler"@en ;
+  skos:broader ref:RoadUser .
+
+ref:Car a skos:Concept ;
+  skos:inScheme ref:scheme ;
+  skos:prefLabel "Car (broad reporting class)"@en ;
+  skos:broader ref:RoadUser .
+
+############################
+# Telraam concept scheme
+############################
+
+tel:scheme a skos:ConceptScheme .
+tel:scheme skos:prefLabel "Telraam categories"@en .
+
+tel:RoadUser a skos:Concept ;
+  skos:inScheme tel:scheme ;
+  skos:prefLabel "Road user"@en .
+
+tel:Pedestrian a skos:Concept ;
+  skos:inScheme tel:scheme ;
+  skos:prefLabel "Pedestrian"@en ;
+  skos:broader tel:RoadUser ;
+  skos:broadMatch ref:Pedestrian .
+
+tel:TwoWheeler a skos:Concept ;
+  skos:inScheme tel:scheme ;
+  skos:prefLabel "Two-wheeler"@en ;
+  skos:broader tel:RoadUser ;
+  skos:broadMatch ref:TwoWheeler .
+
+tel:Car a skos:Concept ;
+  skos:inScheme tel:scheme ;
+  skos:prefLabel "Car"@en ;
+  skos:broader tel:RoadUser ;
+  skos:broadMatch ref:Car .
+
+tel:HeavyVehicle a skos:Concept ;
+  skos:inScheme tel:scheme ;
+  skos:prefLabel "Heavy vehicle"@en ;
+  skos:broader tel:RoadUser ;
+  # As in your example: treat tel:HeavyVehicle as narrower than ref:Car
+  skos:broadMatch ref:Car .
+
+############################
+# ANPR concept scheme
+############################
+
+anpr:scheme a skos:ConceptScheme .
+anpr:scheme skos:prefLabel "ANPR categories"@en .
+
+anpr:VehicleWithPlate a skos:Concept ;
+  skos:inScheme anpr:scheme ;
+  skos:prefLabel "Vehicle with number plate"@en ;
+  # Map ANPR top concept to ref:Car (broad reporting concept)
+  skos:broadMatch ref:Car .
+
+anpr:PassengerCar a skos:Concept ;
+  skos:inScheme anpr:scheme ;
+  skos:prefLabel "Passenger car"@en ;
+  skos:broader anpr:VehicleWithPlate .
+
+anpr:Van a skos:Concept ;
+  skos:inScheme anpr:scheme ;
+  skos:prefLabel "Van / light commercial vehicle"@en ;
+  skos:broader anpr:VehicleWithPlate .
+
+anpr:Truck a skos:Concept ;
+  skos:inScheme anpr:scheme ;
+  skos:prefLabel "Truck"@en ;
+  skos:broader anpr:VehicleWithPlate .
+
+anpr:Bus a skos:Concept ;
+  skos:inScheme anpr:scheme ;
+  skos:prefLabel "Bus"@en ;
+  skos:broader anpr:VehicleWithPlate .
+
+
+######################################################################
+# 2) SKOS entailment rules
+# (Eyeling has no special SKOS builtins, so we implement closure in N3)
+######################################################################
+
+# Mapping properties to hierarchy (cross-scheme)
+{ ?a skos:broadMatch ?b. } => { ?a skos:broader ?b. } .
+{ ?a skos:narrowMatch ?b. } => { ?a skos:narrower ?b. } .
+
+# Symmetry for mapping properties
+{ ?a skos:exactMatch ?b. } => { ?b skos:exactMatch ?a. } .
+{ ?a skos:closeMatch ?b. } => { ?b skos:closeMatch ?a. } .
+
+# Inverses
+{ ?n skos:broader ?b. } => { ?b skos:narrower ?n. } .
+{ ?n skos:narrower ?c. } => { ?c skos:broader ?n. } .
+
+# Immediate -> transitive
+{ ?n skos:broader ?b. } => { ?n skos:broaderTransitive ?b. } .
+{ ?n skos:narrower ?c. } => { ?n skos:narrowerTransitive ?c. } .
+
+# Transitivity (closure)
+{ ?a skos:broaderTransitive ?b. ?b skos:broaderTransitive ?c. } => { ?a skos:broaderTransitive ?c. } .
+{ ?a skos:narrowerTransitive ?b. ?b skos:narrowerTransitive ?c. } => { ?a skos:narrowerTransitive ?c. } .
+
+# Make both transitive properties inverse of each other
+{ ?a skos:broaderTransitive ?b. } => { ?b skos:narrowerTransitive ?a. } .
+{ ?a skos:narrowerTransitive ?b. } => { ?b skos:broaderTransitive ?a. } .
+
+
+######################################################################
+# 3) Helper relation for aggregation: ex:narrowerOrEqualOf
+######################################################################
+
+# Every concept counts as narrower-or-equal to itself
+{ ?c a skos:Concept. } => { ?c ex:narrowerOrEqualOf ?c. } .
+
+# Any SKOS narrower concept contributes to its broader concept
+{ ?c skos:broaderTransitive ?b. } => { ?c ex:narrowerOrEqualOf ?b. } .
+
+# exactMatch also counts as equal for aggregation
+{ ?c skos:exactMatch ?b. } => { ?c ex:narrowerOrEqualOf ?b. } .
+
+
+######################################################################
+# 4) Sample SOSA data (Telraam + ANPR)
+######################################################################
+
+ex:segment1 a sosa:FeatureOfInterest ;
+  rdfs:label "Example road segment 1"@en .
+
+ex:telraamSensor1 a sosa:Sensor, ex:DataSourceSensor ;
+  rdfs:label "Telraam counter #1"@en .
+
+ex:anprCamera1 a sosa:Sensor, ex:DataSourceSensor ;
+  rdfs:label "ANPR camera #1"@en .
+
+# Telraam observations
+ex:obs_tel_car a sosa:Observation ;
+  sosa:madeBySensor ex:telraamSensor1 ;
+  sosa:hasFeatureOfInterest ex:segment1 ;
+  sosa:resultTime "2025-12-23T08:00:00Z"^^xsd:dateTime ;
+  sosa:observedProperty tel:Car ;
+  sosa:hasSimpleResult 10 .
+
+ex:obs_tel_heavy a sosa:Observation ;
+  sosa:madeBySensor ex:telraamSensor1 ;
+  sosa:hasFeatureOfInterest ex:segment1 ;
+  sosa:resultTime "2025-12-23T08:00:00Z"^^xsd:dateTime ;
+  sosa:observedProperty tel:HeavyVehicle ;
+  sosa:hasSimpleResult 2 .
+
+# ANPR observations
+ex:obs_anpr_passenger a sosa:Observation ;
+  sosa:madeBySensor ex:anprCamera1 ;
+  sosa:hasFeatureOfInterest ex:segment1 ;
+  sosa:resultTime "2025-12-23T08:00:00Z"^^xsd:dateTime ;
+  sosa:observedProperty anpr:PassengerCar ;
+  sosa:hasSimpleResult 8 .
+
+ex:obs_anpr_van a sosa:Observation ;
+  sosa:madeBySensor ex:anprCamera1 ;
+  sosa:hasFeatureOfInterest ex:segment1 ;
+  sosa:resultTime "2025-12-23T08:00:00Z"^^xsd:dateTime ;
+  sosa:observedProperty anpr:Van ;
+  sosa:hasSimpleResult 1 .
+
+ex:obs_anpr_truck a sosa:Observation ;
+  sosa:madeBySensor ex:anprCamera1 ;
+  sosa:hasFeatureOfInterest ex:segment1 ;
+  sosa:resultTime "2025-12-23T08:00:00Z"^^xsd:dateTime ;
+  sosa:observedProperty anpr:Truck ;
+  sosa:hasSimpleResult 1 .
+
+ex:obs_anpr_bus a sosa:Observation ;
+  sosa:madeBySensor ex:anprCamera1 ;
+  sosa:hasFeatureOfInterest ex:segment1 ;
+  sosa:resultTime "2025-12-23T08:00:00Z"^^xsd:dateTime ;
+  sosa:observedProperty anpr:Bus ;
+  sosa:hasSimpleResult 0 .
+
+
+######################################################################
+# 5) Request + generic aggregation rule (uses Eyeling builtins)
+######################################################################
+
+# A request: "Give me car counts at this FOI and time"
+ex:request_cars_at_t1 a ex:CountRequest ;
+  ex:requestedConcept ref:Car ;
+  sosa:hasFeatureOfInterest ex:segment1 ;
+  sosa:resultTime "2025-12-23T08:00:00Z"^^xsd:dateTime .
+
+# Aggregate: for a given request, sum all matching results.
+# Uses Eyeling builtins:
+# - log:collectAllIn to collect values and contributing obs
+# - list:append to force >=2 elements for math:sum (append 0)
+# - math:sum to compute total
+# - log:skolem to mint stable IRI for derived observation
+#
+# NOTE: termination-safe:
+#   only include observations from sensors typed ex:DataSourceSensor
+{
+  ?req a ex:CountRequest ;
+       ex:requestedConcept ?concept ;
+       sosa:hasFeatureOfInterest ?foi ;
+       sosa:resultTime ?t .
+
+  ( ?v
+    {
+      ?obs a sosa:Observation ;
+           sosa:madeBySensor ?sensor ;
+           sosa:hasFeatureOfInterest ?foi ;
+           sosa:resultTime ?t ;
+           sosa:observedProperty ?p ;
+           sosa:hasSimpleResult ?v .
+      ?sensor a ex:DataSourceSensor .
+      ?p ex:narrowerOrEqualOf ?concept .
+    }
+    ?vals
+  ) log:collectAllIn _:scopeVals .
+
+  ( ?obs
+    {
+      ?obs a sosa:Observation ;
+           sosa:madeBySensor ?sensor ;
+           sosa:hasFeatureOfInterest ?foi ;
+           sosa:resultTime ?t ;
+           sosa:observedProperty ?p ;
+           sosa:hasSimpleResult ?v .
+      ?sensor a ex:DataSourceSensor .
+      ?p ex:narrowerOrEqualOf ?concept .
+    }
+    ?obsList
+  ) log:collectAllIn _:scopeObs .
+
+  ( ?vals (0) ) list:append ?valsPlus0 .
+  ?valsPlus0 math:sum ?sum .
+
+  ( "agg" ?concept ?foi ?t ) log:skolem ?aggObs .
+}
+=>
+{
+  ?aggObs a sosa:Observation, ex:AggregatedObservation ;
+          sosa:observedProperty ?concept ;
+          sosa:hasFeatureOfInterest ?foi ;
+          sosa:resultTime ?t ;
+          sosa:hasSimpleResult ?sum ;
+          ex:basedOnRequest ?req ;
+          ex:contributingValues ?vals ;
+          ex:contributingObservations ?obsList .
+} .
+
+# Expand provenance list into prov:wasDerivedFrom triples (optional)
+{
+  ?agg ex:contributingObservations ?l .
+  ?l list:member ?obs .
+}
+=>
+{
+  ?agg prov:wasDerivedFrom ?obs .
+} .
+
+######################################################################
+# Expected derived result for this demo:
+#
+# ref:Car total = 10 (tel:Car) + 2 (tel:HeavyVehicle)
+#               + 8 (anpr:PassengerCar) + 1 (anpr:Van) + 1 (anpr:Truck) + 0 (anpr:Bus)
+#               = 22
+######################################################################
+
