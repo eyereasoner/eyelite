@@ -499,6 +499,25 @@ function lex(inputText) {
         }
         break;
       }
+
+      // Optional exponent part: e.g., 1e0, 1.1e-3, 1.1E+0
+      if (i < n && (chars[i] === 'e' || chars[i] === 'E')) {
+        let j = i + 1;
+        if (j < n && (chars[j] === '+' || chars[j] === '-')) j++;
+        if (j < n && /[0-9]/.test(chars[j])) {
+          numChars.push(chars[i]); // e/E
+          i++;
+          if (i < n && (chars[i] === '+' || chars[i] === '-')) {
+            numChars.push(chars[i]);
+            i++;
+          }
+          while (i < n && /[0-9]/.test(chars[i])) {
+            numChars.push(chars[i]);
+            i++;
+          }
+        }
+      }
+
       tokens.push(new Token('Literal', numChars.join('')));
       continue;
     }
@@ -1862,6 +1881,22 @@ function unifyTerm(a, b, subst) {
   if (a instanceof Iri && b instanceof Iri && a.value === b.value) return { ...subst };
   if (a instanceof Literal && b instanceof Literal && a.value === b.value) return { ...subst };
   if (a instanceof Blank && b instanceof Blank && a.label === b.label) return { ...subst };
+
+  // Numeric-value match for literals (EYE-style): allow different lexical forms / typing
+  // e.g. "1.1"^^xsd:double  ≈  1.1e0
+  if (a instanceof Literal && b instanceof Literal) {
+    const av = parseNumberLiteral(a); // BigInt | Number | null
+    const bv = parseNumberLiteral(b);
+    if (av !== null && bv !== null) {
+      if (typeof av === 'bigint' && typeof bv === 'bigint') {
+        if (av === bv) return { ...subst };
+      } else {
+        const an = typeof av === 'bigint' ? Number(av) : av;
+        const bn = typeof bv === 'bigint' ? Number(bv) : bv;
+        if (!Number.isNaN(an) && !Number.isNaN(bn) && an === bn) return { ...subst };
+      }
+    }
+  }
 
   // Open list vs concrete list
   if (a instanceof OpenListTerm && b instanceof ListTerm) {
