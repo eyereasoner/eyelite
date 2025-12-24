@@ -1,0 +1,38 @@
+# ------------------------------------------------------------
+# Minimal SKOS alignment + propagation example (Eyeling-friendly)
+#
+# Goal:
+#   Show how a SKOS mapping (broadMatch) lets you treat dataset-
+#   specific categories as a reference category, and how that
+#   alignment propagates to more specific (narrower) categories.
+#
+# What should be inferred:
+#   anpr:VehicleWithPlate ex:treatedAs ref:Car .
+#   anpr:PassengerCar     ex:treatedAs ref:Car .
+#
+# Run (example):
+#   eyeling alignment-demo.n3
+# ------------------------------------------------------------
+
+@prefix ex:   <http://example.org/> .
+@prefix ref:  <http://example.org/ref/> .
+@prefix anpr: <http://example.org/anpr/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# --- Concepts (two schemes) ---
+ref:Car a skos:Concept .
+
+anpr:VehicleWithPlate a skos:Concept ;
+  skos:broadMatch ref:Car .
+
+anpr:PassengerCar a skos:Concept ;
+  skos:broader anpr:VehicleWithPlate .
+
+# --- Rules ---
+# Rule 1: interpret skos:broadMatch as "treat A as B" for reporting
+{ ?a skos:broadMatch ?b. } => { ?a ex:treatedAs ?b. } .
+
+# Rule 2: propagate that treatment down the SKOS hierarchy:
+# if X has broader concept Y, and Y is treatedAs Z, then X is treatedAs Z
+{ ?x skos:broader ?y. ?y ex:treatedAs ?z. } => { ?x ex:treatedAs ?z. } .
+
