@@ -1,5 +1,5 @@
 # ------------------------------------------------------------
-# Minimal SKOS alignment + propagation example (Eyeling-friendly)
+# Minimal SKOS alignment + propagation example
 #
 # Goal:
 #   Show how a SKOS mapping (broadMatch) lets you treat dataset-
@@ -11,7 +11,7 @@
 #   anpr:PassengerCar     ex:treatedAs ref:Car .
 #
 # Run (example):
-#   eyeling alignment-demo.n3
+#   eyeling minimal-skos-alignment.n3
 # ------------------------------------------------------------
 
 @prefix ex:   <http://example.org/> .
