@@ -3311,6 +3311,17 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
         s2[g.o.name] = lit;
         return [s2];
       }
+      if (g.o instanceof Blank) return [{ ...subst }];
+
+      const oi = parseIntLiteral(g.o);
+      if (oi !== null && oi === q) return [{ ...subst }];
+
+      // Only do numeric compare when safe enough to convert
+      const qNum = Number(q);
+      if (Number.isFinite(qNum) && Math.abs(qNum) <= Number.MAX_SAFE_INTEGER) {
+        if (numEqualTerm(g.o, qNum)) return [{ ...subst }];
+      }
+
       const s2 = unifyTerm(g.o, lit, subst);
       return s2 !== null ? [s2] : [];
     }
@@ -3329,6 +3340,10 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       s2[g.o.name] = lit;
       return [s2];
     }
+    if (g.o instanceof Blank) return [{ ...subst }];
+
+    if (numEqualTerm(g.o, q)) return [{ ...subst }];
+
     const s2 = unifyTerm(g.o, lit, subst);
     return s2 !== null ? [s2] : [];
   }
@@ -3509,18 +3524,27 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
   // math:rounded
   // Round to nearest integer.
   // If there are two such numbers, then the one closest to positive infinity is returned.
-  // Schema: $s math:rounded $o
+  // Schema: $s+ math:rounded $o-
+  // Note: spec says $o is xsd:integer, but we also accept any numeric $o that equals the rounded value.
   if (g.p instanceof Iri && g.p.value === MATH_NS + 'rounded') {
     const a = parseNum(g.s);
     if (a === null) return [];
-    const rVal = Math.round(a);
-    const lit = new Literal(formatNum(rVal));
+    if (Number.isNaN(a)) return [];
+
+    const rVal = Math.round(a); // ties go toward +∞ in JS (e.g., -1.5 -> -1)
+    const lit = new Literal(String(rVal)); // integer token
 
     if (g.o instanceof Var) {
       const s2 = { ...subst };
       s2[g.o.name] = lit;
       return [s2];
     }
+    if (g.o instanceof Blank) return [{ ...subst }];
+
+    // Accept typed numeric literals too (e.g., "3"^^xsd:float) if numerically equal.
+    if (numEqualTerm(g.o, rVal)) return [{ ...subst }];
+
+    // Fallback to strict unification
     const s2 = unifyTerm(g.o, lit, subst);
     return s2 !== null ? [s2] : [];
   }
