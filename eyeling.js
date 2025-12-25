@@ -1285,20 +1285,6 @@ function termsEqual(a, b) {
         const bn = bi.kind === 'bigint' ? Number(bi.value) : bi.value;
         return !Number.isNaN(an) && !Number.isNaN(bn) && an === bn;
       }
-
-      // integer <-> decimal: allow exact equality (but NOT with double)
-      const intDt = XSD_NS + 'integer';
-      const decDt = XSD_NS + 'decimal';
-      if ((ai.dt === intDt && bi.dt === decDt) || (ai.dt === decDt && bi.dt === intDt)) {
-        const intInfo = ai.dt === intDt ? ai : bi;
-        const decInfo = ai.dt === decDt ? ai : bi;
-
-        const dec = parseXsdDecimalToBigIntScale(decInfo.lexStr);
-        if (dec) {
-          const scaledInt = intInfo.value * pow10n(dec.scale);
-          return scaledInt === dec.num;
-        }
-      }
     }
 
     return false;
@@ -2014,20 +2000,6 @@ function unifyTerm(a, b, subst) {
           if (!Number.isNaN(an) && !Number.isNaN(bn) && an === bn) return { ...subst };
         }
       }
-
-      // integer <-> decimal: allow exact equality (but NOT with double)
-      const intDt = XSD_NS + 'integer';
-      const decDt = XSD_NS + 'decimal';
-      if ((ai.dt === intDt && bi.dt === decDt) || (ai.dt === decDt && bi.dt === intDt)) {
-        const intInfo = ai.dt === intDt ? ai : bi;
-        const decInfo = ai.dt === decDt ? ai : bi;
-
-        const dec = parseXsdDecimalToBigIntScale(decInfo.lexStr);
-        if (dec) {
-          const scaledInt = intInfo.value * pow10n(dec.scale);
-          if (scaledInt === dec.num) return { ...subst };
-        }
-      }
     }
   }
 
@@ -2068,6 +2040,102 @@ function unifyTerm(a, b, subst) {
     if (alphaEqFormulaTriples(a.triples, b.triples)) return { ...subst };
     return unifyFormulaTriples(a.triples, b.triples, subst);
   }
+  return null;
+}
+
+function unifyTermListAppend(a, b, subst) {
+  a = applySubstTerm(a, subst);
+  b = applySubstTerm(b, subst);
+
+  // Variable binding (same as unifyTerm)
+  if (a instanceof Var) {
+    const v = a.name;
+    const t = b;
+    if (t instanceof Var && t.name === v) return { ...subst };
+    if (containsVarTerm(t, v)) return null;
+    const s2 = { ...subst };
+    s2[v] = t;
+    return s2;
+  }
+  if (b instanceof Var) return unifyTermListAppend(b, a, subst);
+
+  // Exact matches
+  if (a instanceof Iri && b instanceof Iri && a.value === b.value) return { ...subst };
+  if (a instanceof Literal && b instanceof Literal && a.value === b.value) return { ...subst };
+  if (a instanceof Blank && b instanceof Blank && a.label === b.label) return { ...subst };
+
+  // Plain string vs xsd:string equivalence
+  if (a instanceof Literal && b instanceof Literal) {
+    if (literalsEquivalentAsXsdString(a.value, b.value)) return { ...subst };
+  }
+
+  // Numeric match: same-dt OR integer<->decimal exact equality (for list:append only)
+  if (a instanceof Literal && b instanceof Literal) {
+    const ai = parseNumericLiteralInfo(a);
+    const bi = parseNumericLiteralInfo(b);
+    if (ai && bi) {
+      // same datatype
+      if (ai.dt === bi.dt) {
+        if (ai.kind === 'bigint' && bi.kind === 'bigint') {
+          if (ai.value === bi.value) return { ...subst };
+        } else {
+          const an = ai.kind === 'bigint' ? Number(ai.value) : ai.value;
+          const bn = bi.kind === 'bigint' ? Number(bi.value) : bi.value;
+          if (!Number.isNaN(an) && !Number.isNaN(bn) && an === bn) return { ...subst };
+        }
+      }
+
+      // integer <-> decimal exact equality
+      const intDt = XSD_NS + 'integer';
+      const decDt = XSD_NS + 'decimal';
+      if ((ai.dt === intDt && bi.dt === decDt) || (ai.dt === decDt && bi.dt === intDt)) {
+        const intInfo = ai.dt === intDt ? ai : bi;
+        const decInfo = ai.dt === decDt ? ai : bi;
+        const dec = parseXsdDecimalToBigIntScale(decInfo.lexStr);
+        if (dec) {
+          const scaledInt = intInfo.value * pow10n(dec.scale);
+          if (scaledInt === dec.num) return { ...subst };
+        }
+      }
+    }
+  }
+
+  // Open list vs concrete list
+  if (a instanceof OpenListTerm && b instanceof ListTerm) {
+    return unifyOpenWithList(a.prefix, a.tailVar, b.elems, subst);
+  }
+  if (a instanceof ListTerm && b instanceof OpenListTerm) {
+    return unifyOpenWithList(b.prefix, b.tailVar, a.elems, subst);
+  }
+
+  // Open list vs open list
+  if (a instanceof OpenListTerm && b instanceof OpenListTerm) {
+    if (a.tailVar !== b.tailVar || a.prefix.length !== b.prefix.length) return null;
+    let s2 = { ...subst };
+    for (let i = 0; i < a.prefix.length; i++) {
+      s2 = unifyTermListAppend(a.prefix[i], b.prefix[i], s2);
+      if (s2 === null) return null;
+    }
+    return s2;
+  }
+
+  // List terms
+  if (a instanceof ListTerm && b instanceof ListTerm) {
+    if (a.elems.length !== b.elems.length) return null;
+    let s2 = { ...subst };
+    for (let i = 0; i < a.elems.length; i++) {
+      s2 = unifyTermListAppend(a.elems[i], b.elems[i], s2);
+      if (s2 === null) return null;
+    }
+    return s2;
+  }
+
+  // Formulas
+  if (a instanceof FormulaTerm && b instanceof FormulaTerm) {
+    if (alphaEqFormulaTriples(a.triples, b.triples)) return { ...subst };
+    return unifyFormulaTriples(a.triples, b.triples, subst);
+  }
+
   return null;
 }
 
@@ -2720,7 +2788,7 @@ function listAppendSplit(parts, resElems, subst) {
   const n = resElems.length;
   for (let k = 0; k <= n; k++) {
     const left = new ListTerm(resElems.slice(0, k));
-    let s1 = unifyTerm(parts[0], left, subst);
+    let s1 = unifyTermListAppend(parts[0], left, subst);
     if (s1 === null) continue;
     const restElems = resElems.slice(k);
     out.push(...listAppendSplit(parts.slice(1), restElems, s1));
@@ -2789,7 +2857,7 @@ function parseNumericLiteralInfo(t) {
   if (Number.isNaN(num)) return null;
 
   // allow +/-Infinity for float/double
-  if ((dt2 === XSD_DECIMAL_DT) && !Number.isFinite(num)) return null;
+  if (dt2 === XSD_DECIMAL_DT && !Number.isFinite(num)) return null;
 
   return { dt: dt2, kind: 'number', value: num, lexStr };
 }
