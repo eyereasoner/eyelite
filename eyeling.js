@@ -4065,6 +4065,61 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [{ ...subst }];
   }
 
+  // log:dtlit
+  // Schema: ( $s.1? $s.2? )? log:dtlit $o?
+  // true iff $o is a datatyped literal with string value $s.1 and datatype IRI $s.2
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'dtlit') {
+    // Fully unbound (both arguments '?'-mode): treat as satisfiable, succeed once.
+    // Required by notation3tests "success-fullUnbound-*".
+    if (g.s instanceof Var && g.o instanceof Var) return [{ ...subst }];
+
+    const results = [];
+
+    // Direction 1: object literal -> subject list (string, datatype)
+    if (g.o instanceof Literal) {
+      const [oLex, oDt0] = literalParts(g.o.value);
+      let oDt = oDt0;
+
+      // literalParts() strips @lang into the lexical part and leaves dt null,
+      // but RDF 1.1 language-tagged strings have datatype rdf:langString.
+      if (oDt === null) {
+        if (literalHasLangTag(g.o.value)) oDt = RDF_NS + 'langString';
+        else if (isPlainStringLiteralValue(g.o.value)) oDt = XSD_NS + 'string';
+      }
+
+      if (oDt !== null) {
+        const strLit = isQuotedLexical(oLex) ? new Literal(oLex) : makeStringLiteral(String(oLex));
+        const subjList = new ListTerm([strLit, new Iri(oDt)]);
+        const s2 = unifyTerm(goal.s, subjList, subst);
+        if (s2 !== null) results.push(s2);
+      }
+    }
+
+    // Direction 2: subject list -> object literal
+    if (g.s instanceof ListTerm && g.s.elems.length === 2) {
+      const a = g.s.elems[0];
+      const b = g.s.elems[1];
+
+      if (a instanceof Literal && b instanceof Iri) {
+        const [sLex, sDt0] = literalParts(a.value);
+
+        // $s.1 must be xsd:string (plain or ^^xsd:string), not language-tagged.
+        const okString =
+          (sDt0 === null && isPlainStringLiteralValue(a.value)) || sDt0 === XSD_NS + 'string';
+        if (okString) {
+          const dtIri = b.value;
+          // For xsd:string, prefer the plain string literal form.
+          const outLit =
+            dtIri === XSD_NS + 'string' ? new Literal(sLex) : new Literal(`${sLex}^^<${dtIri}>`);
+          const s2 = unifyTerm(goal.o, outLit, subst);
+          if (s2 !== null) results.push(s2);
+        }
+      }
+    }
+
+    return results;
+  }
+
   // log:implies — expose internal forward rules as data
   if (g.p instanceof Iri && g.p.value === LOG_NS + 'implies') {
     const allFw = backRules.__allForwardRules || [];
