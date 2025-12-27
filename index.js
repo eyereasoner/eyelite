@@ -1,4 +1,4 @@
-'use strict';
++'use strict';
 
 const fs = require('node:fs');
 const os = require('node:os');
@@ -13,15 +13,23 @@ function reason(opt = {}, n3_input = '') {
 
   // allow passing an args array directly
   if (Array.isArray(opt)) opt = { args: opt };
+  if (opt == null || typeof opt !== 'object') opt = {};
 
   const args = [];
 
   // default: proof comments OFF for API output (machine-friendly)
   // set { proofComments: true } to keep them
+  const proofCommentsSpecified = typeof opt.proofComments === 'boolean' || typeof opt.noProofComments === 'boolean';
+
   const proofComments =
     typeof opt.proofComments === 'boolean' ? opt.proofComments : typeof opt.noProofComments === 'boolean' ? !opt.noProofComments : false;
 
-  if (!proofComments) args.push('--no-proof-comments'); // CLI already supports this :contentReference[oaicite:1]{index=1}
+  // Only pass a flag when the caller explicitly asked.
+  // (CLI default is now: no proof comments.)
+  if (proofCommentsSpecified) {
+    if (proofComments) args.push('--proof-comments');
+    else args.push('--no-proof-comments');
+  }
 
   if (Array.isArray(opt.args)) args.push(...opt.args);
 
@@ -34,10 +42,7 @@ function reason(opt = {}, n3_input = '') {
     fs.writeFileSync(inputFile, n3_input, 'utf8');
 
     const eyelingPath = path.join(__dirname, 'eyeling.js');
-    const res = cp.spawnSync(process.execPath, [eyelingPath, ...args, inputFile], {
-      encoding: 'utf8',
-      maxBuffer,
-    });
+    const res = cp.spawnSync(process.execPath, [eyelingPath, ...args, inputFile], { encoding: 'utf8', maxBuffer });
 
     if (res.error) throw res.error;
     if (res.status !== 0) {
@@ -47,6 +52,7 @@ function reason(opt = {}, n3_input = '') {
       err.stderr = res.stderr;
       throw err;
     }
+
     return res.stdout;
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -54,5 +60,6 @@ function reason(opt = {}, n3_input = '') {
 }
 
 module.exports = { reason };
+
 // small interop nicety for ESM default import
 module.exports.default = module.exports;

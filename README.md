@@ -103,16 +103,16 @@ npm run test:packlist
 - `test:package` does a “real consumer” smoke test: `npm pack` → install tarball into a temp project → run API + CLI + examples.
 - `test:packlist` sanity-checks what will be published in the npm tarball (and the CLI shebang/bin wiring).
 
-### Run a single file
+### Usage
 
-From the repo root:
+```
+Usage: eyeling.js [options] <file.n3>
 
-```bash
-# Option 1: use the shebang (Unix-like)
-./eyeling.js examples/socrates.n3
-
-# Option 2: explicit node
-node eyeling.js examples/socrates.n3
+Options:
+  -h, --help              Show this help and exit.
+  -v, --version           Print version and exit.
+  -p, --proof-comments    Enable proof explanations.
+  -n, --no-proof-comments Disable proof explanations (default).
 ```
 
 By default, `eyeling`:
@@ -121,17 +121,6 @@ By default, `eyeling`:
 2. runs **forward chaining to a fixpoint**
 3. prints only **newly derived forward facts** (not the original input facts)
 4. prints a compact per-triple explanation as `#` comments (can be disabled)
-
-### Options
-
-```bash
-node eyeling.js --version
-node eyeling.js -v
-
-# Disable proof comments (print only derived triples)
-node eyeling.js --no-proof-comments examples/socrates.n3
-node eyeling.js -n examples/socrates.n3
-```
 
 ## What output do I get?
 

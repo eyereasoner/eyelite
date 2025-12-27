@@ -407,9 +407,9 @@
       <div class="controls">
         <button id="run-btn">Run reasoning</button>
 
-        <label class="toggle" title="Runs Eyeling with -n (no proof comments)">
-          <input id="no-proof-comments" type="checkbox" />
-          Turn proof comments off (-n)
+        <label class="toggle" title="Runs Eyeling with -p (proof comments)">
+          <input id="proof-comments" type="checkbox" />
+          Turn proof comments on (-p)
         </label>
 
         <span class="status" id="status">Idle.</span>
@@ -449,7 +449,7 @@
       const statusEl = document.getElementById("status");
       const uriInput = document.getElementById("n3-uri");
       const loadUriBtn = document.getElementById("load-uri-btn");
-      const noProofCheckbox = document.getElementById("no-proof-comments");
+      const proofCheckbox = document.getElementById("proof-comments");
       const versionEl = document.getElementById("eyeling-version");
 
       const EYELING_JS_URL =
@@ -679,7 +679,7 @@
               argv: [
                 "node",
                 "eyeling.js",
-                ...(noProofCheckbox.checked ? ["-n"] : []),
+                ...(proofCheckbox.checked ? ["-p"] : []),
                 "input.n3",
               ],
               exit: (code) => {

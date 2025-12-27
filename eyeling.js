@@ -75,7 +75,7 @@ const skolemCache = new Map();
 const jsonPointerCache = new Map();
 
 // Controls whether human-readable proof comments are printed.
-let proofCommentsEnabled = true;
+let proofCommentsEnabled = false;
 
 // ----------------------------------------------------------------------------
 // Deterministic time support
@@ -5558,7 +5558,6 @@ function localIsoDateTimeString(d) {
 // ============================================================================
 // CLI entry point
 // ============================================================================
-
 function main() {
   // Drop "node" and script name; keep only user-provided args
   const argv = process.argv.slice(2);
@@ -5566,6 +5565,19 @@ function main() {
   // --------------------------------------------------------------------------
   // Global options
   // --------------------------------------------------------------------------
+  // --help / -h: print help and exit
+  if (argv.includes('--help') || argv.includes('-h')) {
+    console.log(
+      'Usage: eyeling.js [options] <file.n3>\n' +
+        '\n' +
+        'Options:\n' +
+        '  -h, --help              Show this help and exit.\n' +
+        '  -v, --version           Print version and exit.\n' +
+        '  -p, --proof-comments    Enable proof explanations.\n' +
+        '  -n, --no-proof-comments Disable proof explanations (default).\n',
+    );
+    process.exit(0);
+  }
 
   // --version / -v: print version and exit
   if (argv.includes('--version') || argv.includes('-v')) {
@@ -5573,7 +5585,13 @@ function main() {
     process.exit(0);
   }
 
-  // --no-proof-comments / -n: disable proof explanations
+  // --proof-comments / -p: enable proof explanations
+  if (argv.includes('--proof-comments') || argv.includes('-p')) {
+    proofCommentsEnabled = true;
+  }
+
+  // --no-proof-comments / -n: disable proof explanations (default)
+  // Keep this after --proof-comments so -n wins if both are present.
   if (argv.includes('--no-proof-comments') || argv.includes('-n')) {
     proofCommentsEnabled = false;
   }
@@ -5582,9 +5600,16 @@ function main() {
   // Positional args (the N3 file)
   // --------------------------------------------------------------------------
   const positional = argv.filter((a) => !a.startsWith('-'));
-
   if (positional.length !== 1) {
-    console.error('Usage: eyeling.js [--version|-v] [--no-proof-comments|-n] <file.n3>');
+    console.error(
+      'Usage: eyeling.js [options] <file.n3>\n' +
+        '\n' +
+        'Options:\n' +
+        '  -h, --help              Show this help and exit.\n' +
+        '  -v, --version           Print version and exit.\n' +
+        '  -p, --proof-comments    Enable proof explanations.\n' +
+        '  -n, --no-proof-comments Disable proof explanations (default).\n',
+    );
     process.exit(1);
   }
 
@@ -5603,12 +5628,12 @@ function main() {
   const [prefixes, triples, frules, brules] = parser.parseDocument();
   // console.log(JSON.stringify([prefixes, triples, frules, brules], null, 2));
 
-  // Build internal ListTerm values from rdf:first/rdf:rest (+ rdf:nil) input triples
+  // Build internal ListTerm values from rdf:first/rdf:rest (+ rdf:nil)
+  // input triples
   materializeRdfLists(triples, frules, brules);
 
   const facts = triples.filter((tr) => isGroundTriple(tr));
   const derived = forwardChain(facts, frules, brules);
-
   const derivedTriples = derived.map((df) => df.fact);
   const usedPrefixes = prefixes.prefixesUsedForOutput(derivedTriples);
 
