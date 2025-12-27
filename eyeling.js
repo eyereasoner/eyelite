@@ -19,9 +19,9 @@
 const { version } = require('./package.json');
 const nodeCrypto = require('crypto');
 
-// ============================================================================
+// ===========================================================================
 // Namespace constants
-// ============================================================================
+// ===========================================================================
 
 const RDF_NS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
 const RDFS_NS = 'http://www.w3.org/2000/01/rdf-schema#';
@@ -97,6 +97,47 @@ function normalizeDateTimeLex(s) {
   return t.trim();
 }
 
+// ===========================================================================
+// Run-level time helpers
+// ===========================================================================
+
+function localIsoDateTimeString(d) {
+  function pad(n, width = 2) {
+    return String(n).padStart(width, '0');
+  }
+  const year = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const hour = d.getHours();
+  const min = d.getMinutes();
+  const sec = d.getSeconds();
+  const ms = d.getMilliseconds();
+  const offsetMin = -d.getTimezoneOffset(); // minutes east of UTC
+  const sign = offsetMin >= 0 ? '+' : '-';
+  const abs = Math.abs(offsetMin);
+  const oh = Math.floor(abs / 60);
+  const om = abs % 60;
+  const msPart = ms ? '.' + String(ms).padStart(3, '0') : '';
+  return (
+    pad(year, 4) +
+    '-' +
+    pad(month) +
+    '-' +
+    pad(day) +
+    'T' +
+    pad(hour) +
+    ':' +
+    pad(min) +
+    ':' +
+    pad(sec) +
+    msPart +
+    sign +
+    pad(oh) +
+    ':' +
+    pad(om)
+  );
+}
+
 function utcIsoDateTimeStringFromEpochSeconds(sec) {
   const ms = sec * 1000;
   const d = new Date(ms);
@@ -154,9 +195,9 @@ function deterministicSkolemIdFromKey(key) {
 
 let runLocalTimeCache = null;
 
-// ============================================================================
+// ===========================================================================
 // AST (Abstract Syntax Tree)
-// ============================================================================
+// ===========================================================================
 
 class Term {}
 
@@ -238,9 +279,9 @@ class DerivedFact {
   }
 }
 
-// ============================================================================
+// ===========================================================================
 // LEXER
-// ============================================================================
+// ===========================================================================
 
 class Token {
   constructor(typ, value = null) {
@@ -631,9 +672,9 @@ function lex(inputText) {
   return tokens;
 }
 
-// ============================================================================
+// ===========================================================================
 // PREFIX ENVIRONMENT
-// ============================================================================
+// ===========================================================================
 
 class PrefixEnv {
   constructor(map) {
@@ -789,9 +830,9 @@ function collectBlankLabelsInTriples(triples) {
   return acc;
 }
 
-// ============================================================================
+// ===========================================================================
 // PARSER
-// ============================================================================
+// ===========================================================================
 
 class Parser {
   constructor(tokens) {
@@ -1231,9 +1272,9 @@ class Parser {
   }
 }
 
-// ============================================================================
+// ===========================================================================
 // Blank-node lifting and Skolemization
-// ============================================================================
+// ===========================================================================
 
 function liftBlankRuleVars(premise, conclusion) {
   function convertTerm(t, mapping, counter) {
@@ -1340,9 +1381,9 @@ function skolemizeTripleForHeadBlanks(tr, headBlankLabels, mapping, skCounter, f
   );
 }
 
-// ============================================================================
+// ===========================================================================
 // Alpha equivalence helpers
-// ============================================================================
+// ===========================================================================
 
 function termsEqual(a, b) {
   if (a === b) return true;
@@ -1614,9 +1655,9 @@ function hasAlphaEquiv(triples, tr) {
   return triples.some((t) => alphaEqTriple(t, tr));
 }
 
-// ============================================================================
+// ===========================================================================
 // Indexes (facts + backward rules)
-// ============================================================================
+// ===========================================================================
 //
 // Facts:
 //   - __byPred: Map<predicateIRI, Triple[]>
@@ -1784,9 +1825,9 @@ function indexBackRule(backRules, r) {
   }
 }
 
-// ============================================================================
+// ===========================================================================
 // Special predicate helpers
-// ============================================================================
+// ===========================================================================
 
 function isRdfTypePred(p) {
   return p instanceof Iri && p.value === RDF_NS + 'type';
@@ -1804,9 +1845,9 @@ function isLogImpliedBy(p) {
   return p instanceof Iri && p.value === LOG_NS + 'impliedBy';
 }
 
-// ============================================================================
+// ===========================================================================
 // Constraint / "test" builtins
-// ============================================================================
+// ===========================================================================
 
 function isConstraintBuiltin(tr) {
   if (!(tr.p instanceof Iri)) return false;
@@ -1874,9 +1915,9 @@ function reorderPremiseForConstraints(premise) {
   return normal.concat(delayed);
 }
 
-// ============================================================================
+// ===========================================================================
 // Unification + substitution
-// ============================================================================
+// ===========================================================================
 
 function containsVarTerm(t, v) {
   if (t instanceof Var) return t.name === v;
@@ -2188,9 +2229,9 @@ function composeSubst(outer, delta) {
   return out;
 }
 
-// ============================================================================
+// ===========================================================================
 // BUILTINS
-// ============================================================================
+// ===========================================================================
 
 function literalParts(lit) {
   // Split a literal into lexical form and datatype IRI (if any).
@@ -2528,9 +2569,9 @@ function parseXsdFloatSpecialLex(s) {
   return null;
 }
 
-// ============================================================================
+// ===========================================================================
 // Math builtin helpers
-// ============================================================================
+// ===========================================================================
 
 function formatXsdFloatSpecialLex(n) {
   if (n === Infinity) return 'INF';
@@ -2686,9 +2727,9 @@ function pow10n(k) {
   return 10n ** BigInt(k);
 }
 
-// ============================================================================
+// ===========================================================================
 // Time & duration builtin helpers
-// ============================================================================
+// ===========================================================================
 
 function parseXsdDateTerm(t) {
   if (!(t instanceof Literal)) return null;
@@ -3017,9 +3058,9 @@ function evalUnaryMathRel(g, subst, forwardFn, inverseFn /* may be null */) {
   return [];
 }
 
-// ============================================================================
+// ===========================================================================
 // List builtin helpers
-// ============================================================================
+// ===========================================================================
 
 function listAppendSplit(parts, resElems, subst) {
   if (!parts.length) {
@@ -3070,9 +3111,142 @@ function evalListRestLikeBuiltin(sTerm, oTerm, subst) {
   return [];
 }
 
-// ============================================================================
+// ===========================================================================
+// RDF list materialization
+// ===========================================================================
+
+// Turn RDF Collections described with rdf:first/rdf:rest (+ rdf:nil) into ListTerm terms.
+// This mutates triples/rules in-place so list:* builtins work on RDF-serialized lists too.
+function materializeRdfLists(triples, forwardRules, backwardRules) {
+  const RDF_FIRST = RDF_NS + 'first';
+  const RDF_REST = RDF_NS + 'rest';
+  const RDF_NIL = RDF_NS + 'nil';
+
+  function nodeKey(t) {
+    if (t instanceof Blank) return 'B:' + t.label;
+    if (t instanceof Iri) return 'I:' + t.value;
+    return null;
+  }
+
+  // Collect first/rest arcs from *input triples*
+  const firstMap = new Map(); // key(subject) -> Term (object)
+  const restMap = new Map(); // key(subject) -> Term (object)
+  for (const tr of triples) {
+    if (!(tr.p instanceof Iri)) continue;
+    const k = nodeKey(tr.s);
+    if (!k) continue;
+    if (tr.p.value === RDF_FIRST) firstMap.set(k, tr.o);
+    else if (tr.p.value === RDF_REST) restMap.set(k, tr.o);
+  }
+  if (!firstMap.size && !restMap.size) return;
+
+  const cache = new Map(); // key(node) -> ListTerm
+  const visiting = new Set(); // cycle guard
+
+  function buildListForKey(k) {
+    if (cache.has(k)) return cache.get(k);
+    if (visiting.has(k)) return null; // cycle => not a well-formed list
+    visiting.add(k);
+
+    // rdf:nil => ()
+    if (k === 'I:' + RDF_NIL) {
+      const empty = new ListTerm([]);
+      cache.set(k, empty);
+      visiting.delete(k);
+      return empty;
+    }
+
+    const head = firstMap.get(k);
+    const tail = restMap.get(k);
+    if (head === undefined || tail === undefined) {
+      visiting.delete(k);
+      return null; // not a full cons cell
+    }
+
+    const headTerm = rewriteTerm(head);
+
+    let tailListElems = null;
+    if (tail instanceof Iri && tail.value === RDF_NIL) {
+      tailListElems = [];
+    } else {
+      const tk = nodeKey(tail);
+      if (!tk) {
+        visiting.delete(k);
+        return null;
+      }
+      const tailList = buildListForKey(tk);
+      if (!tailList) {
+        visiting.delete(k);
+        return null;
+      }
+      tailListElems = tailList.elems;
+    }
+
+    const out = new ListTerm([headTerm, ...tailListElems]);
+    cache.set(k, out);
+    visiting.delete(k);
+    return out;
+  }
+
+  function rewriteTerm(t) {
+    // Replace list nodes (Blank/Iri) by their constructed ListTerm when possible
+    const k = nodeKey(t);
+    if (k) {
+      const built = buildListForKey(k);
+      if (built) return built;
+      // Also rewrite rdf:nil even if not otherwise referenced
+      if (t instanceof Iri && t.value === RDF_NIL) return new ListTerm([]);
+      return t;
+    }
+    if (t instanceof ListTerm) {
+      let changed = false;
+      const elems = t.elems.map((e) => {
+        const r = rewriteTerm(e);
+        if (r !== e) changed = true;
+        return r;
+      });
+      return changed ? new ListTerm(elems) : t;
+    }
+    if (t instanceof OpenListTerm) {
+      let changed = false;
+      const prefix = t.prefix.map((e) => {
+        const r = rewriteTerm(e);
+        if (r !== e) changed = true;
+        return r;
+      });
+      return changed ? new OpenListTerm(prefix, t.tailVar) : t;
+    }
+    if (t instanceof FormulaTerm) {
+      for (const tr of t.triples) rewriteTriple(tr);
+      return t;
+    }
+    return t;
+  }
+
+  function rewriteTriple(tr) {
+    tr.s = rewriteTerm(tr.s);
+    tr.p = rewriteTerm(tr.p);
+    tr.o = rewriteTerm(tr.o);
+  }
+
+  // Pre-build all reachable list heads
+  for (const k of firstMap.keys()) buildListForKey(k);
+
+  // Rewrite input triples + rules in-place
+  for (const tr of triples) rewriteTriple(tr);
+  for (const r of forwardRules) {
+    for (const tr of r.premise) rewriteTriple(tr);
+    for (const tr of r.conclusion) rewriteTriple(tr);
+  }
+  for (const r of backwardRules) {
+    for (const tr of r.premise) rewriteTriple(tr);
+    for (const tr of r.conclusion) rewriteTriple(tr);
+  }
+}
+
+// ===========================================================================
 // Crypto builtin helpers
-// ============================================================================
+// ===========================================================================
 
 function hashLiteralTerm(t, algo) {
   if (!(t instanceof Literal)) return null;
@@ -3098,9 +3272,9 @@ function evalCryptoHashBuiltin(g, subst, algo) {
   return s2 !== null ? [s2] : [];
 }
 
-// ============================================================================
+// ===========================================================================
 // Builtin evaluation
-// ============================================================================
+// ===========================================================================
 // Backward proof & builtins mutual recursion — declarations first
 
 function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
@@ -4560,9 +4734,9 @@ function isBuiltinPred(p) {
   );
 }
 
-// ============================================================================
+// ===========================================================================
 // Backward proof (SLD-style)
-// ============================================================================
+// ===========================================================================
 
 function standardizeRule(rule, gen) {
   function renameTerm(t, vmap, genArr) {
@@ -4609,9 +4783,9 @@ function listHasTriple(list, tr) {
   return list.some((t) => triplesEqual(t, tr));
 }
 
-// ============================================================================
+// ===========================================================================
 // Substitution compaction (to avoid O(depth^2) in deep backward chains)
-// ============================================================================
+// ===========================================================================
 //
 // Why: backward chaining with standardizeRule introduces fresh variables at
 // each step. composeSubst frequently copies a growing substitution object.
@@ -4846,9 +5020,9 @@ function proveGoals(goals, subst, facts, backRules, depth, visited, varGen) {
   return results;
 }
 
-// ============================================================================
+// ===========================================================================
 // Forward chaining to fixpoint
-// ============================================================================
+// ===========================================================================
 
 function forwardChain(facts, forwardRules, backRules) {
   ensureFactIndexes(facts);
@@ -5032,9 +5206,9 @@ function forwardChain(facts, forwardRules, backRules) {
   return derivedForward;
 }
 
-// ============================================================================
+// ===========================================================================
 // Pretty printing as N3/Turtle
-// ============================================================================
+// ===========================================================================
 
 function termToN3(t, pref) {
   if (t instanceof Iri) {
@@ -5201,179 +5375,9 @@ function printExplanation(df, prefixes) {
   console.log('# ----------------------------------------------------------------------\n');
 }
 
-// ============================================================================
-// Misc helpers
-// ============================================================================
-
-// Turn RDF Collections described with rdf:first/rdf:rest (+ rdf:nil) into ListTerm terms.
-// This mutates triples/rules in-place so list:* builtins work on RDF-serialized lists too.
-function materializeRdfLists(triples, forwardRules, backwardRules) {
-  const RDF_FIRST = RDF_NS + 'first';
-  const RDF_REST = RDF_NS + 'rest';
-  const RDF_NIL = RDF_NS + 'nil';
-
-  function nodeKey(t) {
-    if (t instanceof Blank) return 'B:' + t.label;
-    if (t instanceof Iri) return 'I:' + t.value;
-    return null;
-  }
-
-  // Collect first/rest arcs from *input triples*
-  const firstMap = new Map(); // key(subject) -> Term (object)
-  const restMap = new Map(); // key(subject) -> Term (object)
-  for (const tr of triples) {
-    if (!(tr.p instanceof Iri)) continue;
-    const k = nodeKey(tr.s);
-    if (!k) continue;
-    if (tr.p.value === RDF_FIRST) firstMap.set(k, tr.o);
-    else if (tr.p.value === RDF_REST) restMap.set(k, tr.o);
-  }
-  if (!firstMap.size && !restMap.size) return;
-
-  const cache = new Map(); // key(node) -> ListTerm
-  const visiting = new Set(); // cycle guard
-
-  function buildListForKey(k) {
-    if (cache.has(k)) return cache.get(k);
-    if (visiting.has(k)) return null; // cycle => not a well-formed list
-    visiting.add(k);
-
-    // rdf:nil => ()
-    if (k === 'I:' + RDF_NIL) {
-      const empty = new ListTerm([]);
-      cache.set(k, empty);
-      visiting.delete(k);
-      return empty;
-    }
-
-    const head = firstMap.get(k);
-    const tail = restMap.get(k);
-    if (head === undefined || tail === undefined) {
-      visiting.delete(k);
-      return null; // not a full cons cell
-    }
-
-    const headTerm = rewriteTerm(head);
-
-    let tailListElems = null;
-    if (tail instanceof Iri && tail.value === RDF_NIL) {
-      tailListElems = [];
-    } else {
-      const tk = nodeKey(tail);
-      if (!tk) {
-        visiting.delete(k);
-        return null;
-      }
-      const tailList = buildListForKey(tk);
-      if (!tailList) {
-        visiting.delete(k);
-        return null;
-      }
-      tailListElems = tailList.elems;
-    }
-
-    const out = new ListTerm([headTerm, ...tailListElems]);
-    cache.set(k, out);
-    visiting.delete(k);
-    return out;
-  }
-
-  function rewriteTerm(t) {
-    // Replace list nodes (Blank/Iri) by their constructed ListTerm when possible
-    const k = nodeKey(t);
-    if (k) {
-      const built = buildListForKey(k);
-      if (built) return built;
-      // Also rewrite rdf:nil even if not otherwise referenced
-      if (t instanceof Iri && t.value === RDF_NIL) return new ListTerm([]);
-      return t;
-    }
-    if (t instanceof ListTerm) {
-      let changed = false;
-      const elems = t.elems.map((e) => {
-        const r = rewriteTerm(e);
-        if (r !== e) changed = true;
-        return r;
-      });
-      return changed ? new ListTerm(elems) : t;
-    }
-    if (t instanceof OpenListTerm) {
-      let changed = false;
-      const prefix = t.prefix.map((e) => {
-        const r = rewriteTerm(e);
-        if (r !== e) changed = true;
-        return r;
-      });
-      return changed ? new OpenListTerm(prefix, t.tailVar) : t;
-    }
-    if (t instanceof FormulaTerm) {
-      for (const tr of t.triples) rewriteTriple(tr);
-      return t;
-    }
-    return t;
-  }
-
-  function rewriteTriple(tr) {
-    tr.s = rewriteTerm(tr.s);
-    tr.p = rewriteTerm(tr.p);
-    tr.o = rewriteTerm(tr.o);
-  }
-
-  // Pre-build all reachable list heads
-  for (const k of firstMap.keys()) buildListForKey(k);
-
-  // Rewrite input triples + rules in-place
-  for (const tr of triples) rewriteTriple(tr);
-  for (const r of forwardRules) {
-    for (const tr of r.premise) rewriteTriple(tr);
-    for (const tr of r.conclusion) rewriteTriple(tr);
-  }
-  for (const r of backwardRules) {
-    for (const tr of r.premise) rewriteTriple(tr);
-    for (const tr of r.conclusion) rewriteTriple(tr);
-  }
-}
-
-function localIsoDateTimeString(d) {
-  function pad(n, width = 2) {
-    return String(n).padStart(width, '0');
-  }
-  const year = d.getFullYear();
-  const month = d.getMonth() + 1;
-  const day = d.getDate();
-  const hour = d.getHours();
-  const min = d.getMinutes();
-  const sec = d.getSeconds();
-  const ms = d.getMilliseconds();
-  const offsetMin = -d.getTimezoneOffset(); // minutes east of UTC
-  const sign = offsetMin >= 0 ? '+' : '-';
-  const abs = Math.abs(offsetMin);
-  const oh = Math.floor(abs / 60);
-  const om = abs % 60;
-  const msPart = ms ? '.' + String(ms).padStart(3, '0') : '';
-  return (
-    pad(year, 4) +
-    '-' +
-    pad(month) +
-    '-' +
-    pad(day) +
-    'T' +
-    pad(hour) +
-    ':' +
-    pad(min) +
-    ':' +
-    pad(sec) +
-    msPart +
-    sign +
-    pad(oh) +
-    ':' +
-    pad(om)
-  );
-}
-
-// ============================================================================
+// ===========================================================================
 // CLI entry point
-// ============================================================================
+// ===========================================================================
 function main() {
   // Drop "node" and script name; keep only user-provided args
   const argv = process.argv.slice(2);
