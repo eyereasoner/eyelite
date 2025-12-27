@@ -1,29 +1,3 @@
 @prefix : <https://eyereasoner.github.io/ns#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is true .
-# It holds because the following instance of the rule body is provable:
-#   :Bob :has (:Table 1) .
-#   :Alice :has (:Book 1) .
-#   :Table log:notEqualTo :Book .
-# via the schematic forward rule:
-#   {
-#     ?W1 :has (?O1 ?N1) .
-#     ?W2 :has (?O2 ?N2) .
-#     ?O1 log:notEqualTo ?O2 .
-#   } => {
-#     :test :is true .
-#   } .
-# with substitution (on rule variables):
-#   ?N1 = 1
-#   ?N2 = 1
-#   ?O1 = :Table
-#   ?O2 = :Book
-#   ?W1 = :Bob
-#   ?W2 = :Alice
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is true .
-

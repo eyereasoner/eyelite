@@ -1,18 +1,3 @@
 @prefix : <http://example.org/socrates#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is true .
-# It holds because the following instance of the rule body is provable:
-#   :X = :Y .
-# via the schematic forward rule:
-#   {
-#     :X = :Y .
-#   } => {
-#     :test :is true .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is true .
-

@@ -1,40 +1,4 @@
 @prefix : <https://eyereasoner.github.io/ns#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   _:b1 a :Animal .
-# It holds because the following instance of the rule body is provable:
-#   _:b1 a :Monkey .
-# via the schematic forward rule:
-#   {
-#     ?X a :Monkey .
-#   } => {
-#     ?X a :Animal .
-#   } .
-# with substitution (on rule variables):
-#   ?X = _:b1
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 _:b1 a :Animal .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is true .
-# It holds because the following instance of the rule body is provable:
-#   _:b1 a :Monkey .
-#   _:b1 a :Animal .
-# via the schematic forward rule:
-#   {
-#     ?X a :Monkey .
-#     ?X a :Animal .
-#   } => {
-#     :test :is true .
-#   } .
-# with substitution (on rule variables):
-#   ?X = _:b1
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is true .
-

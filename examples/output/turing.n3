@@ -1,44 +1,8 @@
 @prefix : <http://example.org/#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is {
-#       (1 0 1 0 0 1) :compute (1 0 1 0 1 0 "#") .
-#       (1 0 1 1 1 1) :compute (1 1 0 0 0 0 "#") .
-#       (1 1 1 1 1 1) :compute (1 0 0 0 0 0 0 "#") .
-#       () :compute (1 "#") .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   (1 0 1 0 0 1) :compute (1 0 1 0 1 0 "#") .
-#   (1 0 1 1 1 1) :compute (1 1 0 0 0 0 "#") .
-#   (1 1 1 1 1 1) :compute (1 0 0 0 0 0 0 "#") .
-#   () :compute (1 "#") .
-# via the schematic forward rule:
-#   {
-#     (1 0 1 0 0 1) :compute ?A1 .
-#     (1 0 1 1 1 1) :compute ?A2 .
-#     (1 1 1 1 1 1) :compute ?A3 .
-#     () :compute ?A4 .
-#   } => {
-#     :test :is {
-#         (1 0 1 0 0 1) :compute ?A1 .
-#         (1 0 1 1 1 1) :compute ?A2 .
-#         (1 1 1 1 1 1) :compute ?A3 .
-#         () :compute ?A4 .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?A1 = (1 0 1 0 1 0 "#")
-#   ?A2 = (1 1 0 0 0 0 "#")
-#   ?A3 = (1 0 0 0 0 0 0 "#")
-#   ?A4 = (1 "#")
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is {
     (1 0 1 0 0 1) :compute (1 0 1 0 1 0 "#") .
     (1 0 1 1 1 1) :compute (1 1 0 0 0 0 "#") .
     (1 1 1 1 1 1) :compute (1 0 0 0 0 0 0 "#") .
     () :compute (1 "#") .
 } .
-

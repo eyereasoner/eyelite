@@ -1,36 +1,4 @@
 @prefix : <http://example.org/socrates#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :result :is :Post .
-# It holds because the following instance of the rule body is provable:
-#   :Pillar :to :Post .
-# via the schematic forward rule:
-#   {
-#     :Pillar :to ?What .
-#   } => {
-#     :result :is ?What .
-#   } .
-# with substitution (on rule variables):
-#   ?What = :Post
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :result :is :Post .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is true .
-# It holds because the following instance of the rule body is provable:
-#   :result :is :Post .
-# via the schematic forward rule:
-#   {
-#     :result :is :Post .
-#   } => {
-#     :test :is true .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is true .
-

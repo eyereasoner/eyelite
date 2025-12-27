@@ -1,122 +1,17 @@
 @prefix : <http://eulersharp.sourceforge.net/2007/07test/graph#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is {
-#       :i42 :cycle (:i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75) .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   :i42 :cycle (:i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75) .
-# via the schematic forward rule:
-#   {
-#     :i42 :cycle ?C .
-#   } => {
-#     :test :is {
-#         :i42 :cycle ?C .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?C = (:i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is {
     :i42 :cycle (:i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75) .
 } .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is {
-#       :i42 :cycle (:i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81) .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   :i42 :cycle (:i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81) .
-# via the schematic forward rule:
-#   {
-#     :i42 :cycle ?C .
-#   } => {
-#     :test :is {
-#         :i42 :cycle ?C .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?C = (:i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is {
     :i42 :cycle (:i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81 :i81) .
 } .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is {
-#       :i42 :cycle (:i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87) .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   :i42 :cycle (:i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87) .
-# via the schematic forward rule:
-#   {
-#     :i42 :cycle ?C .
-#   } => {
-#     :test :is {
-#         :i42 :cycle ?C .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?C = (:i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is {
     :i42 :cycle (:i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87 :i87) .
 } .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is {
-#       :i42 :cycle (:i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72) .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   :i42 :cycle (:i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72) .
-# via the schematic forward rule:
-#   {
-#     :i42 :cycle ?C .
-#   } => {
-#     :test :is {
-#         :i42 :cycle ?C .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?C = (:i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is {
     :i42 :cycle (:i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72 :i75 :i72) .
 } .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is {
-#       :i42 :cycle (:i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9) .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   :i42 :cycle (:i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9) .
-# via the schematic forward rule:
-#   {
-#     :i42 :cycle ?C .
-#   } => {
-#     :test :is {
-#         :i42 :cycle ?C .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?C = (:i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is {
     :i42 :cycle (:i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9 :i9) .
 } .
-

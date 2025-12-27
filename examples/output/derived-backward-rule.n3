@@ -1,53 +1,9 @@
 @prefix : <https://eyereasoner.github.io/ns#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   {
-#       ?x :childOf ?y .
-#   } <= {
-#       ?y :parentOf ?x .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   :parentOf :invOf :childOf .
-# via the schematic forward rule:
-#   {
-#     ?p :invOf ?q .
-#   } => {
-#     {
-#         ?x ?q ?y .
-#     } <= {
-#         ?y ?p ?x .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?p = :parentOf
-#   ?q = :childOf
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 {
     ?x :childOf ?y .
 } <= {
     ?y :parentOf ?x .
 } .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :bob :hasParent :alice .
-# It holds because the following instance of the rule body is provable:
-#   :bob :childOf :alice .
-# via the schematic forward rule:
-#   {
-#     ?x :childOf ?y .
-#   } => {
-#     ?x :hasParent ?y .
-#   } .
-# with substitution (on rule variables):
-#   ?x = :bob
-#   ?y = :alice
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :bob :hasParent :alice .
-

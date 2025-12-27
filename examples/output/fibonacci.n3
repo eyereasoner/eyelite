@@ -1,44 +1,8 @@
 @prefix : <https://eyereasoner.github.io/eye/reasoning#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is {
-#       0 :fibonacci 0 .
-#       1 :fibonacci 1 .
-#       10 :fibonacci 55 .
-#       100 :fibonacci 354224848179261915075 .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   0 :fibonacci 0 .
-#   1 :fibonacci 1 .
-#   10 :fibonacci 55 .
-#   100 :fibonacci 354224848179261915075 .
-# via the schematic forward rule:
-#   {
-#     0 :fibonacci ?F0 .
-#     1 :fibonacci ?F1 .
-#     10 :fibonacci ?F10 .
-#     100 :fibonacci ?F100 .
-#   } => {
-#     :test :is {
-#         0 :fibonacci ?F0 .
-#         1 :fibonacci ?F1 .
-#         10 :fibonacci ?F10 .
-#         100 :fibonacci ?F100 .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?F0 = 0
-#   ?F1 = 1
-#   ?F10 = 55
-#   ?F100 = 354224848179261915075
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is {
     0 :fibonacci 0 .
     1 :fibonacci 1 .
     10 :fibonacci 55 .
     100 :fibonacci 354224848179261915075 .
 } .
-

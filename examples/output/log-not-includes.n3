@@ -1,69 +1,10 @@
 @prefix : <http://example.org/> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :x :y 1 .
-# It holds because the following instance of the rule body is provable:
-#   1 math:equalTo 1 .
-# via the schematic forward rule:
-#   {
-#     1 math:equalTo 1 .
-#   } => {
-#     :x :y 1 .
-#     {
-#         :x :y 1 .
-#     } => {
-#         :a :b :c .
-#     } .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :x :y 1 .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   {
-#       :x :y 1 .
-#   } => {
-#       :a :b :c .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   1 math:equalTo 1 .
-# via the schematic forward rule:
-#   {
-#     1 math:equalTo 1 .
-#   } => {
-#     :x :y 1 .
-#     {
-#         :x :y 1 .
-#     } => {
-#         :a :b :c .
-#     } .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 {
     :x :y 1 .
 } => {
     :a :b :c .
 } .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :a :b :c .
-# It holds because the following instance of the rule body is provable:
-#   :x :y 1 .
-# via the schematic forward rule:
-#   {
-#     :x :y 1 .
-#   } => {
-#     :a :b :c .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :a :b :c .
-

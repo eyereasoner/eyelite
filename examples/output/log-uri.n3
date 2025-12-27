@@ -1,46 +1,4 @@
 @prefix : <http://example.org/> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :uriString :is "https://www.w3.org" .
-# It holds because the following instance of the rule body is provable:
-#   <https://www.w3.org> log:uri "https://www.w3.org" .
-#   <https://www.w3.org> log:uri "https://www.w3.org" .
-# via the schematic forward rule:
-#   {
-#     <https://www.w3.org> log:uri ?s .
-#     ?r log:uri "https://www.w3.org" .
-#   } => {
-#     :uriString :is ?s .
-#     :uriResource :is ?r .
-#   } .
-# with substitution (on rule variables):
-#   ?r = <https://www.w3.org>
-#   ?s = "https://www.w3.org"
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :uriString :is "https://www.w3.org" .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :uriResource :is <https://www.w3.org> .
-# It holds because the following instance of the rule body is provable:
-#   <https://www.w3.org> log:uri "https://www.w3.org" .
-#   <https://www.w3.org> log:uri "https://www.w3.org" .
-# via the schematic forward rule:
-#   {
-#     <https://www.w3.org> log:uri ?s .
-#     ?r log:uri "https://www.w3.org" .
-#   } => {
-#     :uriString :is ?s .
-#     :uriResource :is ?r .
-#   } .
-# with substitution (on rule variables):
-#   ?r = <https://www.w3.org>
-#   ?s = "https://www.w3.org"
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :uriResource :is <https://www.w3.org> .
-

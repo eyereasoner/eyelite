@@ -2,124 +2,16 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   {
-#       :Koko a :Animal .
-#   } => {
-#       _:x a :Cat .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   :Koko a :Animal .
-# via the schematic forward rule:
-#   {
-#     :Koko a :Animal .
-#   } => {
-#     {
-#         :Koko a :Animal .
-#     } => {
-#         _:x a :Cat .
-#     } .
-#     {
-#         :Koko a :Animal .
-#     } => {
-#         _:x a :BritishShortHair .
-#     } .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 {
     :Koko a :Animal .
 } => {
     _:x a :Cat .
 } .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   {
-#       :Koko a :Animal .
-#   } => {
-#       _:x a :BritishShortHair .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   :Koko a :Animal .
-# via the schematic forward rule:
-#   {
-#     :Koko a :Animal .
-#   } => {
-#     {
-#         :Koko a :Animal .
-#     } => {
-#         _:x a :Cat .
-#     } .
-#     {
-#         :Koko a :Animal .
-#     } => {
-#         _:x a :BritishShortHair .
-#     } .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 {
     :Koko a :Animal .
 } => {
     _:x a :BritishShortHair .
 } .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   _:sk_0 a :Cat .
-# It holds because the following instance of the rule body is provable:
-#   :Koko a :Animal .
-# via the schematic forward rule:
-#   {
-#     :Koko a :Animal .
-#   } => {
-#     _:x a :Cat .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 _:sk_0 a :Cat .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   _:sk_1 a :BritishShortHair .
-# It holds because the following instance of the rule body is provable:
-#   :Koko a :Animal .
-# via the schematic forward rule:
-#   {
-#     :Koko a :Animal .
-#   } => {
-#     _:x a :BritishShortHair .
-#   } .
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 _:sk_1 a :BritishShortHair .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is true .
-# It holds because the following instance of the rule body is provable:
-#   _:sk_0 a :Cat .
-#   _:sk_1 a :BritishShortHair .
-#   _:sk_0 log:notEqualTo _:sk_1 .
-# via the schematic forward rule:
-#   {
-#     ?X a :Cat .
-#     ?Y a :BritishShortHair .
-#     ?X log:notEqualTo ?Y .
-#   } => {
-#     :test :is true .
-#   } .
-# with substitution (on rule variables):
-#   ?X = _:sk_0
-#   ?Y = _:sk_1
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is true .
-

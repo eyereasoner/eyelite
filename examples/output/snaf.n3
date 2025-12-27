@@ -1,26 +1,3 @@
 @prefix : <http://example.org/> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :Alice :hates :Nobody .
-# It holds because the following instance of the rule body is provable:
-#   :Bob a :Person .
-#   ?SCOPE log:notIncludes {
-#       :Alice :hates :Bob .
-#   } .
-# via the schematic forward rule:
-#   {
-#     ?X a :Person .
-#     ?SCOPE log:notIncludes {
-#         :Alice :hates ?X .
-#     } .
-#   } => {
-#     :Alice :hates :Nobody .
-#   } .
-# with substitution (on rule variables):
-#   ?X = :Bob
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :Alice :hates :Nobody .
-

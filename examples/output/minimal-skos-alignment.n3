@@ -2,44 +2,5 @@
 @prefix ex: <http://example.org/> .
 @prefix ref: <http://example.org/ref/> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   anpr:VehicleWithPlate ex:treatedAs ref:Car .
-# It holds because the following instance of the rule body is provable:
-#   anpr:VehicleWithPlate skos:broadMatch ref:Car .
-# via the schematic forward rule:
-#   {
-#     ?a skos:broadMatch ?b .
-#   } => {
-#     ?a ex:treatedAs ?b .
-#   } .
-# with substitution (on rule variables):
-#   ?a = anpr:VehicleWithPlate
-#   ?b = ref:Car
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 anpr:VehicleWithPlate ex:treatedAs ref:Car .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   anpr:PassengerCar ex:treatedAs ref:Car .
-# It holds because the following instance of the rule body is provable:
-#   anpr:PassengerCar skos:broader anpr:VehicleWithPlate .
-#   anpr:VehicleWithPlate ex:treatedAs ref:Car .
-# via the schematic forward rule:
-#   {
-#     ?x skos:broader ?y .
-#     ?y ex:treatedAs ?z .
-#   } => {
-#     ?x ex:treatedAs ?z .
-#   } .
-# with substitution (on rule variables):
-#   ?x = anpr:PassengerCar
-#   ?y = anpr:VehicleWithPlate
-#   ?z = ref:Car
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 anpr:PassengerCar ex:treatedAs ref:Car .
-

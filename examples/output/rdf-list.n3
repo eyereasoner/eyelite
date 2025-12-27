@@ -1,31 +1,3 @@
 @prefix : <http://example.org/ns#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :result :is true .
-# It holds because the following instance of the rule body is provable:
-#   :X :val (1 2) .
-#   (1 2) :head 1 .
-#   (1 2) :tail (2) .
-#   1 log:equalTo 1 .
-#   (2) log:equalTo (2) .
-# via the schematic forward rule:
-#   {
-#     ?X :val ?Y .
-#     ?Y :head ?H .
-#     ?Y :tail ?T .
-#     ?H log:equalTo 1 .
-#     ?T log:equalTo (2) .
-#   } => {
-#     :result :is true .
-#   } .
-# with substitution (on rule variables):
-#   ?H = 1
-#   ?T = (2)
-#   ?X = :X
-#   ?Y = (1 2)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :result :is true .
-

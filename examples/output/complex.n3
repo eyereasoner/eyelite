@@ -2,51 +2,6 @@
 @prefix complex: <https://eyereasoner.github.io/eye/complex#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :test :is {
-#       ((-1 0) (0.5 0)) complex:exponentiation ("6.123233995736766e-17"^^xsd:decimal "1"^^xsd:decimal) .
-#       ((2.718281828459045 0) (0 3.141592653589793)) complex:exponentiation ("-1"^^xsd:decimal "1.2246467991473532e-16"^^xsd:decimal) .
-#       ((0 1) (0 1)) complex:exponentiation ("0.20787957635076193"^^xsd:decimal "0"^^xsd:decimal) .
-#       ((2.718281828459045 0) (-1.57079632679 0)) complex:exponentiation ("0.20787957635177984"^^xsd:decimal "0"^^xsd:decimal) .
-#       (2 0) complex:asin ("1.5707963267948966"^^xsd:decimal "1.3169578969248166"^^xsd:decimal) .
-#       (2 0) complex:acos ("0"^^xsd:decimal "-1.3169578969248166"^^xsd:decimal) .
-#   } .
-# It holds because the following instance of the rule body is provable:
-#   ((-1 0) (0.5 0)) complex:exponentiation ("6.123233995736766e-17"^^xsd:decimal "1"^^xsd:decimal) .
-#   ((2.718281828459045 0) (0 3.141592653589793)) complex:exponentiation ("-1"^^xsd:decimal "1.2246467991473532e-16"^^xsd:decimal) .
-#   ((0 1) (0 1)) complex:exponentiation ("0.20787957635076193"^^xsd:decimal "0"^^xsd:decimal) .
-#   ((2.718281828459045 0) (-1.57079632679 0)) complex:exponentiation ("0.20787957635177984"^^xsd:decimal "0"^^xsd:decimal) .
-#   (2 0) complex:asin ("1.5707963267948966"^^xsd:decimal "1.3169578969248166"^^xsd:decimal) .
-#   (2 0) complex:acos ("0"^^xsd:decimal "-1.3169578969248166"^^xsd:decimal) .
-# via the schematic forward rule:
-#   {
-#     ((-1 0) (0.5 0)) complex:exponentiation ?C1 .
-#     ((2.718281828459045 0) (0 3.141592653589793)) complex:exponentiation ?C2 .
-#     ((0 1) (0 1)) complex:exponentiation ?C3 .
-#     ((2.718281828459045 0) (-1.57079632679 0)) complex:exponentiation ?C4 .
-#     (2 0) complex:asin ?C5 .
-#     (2 0) complex:acos ?C6 .
-#   } => {
-#     :test :is {
-#         ((-1 0) (0.5 0)) complex:exponentiation ?C1 .
-#         ((2.718281828459045 0) (0 3.141592653589793)) complex:exponentiation ?C2 .
-#         ((0 1) (0 1)) complex:exponentiation ?C3 .
-#         ((2.718281828459045 0) (-1.57079632679 0)) complex:exponentiation ?C4 .
-#         (2 0) complex:asin ?C5 .
-#         (2 0) complex:acos ?C6 .
-#     } .
-#   } .
-# with substitution (on rule variables):
-#   ?C1 = ("6.123233995736766e-17"^^xsd:decimal "1"^^xsd:decimal)
-#   ?C2 = ("-1"^^xsd:decimal "1.2246467991473532e-16"^^xsd:decimal)
-#   ?C3 = ("0.20787957635076193"^^xsd:decimal "0"^^xsd:decimal)
-#   ?C4 = ("0.20787957635177984"^^xsd:decimal "0"^^xsd:decimal)
-#   ?C5 = ("1.5707963267948966"^^xsd:decimal "1.3169578969248166"^^xsd:decimal)
-#   ?C6 = ("0"^^xsd:decimal "-1.3169578969248166"^^xsd:decimal)
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :test :is {
     ((-1 0) (0.5 0)) complex:exponentiation ("6.123233995736766e-17"^^xsd:decimal "1"^^xsd:decimal) .
     ((2.718281828459045 0) (0 3.141592653589793)) complex:exponentiation ("-1"^^xsd:decimal "1.2246467991473532e-16"^^xsd:decimal) .
@@ -55,4 +10,3 @@
     (2 0) complex:asin ("1.5707963267948966"^^xsd:decimal "1.3169578969248166"^^xsd:decimal) .
     (2 0) complex:acos ("0"^^xsd:decimal "-1.3169578969248166"^^xsd:decimal) .
 } .
-

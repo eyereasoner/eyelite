@@ -1,51 +1,5 @@
 @prefix : <http://example.org/odrl-trust#> .
 @prefix odrl: <http://www.w3.org/ns/odrl/2/> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :req1 :decision odrl:permit .
-# It holds because the following instance of the rule body is provable:
-#   (:req1 odrl:permit 0.95) :cand true .
-#   (:req1 odrl:prohibit 0.70) :cand true .
-#   (0.95 0.70) math:greaterThan true .
-# via the schematic forward rule:
-#   {
-#     (:req1 odrl:permit ?Sp) :cand true .
-#     (:req1 odrl:prohibit ?Sd) :cand true .
-#     (?Sp ?Sd) math:greaterThan true .
-#   } => {
-#     :req1 :decision odrl:permit .
-#     :req1 :confidence ?Sp .
-#   } .
-# with substitution (on rule variables):
-#   ?Sd = 0.70
-#   ?Sp = 0.95
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :req1 :decision odrl:permit .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :req1 :confidence 0.95 .
-# It holds because the following instance of the rule body is provable:
-#   (:req1 odrl:permit 0.95) :cand true .
-#   (:req1 odrl:prohibit 0.70) :cand true .
-#   (0.95 0.70) math:greaterThan true .
-# via the schematic forward rule:
-#   {
-#     (:req1 odrl:permit ?Sp) :cand true .
-#     (:req1 odrl:prohibit ?Sd) :cand true .
-#     (?Sp ?Sd) math:greaterThan true .
-#   } => {
-#     :req1 :decision odrl:permit .
-#     :req1 :confidence ?Sp .
-#   } .
-# with substitution (on rule variables):
-#   ?Sd = 0.70
-#   ?Sp = 0.95
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :req1 :confidence 0.95 .
-

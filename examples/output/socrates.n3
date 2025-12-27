@@ -1,24 +1,3 @@
 @prefix : <http://example.org/socrates#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :Socrates a :Mortal .
-# It holds because the following instance of the rule body is provable:
-#   :Socrates a :Human .
-#   :Human rdfs:subClassOf :Mortal .
-# via the schematic forward rule:
-#   {
-#     ?S a ?A .
-#     ?A rdfs:subClassOf ?B .
-#   } => {
-#     ?S a ?B .
-#   } .
-# with substitution (on rule variables):
-#   ?A = :Human
-#   ?B = :Mortal
-#   ?S = :Socrates
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :Socrates a :Mortal .
-

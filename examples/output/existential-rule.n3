@@ -1,38 +1,4 @@
 @prefix : <http://example.org/socrates#> .
 
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :Socrates :is _:sk_0 .
-# It holds because the following instance of the rule body is provable:
-#   :Socrates a :Human .
-# via the schematic forward rule:
-#   {
-#     ?S a :Human .
-#   } => {
-#     ?S :is _:B .
-#   } .
-# with substitution (on rule variables):
-#   ?S = :Socrates
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :Socrates :is _:sk_0 .
-
-# ----------------------------------------------------------------------
-# Proof for derived triple:
-#   :Plato :is _:sk_1 .
-# It holds because the following instance of the rule body is provable:
-#   :Plato a :Human .
-# via the schematic forward rule:
-#   {
-#     ?S a :Human .
-#   } => {
-#     ?S :is _:B .
-#   } .
-# with substitution (on rule variables):
-#   ?S = :Plato
-# Therefore the derived triple above is entailed by the rules and facts.
-# ----------------------------------------------------------------------
-
 :Plato :is _:sk_1 .
-
