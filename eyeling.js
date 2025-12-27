@@ -39,7 +39,11 @@ const RDF_JSON_DT = RDF_NS + 'JSON';
 function resolveIriRef(ref, base) {
   if (!base) return ref;
   if (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(ref)) return ref; // already absolute
-  try { return new URL(ref, base).toString(); } catch { return ref; }
+  try {
+    return new URL(ref, base).toString();
+  } catch {
+    return ref;
+  }
 }
 
 function isRdfJsonDatatype(dt) {
@@ -271,14 +275,30 @@ function decodeN3StringEscapes(s) {
     }
     const e = s[++i];
     switch (e) {
-      case 't': out += '\t'; break;
-      case 'n': out += '\n'; break;
-      case 'r': out += '\r'; break;
-      case 'b': out += '\b'; break;
-      case 'f': out += '\f'; break;
-      case '"': out += '"'; break;
-      case "'": out += "'"; break;
-      case '\\': out += '\\'; break;
+      case 't':
+        out += '\t';
+        break;
+      case 'n':
+        out += '\n';
+        break;
+      case 'r':
+        out += '\r';
+        break;
+      case 'b':
+        out += '\b';
+        break;
+      case 'f':
+        out += '\f';
+        break;
+      case '"':
+        out += '"';
+        break;
+      case "'":
+        out += "'";
+        break;
+      case '\\':
+        out += '\\';
+        break;
 
       case 'u': {
         const hex = s.slice(i + 1, i + 5);
@@ -295,7 +315,7 @@ function decodeN3StringEscapes(s) {
         const hex = s.slice(i + 1, i + 9);
         if (/^[0-9A-Fa-f]{8}$/.test(hex)) {
           const cp = parseInt(hex, 16);
-          if (cp >= 0 && cp <= 0x10FFFF) out += String.fromCodePoint(cp);
+          if (cp >= 0 && cp <= 0x10ffff) out += String.fromCodePoint(cp);
           else out += '\\U' + hex;
           i += 8;
         } else {
@@ -2343,9 +2363,14 @@ function stripQuotes(lex) {
 }
 
 function termToJsString(t) {
-  // Accept any Literal and interpret its lexical form as a JS string.
+  // Strict string extraction for SWAP/N3 string builtins:
+  //   - accept plain string literals ("...") and language-tagged ones ("..."@en)
+  //   - accept "..."^^xsd:string
+  //   - reject any other datatype (e.g., "x"^^xsd:integer, "x"^^xsd:foobar)
   if (!(t instanceof Literal)) return null;
-  const [lex, _dt] = literalParts(t.value);
+  const [lex, dt] = literalParts(t.value);
+  if (!isQuotedLexical(lex)) return null;
+  if (dt !== null && dt !== XSD_NS + 'string' && dt !== 'xsd:string') return null;
   return stripQuotes(lex);
 }
 
@@ -4198,19 +4223,73 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
         const [sLex, sDt0] = literalParts(a.value);
 
         // $s.1 must be xsd:string (plain or ^^xsd:string), not language-tagged.
-        const okString =
-          (sDt0 === null && isPlainStringLiteralValue(a.value)) || sDt0 === XSD_NS + 'string';
+        const okString = (sDt0 === null && isPlainStringLiteralValue(a.value)) || sDt0 === XSD_NS + 'string';
         if (okString) {
           const dtIri = b.value;
           // For xsd:string, prefer the plain string literal form.
-          const outLit =
-            dtIri === XSD_NS + 'string' ? new Literal(sLex) : new Literal(`${sLex}^^<${dtIri}>`);
+          const outLit = dtIri === XSD_NS + 'string' ? new Literal(sLex) : new Literal(`${sLex}^^<${dtIri}>`);
           const s2 = unifyTerm(goal.o, outLit, subst);
           if (s2 !== null) results.push(s2);
         }
       }
     }
 
+    return results;
+  }
+
+  // log:langlit
+  // Schema: ( $s.1? $s.2? )? log:langlit $o?
+  // true iff $o is a language-tagged literal with string value $s.1 and language tag $s.2
+  if (g.p instanceof Iri && g.p.value === LOG_NS + 'langlit') {
+    // Fully unbound (both arguments '?'-mode): treat as satisfiable, succeed once.
+    if (g.s instanceof Var && g.o instanceof Var) return [{ ...subst }];
+    const results = [];
+    const LANG_RE = /^[A-Za-z]+(?:-[A-Za-z0-9]+)*$/; // (same notion as literalParts/literalHasLangTag)
+
+    function extractLangTag(litVal) {
+      if (typeof litVal !== 'string') return null;
+      if (!literalHasLangTag(litVal)) return null;
+      const lastQuote = litVal.lastIndexOf('"');
+      if (lastQuote < 0) return null;
+      const after = lastQuote + 1;
+      if (after >= litVal.length || litVal[after] !== '@') return null;
+      const tag = litVal.slice(after + 1);
+      if (!LANG_RE.test(tag)) return null;
+      return tag;
+    }
+
+    // Direction 1: object language-tagged literal -> subject list (string, langtag)
+    if (g.o instanceof Literal) {
+      const tag = extractLangTag(g.o.value);
+      if (tag !== null) {
+        const [oLex] = literalParts(g.o.value); // strips @lang into lexical part
+        const strLit = isQuotedLexical(oLex) ? new Literal(oLex) : makeStringLiteral(String(oLex));
+        const langLit = makeStringLiteral(tag);
+        const subjList = new ListTerm([strLit, langLit]);
+        const s2 = unifyTerm(goal.s, subjList, subst);
+        if (s2 !== null) results.push(s2);
+      }
+    }
+
+    // Direction 2: subject list -> object language-tagged literal
+    if (g.s instanceof ListTerm && g.s.elems.length === 2) {
+      const a = g.s.elems[0]; // string
+      const b = g.s.elems[1]; // lang tag string
+      if (a instanceof Literal && b instanceof Literal) {
+        const [sLex, sDt0] = literalParts(a.value);
+        const okString = (sDt0 === null && isPlainStringLiteralValue(a.value)) || sDt0 === XSD_NS + 'string';
+        const [langLex, langDt0] = literalParts(b.value);
+        const okLang = (langDt0 === null && isPlainStringLiteralValue(b.value)) || langDt0 === XSD_NS + 'string';
+        if (okString && okLang) {
+          const tag = stripQuotes(langLex);
+          if (LANG_RE.test(tag)) {
+            const outLit = new Literal(`${sLex}@${tag}`);
+            const s2 = unifyTerm(goal.o, outLit, subst);
+            if (s2 !== null) results.push(s2);
+          }
+        }
+      }
+    }
     return results;
   }
 
@@ -4390,8 +4469,8 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       return s2 !== null ? [s2] : [];
     }
 
-    const sOk = (g.s instanceof Var) || (g.s instanceof Blank) || (g.s instanceof Iri);
-    const oOk = (g.o instanceof Var) || (g.o instanceof Blank) || (g.o instanceof Literal);
+    const sOk = g.s instanceof Var || g.s instanceof Blank || g.s instanceof Iri;
+    const oOk = g.o instanceof Var || g.o instanceof Blank || g.o instanceof Literal;
     if (!sOk || !oOk) return [];
     return [{ ...subst }];
   }
