@@ -36,6 +36,12 @@ const STRING_NS = 'http://www.w3.org/2000/10/swap/string#';
 const SKOLEM_NS = 'https://eyereasoner.github.io/.well-known/genid/';
 const RDF_JSON_DT = RDF_NS + 'JSON';
 
+function resolveIriRef(ref, base) {
+  if (!base) return ref;
+  if (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(ref)) return ref; // already absolute
+  try { return new URL(ref, base).toString(); } catch { return ref; }
+}
+
 function isRdfJsonDatatype(dt) {
   // dt comes from literalParts() and may be expanded or prefixed depending on parsing/printing.
   return dt === null || dt === RDF_JSON_DT || dt === 'rdf:JSON';
@@ -864,9 +870,9 @@ class Parser {
     }
 
     if (typ === 'IriRef') {
-      return new Iri(val || '');
+      const base = this.prefixes.map[''] || '';
+      return new Iri(resolveIriRef(val || '', base));
     }
-
     if (typ === 'Ident') {
       const name = val || '';
       if (name === 'a') {
@@ -4296,9 +4302,10 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
       return s2 !== null ? [s2] : [];
     }
 
-    // If neither side is sufficiently instantiated (both vars, or wrong types),
-    // we don't enumerate URIs; the builtin just fails.
-    return [];
+    const sOk = (g.s instanceof Var) || (g.s instanceof Blank) || (g.s instanceof Iri);
+    const oOk = (g.o instanceof Var) || (g.o instanceof Blank) || (g.o instanceof Literal);
+    if (!sOk || !oOk) return [];
+    return [{ ...subst }];
   }
 
   // -----------------------------------------------------------------
