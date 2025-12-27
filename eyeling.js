@@ -2041,6 +2041,16 @@ function unifyFormulaTriples(xs, ys, subst) {
 }
 
 function unifyTerm(a, b, subst) {
+  return unifyTermWithOptions(a, b, subst, { boolValueEq: true, intDecimalEq: false });
+}
+
+function unifyTermListAppend(a, b, subst) {
+  // Keep list:append behavior: allow integer<->decimal exact equality,
+  // but do NOT add boolean-value equivalence (preserves current semantics).
+  return unifyTermWithOptions(a, b, subst, { boolValueEq: false, intDecimalEq: true });
+}
+
+function unifyTermWithOptions(a, b, subst, opts) {
   a = applySubstTerm(a, subst);
   b = applySubstTerm(b, subst);
 
@@ -2054,102 +2064,9 @@ function unifyTerm(a, b, subst) {
     s2[v] = t;
     return s2;
   }
-
   if (b instanceof Var) {
-    return unifyTerm(b, a, subst);
+    return unifyTermWithOptions(b, a, subst, opts);
   }
-
-  // Exact matches
-  if (a instanceof Iri && b instanceof Iri && a.value === b.value) return { ...subst };
-  if (a instanceof Literal && b instanceof Literal && a.value === b.value) return { ...subst };
-  if (a instanceof Blank && b instanceof Blank && a.label === b.label) return { ...subst };
-
-  // String-literal match (RDF 1.1): treat plain strings and xsd:string as equal (but not @lang)
-  if (a instanceof Literal && b instanceof Literal) {
-    if (literalsEquivalentAsXsdString(a.value, b.value)) return { ...subst };
-  }
-
-  // Boolean-value match: treat untyped true/false tokens and xsd:boolean as equal.
-  if (a instanceof Literal && b instanceof Literal) {
-    const ai = parseBooleanLiteralInfo(a);
-    const bi = parseBooleanLiteralInfo(b);
-    if (ai && bi && ai.value === bi.value) return { ...subst };
-  }
-
-  // Numeric-value match for literals, BUT ONLY when datatypes agree (or infer to agree)
-  if (a instanceof Literal && b instanceof Literal) {
-    const ai = parseNumericLiteralInfo(a);
-    const bi = parseNumericLiteralInfo(b);
-
-    if (ai && bi) {
-      // same datatype: keep existing behavior
-      if (ai.dt === bi.dt) {
-        if (ai.kind === 'bigint' && bi.kind === 'bigint') {
-          if (ai.value === bi.value) return { ...subst };
-        } else {
-          const an = ai.kind === 'bigint' ? Number(ai.value) : ai.value;
-          const bn = bi.kind === 'bigint' ? Number(bi.value) : bi.value;
-          if (!Number.isNaN(an) && !Number.isNaN(bn) && an === bn) return { ...subst };
-        }
-      }
-    }
-  }
-
-  // Open list vs concrete list
-  if (a instanceof OpenListTerm && b instanceof ListTerm) {
-    return unifyOpenWithList(a.prefix, a.tailVar, b.elems, subst);
-  }
-  if (a instanceof ListTerm && b instanceof OpenListTerm) {
-    return unifyOpenWithList(b.prefix, b.tailVar, a.elems, subst);
-  }
-
-  // Open list vs open list (same tail var)
-  if (a instanceof OpenListTerm && b instanceof OpenListTerm) {
-    if (a.tailVar !== b.tailVar || a.prefix.length !== b.prefix.length) return null;
-    let s2 = { ...subst };
-    for (let i = 0; i < a.prefix.length; i++) {
-      s2 = unifyTerm(a.prefix[i], b.prefix[i], s2);
-      if (s2 === null) return null;
-    }
-    return s2;
-  }
-
-  // List terms
-  if (a instanceof ListTerm && b instanceof ListTerm) {
-    if (a.elems.length !== b.elems.length) return null;
-    let s2 = { ...subst };
-    for (let i = 0; i < a.elems.length; i++) {
-      s2 = unifyTerm(a.elems[i], b.elems[i], s2);
-      if (s2 === null) return null;
-    }
-    return s2;
-  }
-
-  // Formulas:
-  // 1) If they are alpha-equivalent, succeed without leaking internal bindings.
-  // 2) Otherwise fall back to full unification (may bind vars).
-  if (a instanceof FormulaTerm && b instanceof FormulaTerm) {
-    if (alphaEqFormulaTriples(a.triples, b.triples)) return { ...subst };
-    return unifyFormulaTriples(a.triples, b.triples, subst);
-  }
-  return null;
-}
-
-function unifyTermListAppend(a, b, subst) {
-  a = applySubstTerm(a, subst);
-  b = applySubstTerm(b, subst);
-
-  // Variable binding (same as unifyTerm)
-  if (a instanceof Var) {
-    const v = a.name;
-    const t = b;
-    if (t instanceof Var && t.name === v) return { ...subst };
-    if (containsVarTerm(t, v)) return null;
-    const s2 = { ...subst };
-    s2[v] = t;
-    return s2;
-  }
-  if (b instanceof Var) return unifyTermListAppend(b, a, subst);
 
   // Exact matches
   if (a instanceof Iri && b instanceof Iri && a.value === b.value) return { ...subst };
@@ -2161,12 +2078,20 @@ function unifyTermListAppend(a, b, subst) {
     if (literalsEquivalentAsXsdString(a.value, b.value)) return { ...subst };
   }
 
-  // Numeric match: same-dt OR integer<->decimal exact equality (for list:append only)
+  // Boolean-value equivalence (ONLY for normal unifyTerm)
+  if (opts.boolValueEq && a instanceof Literal && b instanceof Literal) {
+    const ai = parseBooleanLiteralInfo(a);
+    const bi = parseBooleanLiteralInfo(b);
+    if (ai && bi && ai.value === bi.value) return { ...subst };
+  }
+
+  // Numeric-value match:
+  // - always allow equality when datatype matches (existing behavior)
+  // - optionally allow integer<->decimal exact equality (list:append only)
   if (a instanceof Literal && b instanceof Literal) {
     const ai = parseNumericLiteralInfo(a);
     const bi = parseNumericLiteralInfo(b);
     if (ai && bi) {
-      // same datatype
       if (ai.dt === bi.dt) {
         if (ai.kind === 'bigint' && bi.kind === 'bigint') {
           if (ai.value === bi.value) return { ...subst };
@@ -2177,16 +2102,17 @@ function unifyTermListAppend(a, b, subst) {
         }
       }
 
-      // integer <-> decimal exact equality
-      const intDt = XSD_NS + 'integer';
-      const decDt = XSD_NS + 'decimal';
-      if ((ai.dt === intDt && bi.dt === decDt) || (ai.dt === decDt && bi.dt === intDt)) {
-        const intInfo = ai.dt === intDt ? ai : bi;
-        const decInfo = ai.dt === decDt ? ai : bi;
-        const dec = parseXsdDecimalToBigIntScale(decInfo.lexStr);
-        if (dec) {
-          const scaledInt = intInfo.value * pow10n(dec.scale);
-          if (scaledInt === dec.num) return { ...subst };
+      if (opts.intDecimalEq) {
+        const intDt = XSD_NS + 'integer';
+        const decDt = XSD_NS + 'decimal';
+        if ((ai.dt === intDt && bi.dt === decDt) || (ai.dt === decDt && bi.dt === intDt)) {
+          const intInfo = ai.dt === intDt ? ai : bi; // bigint
+          const decInfo = ai.dt === decDt ? ai : bi; // number + lexStr
+          const dec = parseXsdDecimalToBigIntScale(decInfo.lexStr);
+          if (dec) {
+            const scaledInt = intInfo.value * pow10n(dec.scale);
+            if (scaledInt === dec.num) return { ...subst };
+          }
         }
       }
     }
@@ -2205,7 +2131,7 @@ function unifyTermListAppend(a, b, subst) {
     if (a.tailVar !== b.tailVar || a.prefix.length !== b.prefix.length) return null;
     let s2 = { ...subst };
     for (let i = 0; i < a.prefix.length; i++) {
-      s2 = unifyTermListAppend(a.prefix[i], b.prefix[i], s2);
+      s2 = unifyTermWithOptions(a.prefix[i], b.prefix[i], s2, opts);
       if (s2 === null) return null;
     }
     return s2;
@@ -2216,7 +2142,7 @@ function unifyTermListAppend(a, b, subst) {
     if (a.elems.length !== b.elems.length) return null;
     let s2 = { ...subst };
     for (let i = 0; i < a.elems.length; i++) {
-      s2 = unifyTermListAppend(a.elems[i], b.elems[i], s2);
+      s2 = unifyTermWithOptions(a.elems[i], b.elems[i], s2, opts);
       if (s2 === null) return null;
     }
     return s2;
@@ -2886,14 +2812,7 @@ function parseNumOrDuration(t) {
 
 function formatDurationLiteralFromSeconds(secs) {
   const neg = secs < 0;
-  const absSecs = Math.abs(secs);
-  const days = Math.round(absSecs / 86400.0);
-  const lex = neg ? `" -P${days}D"` : `"P${days}D"`;
-  const cleanLex = neg ? `" -P${days}D"` : `"P${days}D"`; // minor detail; we just follow shape
-  const lex2 = neg ? `" -P${days}D"` : `"P${days}D"`;
-  const actualLex = neg ? `" -P${days}D"` : `"P${days}D"`;
-  // keep simpler, no spaces:
-  const finalLex = neg ? `" -P${days}D"` : `"P${days}D"`;
+  const days = Math.round(Math.abs(secs) / 86400.0);
   const literalLex = neg ? `"-P${days}D"` : `"P${days}D"`;
   return new Literal(`${literalLex}^^<${XSD_NS}duration>`);
 }
@@ -3087,6 +3006,38 @@ function evalUnaryMathRel(g, subst, forwardFn, inverseFn /* may be null */) {
 
   // Fully unbound: treat as satisfiable (avoid infinite enumeration)
   if (sIsUnbound && oIsUnbound) return [{ ...subst }];
+
+  return [];
+}
+
+function evalListFirstLikeBuiltin(sTerm, oTerm, subst) {
+  if (!(sTerm instanceof ListTerm)) return [];
+  if (!sTerm.elems.length) return [];
+  const first = sTerm.elems[0];
+  const s2 = unifyTerm(oTerm, first, subst);
+  return s2 !== null ? [s2] : [];
+}
+
+function evalListRestLikeBuiltin(sTerm, oTerm, subst) {
+  // Closed list: (a b c) -> (b c)
+  if (sTerm instanceof ListTerm) {
+    if (!sTerm.elems.length) return [];
+    const rest = new ListTerm(sTerm.elems.slice(1));
+    const s2 = unifyTerm(oTerm, rest, subst);
+    return s2 !== null ? [s2] : [];
+  }
+
+  // Open list: (a b ... ?T) -> (b ... ?T)
+  if (sTerm instanceof OpenListTerm) {
+    if (!sTerm.prefix.length) return [];
+    if (sTerm.prefix.length === 1) {
+      const s2 = unifyTerm(oTerm, new Var(sTerm.tailVar), subst);
+      return s2 !== null ? [s2] : [];
+    }
+    const rest = new OpenListTerm(sTerm.prefix.slice(1), sTerm.tailVar);
+    const s2 = unifyTerm(oTerm, rest, subst);
+    return s2 !== null ? [s2] : [];
+  }
 
   return [];
 }
@@ -3785,79 +3736,18 @@ function evalBuiltin(goal, subst, facts, backRules, depth, varGen) {
     return [];
   }
 
-  // list:first
+  // list:first and rdf:first
   // true iff $s is a list and $o is the first member of that list.
   // Schema: $s+ list:first $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + 'first') {
-    if (!(g.s instanceof ListTerm)) return [];
-    if (!g.s.elems.length) return [];
-    const first = g.s.elems[0];
-    const s2 = unifyTerm(g.o, first, subst);
-    return s2 !== null ? [s2] : [];
+  if (g.p instanceof Iri && (g.p.value === LIST_NS + 'first' || g.p.value === RDF_NS + 'first')) {
+    return evalListFirstLikeBuiltin(g.s, g.o, subst);
   }
 
-  // list:rest
+  // list:rest and rdf:rest
   // true iff $s is a (non-empty) list and $o is the rest (tail) of that list.
   // Schema: $s+ list:rest $o-
-  if (g.p instanceof Iri && g.p.value === LIST_NS + 'rest') {
-    // Closed list: (a b c) -> (b c)
-    if (g.s instanceof ListTerm) {
-      if (!g.s.elems.length) return [];
-      const rest = new ListTerm(g.s.elems.slice(1));
-      const s2 = unifyTerm(g.o, rest, subst);
-      return s2 !== null ? [s2] : [];
-    }
-
-    // Open list: (a b ... ?T) -> (b ... ?T)
-    if (g.s instanceof OpenListTerm) {
-      if (!g.s.prefix.length) return []; // can't compute rest without a known head
-
-      if (g.s.prefix.length === 1) {
-        // (a ... ?T) rest is exactly ?T
-        const s2 = unifyTerm(g.o, new Var(g.s.tailVar), subst);
-        return s2 !== null ? [s2] : [];
-      }
-
-      const rest = new OpenListTerm(g.s.prefix.slice(1), g.s.tailVar);
-      const s2 = unifyTerm(g.o, rest, subst);
-      return s2 !== null ? [s2] : [];
-    }
-
-    return [];
-  }
-
-  // rdf:first (alias of list:first)
-  // Schema: $s+ rdf:first $o-
-  if (g.p instanceof Iri && g.p.value === RDF_NS + 'first') {
-    if (!(g.s instanceof ListTerm)) return [];
-    if (!g.s.elems.length) return [];
-    const first = g.s.elems[0];
-    const s2 = unifyTerm(g.o, first, subst);
-    return s2 !== null ? [s2] : [];
-  }
-
-  // rdf:rest (alias of list:rest)
-  // Schema: $s+ rdf:rest $o-
-  if (g.p instanceof Iri && g.p.value === RDF_NS + 'rest') {
-    // Closed list: (a b c) -> (b c)
-    if (g.s instanceof ListTerm) {
-      if (!g.s.elems.length) return [];
-      const rest = new ListTerm(g.s.elems.slice(1));
-      const s2 = unifyTerm(g.o, rest, subst);
-      return s2 !== null ? [s2] : [];
-    }
-    // Open list: (a b ... ?T) -> (b ... ?T)
-    if (g.s instanceof OpenListTerm) {
-      if (!g.s.prefix.length) return [];
-      if (g.s.prefix.length === 1) {
-        const s2 = unifyTerm(g.o, new Var(g.s.tailVar), subst);
-        return s2 !== null ? [s2] : [];
-      }
-      const rest = new OpenListTerm(g.s.prefix.slice(1), g.s.tailVar);
-      const s2 = unifyTerm(g.o, rest, subst);
-      return s2 !== null ? [s2] : [];
-    }
-    return [];
+  if (g.p instanceof Iri && (g.p.value === LIST_NS + 'rest' || g.p.value === RDF_NS + 'rest')) {
+    return evalListRestLikeBuiltin(g.s, g.o, subst);
   }
 
   // list:iterate
@@ -5065,134 +4955,121 @@ function forwardChain(facts, forwardRules, backRules) {
 
   function runFixpoint() {
     let anyChange = false;
+
     while (true) {
       let changed = false;
 
-      while (true) {
-        let changed = false;
+      for (let i = 0; i < forwardRules.length; i++) {
+        const r = forwardRules[i];
+        const empty = {};
+        const visited = [];
+        const sols = proveGoals(r.premise.slice(), empty, facts, backRules, 0, visited, varGen);
 
-        for (let i = 0; i < forwardRules.length; i++) {
-          const r = forwardRules[i];
-          const empty = {};
-          const visited = [];
-
-          const sols = proveGoals(r.premise.slice(), empty, facts, backRules, 0, visited, varGen);
-
-          // Inference fuse
-          if (r.isFuse && sols.length) {
-            console.log('# Inference fuse triggered: a { ... } => false. rule fired.');
-            process.exit(2);
-          }
-
-          for (const s of sols) {
-            // IMPORTANT: one skolem map per *rule firing* so head blank nodes
-            // (e.g., from [ :p ... ; :q ... ]) stay connected across all head triples.
-            const skMap = {};
-            const instantiatedPremises = r.premise.map((b) => applySubstTriple(b, s));
-            const fireKey = firingKey(i, instantiatedPremises);
-
-            for (const cpat of r.conclusion) {
-              const instantiated = applySubstTriple(cpat, s);
-
-              const isFwRuleTriple =
-                isLogImplies(instantiated.p) &&
-                ((instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
-                  (instantiated.s instanceof Literal && instantiated.s.value === 'true' && instantiated.o instanceof FormulaTerm) ||
-                  (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === 'true'));
-
-              const isBwRuleTriple =
-                isLogImpliedBy(instantiated.p) &&
-                ((instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
-                  (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === 'true') ||
-                  (instantiated.s instanceof Literal && instantiated.s.value === 'true' && instantiated.o instanceof FormulaTerm));
-
-              if (isFwRuleTriple || isBwRuleTriple) {
-                if (!hasFactIndexed(facts, instantiated)) {
-                  factList.push(instantiated);
-                  pushFactIndexed(facts, instantiated);
-                  derivedForward.push(
-                    new DerivedFact(instantiated, r, instantiatedPremises.slice(), {
-                      ...s,
-                    }),
-                  );
-                  changed = true;
-                }
-
-                // Promote rule-producing triples to live rules, treating literal true as {}.
-                const left =
-                  instantiated.s instanceof FormulaTerm
-                    ? instantiated.s.triples
-                    : instantiated.s instanceof Literal && instantiated.s.value === 'true'
-                      ? []
-                      : null;
-
-                const right =
-                  instantiated.o instanceof FormulaTerm
-                    ? instantiated.o.triples
-                    : instantiated.o instanceof Literal && instantiated.o.value === 'true'
-                      ? []
-                      : null;
-
-                if (left !== null && right !== null) {
-                  if (isFwRuleTriple) {
-                    const [premise0, conclusion] = liftBlankRuleVars(left, right);
-                    const premise = reorderPremiseForConstraints(premise0);
-
-                    const headBlankLabels = collectBlankLabelsInTriples(conclusion);
-                    const newRule = new Rule(premise, conclusion, true, false, headBlankLabels);
-
-                    const already = forwardRules.some(
-                      (rr) =>
-                        rr.isForward === newRule.isForward &&
-                        rr.isFuse === newRule.isFuse &&
-                        triplesListEqual(rr.premise, newRule.premise) &&
-                        triplesListEqual(rr.conclusion, newRule.conclusion),
-                    );
-                    if (!already) forwardRules.push(newRule);
-                  } else if (isBwRuleTriple) {
-                    const [premise, conclusion] = liftBlankRuleVars(right, left);
-
-                    const headBlankLabels = collectBlankLabelsInTriples(conclusion);
-                    const newRule = new Rule(premise, conclusion, false, false, headBlankLabels);
-
-                    const already = backRules.some(
-                      (rr) =>
-                        rr.isForward === newRule.isForward &&
-                        rr.isFuse === newRule.isFuse &&
-                        triplesListEqual(rr.premise, newRule.premise) &&
-                        triplesListEqual(rr.conclusion, newRule.conclusion),
-                    );
-                    if (!already) {
-                      backRules.push(newRule);
-                      indexBackRule(backRules, newRule);
-                    }
-                  }
-                }
-
-                continue; // skip normal fact handling
-              }
-
-              // Only skolemize blank nodes that occur explicitly in the rule head
-              const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter, fireKey, headSkolemCache);
-
-              if (!isGroundTriple(inst)) continue;
-              if (hasFactIndexed(facts, inst)) continue;
-
-              factList.push(inst);
-              pushFactIndexed(facts, inst);
-
-              derivedForward.push(new DerivedFact(inst, r, instantiatedPremises.slice(), { ...s }));
-              changed = true;
-            }
-          }
+        // Inference fuse
+        if (r.isFuse && sols.length) {
+          console.log('# Inference fuse triggered: a { ... } => false. rule fired.');
+          process.exit(2);
         }
 
-        if (!changed) break;
+        for (const s of sols) {
+          // IMPORTANT: one skolem map per *rule firing*
+          const skMap = {};
+          const instantiatedPremises = r.premise.map((b) => applySubstTriple(b, s));
+          const fireKey = firingKey(i, instantiatedPremises);
+
+          for (const cpat of r.conclusion) {
+            const instantiated = applySubstTriple(cpat, s);
+
+            const isFwRuleTriple =
+              isLogImplies(instantiated.p) &&
+              ((instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
+                (instantiated.s instanceof Literal && instantiated.s.value === 'true' && instantiated.o instanceof FormulaTerm) ||
+                (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === 'true'));
+
+            const isBwRuleTriple =
+              isLogImpliedBy(instantiated.p) &&
+              ((instantiated.s instanceof FormulaTerm && instantiated.o instanceof FormulaTerm) ||
+                (instantiated.s instanceof FormulaTerm && instantiated.o instanceof Literal && instantiated.o.value === 'true') ||
+                (instantiated.s instanceof Literal && instantiated.s.value === 'true' && instantiated.o instanceof FormulaTerm));
+
+            if (isFwRuleTriple || isBwRuleTriple) {
+              if (!hasFactIndexed(facts, instantiated)) {
+                factList.push(instantiated);
+                pushFactIndexed(facts, instantiated);
+                derivedForward.push(new DerivedFact(instantiated, r, instantiatedPremises.slice(), { ...s }));
+                changed = true;
+              }
+
+              // Promote rule-producing triples to live rules, treating literal true as {}.
+              const left =
+                instantiated.s instanceof FormulaTerm
+                  ? instantiated.s.triples
+                  : instantiated.s instanceof Literal && instantiated.s.value === 'true'
+                    ? []
+                    : null;
+
+              const right =
+                instantiated.o instanceof FormulaTerm
+                  ? instantiated.o.triples
+                  : instantiated.o instanceof Literal && instantiated.o.value === 'true'
+                    ? []
+                    : null;
+
+              if (left !== null && right !== null) {
+                if (isFwRuleTriple) {
+                  const [premise0, conclusion] = liftBlankRuleVars(left, right);
+                  const premise = reorderPremiseForConstraints(premise0);
+                  const headBlankLabels = collectBlankLabelsInTriples(conclusion);
+                  const newRule = new Rule(premise, conclusion, true, false, headBlankLabels);
+
+                  const already = forwardRules.some(
+                    (rr) =>
+                      rr.isForward === newRule.isForward &&
+                      rr.isFuse === newRule.isFuse &&
+                      triplesListEqual(rr.premise, newRule.premise) &&
+                      triplesListEqual(rr.conclusion, newRule.conclusion),
+                  );
+                  if (!already) forwardRules.push(newRule);
+                } else if (isBwRuleTriple) {
+                  const [premise, conclusion] = liftBlankRuleVars(right, left);
+                  const headBlankLabels = collectBlankLabelsInTriples(conclusion);
+                  const newRule = new Rule(premise, conclusion, false, false, headBlankLabels);
+
+                  const already = backRules.some(
+                    (rr) =>
+                      rr.isForward === newRule.isForward &&
+                      rr.isFuse === newRule.isFuse &&
+                      triplesListEqual(rr.premise, newRule.premise) &&
+                      triplesListEqual(rr.conclusion, newRule.conclusion),
+                  );
+                  if (!already) {
+                    backRules.push(newRule);
+                    indexBackRule(backRules, newRule);
+                  }
+                }
+              }
+
+              continue; // skip normal fact handling
+            }
+
+            // Only skolemize blank nodes that occur explicitly in the rule head
+            const inst = skolemizeTripleForHeadBlanks(instantiated, r.headBlankLabels, skMap, skCounter, fireKey, headSkolemCache);
+
+            if (!isGroundTriple(inst)) continue;
+            if (hasFactIndexed(facts, inst)) continue;
+
+            factList.push(inst);
+            pushFactIndexed(facts, inst);
+            derivedForward.push(new DerivedFact(inst, r, instantiatedPremises.slice(), { ...s }));
+            changed = true;
+          }
+        }
       }
 
-      if (changed) anyChange = true;
       if (!changed) break;
+      anyChange = true;
     }
+
     return anyChange;
   }
 
