@@ -87,16 +87,6 @@ let fixedNowLex = null;
 // If not fixed, we still memoize one value per run to avoid re-firing rules.
 let runNowLex = null;
 
-function normalizeDateTimeLex(s) {
-  // Accept: 2025-... , "2025-..." , "2025-..."^^xsd:dateTime , "..."^^<...>
-  if (s == null) return null;
-  let t = String(s).trim();
-  const caret = t.indexOf('^^');
-  if (caret >= 0) t = t.slice(0, caret).trim();
-  if (t.startsWith('"') && t.endsWith('"') && t.length >= 2) t = t.slice(1, -1);
-  return t.trim();
-}
-
 // ===========================================================================
 // Run-level time helpers
 // ===========================================================================
@@ -1651,10 +1641,6 @@ function alphaEqTriple(a, b) {
   return alphaEqTerm(a.s, b.s, bmap) && alphaEqTerm(a.p, b.p, bmap) && alphaEqTerm(a.o, b.o, bmap);
 }
 
-function hasAlphaEquiv(triples, tr) {
-  return triples.some((t) => alphaEqTriple(t, tr));
-}
-
 // ===========================================================================
 // Indexes (facts + backward rules)
 // ===========================================================================
@@ -1896,12 +1882,10 @@ function isConstraintBuiltin(tr) {
   return false;
 }
 
-/**
- * Move constraint builtins to the end of the rule premise.
- * This is a simple "delaying" strategy similar in spirit to Prolog's when/2:
- * - normal goals first (can bind variables),
- * - pure test / constraint builtins last (checked once bindings are in place).
- */
+// Move constraint builtins to the end of the rule premise.
+// This is a simple "delaying" strategy similar in spirit to Prolog's when/2:
+// - normal goals first (can bind variables),
+// - pure test / constraint builtins last (checked once bindings are in place).
 function reorderPremiseForConstraints(premise) {
   if (!premise || premise.length === 0) return premise;
 
@@ -2674,15 +2658,6 @@ function parseIntLiteral(t) {
   } catch {
     return null;
   }
-}
-
-function parseNumberLiteral(t) {
-  // Prefer BigInt for integers, fall back to Number for other numeric literals.
-  const bi = parseIntLiteral(t);
-  if (bi !== null) return bi;
-  const n = parseNum(t);
-  if (n !== null) return n;
-  return null;
 }
 
 function formatNum(n) {
