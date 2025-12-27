@@ -7,10 +7,10 @@
 # Proof for derived triple:
 #   :bob :age 16 .
 # It holds because the following instance of the rule body is provable:
-#   :bob :profileJson """{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/age") string:jsonPointer 16 .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/name") string:jsonPointer "Bob" .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/city") string:jsonPointer "Brussels" .
+#   :bob :profileJson "{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/age") string:jsonPointer 16 .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/name") string:jsonPointer "Bob" .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/city") string:jsonPointer "Brussels" .
 # via the schematic forward rule:
 #   {
 #     ?p :profileJson ?j .
@@ -25,7 +25,7 @@
 # with substitution (on rule variables):
 #   ?age = 16
 #   ?city = "Brussels"
-#   ?j = """{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON
+#   ?j = "{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON
 #   ?name = "Bob"
 #   ?p = :bob
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -37,10 +37,10 @@
 # Proof for derived triple:
 #   :bob :name "Bob" .
 # It holds because the following instance of the rule body is provable:
-#   :bob :profileJson """{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/age") string:jsonPointer 16 .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/name") string:jsonPointer "Bob" .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/city") string:jsonPointer "Brussels" .
+#   :bob :profileJson "{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/age") string:jsonPointer 16 .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/name") string:jsonPointer "Bob" .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/city") string:jsonPointer "Brussels" .
 # via the schematic forward rule:
 #   {
 #     ?p :profileJson ?j .
@@ -55,7 +55,7 @@
 # with substitution (on rule variables):
 #   ?age = 16
 #   ?city = "Brussels"
-#   ?j = """{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON
+#   ?j = "{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON
 #   ?name = "Bob"
 #   ?p = :bob
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -67,10 +67,10 @@
 # Proof for derived triple:
 #   :bob :city "Brussels" .
 # It holds because the following instance of the rule body is provable:
-#   :bob :profileJson """{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/age") string:jsonPointer 16 .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/name") string:jsonPointer "Bob" .
-#   ("""{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON "/city") string:jsonPointer "Brussels" .
+#   :bob :profileJson "{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/age") string:jsonPointer 16 .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/name") string:jsonPointer "Bob" .
+#   ("{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON "/city") string:jsonPointer "Brussels" .
 # via the schematic forward rule:
 #   {
 #     ?p :profileJson ?j .
@@ -85,7 +85,7 @@
 # with substitution (on rule variables):
 #   ?age = 16
 #   ?city = "Brussels"
-#   ?j = """{ "name": "Bob",   "age": 16, "city": "Brussels" }"""^^rdf:JSON
+#   ?j = "{ \"name\": \"Bob\",   \"age\": 16, \"city\": \"Brussels\" }"^^rdf:JSON
 #   ?name = "Bob"
 #   ?p = :bob
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -97,10 +97,10 @@
 # Proof for derived triple:
 #   :alice :age 23 .
 # It holds because the following instance of the rule body is provable:
-#   :alice :profileJson """{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/age") string:jsonPointer 23 .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/name") string:jsonPointer "Alice" .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/city") string:jsonPointer "Brussels" .
+#   :alice :profileJson "{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/age") string:jsonPointer 23 .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/name") string:jsonPointer "Alice" .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/city") string:jsonPointer "Brussels" .
 # via the schematic forward rule:
 #   {
 #     ?p :profileJson ?j .
@@ -115,7 +115,7 @@
 # with substitution (on rule variables):
 #   ?age = 23
 #   ?city = "Brussels"
-#   ?j = """{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON
+#   ?j = "{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON
 #   ?name = "Alice"
 #   ?p = :alice
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -127,10 +127,10 @@
 # Proof for derived triple:
 #   :alice :name "Alice" .
 # It holds because the following instance of the rule body is provable:
-#   :alice :profileJson """{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/age") string:jsonPointer 23 .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/name") string:jsonPointer "Alice" .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/city") string:jsonPointer "Brussels" .
+#   :alice :profileJson "{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/age") string:jsonPointer 23 .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/name") string:jsonPointer "Alice" .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/city") string:jsonPointer "Brussels" .
 # via the schematic forward rule:
 #   {
 #     ?p :profileJson ?j .
@@ -145,7 +145,7 @@
 # with substitution (on rule variables):
 #   ?age = 23
 #   ?city = "Brussels"
-#   ?j = """{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON
+#   ?j = "{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON
 #   ?name = "Alice"
 #   ?p = :alice
 # Therefore the derived triple above is entailed by the rules and facts.
@@ -157,10 +157,10 @@
 # Proof for derived triple:
 #   :alice :city "Brussels" .
 # It holds because the following instance of the rule body is provable:
-#   :alice :profileJson """{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/age") string:jsonPointer 23 .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/name") string:jsonPointer "Alice" .
-#   ("""{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON "/city") string:jsonPointer "Brussels" .
+#   :alice :profileJson "{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/age") string:jsonPointer 23 .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/name") string:jsonPointer "Alice" .
+#   ("{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON "/city") string:jsonPointer "Brussels" .
 # via the schematic forward rule:
 #   {
 #     ?p :profileJson ?j .
@@ -175,7 +175,7 @@
 # with substitution (on rule variables):
 #   ?age = 23
 #   ?city = "Brussels"
-#   ?j = """{ "name": "Alice", "age": 23, "city": "Brussels" }"""^^rdf:JSON
+#   ?j = "{ \"name\": \"Alice\", \"age\": 23, \"city\": \"Brussels\" }"^^rdf:JSON
 #   ?name = "Alice"
 #   ?p = :alice
 # Therefore the derived triple above is entailed by the rules and facts.

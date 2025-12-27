@@ -4,20 +4,8 @@
 # Proof for derived triple:
 #   ex:checks ex:firstUserNameOk true .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users/0/profile~1name") string:jsonPointer "Ada Lovelace" .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users/0/profile~1name") string:jsonPointer "Ada Lovelace" .
 # via the schematic forward rule:
 #   {
 #     ex:doc ex:json ?J .
@@ -26,13 +14,7 @@
 #     ex:checks ex:firstUserNameOk true .
 #   } .
 # with substitution (on rule variables):
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 # Therefore the derived triple above is entailed by the rules and facts.
 # ----------------------------------------------------------------------
 
@@ -42,27 +24,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u1> a ex:AllowedUser .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (0 """{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/id") string:jsonPointer "u1" .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/email") string:jsonPointer "ada@example.org" .
@@ -97,13 +61,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "example.org"
 #   ?Id = "u1"
 #   ?Idx = 0
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Ada Lovelace"
 #   ?UriStr = "urn:example:user:u1"
 #   ?User = <urn:example:user:u1>
@@ -118,27 +76,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u1> ex:name "Ada Lovelace" .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (0 """{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/id") string:jsonPointer "u1" .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/email") string:jsonPointer "ada@example.org" .
@@ -173,13 +113,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "example.org"
 #   ?Id = "u1"
 #   ?Idx = 0
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Ada Lovelace"
 #   ?UriStr = "urn:example:user:u1"
 #   ?User = <urn:example:user:u1>
@@ -194,27 +128,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u1> ex:email "ada@example.org" .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (0 """{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/id") string:jsonPointer "u1" .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/email") string:jsonPointer "ada@example.org" .
@@ -249,13 +165,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "example.org"
 #   ?Id = "u1"
 #   ?Idx = 0
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Ada Lovelace"
 #   ?UriStr = "urn:example:user:u1"
 #   ?User = <urn:example:user:u1>
@@ -270,27 +180,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u1> ex:emailDomain "example.org" .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (0 """{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/id") string:jsonPointer "u1" .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/email") string:jsonPointer "ada@example.org" .
@@ -325,13 +217,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "example.org"
 #   ?Id = "u1"
 #   ?Idx = 0
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Ada Lovelace"
 #   ?UriStr = "urn:example:user:u1"
 #   ?User = <urn:example:user:u1>
@@ -346,27 +232,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u1> ex:userIndex 0 .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (0 """{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/id") string:jsonPointer "u1" .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON "/email") string:jsonPointer "ada@example.org" .
@@ -401,13 +269,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "example.org"
 #   ?Id = "u1"
 #   ?Idx = 0
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Ada Lovelace"
 #   ?UriStr = "urn:example:user:u1"
 #   ?User = <urn:example:user:u1>
@@ -422,27 +284,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u2> a ex:BlockedUser .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (1 """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/id") string:jsonPointer "u2" .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/email") string:jsonPointer "bob@evil.invalid" .
@@ -477,13 +321,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "evil.invalid"
 #   ?Id = "u2"
 #   ?Idx = 1
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Bob Mallory"
 #   ?UriStr = "urn:example:user:u2"
 #   ?User = <urn:example:user:u2>
@@ -498,27 +336,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u2> ex:name "Bob Mallory" .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (1 """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/id") string:jsonPointer "u2" .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/email") string:jsonPointer "bob@evil.invalid" .
@@ -553,13 +373,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "evil.invalid"
 #   ?Id = "u2"
 #   ?Idx = 1
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Bob Mallory"
 #   ?UriStr = "urn:example:user:u2"
 #   ?User = <urn:example:user:u2>
@@ -574,27 +388,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u2> ex:email "bob@evil.invalid" .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (1 """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/id") string:jsonPointer "u2" .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/email") string:jsonPointer "bob@evil.invalid" .
@@ -629,13 +425,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "evil.invalid"
 #   ?Id = "u2"
 #   ?Idx = 1
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Bob Mallory"
 #   ?UriStr = "urn:example:user:u2"
 #   ?User = <urn:example:user:u2>
@@ -650,27 +440,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u2> ex:emailDomain "evil.invalid" .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (1 """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/id") string:jsonPointer "u2" .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/email") string:jsonPointer "bob@evil.invalid" .
@@ -705,13 +477,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "evil.invalid"
 #   ?Id = "u2"
 #   ?Idx = 1
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Bob Mallory"
 #   ?UriStr = "urn:example:user:u2"
 #   ?User = <urn:example:user:u2>
@@ -726,27 +492,9 @@ ex:checks ex:firstUserNameOk true .
 # Proof for derived triple:
 #   <urn:example:user:u2> ex:userIndex 1 .
 # It holds because the following instance of the rule body is provable:
-#   ex:doc ex:json """{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
-#   ("""{
-#     "users": [
-#       { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#       { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
+#   ex:doc ex:json "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/policy/allowedDomains") string:jsonPointer ("example.org" "example.com") .
+#   ("{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON "/users") string:jsonPointer ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u1","email":"ada@example.org","profile/name":"Ada Lovelace"}"""^^rdf:JSON """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) list:iterate (1 """{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON) .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/id") string:jsonPointer "u2" .
 #   ("""{"id":"u2","email":"bob@evil.invalid","profile/name":"Bob Mallory"}"""^^rdf:JSON "/email") string:jsonPointer "bob@evil.invalid" .
@@ -781,13 +529,7 @@ ex:checks ex:firstUserNameOk true .
 #   ?EmailDomain = "evil.invalid"
 #   ?Id = "u2"
 #   ?Idx = 1
-#   ?J = """{
-#     "users": [
-#     { "id": "u1", "email": "ada@example.org",     "profile/name": "Ada Lovelace" },
-#     { "id": "u2", "email": "bob@evil.invalid",    "profile/name": "Bob Mallory" }
-#     ],
-#     "policy": { "allowedDomains": ["example.org", "example.com"] }
-#   }"""^^rdf:JSON
+#   ?J = "{\n  \"users\": [\n    { \"id\": \"u1\", \"email\": \"ada@example.org\",     \"profile/name\": \"Ada Lovelace\" },\n    { \"id\": \"u2\", \"email\": \"bob@evil.invalid\",    \"profile/name\": \"Bob Mallory\" }\n  ],\n  \"policy\": { \"allowedDomains\": [\"example.org\", \"example.com\"] }\n}"^^rdf:JSON
 #   ?Name = "Bob Mallory"
 #   ?UriStr = "urn:example:user:u2"
 #   ?User = <urn:example:user:u2>

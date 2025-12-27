@@ -257,6 +257,61 @@ function isNameChar(c) {
   return /[0-9A-Za-z_\-:]/.test(c);
 }
 
+function decodeN3StringEscapes(s) {
+  let out = '';
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c !== '\\') {
+      out += c;
+      continue;
+    }
+    if (i + 1 >= s.length) {
+      out += '\\';
+      continue;
+    }
+    const e = s[++i];
+    switch (e) {
+      case 't': out += '\t'; break;
+      case 'n': out += '\n'; break;
+      case 'r': out += '\r'; break;
+      case 'b': out += '\b'; break;
+      case 'f': out += '\f'; break;
+      case '"': out += '"'; break;
+      case "'": out += "'"; break;
+      case '\\': out += '\\'; break;
+
+      case 'u': {
+        const hex = s.slice(i + 1, i + 5);
+        if (/^[0-9A-Fa-f]{4}$/.test(hex)) {
+          out += String.fromCharCode(parseInt(hex, 16));
+          i += 4;
+        } else {
+          out += '\\u';
+        }
+        break;
+      }
+
+      case 'U': {
+        const hex = s.slice(i + 1, i + 9);
+        if (/^[0-9A-Fa-f]{8}$/.test(hex)) {
+          const cp = parseInt(hex, 16);
+          if (cp >= 0 && cp <= 0x10FFFF) out += String.fromCodePoint(cp);
+          else out += '\\U' + hex;
+          i += 8;
+        } else {
+          out += '\\U';
+        }
+        break;
+      }
+
+      default:
+        // preserve unknown escapes
+        out += '\\' + e;
+    }
+  }
+  return out;
+}
+
 function lex(inputText) {
   const chars = Array.from(inputText);
   const n = chars.length;
@@ -390,7 +445,9 @@ function lex(inputText) {
           sChars.push(cc);
         }
         if (!closed) throw new Error('Unterminated long string literal """..."""');
-        const s = '"""' + sChars.join('') + '"""';
+        const raw = '"""' + sChars.join('') + '"""';
+        const decoded = decodeN3StringEscapes(stripQuotes(raw));
+        const s = JSON.stringify(decoded); // canonical short quoted form
         tokens.push(new Token('Literal', s));
         continue;
       }
@@ -413,7 +470,9 @@ function lex(inputText) {
         if (cc === '"') break;
         sChars.push(cc);
       }
-      const s = '"' + sChars.join('') + '"';
+      const raw = '"' + sChars.join('') + '"';
+      const decoded = decodeN3StringEscapes(stripQuotes(raw));
+      const s = JSON.stringify(decoded); // canonical short quoted form
       tokens.push(new Token('Literal', s));
       continue;
     }
